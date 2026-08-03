@@ -2,7 +2,8 @@
 
 Cross-domain **runtime contracts** for FamTutor Engine.
 
-This package defines JSON-safe wire types and the stateless `DomainRuntime` interface.
+This package defines JSON-safe wire types and the stateless `DomainRuntime` interface,
+plus the stateful `MountedRenderer` contract (implemented by domain packages).
 It does **not** contain mathematics, JSXGraph, DOM APIs, or CathyGO/host types.
 
 ## What it is
@@ -10,12 +11,13 @@ It does **not** contain mathematics, JSXGraph, DOM APIs, or CathyGO/host types.
 | Concept | Role |
 |---|---|
 | `DocumentRef` | Domain + schema + documentId + revision |
-| `ChangeSet` | Transactional operation batch (`base.revision` is the optimistic lock) |
-| `Diagnostic` / `ValidationReport` | Structured expected failures |
-| `ApplyResult` | Success or structured failure from `apply` |
-| `RenderArtifact` | One-shot SVG/PNG/JSON render result (**not** a host delivery bundle) |
+| `ChangeSet` | Transactional operation batch (`base.revision` is the optimistic lock); optional `metadata` |
+| `Diagnostic` / `ValidationReport` | Structured expected failures (`valid` \| `partial` \| `invalid`) |
+| `ApplyResult` | Discriminated success (`document`+`next`) or failure (current `document`+diagnostics) |
+| `RenderResult` / `RenderArtifact` | One-shot render outcome (**not** a host delivery bundle) |
 | `DomainRuntime` | Stateless domain executor |
-| `RuntimeRegistry` | Register/resolve runtimes by domain |
+| `MountedRenderer` | Stateful live renderer contract (events, apply serialization, snapshots) |
+| `RuntimeRegistry` | Register/resolve runtimes by domain; descriptors are defensively cloned |
 
 ## State boundary
 
@@ -26,6 +28,9 @@ It does **not** contain mathematics, JSXGraph, DOM APIs, or CathyGO/host types.
 - no undo history
 - no idempotency cache
 - `apply` must not mutate the input document
+
+`MountedRenderer` is **stateful** (camera/stage/selection, apply queue, bounded ChangeSet idempotency, events).
+Domain packages implement it (for example `mountMathRenderer` in `@famtutor/math-runtime`).
 
 Stateful Agent sessions (for example `AgentMathRuntime` + `DocumentStore`) wrap a domain runtime and own dry-run / commit / undo / idempotency.
 
@@ -49,8 +54,6 @@ const resolved = await registry.resolve("math");
 
 - **RenderArtifact** (this package): single render output for one document revision.
 - **RenderBundle** (`famtutor.render.bundle.v1`, PR4): host delivery container with canonical document, assets, compatibility, and fallback SVG.
-
-Live `MountedRenderer` / ChangeSet UI updates are **PR3**, not this package.
 
 ## Verify
 
