@@ -73,6 +73,9 @@ def main() -> int:
 
     geometry = json.loads((ROOT / "examples" / "perpendicular-bisector.json").read_text())
     functions = json.loads((ROOT / "examples" / "function-slider.json").read_text())
+    # Build + validate Render Bundle in Node (core APIs), then mount document payload in Chromium.
+    from subprocess import check_output
+    bundle = json.loads(check_output(["node", str(ROOT / "scripts" / "_make_bundle_for_smoke.mjs")], cwd=str(ROOT), text=True))
     amd_source = AMD_BUNDLE.read_text()
     console_messages: list[str] = []
     page_errors: list[str] = []
@@ -95,7 +98,7 @@ def main() -> int:
         page.add_script_tag(content=AMD_LOADER + "\n" + amd_source + "\nwindow.FamTutorMath = __famtutorAmdRequire('browser-entry');")
 
         summary = page.evaluate(
-            """async ({ geometry, functions }) => {
+            """async ({ geometry, functions, bundle }) => {
               const runtime = globalThis.FamTutorMath;
               const resultEl = document.querySelector('#result');
               const checks = [];
@@ -199,13 +202,13 @@ def main() -> int:
                 // Use replaceDocument-free apply of a no-op? Instead set via exported getState after manual board touch:
                 // MathMountedRenderer does not expose board; use setBoundingBox by remounting through replaceDocument with same doc after mutating via dispatch stage.
                 const stageBefore = renderer.getDocument().revision;
-                const stageResult = await renderer.dispatch({ type: 'stage.set', stageId: 'observe' });
+                const stageResult = await renderer.dispatch({ type: 'stage.set', payload: { stageId: 'observe' } });
                 assert('11_stage_ephemeral', stageResult.ok && stageResult.revisionChanged === false
                   && renderer.getDocument().revision === stageBefore
                   && renderer.getState().stageId === 'observe');
 
                 const selBefore = renderer.getDocument().revision;
-                const selResult = await renderer.dispatch({ type: 'selection.set', entityId: 'A' });
+                const selResult = await renderer.dispatch({ type: 'selection.set', payload: { entityId: 'A' } });
                 assert('12_selection_ephemeral', selResult.ok && selResult.revisionChanged === false
                   && renderer.getDocument().revision === selBefore
                   && renderer.getState().selectedEntityId === 'A');
@@ -224,7 +227,7 @@ def main() -> int:
                 });
                 assert('13prep_delete_Q', deleteQ.ok && !renderer.getDocument().entities.some(e => e.id === 'Q'));
                 // selection may still be A; construct Q, select, delete — expect selection cleared
-                await renderer.dispatch({ type: 'selection.set', entityId: 'A' });
+                await renderer.dispatch({ type: 'selection.set', payload: { entityId: 'A' } });
                 const add = await renderer.applyChangeSet({
                   schema: 'famtutor.engine.change-set.v1',
                   changeSetId: 'live-cs-readd-Q',
@@ -243,7 +246,7 @@ def main() -> int:
                   metadata: { timestamp: '2026-08-03T12:00:02.000Z' }
                 });
                 assert('13a_readd_Q', add.ok);
-                await renderer.dispatch({ type: 'selection.set', entityId: 'Q' });
+                await renderer.dispatch({ type: 'selection.set', payload: { entityId: 'Q' } });
                 assert('13b_selected_Q', renderer.getState().selectedEntityId === 'Q');
                 const clearedEvents = [];
                 const unsubSel = renderer.subscribe(ev => {
@@ -269,7 +272,7 @@ def main() -> int:
                 const pointSet = await renderer.dispatch({
                   type: 'point.set',
                   target: 'A',
-                  coords: [-2.25, 1.125]
+                  payload: { coords: [-2.25, 1.125] }
                 });
                 assert('14_point_set_commits', pointSet.ok && pointSet.revisionChanged === true
                   && renderer.getDocument().revision === pointBefore + 1);
@@ -284,7 +287,7 @@ def main() -> int:
                 const sliderHost = document.querySelector('#live-board');
                 const sliderRenderer = await runtime.mountMathRenderer(sliderHost, functions);
                 const scalarBefore = sliderRenderer.getDocument().revision;
-                const scalarSet = await sliderRenderer.dispatch({ type: 'scalar.set', target: 'a', value: 1.75 });
+                const scalarSet = await sliderRenderer.dispatch({ type: 'scalar.set', target: 'a', payload: { value: 1.75 } });
                 assert('16_scalar_set_commits', scalarSet.ok && scalarSet.revisionChanged === true
                   && sliderRenderer.getDocument().revision === scalarBefore + 1);
                 const nodeSlider = sliderRenderer.getDocument().construction.find(n => {
@@ -297,14 +300,14 @@ def main() -> int:
                 let threw = false;
                 const bad = sliderRenderer.subscribe(() => { threw = true; throw new Error('listener boom'); });
                 const good = sliderRenderer.subscribe(ev => sequences.push(ev.sequence));
-                await sliderRenderer.dispatch({ type: 'selection.set', entityId: 'a' });
+                await sliderRenderer.dispatch({ type: 'selection.set', payload: { entityId: 'a' } });
                 assert('17_event_sequence_monotonic', sequences.length >= 1
                   && sequences.every((s, i) => i === 0 || s > sequences[i - 1]));
                 assert('18_listener_isolation', threw === true);
                 bad();
                 const afterUnsub = sequences.length;
                 good();
-                await sliderRenderer.dispatch({ type: 'selection.set', entityId: undefined });
+                await sliderRenderer.dispatch({ type: 'selection.set', payload: { entityId: undefined } });
                 assert('19_unsubscribe', sequences.length === afterUnsub);
 
                 const childCounts = [];
@@ -397,6 +400,62 @@ def main() -> int:
                 assert('23b_camera_after_rebuild', camApply.ok && !!camRenderer.getState().camera);
                 await camRenderer.destroy();
 
+                // SHA-256 known vector (Web Crypto in Chromium)
+                const emptyDigest = await runtime.sha256Utf8('');
+                assert('24_sha256_known_vector', emptyDigest === 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+
+                // Idempotency key reused with different payload
+                const idHost = document.querySelector('#live-board');
+                const idRenderer = await runtime.mountMathRenderer(idHost, geometry);
+                const base = {
+                  domain: 'math',
+                  schema: 'famtutor.math.document.v1',
+                  documentId: geometry.documentId,
+                  revision: idRenderer.getDocument().revision
+                };
+                const firstCs = {
+                  schema: 'famtutor.engine.change-set.v1',
+                  changeSetId: 'reuse-key',
+                  base,
+                  operations: [{ op: 'construct', command: 'point.free', outputs: ['IK1'], params: { coords: [0, 0] } }],
+                  metadata: { timestamp: '2026-08-03T13:00:00.000Z' }
+                };
+                const firstApply = await idRenderer.applyChangeSet(firstCs);
+                assert('25_idempotent_first', firstApply.ok);
+                const reused = await idRenderer.applyChangeSet({
+                  ...firstCs,
+                  operations: [{ op: 'construct', command: 'point.free', outputs: ['IK2'], params: { coords: [1, 1] } }]
+                });
+                assert('25b_idempotent_reused', reused.ok === false && reused.diagnostics.some(d => d.code === 'IDEMPOTENCY_KEY_REUSED'));
+                await idRenderer.destroy();
+
+                // Host-neutral bundle payload (created/validated in Node) mounts via MathMountedRenderer.
+                assert('26_bundle_payload', bundle && bundle.schema === 'famtutor.render.bundle.v1');
+                const bundleHost = document.querySelector('#live-board');
+                const bundleRenderer = await runtime.mountMathRenderer(bundleHost, bundle.document.content, {
+                  viewId: bundle.entrypoint.viewId,
+                  stageId: bundle.entrypoint.stageId
+                });
+                const afterBundle = await bundleRenderer.applyChangeSet({
+                  schema: 'famtutor.engine.change-set.v1',
+                  changeSetId: 'bundle-cs-1',
+                  base: {
+                    domain: 'math',
+                    schema: 'famtutor.math.document.v1',
+                    documentId: bundle.document.ref.documentId,
+                    revision: bundleRenderer.getDocument().revision
+                  },
+                  operations: [{ op: 'construct', command: 'point.free', outputs: ['BundlePt'], params: { coords: [2, 2] } }],
+                  metadata: { timestamp: '2026-08-03T13:01:00.000Z' }
+                });
+                assert('26b_bundle_apply', afterBundle.ok === true && afterBundle.strategy === 'rebuild');
+                const snap = await bundleRenderer.snapshot({ renderer: 'jsxgraph-svg' });
+                assert('26c_bundle_snapshot', snap.ok && snap.artifact.digest.algorithm === 'sha256' && snap.artifact.digest.value.length === 64);
+                const dispatchLegacy = await bundleRenderer.dispatch({ type: 'selection.set', entityId: 'A' });
+                assert('26d_legacy_action_normalizer', dispatchLegacy.ok === true);
+                await bundleRenderer.destroy();
+                assert('26e_host_empty', bundleHost.children.length === 0);
+
                 const summary = {
                   checks: checks.map(c => ({ name: c.name, ok: c.ok })),
                   passed: checks.filter(c => c.ok).length,
@@ -413,7 +472,7 @@ def main() -> int:
                 throw error;
               }
             }""",
-            {"geometry": geometry, "functions": functions},
+            {"geometry": geometry, "functions": functions, "bundle": bundle},
         )
 
         status = page.locator("body").get_attribute("data-status")

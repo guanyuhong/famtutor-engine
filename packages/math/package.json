@@ -1,6 +1,6 @@
 {
   "name": "@famtutor/math-runtime",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FamTutor Engine math domain: Agent-native 2D construction, validation, simulation, and JSXGraph/SVG runtime.",
   "type": "module",
   "main": "./dist/index.js",
@@ -47,7 +47,7 @@
     "verify": "npm run test && npm run test:schema && npm run test:browser && npm run test:mcp && npm run test:cli && node ../../scripts/package-smoke.mjs"
   },
   "dependencies": {
-    "@famtutor/core": "0.2.0"
+    "@famtutor/core": "0.3.0"
   },
   "repository": {
     "type": "git",

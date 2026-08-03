@@ -1,6 +1,6 @@
 {
   "schema": "famtutor.math.agent-tools.v1",
-  "runtimeVersion": "0.2.0",
+  "runtimeVersion": "0.3.0",
   "tools": [
     {
       "name": "math_capabilities",
@@ -301,7 +301,7 @@
     {
       "name": "math_export",
       "title": "Export document or SVG",
-      "description": "Export canonical MathDocument JSON or deterministic SVG with a content hash.",
+      "description": "Export canonical MathDocument JSON, deterministic SVG, or a host-neutral Render Bundle.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -317,7 +317,8 @@
             "type": "string",
             "enum": [
               "math-document",
-              "svg"
+              "svg",
+              "render-bundle"
             ]
           },
           "viewId": {

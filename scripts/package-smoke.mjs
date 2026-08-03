@@ -34,7 +34,8 @@ const coreTarball = await packPackage(coreRoot, "core");
 assertTarContains(coreTarball, [
   "package/dist/index.js",
   "package/dist/index.d.ts",
-  "package/protocol/famtutor.engine.runtime.v1.schema.json"
+  "package/protocol/famtutor.engine.runtime.v1.schema.json",
+  "package/protocol/famtutor.render.bundle.v1.schema.json"
 ]);
 
 const mathTarball = await packPackage(mathRoot, "math");
@@ -42,6 +43,7 @@ assertTarContains(mathTarball, [
   "package/dist/index.js",
   "package/dist/index.d.ts",
   "package/protocol/famtutor.math.document.v1.schema.json",
+  "package/protocol/famtutor.math.operations.v1.schema.json",
   "package/bin/famtutor-math.mjs",
   "package/bin/famtutor-math-mcp.mjs"
 ]);
@@ -74,21 +76,34 @@ import {
   MATH_RUNTIME_VERSION,
   MathDomainRuntime,
   validateMathDocument,
-  renderDirectSvg
+  renderDirectSvg,
+  createMathRenderBundle,
+  serializeRenderBundle
 } from "@famtutor/math-runtime";
 
 const require = createRequire(import.meta.url);
 const coreSchema = require("@famtutor/core/protocol/runtime-schema");
+const bundleSchema = require("@famtutor/core/protocol/render-bundle-schema");
 const mathSchema = require("@famtutor/math-runtime/protocol/document-schema");
+const operationsSchema = require("@famtutor/math-runtime/protocol/operations-schema");
 if (!CORE_VERSION || !MATH_RUNTIME_VERSION) throw new Error("missing versions");
 if (!coreSchema || typeof coreSchema !== "object") throw new Error("core schema subpath failed");
+if (!bundleSchema || bundleSchema.$id !== "https://famtutor.ai/schemas/famtutor.render.bundle.v1.schema.json") {
+  throw new Error("render-bundle schema subpath failed");
+}
 if (!mathSchema || typeof mathSchema !== "object") throw new Error("math schema subpath failed");
+if (!operationsSchema || typeof operationsSchema !== "object") throw new Error("operations schema subpath failed");
 
 const document = JSON.parse(readFileSync(new URL("./example.json", import.meta.url), "utf8"));
 const report = validateMathDocument(document);
 if (report.status !== "valid") throw new Error("validate failed");
 const rendered = renderDirectSvg(document, { width: 640, height: 420 });
 if (!rendered.svg.startsWith("<svg")) throw new Error("svg render failed");
+
+const bundle = await createMathRenderBundle(document, { width: 960, height: 640 });
+if (!bundle.ok) throw new Error("createMathRenderBundle failed");
+const serialized = serializeRenderBundle(bundle.bundle);
+if (!serialized.includes("famtutor.render.bundle.v1")) throw new Error("bundle serialize failed");
 
 const runtime = new MathDomainRuntime();
 const descriptor = await runtime.descriptor();
@@ -99,7 +114,8 @@ console.log(JSON.stringify({
   ok: true,
   core: CORE_VERSION,
   math: MATH_RUNTIME_VERSION,
-  svgBytes: rendered.svg.length
+  svgBytes: rendered.svg.length,
+  bundleDigest: bundle.bundle.integrity.value
 }));
 `);
 
