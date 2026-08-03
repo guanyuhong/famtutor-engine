@@ -39,3 +39,18 @@ for label, (schema_path, example_names) in SCHEMAS.items():
         validated.append(f"{label}:{name}")
 
 print(f"Core JSON Schema smoke passed: {len(validated)} examples.")
+
+case_schema_path = ROOT / "protocol" / "famtutor.case.v1.schema.json"
+case_schema = json.loads(case_schema_path.read_text())
+Draft202012Validator.check_schema(case_schema)
+case_validator = Draft202012Validator(case_schema, format_checker=FormatChecker())
+corpus_root = ROOT.parent.parent / "corpus" / "books"
+case_paths = sorted(corpus_root.glob("*/cases/*/case.json"))
+for path in case_paths:
+    document = json.loads(path.read_text())
+    errors = sorted(case_validator.iter_errors(document), key=lambda error: list(error.absolute_path))
+    if errors:
+        details = "\n".join(f"{list(error.absolute_path)}: {error.message}" for error in errors)
+        raise RuntimeError(f"{path} failed case JSON Schema validation:\n{details}")
+if case_paths:
+    print(f"Case JSON Schema smoke passed: {len(case_paths)} cases.")

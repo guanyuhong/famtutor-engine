@@ -9,9 +9,11 @@ import {
   MCP_SERVER_INFO,
   MathDomainRuntime,
   applyMathChangeSet,
+  createMathRenderBundle,
   deepClone,
   sha256Utf8,
-  stableHash
+  stableHash,
+  validateMathRenderBundle
 } from "../dist/index.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -107,6 +109,33 @@ test("applyMathChangeSet is deterministic for identical inputs", () => {
   assert.equal(first.ok, true);
   assert.equal(second.ok, true);
   assert.equal(stableHash(first.document), stableHash(second.document));
+});
+
+test("applied documents remain canonical JSON through Render Bundle validation", async () => {
+  const document = emptyDoc(1);
+  const result = applyMathChangeSet(document, {
+    schema: "famtutor.engine.change-set.v1",
+    changeSetId: "cs-json-safe",
+    base: {
+      domain: "math",
+      schema: "famtutor.math.document.v1",
+      documentId: "doc-core",
+      revision: 1
+    },
+    operations: [
+      { op: "construct", command: "point.free", outputs: ["A"], params: { coords: [0, 0] } },
+      { op: "construct", command: "point.free", outputs: ["B"], params: { coords: [2, 0] } },
+      { op: "construct", command: "segment.through_points", outputs: ["AB"], inputs: [{ ref: "A" }, { ref: "B" }] },
+      { op: "expand_macro", macro: "macro.line.perpendicular_bisector", inputs: { A: "A", B: "B" }, idPrefix: "json_safe" }
+    ]
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.document, JSON.parse(JSON.stringify(result.document)));
+  const created = await createMathRenderBundle(result.document);
+  assert.equal(created.ok, true);
+  if (!created.ok) return;
+  const validated = await validateMathRenderBundle(created.bundle);
+  assert.equal(validated.ok, true);
 });
 
 test("base revision mismatch returns REVISION_CONFLICT without throwing", () => {

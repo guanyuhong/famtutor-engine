@@ -1,0 +1,15 @@
+{
+  "schema": "famtutor.knowledge-points.v1",
+  "bookId": "zjedu-math-8a-2013",
+  "section": "1.1 认识三角形",
+  "items": [
+    { "id": "triangle-elements", "title": "三角形的顶点、边和内角", "printedPages": [4], "pdfPages": [7] },
+    { "id": "triangle-angle-sum", "title": "三角形内角和", "printedPages": [4], "pdfPages": [7] },
+    { "id": "triangle-inequality", "title": "三角形三边关系", "printedPages": [5, 6], "pdfPages": [8, 9] },
+    { "id": "angle-bisector", "title": "三角形的角平分线", "printedPages": [7], "pdfPages": [10] },
+    { "id": "median", "title": "三角形的中线", "printedPages": [7], "pdfPages": [10] },
+    { "id": "altitude", "title": "三角形的高", "printedPages": [8], "pdfPages": [11] },
+    { "id": "triangle-lines-assessment", "title": "中线、角平分线与高的辨析", "printedPages": [8, 9], "pdfPages": [11, 12] },
+    { "id": "midpoint-area", "title": "三边中点与面积探索", "printedPages": [9], "pdfPages": [12] }
+  ]
+}

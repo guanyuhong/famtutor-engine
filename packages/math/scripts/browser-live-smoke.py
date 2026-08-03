@@ -6,12 +6,16 @@ from __future__ import annotations
 import json
 import os
 import sys
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from threading import Thread
 
 from playwright.sync_api import sync_playwright
 
 
 ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = ROOT.parent.parent
 ARTIFACTS = ROOT / "artifacts"
 ARTIFACTS.mkdir(parents=True, exist_ok=True)
 AMD_BUNDLE = ARTIFACTS / "runtime.browser.amd.js"
@@ -65,6 +69,11 @@ HTML = """<!doctype html>
 </html>"""
 
 
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, _format: str, *args: object) -> None:
+        return
+
+
 def main() -> int:
     if not AMD_BUNDLE.exists():
         raise RuntimeError(f"Missing AMD bundle: {AMD_BUNDLE}")
@@ -76,9 +85,21 @@ def main() -> int:
     # Build + validate Render Bundle in Node (core APIs), then mount document payload in Chromium.
     from subprocess import check_output
     bundle = json.loads(check_output(["node", str(ROOT / "scripts" / "_make_bundle_for_smoke.mjs")], cwd=str(ROOT), text=True))
+    corpus_payload_script = ROOT.parent.parent / "scripts" / "corpus-browser-payload.mjs"
+    seed_cases = json.loads(check_output([
+        "node",
+        str(corpus_payload_script),
+        "zj8a-1-1-01-triangle-elements",
+        "zj8a-1-1-02-drag-angle-sum",
+        "zj8a-1-1-05-angle-bisector",
+    ], cwd=str(ROOT.parent.parent), text=True))
     amd_source = AMD_BUNDLE.read_text()
     console_messages: list[str] = []
     page_errors: list[str] = []
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(REPO_ROOT)))
+    server_thread = Thread(target=server.serve_forever, daemon=True)
+    server_thread.start()
+    base_url = f"http://127.0.0.1:{server.server_port}"
 
     with sync_playwright() as playwright:
         launch_kwargs: dict = {
@@ -98,7 +119,7 @@ def main() -> int:
         page.add_script_tag(content=AMD_LOADER + "\n" + amd_source + "\nwindow.FamTutorMath = __famtutorAmdRequire('browser-entry');")
 
         summary = page.evaluate(
-            """async ({ geometry, functions, bundle }) => {
+            """async ({ geometry, functions, bundle, seedCases }) => {
               const runtime = globalThis.FamTutorMath;
               const resultEl = document.querySelector('#result');
               const checks = [];
@@ -456,6 +477,30 @@ def main() -> int:
                 await bundleRenderer.destroy();
                 assert('26e_host_empty', bundleHost.children.length === 0);
 
+                // PR6 seed acceptance: one demonstration, exploration, and guided-construction
+                // case is replayed + bundled in Node, then its mounted payload is exercised here.
+                assert('27_seed_case_count', seedCases.length === 3);
+                const mountedTypes = new Set();
+                for (const seedCase of seedCases) {
+                  assert(`28_${seedCase.caseId}_bundle`, seedCase.bundle?.schema === 'famtutor.render.bundle.v1');
+                  const seedRenderer = await runtime.mountMathRenderer(
+                    bundleHost,
+                    seedCase.bundle.document.content,
+                    { viewId: seedCase.bundle.entrypoint.viewId }
+                  );
+                  mountedTypes.add(seedCase.caseType);
+                  const seedSnapshot = await seedRenderer.snapshot({ renderer: 'jsxgraph-svg' });
+                  assert(`29_${seedCase.caseId}_snapshot`, seedSnapshot.ok
+                    && seedSnapshot.artifact.content.startsWith('<svg')
+                    && seedSnapshot.artifact.digest.value.length === 64);
+                  await seedRenderer.destroy();
+                  assert(`30_${seedCase.caseId}_destroy`, bundleHost.children.length === 0);
+                }
+                assert('31_seed_case_type_coverage',
+                  mountedTypes.has('demonstration')
+                  && mountedTypes.has('exploration')
+                  && mountedTypes.has('guided-construction'));
+
                 const summary = {
                   checks: checks.map(c => ({ name: c.name, ok: c.ok })),
                   passed: checks.filter(c => c.ok).length,
@@ -472,7 +517,7 @@ def main() -> int:
                 throw error;
               }
             }""",
-            {"geometry": geometry, "functions": functions, "bundle": bundle},
+            {"geometry": geometry, "functions": functions, "bundle": bundle, "seedCases": seed_cases},
         )
 
         status = page.locator("body").get_attribute("data-status")
@@ -480,9 +525,54 @@ def main() -> int:
         if status != "passed" or title != "BROWSER_LIVE_SMOKE_PASSED":
             raise RuntimeError(f"Live browser status={status}, title={title}")
 
+        # Exercise the public Node/ESM bundle API in a real browser. The AMD entry above
+        # intentionally omits @famtutor/core value exports, so an import map resolves the
+        # workspace package for this full mountMathRenderBundle path.
+        bundle_page = browser.new_page(viewport={"width": 1200, "height": 900})
+        # Start on a same-origin resource with no module scripts; import maps must be
+        # installed before the first module graph begins loading.
+        bundle_page.goto(f"{base_url}/package.json", wait_until="domcontentloaded")
+        bundle_page.add_script_tag(type="importmap", content=json.dumps({
+            "imports": {"@famtutor/core": f"{base_url}/packages/core/dist/index.js"}
+        }))
+        bundle_page.add_script_tag(url=f"{base_url}/packages/math/vendor/jsxgraph/jsxgraphcore.js")
+        bundle_page.add_script_tag(type="module", content=f"""
+          import {{ mountMathRenderBundle }} from '{base_url}/packages/math/dist/index.js';
+          window.__mountMathRenderBundle = mountMathRenderBundle;
+        """)
+        bundle_page.wait_for_function("typeof window.__mountMathRenderBundle === 'function'")
+        bundle_api_checks = bundle_page.evaluate(
+            """async (seedCases) => {
+              const results = [];
+              for (const seedCase of seedCases) {
+                const host = document.createElement('div');
+                host.style.width = '720px';
+                host.style.height = '480px';
+                document.body.append(host);
+                const mounted = await window.__mountMathRenderBundle(host, seedCase.bundle);
+                if (!mounted.ok) throw new Error(`${seedCase.caseId}: ${JSON.stringify(mounted.diagnostics)}`);
+                const snapshot = await mounted.renderer.snapshot({ renderer: 'jsxgraph-svg' });
+                if (!snapshot.ok || !snapshot.artifact.content.startsWith('<svg')) {
+                  throw new Error(`${seedCase.caseId}: bundle snapshot failed`);
+                }
+                await mounted.renderer.destroy();
+                host.remove();
+                results.push({ caseId: seedCase.caseId, caseType: seedCase.caseType, ok: true });
+              }
+              return results;
+            }""",
+            seed_cases,
+        )
+        if len(bundle_api_checks) != 3 or not all(item["ok"] for item in bundle_api_checks):
+            raise RuntimeError(f"mountMathRenderBundle seed checks failed: {bundle_api_checks}")
+        summary["mountMathRenderBundleCases"] = bundle_api_checks
+        bundle_page.close()
+
         (ARTIFACTS / "browser-live-smoke-summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
         page.screenshot(path=str(ARTIFACTS / "browser-live-smoke.png"), full_page=True)
         browser.close()
+    server.shutdown()
+    server.server_close()
 
     if page_errors:
         raise RuntimeError("Browser page errors:\n" + "\n".join(page_errors))

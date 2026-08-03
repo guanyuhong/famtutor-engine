@@ -1,0 +1,17 @@
+{
+  "schema": "famtutor.book.v1",
+  "bookId": "zjedu-math-8a-2013",
+  "title": "义务教育教科书·数学八年级上册",
+  "publisher": "浙江教育出版社",
+  "edition": "2013-07-first-edition",
+  "printing": "2021-06-ninth-printing",
+  "isbn": "978-7-5536-0922-5",
+  "locale": "zh-CN",
+  "pdf": {
+    "path": "books/义务教育教科书·数学八年级上册.pdf",
+    "fileName": "义务教育教科书·数学八年级上册.pdf",
+    "sha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "pageCount": 177,
+    "distribution": "internal-repository-only"
+  }
+}

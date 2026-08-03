@@ -1,0 +1,26 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-04-adjust-three-segments",
+  "title": "调整三条线段判断能否组成三角形",
+  "description": "通过三个长度控件调整线段，并即时判断三边是否可以围成三角形。",
+  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [5, 6], "pdfPages": [8, 9], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "knowledgePoints": ["triangle-inequality"],
+  "learningObjective": "通过反例与正例形成三边能围成三角形的判定规则。",
+  "caseType": "exploration",
+  "difficulty": "intermediate",
+  "requiredCapabilities": ["scalar.slider", "conditional-construction", "boolean-feedback", "interaction.set_value"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 104, "attempts": 2 },
+  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "adjust-segments-04", "revision": 1, "seed": 104, "metadata": { "title": "调整三条线段", "locale": "zh-CN", "purpose": "exploration", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 6, 6, -4], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "adjust", "title": "调整并判断", "stages": [{ "id": "change", "narration": "调整三条线段长度。" }, { "id": "judge", "narration": "观察能否围成三角形。" }] }] } },
+  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-04-partial", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "adjust-segments-04", "revision": 1 }, "operations": [
+    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideA", "label": "a" }], "params": { "min": 1, "max": 10, "value": 3, "step": 1, "position": [-4, 4] } },
+    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideB", "label": "b" }], "params": { "min": 1, "max": 10, "value": 4, "step": 1, "position": [-4, 3] } },
+    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideC", "label": "c" }], "params": { "min": 1, "max": 10, "value": 5, "step": 1, "position": [-4, 2] } },
+    { "op": "set_interaction", "policy": { "target": "sideA", "permissions": ["set_value"] } },
+    { "op": "set_interaction", "policy": { "target": "sideB", "permissions": ["set_value"] } },
+    { "op": "set_interaction", "policy": { "target": "sideC", "permissions": ["set_value"] } }
+  ], "metadata": { "origin": "textbook-case-seed" } }] },
+  "expected": { "assertions": [], "interactions": [{ "target": "sideA", "permission": "set_value" }, { "target": "sideB", "permission": "set_value" }, { "target": "sideC", "permission": "set_value" }], "expectedFailure": { "stage": "interaction", "code": "CAPABILITY_CONDITIONAL_FEEDBACK_UNAVAILABLE", "message": "运行时缺少由三条滑块值驱动的条件构造与布尔教学反馈。" } },
+  "artifacts": {},
+  "status": "expected-unsupported",
+  "diagnostics": [{ "code": "CAPABILITY_CONDITIONAL_FEEDBACK_UNAVAILABLE", "severity": "warning", "message": "scalar.slider 可用，但条件构造和布尔反馈尚无协议能力。", "path": "requiredCapabilities", "retryable": false }]
+}

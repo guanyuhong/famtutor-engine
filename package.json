@@ -9,7 +9,8 @@
   "scripts": {
     "build": "npm run build -w @famtutor/core && npm run build -w @famtutor/math-runtime",
     "test": "npm run test -w @famtutor/core && npm run test -w @famtutor/math-runtime",
-    "verify": "npm run verify -w @famtutor/core && npm run verify -w @famtutor/math-runtime"
+    "test:corpus": "npm run build && node ./scripts/corpus-verify.mjs --write-report",
+    "verify": "npm run verify -w @famtutor/core && npm run verify -w @famtutor/math-runtime && npm run test:corpus"
   },
   "devDependencies": {
     "typescript": "5.8.3"

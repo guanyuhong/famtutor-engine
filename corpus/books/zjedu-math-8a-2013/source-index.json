@@ -1,0 +1,24 @@
+{
+  "schema": "famtutor.source-index.v1",
+  "bookId": "zjedu-math-8a-2013",
+  "pageMapping": {
+    "kind": "stable-offset",
+    "pdfPageOffsetFromPrinted": 3,
+    "verifiedPrintedPages": [2, 4, 5, 6, 7, 8, 9, 46, 88, 112, 138]
+  },
+  "pilotSlice": {
+    "chapter": "1 三角形的初步知识",
+    "section": "1.1 认识三角形",
+    "printedPages": [4, 5, 6, 7, 8, 9],
+    "pdfPages": [7, 8, 9, 10, 11, 12],
+    "extractionMethod": "visual-review",
+    "reviewStatus": "reviewed"
+  },
+  "chapterStarts": [
+    { "chapter": 1, "title": "三角形的初步知识", "printedPage": 2, "pdfPage": 5 },
+    { "chapter": 2, "title": "特殊三角形", "printedPage": 46, "pdfPage": 49 },
+    { "chapter": 3, "title": "一元一次不等式", "printedPage": 88, "pdfPage": 91 },
+    { "chapter": 4, "title": "图形与坐标", "printedPage": 112, "pdfPage": 115 },
+    { "chapter": 5, "title": "一次函数", "printedPage": 138, "pdfPage": 141 }
+  ]
+}

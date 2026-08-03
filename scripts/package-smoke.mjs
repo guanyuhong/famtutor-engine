@@ -35,7 +35,8 @@ assertTarContains(coreTarball, [
   "package/dist/index.js",
   "package/dist/index.d.ts",
   "package/protocol/famtutor.engine.runtime.v1.schema.json",
-  "package/protocol/famtutor.render.bundle.v1.schema.json"
+  "package/protocol/famtutor.render.bundle.v1.schema.json",
+  "package/protocol/famtutor.case.v1.schema.json"
 ]);
 
 const mathTarball = await packPackage(mathRoot, "math");
@@ -84,12 +85,16 @@ import {
 const require = createRequire(import.meta.url);
 const coreSchema = require("@famtutor/core/protocol/runtime-schema");
 const bundleSchema = require("@famtutor/core/protocol/render-bundle-schema");
+const caseSchema = require("@famtutor/core/protocol/case-schema");
 const mathSchema = require("@famtutor/math-runtime/protocol/document-schema");
 const operationsSchema = require("@famtutor/math-runtime/protocol/operations-schema");
 if (!CORE_VERSION || !MATH_RUNTIME_VERSION) throw new Error("missing versions");
 if (!coreSchema || typeof coreSchema !== "object") throw new Error("core schema subpath failed");
 if (!bundleSchema || bundleSchema.$id !== "https://famtutor.ai/schemas/famtutor.render.bundle.v1.schema.json") {
   throw new Error("render-bundle schema subpath failed");
+}
+if (!caseSchema || caseSchema.$id !== "https://famtutor.ai/schemas/famtutor.case.v1.schema.json") {
+  throw new Error("case schema subpath failed");
 }
 if (!mathSchema || typeof mathSchema !== "object") throw new Error("math schema subpath failed");
 if (!operationsSchema || typeof operationsSchema !== "object") throw new Error("operations schema subpath failed");

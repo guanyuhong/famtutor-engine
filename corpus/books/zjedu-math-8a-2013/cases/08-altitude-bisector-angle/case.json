@@ -1,0 +1,29 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-08-altitude-bisector-angle",
+  "title": "高与角平分线组合的角度计算",
+  "description": "在直角三角形中同时呈现从 A 作出的高和从 B 作出的角平分线，验证分角为 45°。",
+  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [8], "pdfPages": [11], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "knowledgePoints": ["altitude", "angle-bisector", "angle-calculation"],
+  "learningObjective": "在同一图形中辨认高和角平分线，并利用直角与平分关系计算角度。",
+  "caseType": "guided-construction",
+  "difficulty": "advanced",
+  "requiredCapabilities": ["line.perpendicular_through", "ray.from_points", "measurement.angle", "assertion.expression_equal"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 108, "attempts": 1 },
+  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "altitude-bisector-08", "revision": 1, "seed": 108, "metadata": { "title": "高与角平分线组合", "locale": "zh-CN", "purpose": "demonstration", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-1, 6, 6, -2], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "combine-lines", "title": "组合辅助线", "stages": [{ "id": "triangle", "narration": "构造直角三角形 ABC。" }, { "id": "altitude", "narration": "从 A 向 BC 所在直线作高。", "focus": ["altitudeA"] }, { "id": "bisector", "narration": "作 ∠ABC 的角平分线并计算分角。", "focus": ["bisectorB", "angleDBC"] }] }], "provenance": { "generator": "agent", "sourceRefs": ["zjedu-math-8a-2013:printed-8"] } } },
+  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-08-build", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "altitude-bisector-08", "revision": 1 }, "operations": [
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [0, 5] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [0, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [5, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "D", "label": "D" }], "params": { "coords": [1.5, 1.5] } },
+    { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "triangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "construct", "command": "line.through_points", "outputs": [{ "id": "sideBC" }], "inputs": [{ "ref": "B" }, { "ref": "C" }] },
+    { "op": "construct", "command": "line.perpendicular_through", "outputs": [{ "id": "altitudeA", "label": "高" }], "inputs": [{ "ref": "A" }, { "ref": "sideBC" }] },
+    { "op": "construct", "command": "ray.from_points", "outputs": [{ "id": "bisectorB", "label": "角平分线" }], "inputs": [{ "ref": "B" }, { "ref": "D" }] },
+    { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleDBC", "label": "∠DBC" }], "inputs": [{ "ref": "D" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "add_assertion", "assertion": { "id": "altitude-perpendicular", "predicate": "perpendicular", "arguments": [{ "ref": "altitudeA" }, { "ref": "sideBC" }], "requiredMethod": "construction" } },
+    { "op": "add_assertion", "assertion": { "id": "bisected-right-angle", "predicate": "expression_equal", "arguments": [{ "expr": "angle(D,B,C)" }, { "value": 0.7853981633974483 }], "tolerance": 1e-9, "message": "直角的一半为 45°。" } }
+  ], "metadata": { "origin": "textbook-case-seed" } }] },
+  "expected": { "documentFingerprint": "32cd3558f97c26bb79f9b1e7fbe10f420d083c28ade43a7d7379d05efca86f4f", "assertions": [{ "kind": "entity-exists", "entityIds": ["triangle", "sideBC", "altitudeA", "bisectorB", "angleDBC"] }, { "kind": "runtime-assertions-pass" }, { "kind": "activity-stages", "minimum": 3 }, { "kind": "static-render" }, { "kind": "render-bundle" }], "interactions": [] },
+  "artifacts": {}, "status": "accepted", "diagnostics": []
+}

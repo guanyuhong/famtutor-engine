@@ -8,6 +8,7 @@ An agent-native engine for building, simulating, rendering, and assessing intera
 
 - [Architecture](docs/ARCHITECTURE.md) — engine-level design, three protocol layers, v0.2 PR sequence
 - [Roadmap](docs/ROADMAP.md) — near-term Engine v0.2 priorities and domain backlog
+- [Textbook case corpus](corpus/README.md) — 10 sourced, deterministic Grade 8 seed cases
 - [Core package](packages/core/README.md) — `@famtutor/core` runtime contracts
 - [Math package](packages/math/README.md) — `@famtutor/math-runtime` details
 
@@ -52,6 +53,7 @@ TypeScript is pinned via `package-lock.json`. Prefer `npm ci` for Node packages:
 npm ci
 npm run build
 npm test
+npm run test:corpus
 ```
 
 `npm ci` / `npm test` cover Node unit tests for **core then math**. They do **not** install Python Playwright/Chromium.

@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.ai/schemas/famtutor.case.v1.schema.json",
+  "title": "FamTutor Textbook Case v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "caseId", "title", "description", "source", "knowledgePoints",
+    "learningObjective", "caseType", "difficulty", "requiredCapabilities",
+    "generation", "inputs", "trace", "expected", "artifacts", "status", "diagnostics"
+  ],
+  "properties": {
+    "schema": { "const": "famtutor.case.v1" },
+    "caseId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{2,127}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "source": { "$ref": "#/$defs/source" },
+    "knowledgePoints": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "learningObjective": { "type": "string", "minLength": 1 },
+    "caseType": {
+      "enum": ["demonstration", "exploration", "guided-construction", "assessment"]
+    },
+    "difficulty": { "enum": ["introductory", "intermediate", "advanced"] },
+    "requiredCapabilities": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "generation": { "$ref": "#/$defs/generation" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "initialDocument": { "$ref": "#/$defs/initialDocument" },
+        "parameters": { "type": "object" }
+      },
+      "anyOf": [{ "required": ["initialDocument"] }, { "required": ["parameters"] }]
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changeSets"],
+      "properties": {
+        "changeSets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/changeSet" }
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertions", "interactions"],
+      "properties": {
+        "documentFingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "assertions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/caseAssertion" }
+        },
+        "interactions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/interactionExpectation" }
+        },
+        "expectedFailure": { "$ref": "#/$defs/expectedFailure" }
+      }
+    },
+    "artifacts": { "type": "object" },
+    "status": {
+      "enum": ["accepted", "expected-unsupported", "invalid", "regression"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "accepted" } } },
+      "then": {
+        "properties": {
+          "trace": { "properties": { "changeSets": { "minItems": 1 } } },
+          "expected": {
+            "required": ["documentFingerprint"],
+            "properties": { "assertions": { "minItems": 1 } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "expected-unsupported" } } },
+      "then": { "properties": { "expected": { "required": ["expectedFailure"] } } }
+    }
+  ],
+  "$defs": {
+    "positivePage": { "type": "integer", "minimum": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bookId", "pdfName", "pdfSha256", "chapter", "section", "printedPages",
+        "pdfPages", "extractionMethod", "confidence", "reviewStatus"
+      ],
+      "properties": {
+        "bookId": { "type": "string", "minLength": 1 },
+        "pdfName": { "type": "string", "pattern": "\\.pdf$" },
+        "pdfSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "chapter": { "type": "string", "minLength": 1 },
+        "section": { "type": "string", "minLength": 1 },
+        "printedPages": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/positivePage" } },
+        "pdfPages": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/positivePage" } },
+        "extractionMethod": { "enum": ["visual-review", "ocr-reviewed", "structured-source"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reviewStatus": { "enum": ["reviewed", "needs-review"] }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "promptVersion", "seed", "attempts"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "promptVersion": { "type": "string", "minLength": 1 },
+        "seed": { "type": "integer", "minimum": 0 },
+        "attempts": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "initialDocument": {
+      "type": "object",
+      "required": ["schema", "documentId", "revision", "seed", "metadata", "entities", "construction", "views"],
+      "properties": {
+        "schema": { "type": "string", "minLength": 1 },
+        "documentId": { "type": "string", "minLength": 1 },
+        "revision": { "type": "integer", "minimum": 0 },
+        "seed": { "type": "integer" },
+        "metadata": { "type": "object" },
+        "entities": { "type": "array" },
+        "construction": { "type": "array" },
+        "views": { "type": "array", "minItems": 1 }
+      }
+    },
+    "changeSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "changeSetId", "base", "operations"],
+      "properties": {
+        "schema": { "const": "famtutor.engine.change-set.v1" },
+        "changeSetId": { "type": "string", "minLength": 1 },
+        "base": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["domain", "schema", "documentId", "revision"],
+          "properties": {
+            "domain": { "type": "string", "minLength": 1 },
+            "schema": { "type": "string", "minLength": 1 },
+            "documentId": { "type": "string", "minLength": 1 },
+            "revision": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "operations": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "type": "object" } },
+        "metadata": { "type": "object" }
+      }
+    },
+    "caseAssertion": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["entity-exists", "entity-types", "runtime-assertions-pass", "activity-stages", "static-render", "render-bundle"]
+        },
+        "entityIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "types": { "type": "object", "additionalProperties": { "type": "string" } },
+        "minimum": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "interactionExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "permission"],
+      "properties": {
+        "target": { "type": "string", "minLength": 1 },
+        "permission": { "enum": ["select", "drag", "edit", "set_value"] }
+      }
+    },
+    "expectedFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "code", "message"],
+      "properties": {
+        "stage": { "enum": ["source", "schema", "trace", "validation", "render", "bundle", "interaction", "assertion"] },
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "severity", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["error", "warning", "info"] },
+        "message": { "type": "string", "minLength": 1 },
+        "path": { "type": "string" },
+        "retryable": { "type": "boolean" }
+      }
+    }
+  }
+}

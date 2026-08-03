@@ -368,25 +368,27 @@ export function expandMacro(
       const expected = definitionCommand.outputTypes[index]!;
       const type = (Array.isArray(expected) ? step.outputTypes[index]! : expected) as EntityType;
       const formal = formalById.get(outputId);
-      entities.push({
+      const entity: MathEntity = {
         id: outputId,
         type,
         role: step.role ?? "derived",
-        label: formal && definition.outputs.includes(formal) ? formal : undefined,
         description: `Expanded from ${definition.name}`
-      });
+      };
+      if (formal && definition.outputs.includes(formal)) entity.label = formal;
+      entities.push(entity);
     });
     let nodeId = `op-${outputs.join("-")}`;
     if (usedNodeIds.has(nodeId)) nodeId = uniqueId(document, nodeId, usedNodeIds);
     else usedNodeIds.add(nodeId);
-    construction.push({
+    const node: ConstructionNode = {
       id: nodeId,
       command: step.command,
       inputs: step.inputRefs.map(ref => ({ ref })),
-      params: step.params,
       outputs,
       description: step.description ?? `Expanded from ${definition.name}`
-    });
+    };
+    if (step.params !== undefined) node.params = step.params;
+    construction.push(node);
   }
 
   const outputs: Record<string, string> = {};

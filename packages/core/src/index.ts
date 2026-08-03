@@ -10,3 +10,4 @@ export * from "./bundle.js";
 export * from "./runtime.js";
 export * from "./mounted.js";
 export * from "./registry.js";
+export * from "./case.js";
