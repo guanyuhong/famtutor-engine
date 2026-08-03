@@ -28,8 +28,9 @@ Events · Assertions · Simulation · Evidence
 
 ## 已实现能力
 
-| 模块 | v0.1.1 能力 |
+| 模块 | v0.1.2 能力 |
 |---|---|
+| Core contracts | 实现 `@famtutor/core` `DomainRuntime`；纯事务 `applyMathChangeSet`；`RenderArtifact` |
 | Canonical protocol | `famtutor.math.document.v1`，闭合 JSON Schema、稳定 ID、revision、provenance |
 | 数学命令 | **47** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
@@ -39,18 +40,23 @@ Events · Assertions · Simulation · Evidence
 | Simulation | 点拖动、滑块变化、插值采样、事件轨迹、观察值、断言证据、最终状态提交 |
 | Interactive renderer | JSXGraph SVG/Canvas，动态依赖、拖动、滑块、stage、事件桥接、SVG 快照 |
 | Static renderer | 后端无关 Direct SVG，适合缩略图、PDF/Word、服务端批量输出 |
-| Agent runtime | 9 个稳定工具；事务、revision 乐观锁、dry-run、idempotency、undo、结构化错误 |
+| Agent runtime | 9 个稳定工具；作为 **stateful adapter**（DocumentStore dry-run/idempotency/undo）叠在无状态 DomainRuntime 之上 |
 | MCP | stdio JSON-RPC；支持现代 `2026-07-28` 发现协议，同时兼容 `2025-06-18` initialize 客户端 |
 | CLI | validate、render、simulate、inspect、capabilities |
 
 ## 快速开始
 
-环境要求：Node.js 20+；仓库自身无运行时 npm 依赖。JSXGraph 1.12.2 已放在 `vendor/jsxgraph/`，许可证见 `THIRD_PARTY_NOTICES.md`。
+环境要求：Node.js 20+。本包依赖 `@famtutor/core`（workspace）。JSXGraph 1.12.2 已放在 `vendor/jsxgraph/`，许可证见 `THIRD_PARTY_NOTICES.md`。
+
+从仓库根目录：
 
 ```bash
+npm ci
 npm run build
 npm test
 ```
+
+完整 verify（含 browser）需先按根 README 安装 `requirements-smoke.txt` 并设置 `PLAYWRIGHT_PYTHON`。
 
 验证并渲染示例：
 
@@ -304,8 +310,10 @@ npm run benchmark -w @famtutor/math-runtime
 
 ## 当前边界
 
-v0.1.1 有意不包含：
+v0.1.2 有意不包含：
 
+- 挂载后 ChangeSet 增量渲染 / `MountedRenderer`（Engine v0.2 **PR3**）；
+- `famtutor.render.bundle.v1`（**PR4**）；
 - 完整 GeoGebra 式 UI、资源社区和 Spreadsheet；
 - 通用 CAS、精确代数证明和方程求解；
 - 隐函数、不等式区域、轨迹和高级统计；
@@ -313,8 +321,7 @@ v0.1.1 有意不包含：
 - 完整 3D；
 - `.ggb` 导入导出；
 - 持久化数据库、多人协作和权限系统；
-- 自动标签避让在 JSXGraph runtime 中的完整接入；
-- 挂载后 ChangeSet 增量渲染（Engine v0.2 PR3，见根 [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md)）。
+- 自动标签避让在 JSXGraph runtime 中的完整接入。
 
 这些能力应在协议与 live runtime 稳定后分阶段增加，而不是让 Agent 可靠性被“大而全”拖累。
 

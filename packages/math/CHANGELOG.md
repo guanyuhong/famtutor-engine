@@ -2,6 +2,16 @@
 
 Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
 
+## 0.1.2 — 2026-08-03
+
+Engine PR2 — core contracts + publishing harden:
+
+- depend on `@famtutor/core@0.1.0`; implement `MathDomainRuntime` and pure `applyMathChangeSet`;
+- `AgentMathRuntime` remains the stateful session adapter (dry-run / undo / idempotency / DocumentStore);
+- single `MATH_RUNTIME_VERSION` shared by Agent runtime, MCP, CLI, and protocol JSON;
+- hardened clean-source package smoke via temporary consumer import by package name;
+- package metadata: repository / homepage / bugs / `publishConfig.access`.
+
 ## 0.1.1 — 2026-08-03
 
 Release baseline + L0 primitive closure expansion:

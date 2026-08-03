@@ -12,5 +12,5 @@
     "noEmitOnError": true,
     "rootDir": "./src"
   },
-  "files": ["./src/index.ts"]
+  "files": ["./src/browser-entry.ts"]
 }

@@ -113,7 +113,7 @@ def main() -> int:
         # Load JSXGraph before defining AMD, otherwise UMD detection can choose
         # the AMD branch and defer global JXG creation.
         page.add_script_tag(path=str(JSXGRAPH))
-        page.add_script_tag(content=AMD_LOADER + "\n" + amd_source + "\nwindow.FamTutorMath = __famtutorAmdRequire('index');")
+        page.add_script_tag(content=AMD_LOADER + "\n" + amd_source + "\nwindow.FamTutorMath = __famtutorAmdRequire('browser-entry');")
 
         summary = page.evaluate(
             """async ({ geometry, functions, coverage }) => {

@@ -8,6 +8,7 @@ An agent-native engine for building, simulating, rendering, and assessing intera
 
 - [Architecture](docs/ARCHITECTURE.md) — engine-level design, three protocol layers, v0.2 PR sequence
 - [Roadmap](docs/ROADMAP.md) — near-term Engine v0.2 priorities and domain backlog
+- [Core package](packages/core/README.md) — `@famtutor/core` runtime contracts
 - [Math package](packages/math/README.md) — `@famtutor/math-runtime` details
 
 ## Positioning
@@ -32,7 +33,8 @@ Intent / Author / Agent
 
 | Domain | Status | Package |
 |---|---|---|
-| Mathematics | **Shipped (v0.1)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
+| Core contracts | **Shipped (v0.1.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
+| Mathematics | **Shipped (v0.1.2)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
 | Physics | Planned | — |
 | Science (general) | Planned | — |
 | Computer Science | Planned | — |
@@ -40,19 +42,39 @@ Intent / Author / Agent
 | Chemistry | Planned | — |
 | Biology | Planned | — |
 
-Each domain owns its document protocol, command/macro catalog, and agent tools. Shared engine conventions (revision, transactions, safe evaluation, evidence) stay consistent across domains.
+Each domain owns its document protocol, command/macro catalog, and agent tools. Shared engine conventions live in `@famtutor/core` (`DomainRuntime`, `ChangeSet`, diagnostics, `RenderArtifact`).
 
-## Quick start (Math)
+## Quick start
 
-From the repo root (workspaces). TypeScript is pinned via `package-lock.json` — prefer `npm ci`:
+TypeScript is pinned via `package-lock.json`. Prefer `npm ci` for Node packages:
 
 ```bash
 npm ci
 npm run build
 npm test
-# full gate (schema, browser, MCP, CLI, pack):
+```
+
+`npm ci` / `npm test` cover Node unit tests for **core then math**. They do **not** install Python Playwright/Chromium.
+
+### Full verify (including browser + pack)
+
+1. Create a venv and install pinned smoke deps:
+
+```bash
+python3 -m venv .venv-smoke
+.venv-smoke/bin/pip install -r requirements-smoke.txt
+.venv-smoke/bin/python -m playwright install chromium
+export PLAYWRIGHT_PYTHON="$PWD/.venv-smoke/bin/python"
+```
+
+2. Run the full gate:
+
+```bash
+npm ci
 npm run verify
 ```
+
+`npm run verify` builds/tests **core then math**, including schema smoke, Chromium+JSXGraph browser smoke, MCP, CLI, and clean-source consumer pack smoke.
 
 Interactive demo:
 
@@ -71,17 +93,21 @@ node ./packages/math/bin/famtutor-math-mcp.mjs
 
 ## Math domain (current)
 
-`@famtutor/math-runtime` is the first vertical slice:
+`@famtutor/math-runtime` implements `@famtutor/core` `DomainRuntime`:
 
 - Canonical protocol `famtutor.math.document.v1`
+- Stateless `MathDomainRuntime` + `applyMathChangeSet`
+- Stateful `AgentMathRuntime` / `DocumentStore` adapter (dry-run, undo, idempotency)
 - L0 command catalog + L1 macro expansion (`expand_macro`)
 - Safe expression AST (no arbitrary JavaScript)
 - Headless evaluate / assert / simulate
-- JSXGraph interactive render + Direct SVG
+- JSXGraph interactive render + Direct SVG → `RenderArtifact`
 - 9 Agent tools + MCP stdio
 - Repair diagnostics (`suggestedFixes`)
 
-Details: [packages/math/README.md](packages/math/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
+Live mounted ChangeSet rendering is **PR3** (not shipped). Render Bundle is **PR4**.
+
+Details: [packages/math/README.md](packages/math/README.md) · [packages/core/README.md](packages/core/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
 
 ## Design principles
 
