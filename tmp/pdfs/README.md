@@ -1,6 +1,6 @@
 # Textbook page renderings (visual check cache)
 
-These PNGs are **local visual check materials** for the Zhejiang Education Press Grade 8 Math Vol. A PDF under `books/`. They are not npm pack assets and are not part of the Engine runtime.
+These PNGs are **internal visual check materials** for the Zhejiang Education Press Grade 8 Math Vol. A PDF under `books/`. They are checked into the repository for Agent / Codex page-map work, but are not npm pack assets and are not part of the Engine runtime.
 
 ## Naming
 

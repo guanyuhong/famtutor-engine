@@ -22,25 +22,26 @@ FamTutor Engine 暂不公开发布。近期只围绕一本真实教材建立案�
 | **PR2** core runtime contract | Done | 无状态 DomainRuntime 与 ChangeSet |
 | **PR3** live MountedRenderer | Done | 实时 apply、交互、snapshot |
 | **PR4** Render Bundle v1 | Done | 宿主无关 bundle 与 SHA-256 integrity |
+| **PR5** 教材方案与源材料 | Done | 方案文档、教材 PDF、`tmp/pdfs` 页图（不进 npm） |
 
 仓库内 `0.3.0` 是内部实现基线，不是公开发布状态。教材闭环稳定前不以版本升级或发布为迭代目标。
 
-## 3. PR5：教材案例系统方案文档（本 PR）
+## 3. PR5：教材案例系统方案与源材料（Done）
 
 目标：把教材驱动的案例系统写成可审阅的内部方案，并锁定首批试点切片与页码映射；**不改**协议、脚本或运行时代码。
 
-范围：
+已完成范围：
 
 1. 更新引擎级 `ARCHITECTURE` / `ROADMAP`，并新增 `TEXTBOOK_CASE_SYSTEM`。
-2. 约定本地教材路径与忽略规则：`books/**/*.pdf` 与 `tmp/` **不进入 git**（体积大、版权边界）；工作区可保留 PDF 与页面渲染供本地核对。
+2. 将指定教材 PDF 与 `tmp/pdfs/` 页面渲染纳入仓库，供内部核对与后续 Codex 任务（**不**进入 npm pack；版权仍属出版社）。
 3. 固定首批试点：第 1 章 1.1“认识三角形”（印刷页 4–9 / PDF 页 7–12）。
 
-验收门槛：
+验收门槛（已满足）：
 
 - 文档明确 Artifact / MountedRenderer / RenderBundle / TextbookCase 边界；
-- 教材版本、ISBN、SHA-256、`pdfPage = printedPage + 3` 映射可核对（对照本地 PDF，而非仓库内二进制）；
+- 教材版本、ISBN、SHA-256、`pdfPage = printedPage + 3` 映射可对照仓库内 PDF / 页图核对；
 - 五章目录与首批 10 个种子案例意图表完整；
-- 本 PR **不含** runtime/schema/脚本实现；案例基础设施从 **PR6** 开始。
+- 不含 runtime/schema/脚本实现；案例基础设施从 **PR6** 开始。
 
 ## 4. PR6：教材案例基础设施与 10 个种子案例
 

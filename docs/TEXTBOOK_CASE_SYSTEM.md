@@ -8,7 +8,7 @@
 
 | Field | Value |
 |---|---|
-| Local path | `books/义务教育教科书·数学八年级上册.pdf`（gitignored；不提交到仓库） |
+| Local path | `books/义务教育教科书·数学八年级上册.pdf`（已纳入仓库；不进 npm pack） |
 | Suggested `bookId` | `zjedu-math-8a-2013` |
 | Title | 义务教育教科书·数学八年级上册 |
 | Publisher | 浙江教育出版社 |
@@ -18,7 +18,7 @@
 | PDF pages | 177 |
 | SHA-256 | `d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2` |
 
-PDF 本体与 `tmp/pdfs/` 页面渲染仅作本地核对，不进入 git / GitHub（见根目录 `.gitignore` 与 `books/README.md`）。
+PDF 本体与 `tmp/pdfs/` 页面渲染已进入本仓库，供内部页码核对与 Agent/Codex 任务使用；**不**进入 npm pack。版权仍属出版社，公开分发前需单独审查（见第 10 节与 `books/README.md`）。
 
 教材事实只能来自：
 
@@ -124,7 +124,7 @@ corpus/
       render-bundle.json     # 派生缓存
 ```
 
-PDF、OCR/提取全文和页面图片属于本地 source cache，不应进入 npm pack。是否提交到未来的公开仓库需要单独进行版权审查。
+PDF 与 `tmp/pdfs/` 页面图片已作为内部 source cache 进入本仓库，但**不应**进入 npm pack。未来若公开仓库分发，需单独进行版权审查，并可改为只保留页码引用与派生结构。
 
 ## 5. Agent 生成协议
 
@@ -226,10 +226,10 @@ source validation
 
 ## 10. 分发与版权边界
 
-当前方案仅用于内部迭代。未来公开时需分别处理：
+当前方案仅用于内部迭代。仓库内已纳入教材 PDF 与页图，便于闭环开发；未来公开时需分别处理：
 
-- 教材 PDF 和页面截图默认不随仓库/npm 包分发；
+- 教材 PDF 和页面截图**不**进入 npm pack；公开仓库是否继续携带需单独版权审查；
 - 案例保留书目信息、页码引用和原创结构化表达；
-- 不复制教材的长段原文、整页图像或完整习题集；
-- 可公开案例、内部回归案例和本地 source cache 使用独立清单；
+- 公开案例中不复制教材的长段原文或完整习题集；
+- 可公开案例、内部回归案例和 source cache 使用独立清单；
 - 发布策略不影响 Engine 协议本身的通用性。
