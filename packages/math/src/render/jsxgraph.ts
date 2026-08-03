@@ -91,6 +91,9 @@ interface JxgBoard {
   unsuspendUpdate?: () => void;
   fullUpdate?: () => void;
   update?: () => void;
+  resize?: () => void;
+  getBoundingBox?: () => [number, number, number, number];
+  setBoundingBox?: (box: [number, number, number, number], keepAspectRatio?: boolean) => void;
   renderer?: { svgRoot?: SVGElement };
   [key: string]: unknown;
 }
