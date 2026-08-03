@@ -11,6 +11,9 @@
     "test": "npm run test -w @famtutor/math-runtime",
     "verify": "npm run verify -w @famtutor/math-runtime"
   },
+  "devDependencies": {
+    "typescript": "5.8.3"
+  },
   "engines": {
     "node": ">=20"
   },
