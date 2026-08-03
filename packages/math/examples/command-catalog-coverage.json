@@ -1,0 +1,794 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "command-coverage",
+  "revision": 1,
+  "seed": 123,
+  "metadata": {
+    "title": "Command coverage",
+    "locale": "en",
+    "purpose": "authoring"
+  },
+  "entities": [
+    {
+      "id": "k",
+      "type": "scalar",
+      "role": "derived"
+    },
+    {
+      "id": "s",
+      "type": "scalar",
+      "role": "free"
+    },
+    {
+      "id": "A",
+      "type": "point2",
+      "role": "free",
+      "label": "A"
+    },
+    {
+      "id": "B",
+      "type": "point2",
+      "role": "free",
+      "label": "B"
+    },
+    {
+      "id": "C",
+      "type": "point2",
+      "role": "free",
+      "label": "C"
+    },
+    {
+      "id": "D",
+      "type": "point2",
+      "role": "free",
+      "label": "D"
+    },
+    {
+      "id": "AB",
+      "type": "segment2",
+      "role": "derived"
+    },
+    {
+      "id": "lineAB",
+      "type": "line2",
+      "role": "derived"
+    },
+    {
+      "id": "rayAB",
+      "type": "ray2",
+      "role": "derived"
+    },
+    {
+      "id": "M",
+      "type": "point2",
+      "role": "derived",
+      "label": "M"
+    },
+    {
+      "id": "parallel",
+      "type": "line2",
+      "role": "derived"
+    },
+    {
+      "id": "perpendicular",
+      "type": "line2",
+      "role": "derived"
+    },
+    {
+      "id": "projection",
+      "type": "point2",
+      "role": "derived",
+      "label": "projection"
+    },
+    {
+      "id": "lineIntersection",
+      "type": "point2",
+      "role": "derived",
+      "label": "lineIntersection"
+    },
+    {
+      "id": "v",
+      "type": "vector2",
+      "role": "derived"
+    },
+    {
+      "id": "circleR",
+      "type": "circle2",
+      "role": "derived"
+    },
+    {
+      "id": "circleP",
+      "type": "circle2",
+      "role": "derived"
+    },
+    {
+      "id": "circum",
+      "type": "circle2",
+      "role": "derived"
+    },
+    {
+      "id": "LC1",
+      "type": "point2",
+      "role": "derived",
+      "label": "LC1"
+    },
+    {
+      "id": "LC2",
+      "type": "point2",
+      "role": "derived",
+      "label": "LC2"
+    },
+    {
+      "id": "CC1",
+      "type": "point2",
+      "role": "derived",
+      "label": "CC1"
+    },
+    {
+      "id": "CC2",
+      "type": "point2",
+      "role": "derived",
+      "label": "CC2"
+    },
+    {
+      "id": "glider",
+      "type": "point2",
+      "role": "free",
+      "label": "glider"
+    },
+    {
+      "id": "poly",
+      "type": "polygon2",
+      "role": "derived"
+    },
+    {
+      "id": "ang",
+      "type": "angle",
+      "role": "derived"
+    },
+    {
+      "id": "translated",
+      "type": "point2",
+      "role": "derived",
+      "label": "translated"
+    },
+    {
+      "id": "rotated",
+      "type": "point2",
+      "role": "derived",
+      "label": "rotated"
+    },
+    {
+      "id": "reflected",
+      "type": "point2",
+      "role": "derived",
+      "label": "reflected"
+    },
+    {
+      "id": "dilated",
+      "type": "point2",
+      "role": "derived",
+      "label": "dilated"
+    },
+    {
+      "id": "f",
+      "type": "function1",
+      "role": "derived"
+    },
+    {
+      "id": "curve",
+      "type": "curve2",
+      "role": "derived"
+    },
+    {
+      "id": "text",
+      "type": "text",
+      "role": "annotation"
+    },
+    {
+      "id": "dist",
+      "type": "scalar",
+      "role": "measurement"
+    },
+    {
+      "id": "length",
+      "type": "scalar",
+      "role": "measurement"
+    },
+    {
+      "id": "angleMeasure",
+      "type": "scalar",
+      "role": "measurement"
+    },
+    {
+      "id": "slope",
+      "type": "scalar",
+      "role": "measurement"
+    }
+  ],
+  "construction": [
+    {
+      "id": "op-k",
+      "command": "scalar.constant",
+      "inputs": [],
+      "params": {
+        "value": 2
+      },
+      "outputs": [
+        "k"
+      ]
+    },
+    {
+      "id": "op-s",
+      "command": "scalar.slider",
+      "inputs": [],
+      "params": {
+        "min": 0.5,
+        "max": 4,
+        "value": 2.5,
+        "position": [
+          -5,
+          -5
+        ]
+      },
+      "outputs": [
+        "s"
+      ]
+    },
+    {
+      "id": "op-A",
+      "command": "point.free",
+      "inputs": [],
+      "params": {
+        "coords": [
+          -2,
+          0
+        ]
+      },
+      "outputs": [
+        "A"
+      ]
+    },
+    {
+      "id": "op-B",
+      "command": "point.free",
+      "inputs": [],
+      "params": {
+        "coords": [
+          2,
+          0
+        ]
+      },
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "id": "op-C",
+      "command": "point.free",
+      "inputs": [],
+      "params": {
+        "coords": [
+          0.8,
+          3
+        ]
+      },
+      "outputs": [
+        "C"
+      ]
+    },
+    {
+      "id": "op-D",
+      "command": "point.free",
+      "inputs": [],
+      "params": {
+        "coords": [
+          -1,
+          2
+        ]
+      },
+      "outputs": [
+        "D"
+      ]
+    },
+    {
+      "id": "op-AB",
+      "command": "segment.through_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "AB"
+      ]
+    },
+    {
+      "id": "op-lineAB",
+      "command": "line.through_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "lineAB"
+      ]
+    },
+    {
+      "id": "op-rayAB",
+      "command": "ray.from_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "rayAB"
+      ]
+    },
+    {
+      "id": "op-M",
+      "command": "point.midpoint",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "M"
+      ]
+    },
+    {
+      "id": "op-parallel",
+      "command": "line.parallel_through",
+      "inputs": [
+        {
+          "ref": "C"
+        },
+        {
+          "ref": "lineAB"
+        }
+      ],
+      "outputs": [
+        "parallel"
+      ]
+    },
+    {
+      "id": "op-perpendicular",
+      "command": "line.perpendicular_through",
+      "inputs": [
+        {
+          "ref": "C"
+        },
+        {
+          "ref": "lineAB"
+        }
+      ],
+      "outputs": [
+        "perpendicular"
+      ]
+    },
+    {
+      "id": "op-projection",
+      "command": "point.projection",
+      "inputs": [
+        {
+          "ref": "D"
+        },
+        {
+          "ref": "lineAB"
+        }
+      ],
+      "outputs": [
+        "projection"
+      ]
+    },
+    {
+      "id": "op-lineIntersection",
+      "command": "point.intersection_line_line",
+      "inputs": [
+        {
+          "ref": "lineAB"
+        },
+        {
+          "ref": "perpendicular"
+        }
+      ],
+      "outputs": [
+        "lineIntersection"
+      ]
+    },
+    {
+      "id": "op-v",
+      "command": "vector.between_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "C"
+        }
+      ],
+      "outputs": [
+        "v"
+      ]
+    },
+    {
+      "id": "op-circleR",
+      "command": "circle.center_radius",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "s"
+        }
+      ],
+      "outputs": [
+        "circleR"
+      ]
+    },
+    {
+      "id": "op-circleP",
+      "command": "circle.through_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "circleP"
+      ]
+    },
+    {
+      "id": "op-circum",
+      "command": "circle.through_three_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        },
+        {
+          "ref": "C"
+        }
+      ],
+      "outputs": [
+        "circum"
+      ]
+    },
+    {
+      "id": "op-lineCircle",
+      "command": "point.intersection_line_circle",
+      "inputs": [
+        {
+          "ref": "lineAB"
+        },
+        {
+          "ref": "circleP"
+        }
+      ],
+      "outputs": [
+        "LC1",
+        "LC2"
+      ]
+    },
+    {
+      "id": "op-circleCircle",
+      "command": "point.intersection_circle_circle",
+      "inputs": [
+        {
+          "ref": "circleP"
+        },
+        {
+          "ref": "circum"
+        }
+      ],
+      "outputs": [
+        "CC1",
+        "CC2"
+      ]
+    },
+    {
+      "id": "op-glider",
+      "command": "point.on_path",
+      "inputs": [
+        {
+          "ref": "circleP"
+        }
+      ],
+      "params": {
+        "initial": [
+          0,
+          2
+        ]
+      },
+      "outputs": [
+        "glider"
+      ]
+    },
+    {
+      "id": "op-poly",
+      "command": "polygon.vertices",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        },
+        {
+          "ref": "C"
+        },
+        {
+          "ref": "D"
+        }
+      ],
+      "outputs": [
+        "poly"
+      ]
+    },
+    {
+      "id": "op-ang",
+      "command": "angle.three_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "M"
+        },
+        {
+          "ref": "C"
+        }
+      ],
+      "outputs": [
+        "ang"
+      ]
+    },
+    {
+      "id": "op-translated",
+      "command": "transform.translate_point",
+      "inputs": [
+        {
+          "ref": "D"
+        },
+        {
+          "ref": "v"
+        }
+      ],
+      "outputs": [
+        "translated"
+      ]
+    },
+    {
+      "id": "op-rotated",
+      "command": "transform.rotate_point",
+      "inputs": [
+        {
+          "ref": "D"
+        },
+        {
+          "ref": "M"
+        }
+      ],
+      "params": {
+        "angle": "pi/4"
+      },
+      "outputs": [
+        "rotated"
+      ]
+    },
+    {
+      "id": "op-reflected",
+      "command": "transform.reflect_point_line",
+      "inputs": [
+        {
+          "ref": "D"
+        },
+        {
+          "ref": "lineAB"
+        }
+      ],
+      "outputs": [
+        "reflected"
+      ]
+    },
+    {
+      "id": "op-dilated",
+      "command": "transform.dilate_point",
+      "inputs": [
+        {
+          "ref": "D"
+        },
+        {
+          "ref": "M"
+        }
+      ],
+      "params": {
+        "factor": "k"
+      },
+      "outputs": [
+        "dilated"
+      ]
+    },
+    {
+      "id": "op-f",
+      "command": "function.explicit",
+      "inputs": [],
+      "params": {
+        "expression": "s*sin(x)",
+        "domain": [
+          -5,
+          5
+        ]
+      },
+      "outputs": [
+        "f"
+      ]
+    },
+    {
+      "id": "op-curve",
+      "command": "curve.parametric",
+      "inputs": [],
+      "params": {
+        "xExpression": "3*cos(t)",
+        "yExpression": "2*sin(t)",
+        "parameter": "t",
+        "domain": [
+          0,
+          6.283185307179586
+        ]
+      },
+      "outputs": [
+        "curve"
+      ]
+    },
+    {
+      "id": "op-text",
+      "command": "text.at",
+      "inputs": [
+        {
+          "ref": "C"
+        }
+      ],
+      "params": {
+        "text": "C"
+      },
+      "outputs": [
+        "text"
+      ]
+    },
+    {
+      "id": "op-dist",
+      "command": "measurement.distance",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "C"
+        }
+      ],
+      "outputs": [
+        "dist"
+      ]
+    },
+    {
+      "id": "op-length",
+      "command": "measurement.segment_length",
+      "inputs": [
+        {
+          "ref": "AB"
+        }
+      ],
+      "outputs": [
+        "length"
+      ]
+    },
+    {
+      "id": "op-angleMeasure",
+      "command": "measurement.angle",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "M"
+        },
+        {
+          "ref": "C"
+        }
+      ],
+      "outputs": [
+        "angleMeasure"
+      ]
+    },
+    {
+      "id": "op-slope",
+      "command": "measurement.slope",
+      "inputs": [
+        {
+          "ref": "perpendicular"
+        }
+      ],
+      "outputs": [
+        "slope"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "main",
+      "kind": "graphics2d",
+      "visible": true,
+      "renderer": "direct-svg",
+      "boundingBox": [
+        -7,
+        7,
+        8,
+        -7
+      ],
+      "axes": true,
+      "grid": false,
+      "keepAspectRatio": true
+    }
+  ],
+  "interactions": [
+    {
+      "target": "A",
+      "permissions": [
+        "drag"
+      ]
+    },
+    {
+      "target": "B",
+      "permissions": [
+        "drag"
+      ]
+    },
+    {
+      "target": "C",
+      "permissions": [
+        "drag"
+      ]
+    },
+    {
+      "target": "D",
+      "permissions": [
+        "drag"
+      ]
+    },
+    {
+      "target": "glider",
+      "permissions": [
+        "drag"
+      ],
+      "dragMode": "along_path",
+      "dragTarget": "circleP"
+    },
+    {
+      "target": "s",
+      "permissions": [
+        "set_value"
+      ]
+    }
+  ]
+}

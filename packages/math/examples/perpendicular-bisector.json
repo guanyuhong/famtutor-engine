@@ -1,0 +1,312 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "perpendicular-bisector-demo",
+  "revision": 1,
+  "seed": 42,
+  "metadata": {
+    "title": "垂直平分线探索",
+    "description": "拖动垂直平分线上的点 P，观察 PA 与 PB 的关系。",
+    "locale": "zh-CN",
+    "purpose": "exploration",
+    "subject": "mathematics",
+    "grade": "grade-8",
+    "tags": [
+      "geometry2d",
+      "perpendicular-bisector",
+      "equal-distance"
+    ]
+  },
+  "entities": [
+    {
+      "id": "A",
+      "type": "point2",
+      "label": "A",
+      "role": "free"
+    },
+    {
+      "id": "B",
+      "type": "point2",
+      "label": "B",
+      "role": "free"
+    },
+    {
+      "id": "AB",
+      "type": "segment2",
+      "label": "AB",
+      "role": "derived"
+    },
+    {
+      "id": "M",
+      "type": "point2",
+      "label": "M",
+      "role": "derived"
+    },
+    {
+      "id": "bisector",
+      "type": "line2",
+      "label": "l",
+      "role": "derived"
+    },
+    {
+      "id": "P",
+      "type": "point2",
+      "label": "P",
+      "role": "free"
+    }
+  ],
+  "construction": [
+    {
+      "id": "op-A",
+      "command": "point.free",
+      "params": {
+        "coords": [
+          -3,
+          0
+        ]
+      },
+      "outputs": [
+        "A"
+      ]
+    },
+    {
+      "id": "op-B",
+      "command": "point.free",
+      "params": {
+        "coords": [
+          3,
+          0
+        ]
+      },
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "id": "op-AB",
+      "command": "segment.through_points",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "AB"
+      ]
+    },
+    {
+      "id": "op-M",
+      "command": "point.midpoint",
+      "inputs": [
+        {
+          "ref": "A"
+        },
+        {
+          "ref": "B"
+        }
+      ],
+      "outputs": [
+        "M"
+      ]
+    },
+    {
+      "id": "op-bisector",
+      "command": "line.perpendicular_through",
+      "inputs": [
+        {
+          "ref": "M"
+        },
+        {
+          "ref": "AB"
+        }
+      ],
+      "outputs": [
+        "bisector"
+      ]
+    },
+    {
+      "id": "op-P",
+      "command": "point.on_path",
+      "inputs": [
+        {
+          "ref": "bisector"
+        }
+      ],
+      "params": {
+        "initial": [
+          0,
+          2.5
+        ]
+      },
+      "outputs": [
+        "P"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "main-graphics",
+      "kind": "graphics2d",
+      "visible": true,
+      "renderer": "jsxgraph-svg",
+      "boundingBox": [
+        -6,
+        5,
+        6,
+        -5
+      ],
+      "axes": false,
+      "grid": false,
+      "keepAspectRatio": true,
+      "cameraPolicy": "stable_across_stages"
+    },
+    {
+      "id": "construction-tree",
+      "kind": "construction",
+      "visible": false,
+      "renderer": "auto"
+    }
+  ],
+  "styles": [
+    {
+      "targets": [
+        "A",
+        "B",
+        "AB"
+      ],
+      "style": {
+        "token": "primary",
+        "labelVisible": true
+      }
+    },
+    {
+      "targets": [
+        "M",
+        "bisector"
+      ],
+      "style": {
+        "token": "auxiliary",
+        "labelVisible": true
+      }
+    },
+    {
+      "targets": [
+        "P"
+      ],
+      "style": {
+        "token": "accent",
+        "labelVisible": true
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "target": "A",
+      "permissions": [
+        "select",
+        "drag"
+      ],
+      "dragMode": "free"
+    },
+    {
+      "target": "B",
+      "permissions": [
+        "select",
+        "drag"
+      ],
+      "dragMode": "free"
+    },
+    {
+      "target": "P",
+      "permissions": [
+        "select",
+        "drag"
+      ],
+      "dragMode": "along_path",
+      "dragTarget": "bisector"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "equal-distance",
+      "predicate": "expression_equal",
+      "arguments": [
+        {
+          "expr": "distance(P,A)",
+          "variables": [
+            "P",
+            "A"
+          ]
+        },
+        {
+          "expr": "distance(P,B)",
+          "variables": [
+            "P",
+            "B"
+          ]
+        }
+      ],
+      "expected": true,
+      "tolerance": 1e-9,
+      "requiredMethod": "construction",
+      "severity": "error",
+      "message": "P 位于 AB 的垂直平分线上，因此 PA = PB。"
+    }
+  ],
+  "activities": [
+    {
+      "id": "explore-equal-distance",
+      "title": "拖动并发现等距关系",
+      "stages": [
+        {
+          "id": "observe",
+          "narration": "拖动 P，观察它到 A、B 两点距离是否发生相同变化。",
+          "reveal": [
+            "A",
+            "B",
+            "AB",
+            "M",
+            "bisector",
+            "P"
+          ],
+          "focus": [
+            "P"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "drag-p",
+          "prompt": "沿直线 l 拖动 P，判断 PA 与 PB 的大小关系。",
+          "allowedTools": [
+            "interaction.drag"
+          ],
+          "evidence": [
+            {
+              "kind": "event",
+              "ref": "P"
+            },
+            {
+              "kind": "assertion",
+              "ref": "equal-distance"
+            }
+          ],
+          "hints": [
+            "至少把 P 拖到三个不同位置。",
+            "比较每个位置下的 PA 和 PB。"
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "generator": "agent",
+    "model": "draft-example",
+    "sourceRefs": [
+      "perpendicular-bisector-property"
+    ],
+    "createdAt": "2026-08-03T00:00:00Z"
+  }
+}

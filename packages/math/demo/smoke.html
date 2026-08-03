@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="../vendor/jsxgraph/jsxgraph.css" />
+  <style>
+    html, body { margin: 0; width: 100%; min-height: 100%; }
+    .board { width: 720px; height: 460px; margin: 8px; }
+    #result { white-space: pre-wrap; font: 12px monospace; }
+  </style>
+</head>
+<body data-status="running">
+  <div id="board1" class="board"></div>
+  <div id="board2" class="board"></div>
+  <pre id="result"></pre>
+  <script src="../vendor/jsxgraph/jsxgraphcore.js"></script>
+  <script type="module">
+    import { mountJsxGraph, validateMathDocument } from "../dist/index.js";
+    const result = document.querySelector("#result");
+    try {
+      const [geometry, functions] = await Promise.all([
+        fetch("../examples/perpendicular-bisector.json").then(r => r.json()),
+        fetch("../examples/function-slider.json").then(r => r.json())
+      ]);
+      const validation1 = validateMathDocument(geometry);
+      const validation2 = validateMathDocument(functions);
+      if (validation1.status !== "valid" || validation2.status !== "valid") throw new Error("Example validation failed");
+      const first = mountJsxGraph(document.querySelector("#board1"), geometry);
+      const second = mountJsxGraph(document.querySelector("#board2"), functions);
+      await Promise.all([first.ready, second.ready]);
+      first.setPoint("P", [0, 3.25]);
+      second.setScalar("a", 2.3);
+      const p = first.getValue("P");
+      const a = second.getValue("a");
+      const svg1 = first.exportSvg();
+      const svg2 = second.exportSvg();
+      if (!p || p.kind !== "point2" || Math.abs(p.x) > 1e-5 || Math.abs(p.y - 3.25) > 1e-3) throw new Error(`Unexpected P: ${JSON.stringify(p)}`);
+      if (typeof a !== "number" || Math.abs(a - 2.3) > 1e-6) throw new Error(`Unexpected slider a: ${a}`);
+      if (!svg1.includes("<svg") || !svg2.includes("<svg")) throw new Error("SVG export missing");
+      const summary = {
+        p,
+        a,
+        first: first.report(),
+        second: second.report(),
+        svgLengths: [svg1.length, svg2.length]
+      };
+      result.textContent = JSON.stringify(summary, null, 2);
+      document.body.dataset.status = "passed";
+      document.title = "BROWSER_SMOKE_PASSED";
+    } catch (error) {
+      result.textContent = error?.stack ?? String(error);
+      document.body.dataset.status = "failed";
+      document.title = "BROWSER_SMOKE_FAILED";
+    }
+  </script>
+</body>
+</html>

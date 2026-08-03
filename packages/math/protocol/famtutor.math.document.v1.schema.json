@@ -1,0 +1,780 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.ai/schemas/famtutor.math.document.v1.schema.json",
+  "title": "FamTutor Agent-Native MathDocument v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "documentId",
+    "revision",
+    "seed",
+    "metadata",
+    "entities",
+    "construction",
+    "views"
+  ],
+  "properties": {
+    "schema": {
+      "const": "famtutor.math.document.v1"
+    },
+    "documentId": {
+      "$ref": "#/$defs/id"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "construction": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constructionNode"
+      }
+    },
+    "views": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/view"
+      }
+    },
+    "styles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/styleBinding"
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/interaction"
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
+    },
+    "activities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/activity"
+      }
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9._:-]*$"
+    },
+    "entityType": {
+      "enum": [
+        "scalar",
+        "angle",
+        "boolean",
+        "vector2",
+        "point2",
+        "line2",
+        "segment2",
+        "ray2",
+        "circle2",
+        "arc2",
+        "sector2",
+        "polygon2",
+        "conic2",
+        "transform2",
+        "function1",
+        "curve2",
+        "text"
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "locale",
+        "purpose"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 2
+        },
+        "purpose": {
+          "enum": [
+            "exploration",
+            "demonstration",
+            "practice",
+            "assessment",
+            "authoring"
+          ]
+        },
+        "subject": {
+          "type": "string"
+        },
+        "grade": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "role"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "$ref": "#/$defs/entityType"
+        },
+        "label": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "free",
+            "derived",
+            "auxiliary",
+            "measurement",
+            "annotation"
+          ]
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "input": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": true
+          }
+        }
+      ]
+    },
+    "command": {
+      "enum": [
+        "scalar.constant",
+        "scalar.slider",
+        "point.free",
+        "point.on_path",
+        "point.midpoint",
+        "point.projection",
+        "point.intersection_line_line",
+        "point.intersection_line_circle",
+        "point.intersection_circle_circle",
+        "point.intersection_line_conic",
+        "segment.through_points",
+        "line.through_points",
+        "ray.from_points",
+        "line.parallel_through",
+        "line.perpendicular_through",
+        "vector.between_points",
+        "vector.components",
+        "vector.polar",
+        "circle.center_radius",
+        "circle.through_points",
+        "circle.through_three_points",
+        "arc.center_points",
+        "arc.three_points",
+        "sector.from_arc",
+        "polygon.vertices",
+        "angle.three_points",
+        "conic.ellipse_foci",
+        "conic.parabola_focus_directrix",
+        "conic.hyperbola_foci",
+        "transform.translate_point",
+        "transform.rotate_point",
+        "transform.reflect_point_line",
+        "transform.dilate_point",
+        "transform.translate",
+        "transform.rotate",
+        "transform.reflect",
+        "transform.dilate",
+        "transform.apply",
+        "function.explicit",
+        "curve.parametric",
+        "text.at",
+        "measurement.distance",
+        "measurement.segment_length",
+        "measurement.angle",
+        "measurement.slope",
+        "measurement.area",
+        "measurement.perimeter"
+      ]
+    },
+    "constructionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "command",
+        "outputs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "command": {
+          "$ref": "#/$defs/command"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input"
+          }
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "graphicsView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "visible",
+        "renderer",
+        "boundingBox"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "graphics2d"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "renderer": {
+          "enum": [
+            "auto",
+            "jsxgraph-svg",
+            "jsxgraph-canvas",
+            "direct-svg"
+          ]
+        },
+        "boundingBox": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "axes": {
+          "type": "boolean"
+        },
+        "grid": {
+          "type": "boolean"
+        },
+        "keepAspectRatio": {
+          "type": "boolean"
+        },
+        "cameraPolicy": {
+          "enum": [
+            "document",
+            "fit",
+            "stable_across_stages"
+          ]
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "simpleView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "visible",
+        "renderer"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "construction",
+            "algebra"
+          ]
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "renderer": {
+          "const": "auto"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "view": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/graphicsView"
+        },
+        {
+          "$ref": "#/$defs/simpleView"
+        }
+      ]
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "token": {
+          "enum": [
+            "primary",
+            "accent",
+            "auxiliary",
+            "danger",
+            "muted",
+            "success"
+          ]
+        },
+        "stroke": {
+          "type": "string"
+        },
+        "fill": {
+          "type": "string"
+        },
+        "strokeWidth": {
+          "type": "number",
+          "minimum": 0
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fillOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dash": {
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted"
+          ]
+        },
+        "labelVisible": {
+          "type": "boolean"
+        },
+        "pointSize": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fontSize": {
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    "styleBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "targets",
+        "style"
+      ],
+      "properties": {
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "permissions"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/id"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "select",
+              "drag",
+              "edit",
+              "set_value"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "dragMode": {
+          "enum": [
+            "free",
+            "along_path"
+          ]
+        },
+        "dragTarget": {
+          "$ref": "#/$defs/id"
+        },
+        "snap": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "grid": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        }
+      }
+    },
+    "assertionArgument": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": true
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "expr"
+          ],
+          "properties": {
+            "expr": {
+              "type": "string"
+            },
+            "variables": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "predicate",
+        "arguments"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "predicate": {
+          "enum": [
+            "expression_equal",
+            "point_on",
+            "collinear",
+            "parallel",
+            "perpendicular",
+            "coincident",
+            "equal_length",
+            "equal_angle",
+            "value_in_range"
+          ]
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertionArgument"
+          }
+        },
+        "expected": {
+          "type": "boolean"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "requiredMethod": {
+          "enum": [
+            "construction",
+            "symbolic",
+            "numeric",
+            "any"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "narration": {
+                "type": "string"
+              },
+              "reveal": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "hide": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "focus": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
+              }
+            }
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "prompt"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "allowedTools": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "ref"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "event",
+                        "assertion",
+                        "value"
+                      ]
+                    },
+                    "ref": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "hints": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "generator": {
+          "enum": [
+            "human",
+            "agent",
+            "mixed"
+          ]
+        },
+        "model": {
+          "type": "string"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

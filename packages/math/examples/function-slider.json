@@ -1,0 +1,71 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "function-slider-demo",
+  "revision": 1,
+  "seed": 7,
+  "metadata": {
+    "title": "参数函数探索：y = a sin(x)",
+    "description": "拖动参数 a，观察正弦函数振幅变化。",
+    "locale": "zh-CN",
+    "purpose": "exploration",
+    "subject": "mathematics",
+    "grade": "grade-9",
+    "tags": ["function", "slider", "sine"]
+  },
+  "entities": [
+    { "id": "a", "type": "scalar", "label": "a", "role": "free" },
+    { "id": "f", "type": "function1", "label": "y = a sin(x)", "role": "derived" },
+    { "id": "label", "type": "text", "role": "annotation" }
+  ],
+  "construction": [
+    {
+      "id": "op-a",
+      "command": "scalar.slider",
+      "params": { "min": -3, "max": 3, "value": 1.5, "step": 0.1, "position": [-5.2, -4.5], "length": 3.2 },
+      "outputs": ["a"]
+    },
+    {
+      "id": "op-f",
+      "command": "function.explicit",
+      "params": { "expression": "a*sin(x)", "domain": [-6.283185307179586, 6.283185307179586] },
+      "outputs": ["f"]
+    },
+    {
+      "id": "op-label",
+      "command": "text.at",
+      "params": { "text": "拖动 a 改变振幅", "at": [-5.2, 4.4] },
+      "outputs": ["label"]
+    }
+  ],
+  "views": [
+    {
+      "id": "main",
+      "kind": "graphics2d",
+      "visible": true,
+      "renderer": "jsxgraph-svg",
+      "boundingBox": [-6.5, 5.2, 6.5, -5.2],
+      "axes": true,
+      "grid": true,
+      "keepAspectRatio": true,
+      "cameraPolicy": "document"
+    }
+  ],
+  "styles": [
+    { "targets": ["f"], "style": { "token": "accent", "strokeWidth": 3 } },
+    { "targets": ["label"], "style": { "token": "muted", "fontSize": 15 } }
+  ],
+  "interactions": [
+    { "target": "a", "permissions": ["select", "set_value"] }
+  ],
+  "assertions": [
+    {
+      "id": "a-range",
+      "predicate": "value_in_range",
+      "arguments": [{ "ref": "a" }, { "value": -3 }, { "value": 3 }],
+      "tolerance": 0,
+      "severity": "error",
+      "message": "参数 a 必须位于滑块范围内。"
+    }
+  ],
+  "provenance": { "generator": "agent", "createdAt": "2026-08-03T00:00:00Z" }
+}

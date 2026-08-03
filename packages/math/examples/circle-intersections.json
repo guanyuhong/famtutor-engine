@@ -1,0 +1,62 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "circle-intersections-demo",
+  "revision": 1,
+  "seed": 11,
+  "metadata": {
+    "title": "两圆交点与公共弦",
+    "locale": "zh-CN",
+    "purpose": "demonstration",
+    "subject": "mathematics",
+    "grade": "grade-9",
+    "tags": ["circle", "intersection", "common-chord"]
+  },
+  "entities": [
+    { "id": "O1", "type": "point2", "label": "O₁", "role": "free" },
+    { "id": "O2", "type": "point2", "label": "O₂", "role": "free" },
+    { "id": "C1", "type": "circle2", "role": "derived" },
+    { "id": "C2", "type": "circle2", "role": "derived" },
+    { "id": "P", "type": "point2", "label": "P", "role": "derived" },
+    { "id": "Q", "type": "point2", "label": "Q", "role": "derived" },
+    { "id": "PQ", "type": "segment2", "label": "PQ", "role": "derived" },
+    { "id": "centers", "type": "segment2", "label": "O₁O₂", "role": "auxiliary" }
+  ],
+  "construction": [
+    { "id": "op-O1", "command": "point.free", "params": { "coords": [-1.8, 0] }, "outputs": ["O1"] },
+    { "id": "op-O2", "command": "point.free", "params": { "coords": [1.8, 0] }, "outputs": ["O2"] },
+    { "id": "op-C1", "command": "circle.center_radius", "inputs": [{ "ref": "O1" }], "params": { "radius": 3 }, "outputs": ["C1"] },
+    { "id": "op-C2", "command": "circle.center_radius", "inputs": [{ "ref": "O2" }], "params": { "radius": 3 }, "outputs": ["C2"] },
+    { "id": "op-intersections", "command": "point.intersection_circle_circle", "inputs": [{ "ref": "C1" }, { "ref": "C2" }], "outputs": ["P", "Q"] },
+    { "id": "op-PQ", "command": "segment.through_points", "inputs": [{ "ref": "P" }, { "ref": "Q" }], "outputs": ["PQ"] },
+    { "id": "op-centers", "command": "segment.through_points", "inputs": [{ "ref": "O1" }, { "ref": "O2" }], "outputs": ["centers"] }
+  ],
+  "views": [
+    {
+      "id": "main",
+      "kind": "graphics2d",
+      "visible": true,
+      "renderer": "jsxgraph-svg",
+      "boundingBox": [-6, 5, 6, -5],
+      "axes": false,
+      "grid": false,
+      "keepAspectRatio": true,
+      "cameraPolicy": "document"
+    }
+  ],
+  "styles": [
+    { "targets": ["C1", "C2"], "style": { "token": "primary", "strokeWidth": 2.5 } },
+    { "targets": ["PQ"], "style": { "token": "accent", "strokeWidth": 4 } },
+    { "targets": ["centers"], "style": { "token": "auxiliary", "dash": "dashed" } }
+  ],
+  "interactions": [
+    { "target": "O1", "permissions": ["select", "drag"] },
+    { "target": "O2", "permissions": ["select", "drag"] }
+  ],
+  "assertions": [
+    { "id": "P-on-C1", "predicate": "point_on", "arguments": [{ "ref": "P" }, { "ref": "C1" }], "tolerance": 1e-8 },
+    { "id": "P-on-C2", "predicate": "point_on", "arguments": [{ "ref": "P" }, { "ref": "C2" }], "tolerance": 1e-8 },
+    { "id": "Q-on-C1", "predicate": "point_on", "arguments": [{ "ref": "Q" }, { "ref": "C1" }], "tolerance": 1e-8 },
+    { "id": "Q-on-C2", "predicate": "point_on", "arguments": [{ "ref": "Q" }, { "ref": "C2" }], "tolerance": 1e-8 }
+  ],
+  "provenance": { "generator": "agent", "createdAt": "2026-08-03T00:00:00Z" }
+}
