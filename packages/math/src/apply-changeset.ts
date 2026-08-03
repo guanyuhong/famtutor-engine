@@ -28,7 +28,7 @@ import type {
   MathView,
   StyleBinding
 } from "./types.js";
-import { deepClone, isPlainObject, nowIso, toJsonValue } from "./util.js";
+import { deepClone, isPlainObject, toJsonValue } from "./util.js";
 
 function documentRef(document: MathDocument): DocumentRef {
   return {
@@ -39,11 +39,11 @@ function documentRef(document: MathDocument): DocumentRef {
   };
 }
 
-function fail<TOperation>(
-  changeSet: ChangeSet<TOperation>,
+function fail(
+  changeSet: ChangeSet<MathOperation>,
   document: MathDocument,
-  diagnostic: Diagnostic<TOperation>
-): ApplyResult<MathDocument, TOperation> {
+  diagnostic: Diagnostic<MathOperation>
+): ApplyResult<MathDocument, MathOperation> {
   return {
     ok: false,
     changeSetId: changeSet.changeSetId,
@@ -53,11 +53,11 @@ function fail<TOperation>(
   };
 }
 
-function fromEngineError<TOperation>(
-  changeSet: ChangeSet<TOperation>,
+function fromEngineError(
+  changeSet: ChangeSet<MathOperation>,
   document: MathDocument,
   error: MathEngineError
-): ApplyResult<MathDocument, TOperation> {
+): ApplyResult<MathDocument, MathOperation> {
   return fail(changeSet, document, {
     code: error.code,
     severity: "error",
@@ -66,7 +66,7 @@ function fromEngineError<TOperation>(
     expected: error.expected,
     actual: error.actual,
     retryable: error.retryable,
-    suggestedFixes: error.suggestedFixes as Diagnostic<TOperation>["suggestedFixes"]
+    suggestedFixes: error.suggestedFixes as Diagnostic<MathOperation>["suggestedFixes"]
   });
 }
 
@@ -500,7 +500,12 @@ export function applyMathChangeSet(
   }
 
   draft.revision = document.revision + 1;
-  draft.provenance = { ...(draft.provenance ?? {}), updatedAt: nowIso() };
+  const timestamp = changeSet.metadata && typeof changeSet.metadata.timestamp === "string"
+    ? changeSet.metadata.timestamp
+    : undefined;
+  if (timestamp) {
+    draft.provenance = { ...(draft.provenance ?? {}), updatedAt: timestamp };
+  }
   const report = validateMathDocument(draft);
   if (report.status === "invalid") {
     const enriched = enrichIssuesWithRepair(report.issues);
@@ -511,7 +516,7 @@ export function applyMathChangeSet(
       document: deepClone(document),
       diagnostics: enriched.map(issue => ({
         code: issue.code,
-        severity: issue.severity === "warning" ? "warning" as const : "error" as const,
+        severity: (issue.severity === "warning" || issue.severity === "info" ? issue.severity : "error") as Diagnostic<MathOperation>["severity"],
         message: issue.message,
         path: issue.path,
         expected: issue.expected,

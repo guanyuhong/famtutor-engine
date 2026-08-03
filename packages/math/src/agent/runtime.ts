@@ -1,5 +1,4 @@
 import type { ChangeSet } from "@famtutor/core";
-import { applyMathChangeSet } from "../apply-changeset.js";
 import { commandCapabilities } from "../catalog/commands.js";
 import { macroCapabilities } from "../catalog/macros.js";
 import { MathDomainRuntime } from "../domain-runtime.js";
@@ -130,7 +129,7 @@ function diagnosticToError(diagnostic: {
 
 /**
  * Stateful Agent/session adapter over MathDomainRuntime + DocumentStore.
- * Owns dry-run, commit, undo, and idempotency. Domain mutations go through applyMathChangeSet.
+ * Owns dry-run, commit, undo, and idempotency. Domain mutations go through this.domainRuntime.apply.
  */
 export class AgentMathRuntime {
   readonly store: DocumentStore;
@@ -248,10 +247,14 @@ export class AgentMathRuntime {
         documentId: current.documentId,
         revision: current.revision
       },
-      operations: operations as MathOperation[]
+      operations: operations as MathOperation[],
+      metadata: {
+        timestamp: nowIso(),
+        origin: "agent-math-runtime"
+      }
     };
 
-    const applied = applyMathChangeSet(current, changeSet);
+    const applied = await this.domainRuntime.apply(current, changeSet);
     if (!applied.ok || !applied.document) {
       const primary = applied.diagnostics[0];
       if (!primary) throw new MathEngineError("TRANSACTION_FAILED", "ChangeSet apply failed without diagnostics.");
