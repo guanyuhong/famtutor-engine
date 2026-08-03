@@ -23,8 +23,20 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; pa
 aside { padding: 18px; }
 aside h2 { font-size: 15px; margin: 0 0 12px; }
 pre { margin: 0; padding: 12px; border-radius: 10px; background: #f4f6fa; color: #344054; font-size: 12px; line-height: 1.45; overflow: auto; max-height: 64vh; }
-.status { display: flex; gap: 8px; margin: 0 0 14px; font-size: 12px; }
+.status { display: flex; gap: 8px; margin: 0 0 14px; font-size: 12px; flex-wrap: wrap; }
 .badge { background: #e9f7ef; color: #176b42; padding: 4px 8px; border-radius: 999px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.actions button {
+  border: 1px solid #cfd6e4;
+  background: #f8fafc;
+  color: #172033;
+  border-radius: 9px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+.actions button:hover { background: #eef2f8; }
+#events { max-height: 220px; }
 @media (prefers-color-scheme: dark) {
   :root { background: #10131a; color: #eef1f7; }
   header, .panel { background: #171b24; border-color: #2b3240; }
