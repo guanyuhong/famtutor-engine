@@ -2,6 +2,16 @@
 
 Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
 
+## 0.3.0 — 2026-08-03
+
+Engine PR4 — host-neutral Render Bundle + PR3 hardening:
+
+- depend on `@famtutor/core@0.3.0`; real SHA-256 digests (`algorithm: "sha256"`); `stableHash` only for non-security cache keys;
+- MountedRenderer: destroy shares apply queue; fingerprint idempotency; staging atomicity; `RENDER_INCOMPLETE`; InteractionAction payload envelope; interaction permissions;
+- `createMathRenderBundle` / `validateMathRenderBundle` / `mountMathRenderBundle`;
+- `math_export` format `render-bundle`; capabilities advertise MIME + limits;
+- operations schema delete oneOf; Chromium live smoke covers bundle payload mount + SHA-256 known vector.
+
 ## 0.2.0 — 2026-08-03
 
 Engine PR3 — live MountedRenderer + PR2 contract alignment:

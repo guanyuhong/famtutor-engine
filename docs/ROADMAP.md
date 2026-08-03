@@ -6,8 +6,8 @@
 
 ```text
 famtutor-engine
-├── packages/core     # shipped v0.2.0 — cross-domain runtime contracts
-├── packages/math     # shipped v0.2.0 — first domain + live MountedRenderer
+├── packages/core     # shipped v0.3.0 — contracts + Render Bundle
+├── packages/math     # shipped v0.3.0 — DomainRuntime + MountedRenderer + Math bundle
 ├── packages/physics  # future
 ├── packages/chem     # future
 └── …
@@ -20,7 +20,7 @@ famtutor-engine
 | **PR1** 发布基线 | **Done** |
 | **PR2** `@famtutor/core` + math `DomainRuntime` | **Done** |
 | **PR3** Live `MountedRenderer`（rebuild） | **Done** |
-| **PR4** `famtutor.render.bundle.v1` | Next |
+| **PR4** `famtutor.render.bundle.v1` | **Done** |
 
 完成 PR4 后，再推进数学教学生产能力与新学科包。
 
@@ -38,6 +38,6 @@ famtutor-engine
 ## Non-goals (short term)
 
 - Publishing a single `famtutor.engine.document.v1` that merges all subjects
-- Replacing CathyGO `cgo.visual.scene.v1` in-place, or embedding CathyGO types in Engine core
-- Full 3D / CAS / new domain packages before Render Bundle (PR4) is solid
-- Claiming dirty-set native reconciliation or Render Bundle before those land
+- Embedding CathyGO types in Engine core
+- zip/`.famtutor` archive or remote asset fetch in v1 bundles
+- dirty-set native reconciliation before a dedicated PR

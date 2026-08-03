@@ -20,9 +20,9 @@
 - ~~发布基线（PR1）~~
 - ~~`@famtutor/core` + math `DomainRuntime` / `applyMathChangeSet`（PR2）~~
 - ~~Live ChangeSet / `MountedRenderer` rebuild（PR3）~~
-- Render Bundle（PR4，未做）
+- ~~Render Bundle `famtutor.render.bundle.v1`（PR4）~~
 
-在 PR4 完成前，不再堆新的 L0 命令，也不开物理/化学包。
+在引擎基础完成后，再推进数学教学生产能力；暂不开物理/化学包。
 
 数学侧在引擎基础之后依次：
 
