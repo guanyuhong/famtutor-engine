@@ -9,6 +9,7 @@ artifacts/
 *.tgz
 .npmrc
 
-# Local textbook binaries and page renders (keep out of git / GitHub)
-books/**/*.pdf
-tmp/
+# Scratch under tmp/ — keep tracked visual checks in tmp/pdfs/
+tmp/*
+!tmp/pdfs/
+!tmp/pdfs/**
