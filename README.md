@@ -4,6 +4,12 @@ An agent-native engine for building, simulating, rendering, and assessing intera
 
 面向 Agent 原生的教学内容构建、模拟、渲染与评测引擎。
 
+## Docs
+
+- [Architecture](docs/ARCHITECTURE.md) — engine-level design, three protocol layers, v0.2 PR sequence
+- [Roadmap](docs/ROADMAP.md) — near-term Engine v0.2 priorities and domain backlog
+- [Math package](packages/math/README.md) — `@famtutor/math-runtime` details
+
 ## Positioning
 
 FamTutor Engine is the **domain runtime layer** for interactive learning. Host apps (for example CathyGO Classroom) adapt to Engine protocols — Engine does not need to drop into any specific visual host API.
@@ -38,22 +44,22 @@ Each domain owns its document protocol, command/macro catalog, and agent tools. 
 
 ## Quick start (Math)
 
+From the repo root (workspaces). TypeScript is pinned via `package-lock.json` — prefer `npm ci`:
+
 ```bash
-cd packages/math
-npm install   # if needed: npm install --no-save typescript
+npm ci
 npm run build
 npm test
-
-# Interactive demo
-python3 -m http.server 8765
-# open http://127.0.0.1:8765/demo/
+# full gate (schema, browser, MCP, CLI, pack):
+npm run verify
 ```
 
-From the repo root (workspaces):
+Interactive demo:
 
 ```bash
-npm run build
-npm test
+cd packages/math
+python3 -m http.server 8765
+# open http://127.0.0.1:8765/demo/
 ```
 
 Math CLI / MCP:
