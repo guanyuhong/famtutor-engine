@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-08-03
+
+Render Bundle delivery contract:
+
+- `famtutor.render.bundle.v1` wire format with canonical document, assets, entrypoint, requirements, fallback SVG, and integrity hash
+- `createRenderBundle`, `validateRenderBundle`, `verifyRenderBundleIntegrity`, `checkRenderBundleCompatibility`, and `serializeRenderBundle`
+- SHA-256 digests via `canonicalizeJson` / `sha256Content`; published JSON Schema and `./protocol/render-bundle-schema` export
+- Default bundle size limits and fail-closed rejection of executable or unsafe SVG payloads
+
 ## 0.2.0 — 2026-08-03
 
 Contract completeness release:

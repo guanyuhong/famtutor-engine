@@ -1,0 +1,53 @@
+{
+  "schema": "famtutor.render.bundle.v1",
+  "document": {
+    "ref": {
+      "domain": "example",
+      "schema": "famtutor.example.document.v1",
+      "documentId": "doc-1",
+      "revision": 1
+    },
+    "content": {
+      "title": "Example",
+      "revision": 1
+    },
+    "digest": {
+      "algorithm": "sha256",
+      "value": "c36391a1c2198c4c96202383761868bf29f56a12215420d2d977387aedda710f"
+    }
+  },
+  "assets": [],
+  "entrypoint": {
+    "renderer": "direct-svg",
+    "mode": "artifact",
+    "mediaType": "image/svg+xml"
+  },
+  "requirements": {
+    "domain": "example",
+    "documentSchema": "famtutor.example.document.v1",
+    "runtime": {
+      "name": "@famtutor/example",
+      "versionRange": "^0.3.0"
+    },
+    "renderer": {
+      "id": "direct-svg",
+      "mode": "artifact",
+      "mediaTypes": [
+        "image/svg+xml"
+      ]
+    }
+  },
+  "fallback": {
+    "mediaType": "image/svg+xml",
+    "encoding": "utf8",
+    "content": "<svg xmlns=\"http://www.w3.org/2000/svg\"/>",
+    "digest": {
+      "algorithm": "sha256",
+      "value": "900fbe934249ad120004bd24adf66aad8817d89586273c0cc50e187bddebb601"
+    }
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "value": "bbd6884bef543b100d8aeb0b792f4e5d115cfee8f55d0b274efcabf9eab307db"
+  }
+}

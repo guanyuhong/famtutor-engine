@@ -1,6 +1,6 @@
 {
   "name": "@famtutor/core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FamTutor Engine cross-domain runtime contracts: ChangeSet, DomainRuntime, diagnostics, and RenderArtifact.",
   "type": "module",
   "main": "./dist/index.js",
@@ -12,7 +12,8 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./protocol/runtime-schema": "./protocol/famtutor.engine.runtime.v1.schema.json"
+    "./protocol/runtime-schema": "./protocol/famtutor.engine.runtime.v1.schema.json",
+    "./protocol/render-bundle-schema": "./protocol/famtutor.render.bundle.v1.schema.json"
   },
   "files": [
     "dist",
