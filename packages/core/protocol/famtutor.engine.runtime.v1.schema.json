@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.dev/schemas/famtutor.engine.runtime.v1.schema.json",
+  "title": "FamTutor Engine Runtime Contracts v1",
+  "description": "Cross-domain wire contracts for DocumentRef, ChangeSet, Diagnostic, RenderArtifact, and RuntimeDescriptor. Domain documents stay in per-domain schemas.",
+  "$defs": {
+    "jsonValue": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/jsonValue" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      ]
+    },
+    "documentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain", "schema", "documentId", "revision"],
+      "properties": {
+        "domain": { "type": "string", "minLength": 1 },
+        "schema": { "type": "string", "minLength": 1 },
+        "documentId": { "type": "string", "minLength": 1 },
+        "revision": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "suggestedFix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description"],
+      "properties": {
+        "description": { "type": "string" },
+        "operation": { "$ref": "#/$defs/jsonValue" }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "severity": { "type": "string", "enum": ["error", "warning", "info"] },
+        "message": { "type": "string" },
+        "path": { "type": "string" },
+        "expected": { "$ref": "#/$defs/jsonValue" },
+        "actual": { "$ref": "#/$defs/jsonValue" },
+        "retryable": { "type": "boolean" },
+        "suggestedFixes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/suggestedFix" }
+        }
+      }
+    },
+    "changeSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "changeSetId", "base", "operations"],
+      "properties": {
+        "schema": { "const": "famtutor.engine.change-set.v1" },
+        "changeSetId": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/documentRef" },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["op"],
+            "properties": {
+              "op": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "renderArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "document", "renderer", "mediaType", "encoding", "content", "digest", "diagnostics"],
+      "properties": {
+        "schema": { "const": "famtutor.engine.render-artifact.v1" },
+        "document": { "$ref": "#/$defs/documentRef" },
+        "renderer": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "encoding": { "type": "string", "enum": ["utf8", "base64"] },
+        "content": { "type": "string" },
+        "digest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "value"],
+          "properties": {
+            "algorithm": { "type": "string" },
+            "value": { "type": "string" }
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/diagnostic" }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "runtimeDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "domain", "documentSchemas", "operationSchemas", "renderers"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "domain": { "type": "string" },
+        "documentSchemas": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "operationSchemas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "renderers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "mediaTypes"],
+            "properties": {
+              "id": { "type": "string" },
+              "mediaTypes": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/documentRef" },
+    { "$ref": "#/$defs/diagnostic" },
+    { "$ref": "#/$defs/changeSet" },
+    { "$ref": "#/$defs/renderArtifact" },
+    { "$ref": "#/$defs/runtimeDescriptor" }
+  ]
+}

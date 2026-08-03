@@ -1,0 +1,22 @@
+{
+  "schema": "famtutor.engine.render-artifact.v1",
+  "document": {
+    "domain": "example",
+    "schema": "famtutor.example.document.v1",
+    "documentId": "doc-1",
+    "revision": 3
+  },
+  "renderer": "direct-svg",
+  "mediaType": "image/svg+xml",
+  "encoding": "utf8",
+  "content": "<svg xmlns=\"http://www.w3.org/2000/svg\"/>",
+  "digest": {
+    "algorithm": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "diagnostics": [],
+  "metadata": {
+    "width": 640,
+    "height": 420
+  }
+}

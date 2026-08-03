@@ -1,0 +1,16 @@
+{
+  "schema": "famtutor.engine.change-set.v1",
+  "changeSetId": "cs-example-1",
+  "base": {
+    "domain": "example",
+    "schema": "famtutor.example.document.v1",
+    "documentId": "doc-1",
+    "revision": 3
+  },
+  "operations": [
+    {
+      "op": "noop",
+      "note": "Domain-specific ops are opaque to core schema; only op is required."
+    }
+  ]
+}

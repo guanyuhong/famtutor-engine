@@ -15,7 +15,14 @@
 
 ## v0.2 — 引擎基础优先，再教学生产
 
-**引擎级（优先，见根文档）**：发布基线 → `@famtutor/core` → live ChangeSet / `MountedRenderer` → Render Bundle。在这些落地前，不再堆新的 L0 命令，也不开物理/化学包。
+**引擎级（见根文档）**：
+
+- ~~发布基线（PR1）~~
+- ~~`@famtutor/core` + math `DomainRuntime` / `applyMathChangeSet`（PR2）~~
+- Live ChangeSet / `MountedRenderer`（PR3，未做）
+- Render Bundle（PR4，未做）
+
+在 PR3/PR4 完成前，不再堆新的 L0 命令，也不开物理/化学包。
 
 数学侧在引擎基础之后依次：
 

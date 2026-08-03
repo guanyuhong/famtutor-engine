@@ -1,0 +1,14 @@
+{
+  "code": "REVISION_CONFLICT",
+  "severity": "error",
+  "message": "Expected revision 2, but current revision is 3.",
+  "path": "base.revision",
+  "expected": 2,
+  "actual": 3,
+  "retryable": true,
+  "suggestedFixes": [
+    {
+      "description": "Reload the document and retry with the current revision."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "@famtutor/math-runtime",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "FamTutor Engine math domain: Agent-native 2D construction, validation, simulation, and JSXGraph/SVG runtime.",
   "type": "module",
   "main": "./dist/index.js",
@@ -36,13 +36,29 @@
   ],
   "scripts": {
     "build": "node ./scripts/build.mjs",
+    "prepack": "npm run build",
     "test": "npm run build && node --test ./test/*.test.mjs",
     "test:schema": "npm run build && node ./scripts/schema-smoke.mjs",
     "test:browser": "npm run build && node ./scripts/browser-smoke.mjs",
     "test:mcp": "npm run build && node ./scripts/mcp-smoke.mjs",
     "test:cli": "npm run build && node ./scripts/cli-smoke.mjs",
     "benchmark": "npm run build && node ./scripts/benchmark.mjs",
-    "verify": "npm run test && npm run test:schema && npm run test:browser && npm run test:mcp && npm run test:cli && node ./scripts/package-smoke.mjs"
+    "verify": "npm run test && npm run test:schema && npm run test:browser && npm run test:mcp && npm run test:cli && node ../../scripts/package-smoke.mjs"
+  },
+  "dependencies": {
+    "@famtutor/core": "0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guanyuhong/famtutor-engine.git",
+    "directory": "packages/math"
+  },
+  "homepage": "https://github.com/guanyuhong/famtutor-engine/tree/dev/packages/math",
+  "bugs": {
+    "url": "https://github.com/guanyuhong/famtutor-engine/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=20"

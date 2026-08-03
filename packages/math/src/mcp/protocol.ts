@@ -1,11 +1,12 @@
 import { MathEngineError, asMathEngineError } from "../errors.js";
 import type { AgentToolDefinition, JsonValue } from "../types.js";
 import { isPlainObject, toJsonValue } from "../util.js";
+import { MATH_RUNTIME_VERSION } from "../version.js";
 import { AgentMathRuntime } from "../agent/runtime.js";
 
 export const MCP_SERVER_INFO = Object.freeze({
   name: "famtutor-math-runtime",
-  version: "0.1.1"
+  version: MATH_RUNTIME_VERSION
 });
 
 export const MCP_SUPPORTED_VERSIONS = Object.freeze([
