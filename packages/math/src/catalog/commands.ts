@@ -66,12 +66,34 @@ const definitions: CommandDefinition[] = [
     renderer: "jsxgraph"
   },
   {
+    name: "boolean.expression",
+    title: "Boolean expression",
+    description: "Evaluate a safe boolean expression against scalar or other runtime entities.",
+    inputTypes: [],
+    outputTypes: ["boolean"],
+    requiredParams: ["expression"],
+    expressionParams: ["expression"],
+    category: "scalar",
+    renderer: "computed"
+  },
+  {
     name: "point.free",
     title: "Free point",
     description: "Create a free 2D point from params.coords = [x,y].",
     inputTypes: [],
     outputTypes: ["point2"],
     requiredParams: ["coords"],
+    category: "point",
+    renderer: "both"
+  },
+  {
+    name: "point.from_expressions",
+    title: "Point from expressions",
+    description: "Create a derived point from safe params.x and params.y expressions.",
+    inputTypes: [],
+    outputTypes: ["point2"],
+    requiredParams: ["x", "y"],
+    expressionParams: ["x", "y"],
     category: "point",
     renderer: "both"
   },
@@ -445,6 +467,19 @@ const definitions: CommandDefinition[] = [
     maxInputs: 1,
     outputTypes: ["text"],
     requiredParams: ["text"],
+    category: "annotation",
+    renderer: "both"
+  },
+  {
+    name: "text.conditional",
+    title: "Conditional text annotation",
+    description: "Show params.trueText or params.falseText from a boolean input, optionally anchored to a point.",
+    inputTypes: ["boolean"],
+    variadicInputType: "point2",
+    minInputs: 1,
+    maxInputs: 2,
+    outputTypes: ["text"],
+    requiredParams: ["trueText", "falseText"],
     category: "annotation",
     renderer: "both"
   },

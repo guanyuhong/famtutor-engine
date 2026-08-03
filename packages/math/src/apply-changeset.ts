@@ -90,7 +90,7 @@ function objectArg(value: unknown, path = "arguments"): Record<string, unknown> 
 function roleForCommand(command: string): EntityRole {
   if (command === "point.free" || command === "point.on_path" || command === "scalar.slider") return "free";
   if (command.startsWith("measurement.")) return "measurement";
-  if (command === "text.at") return "annotation";
+  if (command.startsWith("text.")) return "annotation";
   return "derived";
 }
 

@@ -1,5 +1,5 @@
 import { MathEngineError, asMathEngineError } from "../errors.js";
-import { evaluateNumericExpression } from "../expression/evaluator.js";
+import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
 import type {
   CommandInput,
   ConstructionNode,
@@ -112,6 +112,11 @@ function requireScalarValue(value: RuntimeValue | JsonValue, context: string): n
   return value;
 }
 
+function requireBooleanValue(value: RuntimeValue | JsonValue, context: string): boolean {
+  if (typeof value !== "boolean") throw new MathEngineError("TYPE_MISMATCH", `${context} requires a boolean.`);
+  return value;
+}
+
 function paramsObject(node: ConstructionNode): Record<string, JsonValue> {
   return node.params ?? {};
 }
@@ -172,6 +177,16 @@ function expressionNumber(
     });
   }
   return evaluateNumericExpression(raw, name => locals[name] ?? values.get(name));
+}
+
+function expressionBoolean(raw: JsonValue | undefined, values: Map<string, RuntimeValue>): boolean {
+  if (typeof raw === "boolean") return raw;
+  if (typeof raw !== "string") {
+    throw new MathEngineError("INVALID_EXPRESSION_PARAMETER", "Expected a boolean or safe expression string.", {
+      actual: raw ?? null
+    });
+  }
+  return evaluateBooleanExpression(raw, name => values.get(name));
 }
 
 function runtimeTypeMatches(type: EntityType, value: RuntimeValue): boolean {
@@ -267,11 +282,15 @@ function executeNode(
       }
       return [value];
     }
+    case "boolean.expression":
+      return [expressionBoolean(params.expression, values)];
     case "point.free": {
       const coords = firstOutput ? overrides.points?.[firstOutput] : undefined;
       const [x, y] = coords ?? pairParam(node, "coords");
       return [point(x, y)];
     }
+    case "point.from_expressions":
+      return [point(expressionNumber(params.x, values), expressionNumber(params.y, values))];
     case "point.on_path": {
       const path = requirePathValue(inputs[0]!, "point.on_path");
       const coords = firstOutput ? overrides.points?.[firstOutput] : undefined;
@@ -462,6 +481,14 @@ function executeNode(
       const text = stringParam(node, "text");
       const at = inputs.length > 0
         ? requirePointValue(inputs[0]!, "text anchor")
+        : point(...pairParam(node, "at"));
+      return [{ kind: "text", text, at }];
+    }
+    case "text.conditional": {
+      const condition = requireBooleanValue(inputs[0]!, "text.conditional input 1");
+      const text = stringParam(node, condition ? "trueText" : "falseText");
+      const at = inputs.length > 1
+        ? requirePointValue(inputs[1]!, "text.conditional input 2")
         : point(...pairParam(node, "at"));
       return [{ kind: "text", text, at }];
     }

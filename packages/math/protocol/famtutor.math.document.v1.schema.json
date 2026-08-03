@@ -217,7 +217,9 @@
       "enum": [
         "scalar.constant",
         "scalar.slider",
+        "boolean.expression",
         "point.free",
+        "point.from_expressions",
         "point.on_path",
         "point.midpoint",
         "point.projection",
@@ -256,6 +258,7 @@
         "function.explicit",
         "curve.parametric",
         "text.at",
+        "text.conditional",
         "measurement.distance",
         "measurement.segment_length",
         "measurement.angle",

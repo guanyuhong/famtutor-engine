@@ -7,10 +7,11 @@ Committed, offline-replayable textbook cases for FamTutor Engine. The corpus is 
 - Book: `zjedu-math-8a-2013`
 - Slice: 1.1 “认识三角形”, printed pages 4–9 / PDF pages 7–12
 - Cases: 10 total
-- Accepted: 8
-- Expected unsupported: 2
-  - `04-adjust-three-segments`: conditional construction and boolean feedback
+- Accepted: 9
+- Expected unsupported: 1
   - `09-identify-triangle-lines`: assessment submit/scoring/evidence loop
+
+Case 04 is now accepted through safe `boolean.expression`, expression-driven points, and `text.conditional`; its browser regression changes a `3-4-5` state into `10-4-5` and verifies the feedback transition.
 
 Each case stores source metadata, generation provenance, an initial document, an ordered ChangeSet trace, expected assertions/interactions, status, and diagnostics. Accepted cases pin the SHA-256 fingerprint of the replayed canonical document.
 

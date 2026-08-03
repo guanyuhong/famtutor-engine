@@ -91,6 +91,7 @@ def main() -> int:
         str(corpus_payload_script),
         "zj8a-1-1-01-triangle-elements",
         "zj8a-1-1-02-drag-angle-sum",
+        "zj8a-1-1-04-adjust-three-segments",
         "zj8a-1-1-05-angle-bisector",
     ], cwd=str(ROOT.parent.parent), text=True))
     amd_source = AMD_BUNDLE.read_text()
@@ -479,7 +480,7 @@ def main() -> int:
 
                 // PR6 seed acceptance: one demonstration, exploration, and guided-construction
                 // case is replayed + bundled in Node, then its mounted payload is exercised here.
-                assert('27_seed_case_count', seedCases.length === 3);
+                assert('27_seed_case_count', seedCases.length === 4);
                 const mountedTypes = new Set();
                 for (const seedCase of seedCases) {
                   assert(`28_${seedCase.caseId}_bundle`, seedCase.bundle?.schema === 'famtutor.render.bundle.v1');
@@ -489,6 +490,22 @@ def main() -> int:
                     { viewId: seedCase.bundle.entrypoint.viewId }
                   );
                   mountedTypes.add(seedCase.caseType);
+                  if (seedCase.caseId === 'zj8a-1-1-04-adjust-three-segments') {
+                    const initialEvaluation = runtime.evaluateMathDocument(seedRenderer.getDocument());
+                    assert('28_case04_initial_feedback',
+                      initialEvaluation.entities.get('canFormTriangle')?.value === true
+                      && initialEvaluation.entities.get('feedback')?.value?.text === '可以组成三角形');
+                    const changed = await seedRenderer.dispatch({
+                      type: 'scalar.set',
+                      target: 'sideA',
+                      payload: { value: 10 }
+                    });
+                    const changedEvaluation = runtime.evaluateMathDocument(seedRenderer.getDocument());
+                    assert('28_case04_changed_feedback', changed.ok
+                      && changedEvaluation.entities.get('canFormTriangle')?.value === false
+                      && changedEvaluation.entities.get('feedback')?.value?.text === '不能组成三角形'
+                      && bundleHost.textContent.includes('不能组成三角形'));
+                  }
                   const seedSnapshot = await seedRenderer.snapshot({ renderer: 'jsxgraph-svg' });
                   assert(`29_${seedCase.caseId}_snapshot`, seedSnapshot.ok
                     && seedSnapshot.artifact.content.startsWith('<svg')
@@ -537,8 +554,9 @@ def main() -> int:
         }))
         bundle_page.add_script_tag(url=f"{base_url}/packages/math/vendor/jsxgraph/jsxgraphcore.js")
         bundle_page.add_script_tag(type="module", content=f"""
-          import {{ mountMathRenderBundle }} from '{base_url}/packages/math/dist/index.js';
+          import {{ evaluateMathDocument, mountMathRenderBundle }} from '{base_url}/packages/math/dist/index.js';
           window.__mountMathRenderBundle = mountMathRenderBundle;
+          window.__evaluateMathDocument = evaluateMathDocument;
         """)
         bundle_page.wait_for_function("typeof window.__mountMathRenderBundle === 'function'")
         bundle_api_checks = bundle_page.evaluate(
@@ -551,6 +569,23 @@ def main() -> int:
                 document.body.append(host);
                 const mounted = await window.__mountMathRenderBundle(host, seedCase.bundle);
                 if (!mounted.ok) throw new Error(`${seedCase.caseId}: ${JSON.stringify(mounted.diagnostics)}`);
+                if (seedCase.caseId === 'zj8a-1-1-04-adjust-three-segments') {
+                  const initial = window.__evaluateMathDocument(mounted.renderer.getDocument());
+                  if (initial.entities.get('canFormTriangle')?.value !== true) {
+                    throw new Error(`${seedCase.caseId}: initial conditional feedback failed`);
+                  }
+                  const changed = await mounted.renderer.dispatch({
+                    type: 'scalar.set',
+                    target: 'sideA',
+                    payload: { value: 10 }
+                  });
+                  const evaluated = window.__evaluateMathDocument(mounted.renderer.getDocument());
+                  if (!changed.ok
+                    || evaluated.entities.get('canFormTriangle')?.value !== false
+                    || evaluated.entities.get('feedback')?.value?.text !== '不能组成三角形') {
+                    throw new Error(`${seedCase.caseId}: changed conditional feedback failed`);
+                  }
+                }
                 const snapshot = await mounted.renderer.snapshot({ renderer: 'jsxgraph-svg' });
                 if (!snapshot.ok || !snapshot.artifact.content.startsWith('<svg')) {
                   throw new Error(`${seedCase.caseId}: bundle snapshot failed`);
@@ -563,7 +598,7 @@ def main() -> int:
             }""",
             seed_cases,
         )
-        if len(bundle_api_checks) != 3 or not all(item["ok"] for item in bundle_api_checks):
+        if len(bundle_api_checks) != 4 or not all(item["ok"] for item in bundle_api_checks):
             raise RuntimeError(f"mountMathRenderBundle seed checks failed: {bundle_api_checks}")
         summary["mountMathRenderBundleCases"] = bundle_api_checks
         bundle_page.close()

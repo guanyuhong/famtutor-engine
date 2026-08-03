@@ -2,6 +2,12 @@
 
 Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
 
+## Unreleased
+
+- add safe `boolean.expression`, `point.from_expressions`, and `text.conditional` L0 commands;
+- cover slider-driven conditional feedback in headless evaluation, Direct SVG, JSXGraph, simulation, and real Chromium Render Bundle mounting;
+- promote textbook Case 04 from `expected-unsupported` to `accepted`.
+
 ## 0.3.0 — 2026-08-03
 
 Engine PR4 — host-neutral Render Bundle + PR3 hardening:

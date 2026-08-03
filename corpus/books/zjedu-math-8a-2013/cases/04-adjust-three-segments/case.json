@@ -3,24 +3,221 @@
   "caseId": "zj8a-1-1-04-adjust-three-segments",
   "title": "调整三条线段判断能否组成三角形",
   "description": "通过三个长度控件调整线段，并即时判断三边是否可以围成三角形。",
-  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [5, 6], "pdfPages": [8, 9], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.1 认识三角形",
+    "printedPages": [5, 6],
+    "pdfPages": [8, 9],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
   "knowledgePoints": ["triangle-inequality"],
   "learningObjective": "通过反例与正例形成三边能围成三角形的判定规则。",
   "caseType": "exploration",
   "difficulty": "intermediate",
-  "requiredCapabilities": ["scalar.slider", "conditional-construction", "boolean-feedback", "interaction.set_value"],
-  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 104, "attempts": 2 },
-  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "adjust-segments-04", "revision": 1, "seed": 104, "metadata": { "title": "调整三条线段", "locale": "zh-CN", "purpose": "exploration", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 6, 6, -4], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "adjust", "title": "调整并判断", "stages": [{ "id": "change", "narration": "调整三条线段长度。" }, { "id": "judge", "narration": "观察能否围成三角形。" }] }] } },
-  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-04-partial", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "adjust-segments-04", "revision": 1 }, "operations": [
-    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideA", "label": "a" }], "params": { "min": 1, "max": 10, "value": 3, "step": 1, "position": [-4, 4] } },
-    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideB", "label": "b" }], "params": { "min": 1, "max": 10, "value": 4, "step": 1, "position": [-4, 3] } },
-    { "op": "construct", "command": "scalar.slider", "outputs": [{ "id": "sideC", "label": "c" }], "params": { "min": 1, "max": 10, "value": 5, "step": 1, "position": [-4, 2] } },
-    { "op": "set_interaction", "policy": { "target": "sideA", "permissions": ["set_value"] } },
-    { "op": "set_interaction", "policy": { "target": "sideB", "permissions": ["set_value"] } },
-    { "op": "set_interaction", "policy": { "target": "sideC", "permissions": ["set_value"] } }
-  ], "metadata": { "origin": "textbook-case-seed" } }] },
-  "expected": { "assertions": [], "interactions": [{ "target": "sideA", "permission": "set_value" }, { "target": "sideB", "permission": "set_value" }, { "target": "sideC", "permission": "set_value" }], "expectedFailure": { "stage": "interaction", "code": "CAPABILITY_CONDITIONAL_FEEDBACK_UNAVAILABLE", "message": "运行时缺少由三条滑块值驱动的条件构造与布尔教学反馈。" } },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "point.from_expressions",
+    "segment.through_points",
+    "boolean.expression",
+    "text.conditional",
+    "interaction.set_value"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "case04-conditional-feedback-v1",
+    "seed": 104,
+    "attempts": 3
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "adjust-segments-04",
+      "revision": 1,
+      "seed": 104,
+      "metadata": {
+        "title": "调整三条线段",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8"
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [-6, 6, 7, -4],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true
+        }
+      ],
+      "activities": [
+        {
+          "id": "adjust",
+          "title": "调整并判断",
+          "stages": [
+            {
+              "id": "change",
+              "narration": "调整三条线段长度，观察对应线段同步变化。"
+            },
+            {
+              "id": "judge",
+              "narration": "根据三边关系判断能否围成三角形。"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-04-conditional-feedback",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "adjust-segments-04",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [{ "id": "sideA", "label": "a" }],
+            "params": { "min": 1, "max": 10, "value": 3, "step": 1, "position": [-5, 5] }
+          },
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [{ "id": "sideB", "label": "b" }],
+            "params": { "min": 1, "max": 10, "value": 4, "step": 1, "position": [-5, 4] }
+          },
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [{ "id": "sideC", "label": "c" }],
+            "params": { "min": 1, "max": 10, "value": 5, "step": 1, "position": [-5, 3] }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [{ "id": "startA" }],
+            "params": { "coords": [-5, 1.5] }
+          },
+          {
+            "op": "construct",
+            "command": "point.from_expressions",
+            "outputs": [{ "id": "endA" }],
+            "params": { "x": "-5 + sideA", "y": 1.5 }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "inputs": [{ "ref": "startA" }, { "ref": "endA" }],
+            "outputs": [{ "id": "segmentA", "label": "a" }]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [{ "id": "startB" }],
+            "params": { "coords": [-5, 0] }
+          },
+          {
+            "op": "construct",
+            "command": "point.from_expressions",
+            "outputs": [{ "id": "endB" }],
+            "params": { "x": "-5 + sideB", "y": 0 }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "inputs": [{ "ref": "startB" }, { "ref": "endB" }],
+            "outputs": [{ "id": "segmentB", "label": "b" }]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [{ "id": "startC" }],
+            "params": { "coords": [-5, -1.5] }
+          },
+          {
+            "op": "construct",
+            "command": "point.from_expressions",
+            "outputs": [{ "id": "endC" }],
+            "params": { "x": "-5 + sideC", "y": -1.5 }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "inputs": [{ "ref": "startC" }, { "ref": "endC" }],
+            "outputs": [{ "id": "segmentC", "label": "c" }]
+          },
+          {
+            "op": "construct",
+            "command": "boolean.expression",
+            "outputs": [{ "id": "canFormTriangle" }],
+            "params": {
+              "expression": "(sideA + sideB > sideC) && (sideA + sideC > sideB) && (sideB + sideC > sideA)"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.conditional",
+            "inputs": [{ "ref": "canFormTriangle" }],
+            "outputs": [{ "id": "feedback" }],
+            "params": {
+              "trueText": "可以组成三角形",
+              "falseText": "不能组成三角形",
+              "at": [-5, -3]
+            }
+          },
+          { "op": "set_interaction", "policy": { "target": "sideA", "permissions": ["set_value"] } },
+          { "op": "set_interaction", "policy": { "target": "sideB", "permissions": ["set_value"] } },
+          { "op": "set_interaction", "policy": { "target": "sideC", "permissions": ["set_value"] } }
+        ],
+        "metadata": { "origin": "textbook-case-seed" }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "9411e7ea3a8980d9b671ea230801236a5c2a369c17a6123db73a8064f2872790",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": ["sideA", "sideB", "sideC", "segmentA", "segmentB", "segmentC", "canFormTriangle", "feedback"]
+      },
+      {
+        "kind": "entity-types",
+        "types": {
+          "segmentA": "segment2",
+          "segmentB": "segment2",
+          "segmentC": "segment2",
+          "canFormTriangle": "boolean",
+          "feedback": "text"
+        }
+      },
+      { "kind": "activity-stages", "minimum": 2 },
+      { "kind": "static-render" },
+      { "kind": "render-bundle" }
+    ],
+    "interactions": [
+      { "target": "sideA", "permission": "set_value" },
+      { "target": "sideB", "permission": "set_value" },
+      { "target": "sideC", "permission": "set_value" }
+    ]
+  },
   "artifacts": {},
-  "status": "expected-unsupported",
-  "diagnostics": [{ "code": "CAPABILITY_CONDITIONAL_FEEDBACK_UNAVAILABLE", "severity": "warning", "message": "scalar.slider 可用，但条件构造和布尔反馈尚无协议能力。", "path": "requiredCapabilities", "retryable": false }]
+  "status": "accepted",
+  "diagnostics": []
 }

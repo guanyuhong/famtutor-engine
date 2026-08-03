@@ -1,5 +1,5 @@
 import { MathEngineError } from "../errors.js";
-import { evaluateNumericExpression } from "../expression/evaluator.js";
+import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
 import {
   angleValue,
   applyTransform,
@@ -187,6 +187,13 @@ function stringParam(node: ConstructionNode, key: string, fallback = ""): string
   return typeof raw === "string" ? raw : fallback;
 }
 
+function expressionParam(node: ConstructionNode, key: string): string | number {
+  const raw = node.params?.[key];
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "string" && raw.trim().length > 0) return raw;
+  throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires numeric or expression params.${key}.`);
+}
+
 function inputRefs(node: ConstructionNode): string[] {
   return (node.inputs ?? []).flatMap(input => "ref" in input ? [input.ref] : []);
 }
@@ -311,6 +318,8 @@ export function mountJsxGraph(
   const valueOf = (id: string): RuntimeValue | undefined => valueResolvers.get(id)?.();
   const expressionValue = (source: string | number, locals: Record<string, number> = {}): number =>
     evaluateNumericExpression(source, identifier => locals[identifier] ?? valueOf(identifier));
+  const booleanValue = (source: string): boolean =>
+    evaluateBooleanExpression(source, identifier => valueOf(identifier));
   const pointOf = (id: string) => {
     const value = valueOf(id);
     if (!isPoint(value)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${id}' is not a point2 at runtime.`);
@@ -392,9 +401,25 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => native?.Value?.());
         break;
       }
+      case "boolean.expression": {
+        const expression = stringParam(node, "expression");
+        valueResolvers.set(output, () => booleanValue(expression));
+        return;
+      }
       case "point.free": {
         const at = pairParam(node, "coords");
         native = board.create("point", at, attributes);
+        objects.set(output, native);
+        valueResolvers.set(output, () => safeRuntimePoint(native!));
+        break;
+      }
+      case "point.from_expressions": {
+        const xExpression = expressionParam(node, "x");
+        const yExpression = expressionParam(node, "y");
+        native = board.create("point", [
+          () => expressionValue(xExpression),
+          () => expressionValue(yExpression)
+        ], jxgAttributes(document, output, true));
         objects.set(output, native);
         valueResolvers.set(output, () => safeRuntimePoint(native!));
         break;
@@ -762,6 +787,18 @@ export function mountJsxGraph(
           : board.create("text", [at.x, at.y, text], jxgAttributes(document, output, true));
         objects.set(output, native);
         valueResolvers.set(output, () => ({ kind: "text", text, at: refs[0] ? pointOf(refs[0]) : at }));
+        break;
+      }
+      case "text.conditional": {
+        const trueText = stringParam(node, "trueText");
+        const falseText = stringParam(node, "falseText");
+        const selectedText = () => valueOf(refs[0]!) === true ? trueText : falseText;
+        const at = refs[1] ? pointOf(refs[1]) : point(...pairParam(node, "at"));
+        native = refs[1]
+          ? board.create("text", [() => pointOf(refs[1]!).x, () => pointOf(refs[1]!).y, selectedText], jxgAttributes(document, output, true))
+          : board.create("text", [at.x, at.y, selectedText], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, () => ({ kind: "text", text: selectedText(), at: refs[1] ? pointOf(refs[1]) : at }));
         break;
       }
       case "measurement.distance":
