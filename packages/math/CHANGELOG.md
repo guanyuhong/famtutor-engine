@@ -4,8 +4,9 @@ Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
 
 ## 0.1.1 — 2026-08-03
 
-L0 primitive closure expansion:
+Release baseline + L0 primitive closure expansion:
 
+- **publish baseline**: pin TypeScript 5.8.3 via lockfile, local `tsc` for build/browser smoke, remove `private` so `npm pack` works, CI on Node 20/22;
 - strengthen existing primitives: projection onto circle, path gliders on arc/polygon, stable intersection ordering, `measurement.area` / `measurement.perimeter`, `vector.components` / `vector.polar`;
 - new entity types: `arc2`, `sector2`, `conic2`, `transform2`;
 - new commands: arc/sector constructors, ellipse/parabola/hyperbola, `point.intersection_line_conic`, transform objects + `transform.apply`;

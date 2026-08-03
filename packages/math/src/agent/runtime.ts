@@ -436,7 +436,7 @@ export class AgentMathRuntime {
     );
     return {
       ok: true,
-      runtime: { name: "@famtutor/math-runtime", version: "0.1.0" },
+      runtime: { name: "@famtutor/math-runtime", version: "0.1.1" },
       protocol: "famtutor.math.document.v1",
       renderers: ["direct-svg", "jsxgraph-svg", "jsxgraph-canvas"],
       commands: toJsonValue(commands),

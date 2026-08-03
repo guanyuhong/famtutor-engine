@@ -5,7 +5,7 @@ import { AgentMathRuntime } from "../agent/runtime.js";
 
 export const MCP_SERVER_INFO = Object.freeze({
   name: "famtutor-math-runtime",
-  version: "0.1.0"
+  version: "0.1.1"
 });
 
 export const MCP_SUPPORTED_VERSIONS = Object.freeze([

@@ -1,7 +1,6 @@
 {
   "name": "@famtutor/math-runtime",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.1",
   "description": "FamTutor Engine math domain: Agent-native 2D construction, validation, simulation, and JSXGraph/SVG runtime.",
   "type": "module",
   "main": "./dist/index.js",

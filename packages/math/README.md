@@ -28,10 +28,10 @@ Events · Assertions · Simulation · Evidence
 
 ## 已实现能力
 
-| 模块 | v0.1.0 能力 |
+| 模块 | v0.1.1 能力 |
 |---|---|
 | Canonical protocol | `famtutor.math.document.v1`，闭合 JSON Schema、稳定 ID、revision、provenance |
-| 数学命令 | L0 命令目录（由 31 扩展；含弧/扇、圆锥曲线、变换对象、面积/周长等），完整列表见 `capabilities` |
+| 数学命令 | **47** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |
@@ -208,16 +208,16 @@ Codex 配置示例：
 ```toml
 [mcp_servers.famtutor_math]
 command = "node"
-args = ["/absolute/path/famtutor-math-runtime-v0.1.0/bin/famtutor-math-mcp.mjs"]
+args = ["/absolute/path/famtutor-engine/packages/math/bin/famtutor-math-mcp.mjs"]
 startup_timeout_sec = 30
 tool_timeout_sec = 120
 ```
 
 MCP server 将数学命令收敛在 9 个稳定工具里，避免把每个几何命令暴露成一个独立 MCP tool。
 
-## 31 个命令 → L0 命令目录
+## L0 命令目录与 L1 宏
 
-v0.1 起步为 31 个核心命令。当前 L0 已扩展（含 arc/sector/conic/transform2 与测量/向量补强），完整列表以运行时为准：
+当前为 **47** 个 L0 命令与 **8** 个 L1 宏。完整列表以运行时为准：
 
 ```bash
 node ./bin/famtutor-math.mjs capabilities
@@ -225,7 +225,7 @@ node ./bin/famtutor-math.mjs capabilities
 
 L1 宏（中垂线、角平分、四心、切线等）见 `src/catalog/macros.ts`，**不**进入 command enum。
 
-历史 v0.1 基线命令：
+v0.1 起步时的历史基线（31 个核心命令）仍可用于对照：
 
 ```text
 scalar.constant
@@ -267,11 +267,7 @@ measurement.angle
 measurement.slope
 ```
 
-命令签名可在运行时动态查询：
-
-```bash
-node ./bin/famtutor-math.mjs capabilities
-```
+v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。
 
 ## 安全边界
 
@@ -285,16 +281,17 @@ node ./bin/famtutor-math.mjs capabilities
 
 ## 测试
 
-完整验证：
+完整验证（仓库根目录，使用 lockfile）：
 
 ```bash
+npm ci
 npm run verify
-npm run benchmark
+npm run benchmark -w @famtutor/math-runtime
 ```
 
 覆盖内容包括：
 
-- 16 个 Node 单元/集成/随机性质测试；
+- Node 单元/集成/随机性质测试（以 `node --test` 当前结果为准，见 [TEST_REPORT.md](TEST_REPORT.md)）；
 - L0 command catalog 的 headless 和真实 Chromium + JSXGraph 渲染覆盖；
 - 250 组随机垂直平分线构型与 680 个随机拖动采样帧；
 - JSON Schema、9 个 Agent tool schema；
@@ -307,7 +304,7 @@ npm run benchmark
 
 ## 当前边界
 
-v0.1.0 有意不包含：
+v0.1.1 有意不包含：
 
 - 完整 GeoGebra 式 UI、资源社区和 Spreadsheet；
 - 通用 CAS、精确代数证明和方程求解；
@@ -316,9 +313,10 @@ v0.1.0 有意不包含：
 - 完整 3D；
 - `.ggb` 导入导出；
 - 持久化数据库、多人协作和权限系统；
-- 自动标签避让在 JSXGraph runtime 中的完整接入。
+- 自动标签避让在 JSXGraph runtime 中的完整接入；
+- 挂载后 ChangeSet 增量渲染（Engine v0.2 PR3，见根 [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md)）。
 
-这些能力应在协议稳定后分阶段增加，而不是让 v0.1 的 Agent 可靠性被“大而全”拖累。
+这些能力应在协议与 live runtime 稳定后分阶段增加，而不是让 Agent 可靠性被“大而全”拖累。
 
 ## 仓库结构
 

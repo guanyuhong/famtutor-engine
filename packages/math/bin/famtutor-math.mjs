@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   AgentMathRuntime,
   commandCapabilities,
@@ -9,8 +10,13 @@ import {
   validateMathDocument
 } from "../dist/index.js";
 
+const packageJson = JSON.parse(
+  await readFile(resolve(dirname(fileURLToPath(import.meta.url)), "../package.json"), "utf8")
+);
+const RUNTIME_VERSION = packageJson.version;
+
 function usage(code = 0) {
-  const text = `FamTutor Agent-Native Math Runtime v0.1.0
+  const text = `FamTutor Agent-Native Math Runtime v${RUNTIME_VERSION}
 
 Usage:
   famtutor-math validate <document.json>
@@ -43,7 +49,7 @@ if (!command || command === "--help" || command === "-h") usage(0);
 try {
   if (command === "capabilities") {
     process.stdout.write(JSON.stringify({
-      runtime: "0.1.0",
+      runtime: RUNTIME_VERSION,
       protocol: "famtutor.math.document.v1",
       commands: commandCapabilities()
     }, null, 2) + "\n");

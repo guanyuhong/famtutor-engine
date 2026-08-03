@@ -10,6 +10,7 @@ TypeScript AMD test bundle is executed with a tiny synchronous AMD loader.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -93,12 +94,17 @@ def main() -> int:
     page_errors: list[str] = []
 
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(
-            headless=True,
-            executable_path="/usr/bin/chromium",
-            args=["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
-            timeout=30_000,
-        )
+        launch_kwargs: dict = {
+            "headless": True,
+            "args": ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
+            "timeout": 30_000,
+        }
+        # Prefer Playwright-managed Chromium. Override with PLAYWRIGHT_CHROMIUM_EXECUTABLE
+        # when a system browser is required (for example some sandboxed CI images).
+        executable = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE")
+        if executable:
+            launch_kwargs["executable_path"] = executable
+        browser = playwright.chromium.launch(**launch_kwargs)
         page = browser.new_page(viewport={"width": 1500, "height": 1100}, device_scale_factor=1)
         page.on("console", lambda message: console_messages.append(f"{message.type}: {message.text}"))
         page.on("pageerror", lambda error: page_errors.append(str(error)))
