@@ -24,7 +24,8 @@ const entries = listed.stdout.split("\n").filter(Boolean);
 const required = [
   "package/dist/index.js",
   "package/dist/index.d.ts",
-  "package/protocol/famtutor.engine.runtime.v1.schema.json"
+  "package/protocol/famtutor.engine.runtime.v1.schema.json",
+  "package/protocol/famtutor.render.bundle.v1.schema.json"
 ];
 for (const entry of required) {
   if (!entries.includes(entry)) throw new Error(`Packed tarball missing ${entry}`);

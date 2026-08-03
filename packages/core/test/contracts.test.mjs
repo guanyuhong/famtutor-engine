@@ -14,7 +14,7 @@ const packageRoot = join(root, "..");
 test("CORE_VERSION matches package.json", () => {
   const packageJson = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"));
   assert.equal(CORE_VERSION, packageJson.version);
-  assert.equal(CORE_VERSION, "0.2.0");
+  assert.equal(CORE_VERSION, "0.3.0");
 });
 
 test("Diagnostic / ChangeSet / RenderArtifact / RenderResult survive JSON round-trip", () => {

@@ -45,6 +45,7 @@ export * from "./render/style.js";
 export * from "./render/direct-svg.js";
 export * from "./render/jsxgraph.js";
 export * from "./render/mounted-renderer.js";
+export * from "./render/bundle.js";
 
 export * from "./agent/store.js";
 export * from "./agent/tools.js";

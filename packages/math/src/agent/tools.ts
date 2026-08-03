@@ -150,14 +150,14 @@ const TOOL_DEFINITIONS = [
   {
     name: "math_export",
     title: "Export document or SVG",
-    description: "Export canonical MathDocument JSON or deterministic SVG with a content hash.",
+    description: "Export canonical MathDocument JSON, deterministic SVG, or a host-neutral Render Bundle.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
       required: ["documentId", "format"],
       properties: {
         documentId: { type: "string" },
-        format: { type: "string", enum: ["math-document", "svg"] },
+        format: { type: "string", enum: ["math-document", "svg", "render-bundle"] },
         viewId: { type: "string" },
         width: { type: "integer", minimum: 64, maximum: 4096 },
         height: { type: "integer", minimum: 64, maximum: 4096 }

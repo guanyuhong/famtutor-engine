@@ -8,11 +8,7 @@ test("AgentMathRuntime supports transactional create/apply/inspect/render/evalua
   assert.equal(create.ok, true);
   assert.equal(create.document.revision, 1);
 
-  const apply = await runtime.callTool("math_apply", {
-    documentId: "agent-demo",
-    expectedRevision: 1,
-    idempotencyKey: "construct-v1",
-    operations: [
+  const applyOps = [
       { op: "construct", command: "point.free", outputs: [{ id: "A", label: "A" }], params: { coords: [-3,0] } },
       { op: "construct", command: "point.free", outputs: [{ id: "B", label: "B" }], params: { coords: [3,0] } },
       { op: "construct", command: "segment.through_points", outputs: ["AB"], inputs: [{ ref: "A" }, { ref: "B" }] },
@@ -21,7 +17,12 @@ test("AgentMathRuntime supports transactional create/apply/inspect/render/evalua
       { op: "set_interaction", policy: { target: "A", permissions: ["drag"] } },
       { op: "set_interaction", policy: { target: "B", permissions: ["drag"] } },
       { op: "add_assertion", assertion: { id: "midpoint-distance", predicate: "expression_equal", arguments: [{ expr: "distance(M,A)" }, { expr: "distance(M,B)" }], tolerance: 1e-9 } }
-    ]
+    ];
+  const apply = await runtime.callTool("math_apply", {
+    documentId: "agent-demo",
+    expectedRevision: 1,
+    idempotencyKey: "construct-v1",
+    operations: applyOps
   });
   assert.equal(apply.ok, true, JSON.stringify(apply));
   assert.equal(apply.revision, 2);
@@ -31,10 +32,19 @@ test("AgentMathRuntime supports transactional create/apply/inspect/render/evalua
     documentId: "agent-demo",
     expectedRevision: 1,
     idempotencyKey: "construct-v1",
-    operations: [{ op: "construct", command: "point.free", outputs: ["ignored"], params: { coords: [0,0] } }]
+    operations: applyOps
   });
   assert.equal(replay.ok, true);
   assert.equal(replay.revision, 2);
+
+  const reused = await runtime.callTool("math_apply", {
+    documentId: "agent-demo",
+    expectedRevision: 1,
+    idempotencyKey: "construct-v1",
+    operations: [{ op: "construct", command: "point.free", outputs: ["ignored"], params: { coords: [0,0] } }]
+  });
+  assert.equal(reused.ok, false);
+  assert.equal(reused.error.code, "IDEMPOTENCY_KEY_REUSED");
 
   const conflict = await runtime.callTool("math_apply", { documentId: "agent-demo", expectedRevision: 1, operations: [{ op: "set_entity", entityId: "A", patch: { label: "A1" } }] });
   assert.equal(conflict.ok, false);

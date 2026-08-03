@@ -10,6 +10,7 @@ import {
   MathDomainRuntime,
   applyMathChangeSet,
   deepClone,
+  sha256Utf8,
   stableHash
 } from "../dist/index.js";
 
@@ -42,7 +43,7 @@ test("version constants stay synchronized across package, protocol, descriptor, 
   const tools = JSON.parse(readFileSync(join(root, "protocol/famtutor.math.agent-tools.v1.json"), "utf8"));
   const runtime = new MathDomainRuntime();
   const descriptor = await runtime.descriptor();
-  assert.equal(MATH_RUNTIME_VERSION, "0.2.0");
+  assert.equal(MATH_RUNTIME_VERSION, "0.3.0");
   assert.equal(packageJson.version, MATH_RUNTIME_VERSION);
   assert.equal(tools.runtimeVersion, MATH_RUNTIME_VERSION);
   assert.equal(MCP_SERVER_INFO.version, MATH_RUNTIME_VERSION);
@@ -180,7 +181,8 @@ test("Direct SVG render produces a core RenderResult artifact", async () => {
   assert.equal(rendered.artifact.mediaType, "image/svg+xml");
   assert.equal(rendered.artifact.encoding, "utf8");
   assert.ok(rendered.artifact.content.startsWith("<svg"));
-  assert.equal(rendered.artifact.digest.value, stableHash(rendered.artifact.content));
+  assert.equal(rendered.artifact.digest.value, await sha256Utf8(rendered.artifact.content));
+  assert.equal(rendered.artifact.digest.algorithm, "sha256");
 });
 
 test("DomainRuntime.render rejects mounted renderer modes", async () => {

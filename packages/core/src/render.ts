@@ -26,7 +26,7 @@ export interface RenderArtifact {
   encoding: "utf8" | "base64";
   content: string;
   digest: {
-    algorithm: string;
+    algorithm: "sha256";
     value: string;
   };
   diagnostics: Diagnostic[];

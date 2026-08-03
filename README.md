@@ -33,8 +33,8 @@ Intent / Author / Agent
 
 | Domain | Status | Package |
 |---|---|---|
-| Core contracts | **Shipped (v0.2.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
-| Mathematics | **Shipped (v0.2.0)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
+| Core contracts | **Shipped (v0.3.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
+| Mathematics | **Shipped (v0.3.0)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
 | Physics | Planned | — |
 | Science (general) | Planned | — |
 | Computer Science | Planned | — |
@@ -102,11 +102,12 @@ node ./packages/math/bin/famtutor-math-mcp.mjs
 - Safe expression AST (no arbitrary JavaScript)
 - Headless evaluate / assert / simulate
 - JSXGraph interactive render + Direct SVG → `RenderResult` / `RenderArtifact`
-- **`mountMathRenderer` live MountedRenderer**（首版 **rebuild**；外部 handle 与 entity ID 稳定，不承诺 native object identity）
+- **`mountMathRenderer` live MountedRenderer**（rebuild；fingerprint 幂等；payload InteractionAction）
+- **`famtutor.render.bundle.v1`** via `createMathRenderBundle` / `mountMathRenderBundle` / `math_export format:render-bundle`
 - 9 Agent tools + MCP stdio
 - Repair diagnostics (`suggestedFixes`)
 
-Render Bundle 仍是 **PR4**（未交付）。
+CathyGO 等宿主按 Engine 协议自建 adapter（本仓库不嵌入 CathyGO）。
 
 Details: [packages/math/README.md](packages/math/README.md) · [packages/core/README.md](packages/core/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
 

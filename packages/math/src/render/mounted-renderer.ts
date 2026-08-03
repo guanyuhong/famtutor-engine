@@ -1,6 +1,7 @@
 import type {
   ChangeSet,
   Diagnostic,
+  DocumentRef,
   InteractionResult,
   MountedRenderer,
   MountedRendererState,
@@ -21,26 +22,44 @@ import {
   type MathSetParamsOperation
 } from "../operations.js";
 import type { MathDocument } from "../types.js";
-import { deepClone, nowIso, stableHash, toJsonValue } from "../util.js";
+import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
 
 const IDEMPOTENCY_LIMIT = 128;
+const MAX_OPERATIONS = 128;
 
+/** Canonical InteractionAction wire shape (core envelope). */
 export type MathInteractionAction =
+  | { type: "point.set"; target: string; payload: { coords: [number, number] } }
+  | { type: "scalar.set"; target: string; payload: { value: number } }
+  | { type: "stage.set"; payload: { stageId?: string } }
+  | { type: "selection.set"; payload: { entityId?: string } };
+
+/** @deprecated Prefer canonical `{ type, target?, payload }` envelope. */
+export type LegacyMathInteractionAction =
   | { type: "point.set"; target: string; coords: [number, number] }
   | { type: "scalar.set"; target: string; value: number }
   | { type: "stage.set"; stageId?: string }
   | { type: "selection.set"; entityId?: string };
 
+export type MathInteractionActionInput = MathInteractionAction | LegacyMathInteractionAction;
+
 export interface MathMountedRendererOptions extends JsxGraphRuntimeOptions {
   domainRuntime?: MathDomainRuntime;
 }
 
-export interface MathMountedRenderer extends MountedRenderer<MathDocument, MathOperation, MathInteractionAction> {
+export interface MathMountedRenderer extends MountedRenderer<MathDocument, MathOperation, MathInteractionActionInput> {
   readonly host: HTMLElement;
 }
 
-function documentRef(document: MathDocument) {
+interface IdempotencyEntry {
+  changeSetId: string;
+  requestFingerprint: string;
+  documentRef: DocumentRef;
+  result: RenderUpdateResult<MathDocument, MathOperation>;
+}
+
+function documentRef(document: MathDocument): DocumentRef {
   return {
     domain: MATH_DOMAIN,
     schema: MATH_DOCUMENT_SCHEMA,
@@ -49,8 +68,48 @@ function documentRef(document: MathDocument) {
   };
 }
 
+function changeSetFingerprint(changeSet: ChangeSet<MathOperation>): string {
+  return canonicalizeJson({
+    schema: changeSet.schema,
+    base: changeSet.base,
+    operations: changeSet.operations,
+    metadata: changeSet.metadata ?? null
+  });
+}
+
 function producerNodeId(document: MathDocument, entityId: string): string | undefined {
   return buildConstructionGraph(document).producerByEntity.get(entityId);
+}
+
+function stageExists(document: MathDocument, stageId: string): boolean {
+  return Boolean(document.activities?.flatMap(activity => activity.stages ?? []).some(stage => stage.id === stageId));
+}
+
+function interactionAllows(document: MathDocument, target: string, permission: "drag" | "set_value" | "select"): boolean {
+  const policy = document.interactions?.find(candidate => candidate.target === target);
+  if (policy) return policy.permissions.includes(permission);
+  const entity = document.entities.find(candidate => candidate.id === target);
+  if (!entity) return false;
+  if (permission === "select") return true;
+  if (permission === "drag") return entity.role === "free" && entity.type === "point2";
+  return entity.type === "scalar" && entity.role === "free";
+}
+
+export function normalizeMathInteractionAction(action: MathInteractionActionInput): MathInteractionAction {
+  if ("payload" in action && action.payload !== undefined) {
+    return action as MathInteractionAction;
+  }
+  const legacy = action as LegacyMathInteractionAction;
+  if (legacy.type === "point.set") {
+    return { type: "point.set", target: legacy.target, payload: { coords: legacy.coords } };
+  }
+  if (legacy.type === "scalar.set") {
+    return { type: "scalar.set", target: legacy.target, payload: { value: legacy.value } };
+  }
+  if (legacy.type === "stage.set") {
+    return { type: "stage.set", payload: { stageId: legacy.stageId } };
+  }
+  return { type: "selection.set", payload: { entityId: legacy.entityId } };
 }
 
 function destroyedFailure(document: MathDocument): RenderUpdateResult<MathDocument, MathOperation> {
@@ -71,6 +130,12 @@ function destroyedFailure(document: MathDocument): RenderUpdateResult<MathDocume
   };
 }
 
+function cloneUpdateResult(
+  result: RenderUpdateResult<MathDocument, MathOperation>
+): RenderUpdateResult<MathDocument, MathOperation> {
+  return deepClone(result);
+}
+
 class MathMountedRendererImpl implements MathMountedRenderer {
   readonly host: HTMLElement;
   private readonly domainRuntime: MathDomainRuntime;
@@ -82,11 +147,12 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   private selectedEntityId?: string;
   private viewId?: string;
   private destroyed = false;
+  private destroyRequested = false;
   private sequence = 0;
   private eventCounter = 0;
   private readonly listeners = new Set<(event: RuntimeEvent) => void>();
   private queue: Promise<unknown> = Promise.resolve();
-  private readonly idempotency = new Map<string, RenderUpdateResult<MathDocument, MathOperation>>();
+  private readonly idempotency = new Map<string, IdempotencyEntry>();
   private readonly idempotencyOrder: string[] = [];
 
   constructor(host: HTMLElement, document: MathDocument, options: MathMountedRendererOptions = {}) {
@@ -105,10 +171,18 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       this.host.style.position = "relative";
     }
     const container = this.createContainer("active");
-    this.host.replaceChildren(container);
-    this.activeContainer = container;
-    this.active = mountJsxGraph(container, this.document, this.bindMountOptions());
-    await this.active.ready;
+    try {
+      this.host.replaceChildren(container);
+      this.activeContainer = container;
+      this.active = mountJsxGraph(container, this.document, this.bindMountOptions());
+      await this.active.ready;
+    } catch (error) {
+      try { this.active?.destroy(); } catch { /* ignore */ }
+      this.active = undefined;
+      this.activeContainer = undefined;
+      this.host.replaceChildren();
+      throw error;
+    }
   }
 
   getDocument(): MathDocument {
@@ -116,7 +190,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   }
 
   getState(): MountedRendererState {
-    return this.captureState();
+    return deepClone(this.captureState());
   }
 
   applyChangeSet(changeSet: ChangeSet<MathOperation>): Promise<RenderUpdateResult<MathDocument, MathOperation>> {
@@ -128,7 +202,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     options: ReplaceDocumentOptions = {}
   ): Promise<RenderUpdateResult<MathDocument, MathOperation>> {
     return this.enqueue(async () => {
-      if (this.destroyed) return destroyedFailure(this.document);
+      if (this.destroyed || this.destroyRequested) return destroyedFailure(this.document);
       if (!options.allowDocumentSwitch && document.documentId !== this.document.documentId) {
         return this.failUpdate([{
           code: "DOCUMENT_SWITCH_DENIED",
@@ -147,16 +221,18 @@ class MathMountedRendererImpl implements MathMountedRenderer {
           retryable: false
         }]);
       }
-      return this.rebuildWithDocument(deepClone(document), undefined);
+      const result = await this.rebuildWithDocument(deepClone(document), undefined);
+      if (result.ok) this.clearIdempotency();
+      return result;
     });
   }
 
-  dispatch(action: MathInteractionAction): Promise<InteractionResult<MathDocument, MathOperation>> {
-    return this.enqueue(async () => this.dispatchLocked(action));
+  dispatch(action: MathInteractionActionInput): Promise<InteractionResult<MathDocument, MathOperation>> {
+    return this.enqueue(async () => this.dispatchLocked(normalizeMathInteractionAction(action)));
   }
 
   async snapshot(request: RenderRequest = {}): Promise<RenderResult> {
-    if (this.destroyed) {
+    if (this.destroyed || this.destroyRequested) {
       return {
         ok: false,
         diagnostics: [{
@@ -208,7 +284,28 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         }]
       };
     }
+    const report = this.active.report();
     const content = this.active.exportSvg();
+    const diagnostics: Diagnostic[] = [
+      ...report.warnings.map(issue => ({
+        code: issue.code,
+        severity: (issue.severity === "warning" || issue.severity === "info" ? issue.severity : "error") as Diagnostic["severity"],
+        message: issue.message,
+        path: issue.path,
+        expected: issue.expected,
+        actual: issue.actual,
+        retryable: issue.retryable
+      })),
+      ...report.skippedEntities.map(skipped => ({
+        code: "ENTITY_SKIPPED",
+        severity: "warning" as const,
+        message: `Entity '${skipped.id}' was skipped: ${skipped.reason}`,
+        path: skipped.id,
+        actual: skipped.reason,
+        retryable: true
+      }))
+    ];
+    const digestValue = await sha256Utf8(content);
     return {
       ok: true,
       artifact: {
@@ -218,8 +315,14 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         mediaType: "image/svg+xml",
         encoding: "utf8",
         content,
-        digest: { algorithm: "sha256-stableHash", value: stableHash(content) },
-        diagnostics: []
+        digest: { algorithm: "sha256", value: digestValue },
+        diagnostics,
+        metadata: {
+          report: toJsonValue(report),
+          width: this.host.clientWidth || null,
+          height: this.host.clientHeight || null,
+          skippedCount: report.skippedEntities.length
+        }
       }
     };
   }
@@ -230,13 +333,20 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   }
 
   async destroy(): Promise<void> {
-    if (this.destroyed) return;
-    this.destroyed = true;
-    this.active?.destroy();
-    this.active = undefined;
-    this.activeContainer = undefined;
-    this.host.replaceChildren();
-    this.listeners.clear();
+    this.destroyRequested = true;
+    await this.enqueue(async () => {
+      if (this.destroyed) return;
+      this.destroyed = true;
+      try { this.active?.destroy(); } catch { /* ignore teardown errors */ }
+      this.active = undefined;
+      this.activeContainer = undefined;
+      this.host.replaceChildren();
+      this.listeners.clear();
+      this.clearIdempotency();
+    });
+  }
+
+  private clearIdempotency(): void {
     this.idempotency.clear();
     this.idempotencyOrder.length = 0;
   }
@@ -247,6 +357,15 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     return run;
   }
 
+  private safeHostCallback(fn: (() => void) | undefined): void {
+    if (!fn) return;
+    try {
+      fn();
+    } catch {
+      // Host callbacks must not break internal commit paths.
+    }
+  }
+
   private bindMountOptions(): JsxGraphRuntimeOptions {
     return {
       ...this.mountOptions,
@@ -254,7 +373,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       stageId: this.stageId,
       onSelect: entityId => {
         this.selectedEntityId = entityId;
-        this.mountOptions.onSelect?.(entityId);
+        this.safeHostCallback(() => this.mountOptions.onSelect?.(entityId));
         this.emit({
           type: "selection.changed",
           target: entityId,
@@ -262,12 +381,32 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         });
       },
       onEvent: event => {
-        this.mountOptions.onEvent?.(event);
+        this.safeHostCallback(() => this.mountOptions.onEvent?.(event));
         if (event.type === "object.dragEnd" && event.target && Array.isArray(event.value)) {
           const coords = event.value as [number, number];
-          void this.dispatch({ type: "point.set", target: event.target, coords });
+          void this.dispatch({ type: "point.set", target: event.target, payload: { coords } })
+            .catch(error => {
+              this.emit({
+                type: "interaction.failed",
+                target: event.target,
+                payload: {
+                  reason: "dispatch_rejected",
+                  message: error instanceof Error ? error.message : String(error)
+                }
+              });
+            });
         } else if (event.type === "value.changed" && event.target && typeof event.value === "number") {
-          void this.dispatch({ type: "scalar.set", target: event.target, value: event.value });
+          void this.dispatch({ type: "scalar.set", target: event.target, payload: { value: event.value } })
+            .catch(error => {
+              this.emit({
+                type: "interaction.failed",
+                target: event.target,
+                payload: {
+                  reason: "dispatch_rejected",
+                  message: error instanceof Error ? error.message : String(error)
+                }
+              });
+            });
         }
       }
     };
@@ -297,7 +436,12 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     };
   }
 
-  private emit(partial: Omit<RuntimeEvent, "schema" | "eventId" | "sequence" | "document" | "timestamp"> & { timestamp?: string }): void {
+  private emit(
+    partial: Omit<RuntimeEvent, "schema" | "eventId" | "sequence" | "document" | "timestamp"> & {
+      timestamp?: string;
+      document?: DocumentRef;
+    }
+  ): void {
     this.sequence += 1;
     this.eventCounter += 1;
     const event: RuntimeEvent = {
@@ -305,7 +449,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       eventId: `evt-${this.eventCounter}`,
       sequence: this.sequence,
       type: partial.type,
-      document: documentRef(this.document),
+      document: partial.document ?? documentRef(this.document),
       timestamp: partial.timestamp ?? nowIso(),
       target: partial.target,
       payload: partial.payload
@@ -319,9 +463,19 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     }
   }
 
-  private rememberIdempotent(changeSetId: string, result: RenderUpdateResult<MathDocument, MathOperation>): void {
+  private rememberSuccessful(
+    changeSetId: string,
+    requestFingerprint: string,
+    ref: DocumentRef,
+    result: RenderUpdateResult<MathDocument, MathOperation>
+  ): void {
     if (this.idempotency.has(changeSetId)) return;
-    this.idempotency.set(changeSetId, result);
+    this.idempotency.set(changeSetId, {
+      changeSetId,
+      requestFingerprint,
+      documentRef: deepClone(ref),
+      result: deepClone(result)
+    });
     this.idempotencyOrder.push(changeSetId);
     while (this.idempotencyOrder.length > IDEMPOTENCY_LIMIT) {
       const oldest = this.idempotencyOrder.shift();
@@ -341,31 +495,58 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   private async applyChangeSetLocked(
     changeSet: ChangeSet<MathOperation>
   ): Promise<RenderUpdateResult<MathDocument, MathOperation>> {
-    if (this.destroyed) return destroyedFailure(this.document);
-    const cached = this.idempotency.get(changeSet.changeSetId);
-    if (cached) return cached;
+    if (this.destroyed || this.destroyRequested) return destroyedFailure(this.document);
 
-    const applied = await this.domainRuntime.apply(this.document, changeSet);
-    if (!applied.ok) {
-      const result = this.failUpdate(applied.diagnostics);
-      result.apply = applied;
-      this.rememberIdempotent(changeSet.changeSetId, result);
-      return result;
+    const fingerprint = changeSetFingerprint(changeSet);
+    const cached = this.idempotency.get(changeSet.changeSetId);
+    if (cached) {
+      if (cached.requestFingerprint !== fingerprint) {
+        return this.failUpdate([{
+          code: "IDEMPOTENCY_KEY_REUSED",
+          severity: "error",
+          message: `changeSetId '${changeSet.changeSetId}' was reused with a different payload.`,
+          path: "changeSetId",
+          actual: changeSet.changeSetId,
+          retryable: false
+        }]);
+      }
+      return cloneUpdateResult(cached.result);
     }
 
-    const result = await this.rebuildWithDocument(applied.document, applied);
-    this.rememberIdempotent(changeSet.changeSetId, result);
-    return result;
+    const applied = await this.domainRuntime.apply(this.document, changeSet);
+    if (this.destroyed || this.destroyRequested) return destroyedFailure(this.document);
+
+    if (!applied.ok) {
+      const result = this.failUpdate(applied.diagnostics);
+      result.apply = deepClone(applied);
+      // Domain apply failures are deterministic for the same request — cache them.
+      this.rememberSuccessful(changeSet.changeSetId, fingerprint, documentRef(this.document), result);
+      return cloneUpdateResult(result);
+    }
+
+    // Isolate internal document from apply result identity.
+    const nextDocument = deepClone(applied.document);
+    const isolatedApply = deepClone(applied);
+    const result = await this.rebuildWithDocument(nextDocument, isolatedApply);
+    if (result.ok) {
+      this.rememberSuccessful(changeSet.changeSetId, fingerprint, documentRef(this.document), result);
+    }
+    // REBUILD_FAILED / RENDER_INCOMPLETE are not cached as success — same ID may retry.
+    return cloneUpdateResult(result);
   }
 
   private async rebuildWithDocument(
     nextDocument: MathDocument,
     apply?: RenderUpdateResult<MathDocument, MathOperation>["apply"]
   ): Promise<RenderUpdateResult<MathDocument, MathOperation>> {
-    const previousState = this.captureState();
+    if (this.destroyed || this.destroyRequested) return destroyedFailure(this.document);
+
     const previousActive = this.active;
     const previousContainer = this.activeContainer;
     const previousDocument = this.document;
+    const previousStageId = this.stageId;
+    const previousSelectedEntityId = this.selectedEntityId;
+    const previousCamera = this.active?.board.getBoundingBox?.();
 
     const staging = this.createContainer("staging");
     staging.style.position = "absolute";
@@ -375,69 +556,144 @@ class MathMountedRendererImpl implements MathMountedRenderer {
 
     let stagingHandle: JsxGraphRuntimeHandle | undefined;
     try {
+      const nextStageId = previousStageId && stageExists(nextDocument, previousStageId)
+        ? previousStageId
+        : undefined;
+      const nextSelectedEntityId = previousSelectedEntityId
+        && nextDocument.entities.some(entity => entity.id === previousSelectedEntityId)
+        ? previousSelectedEntityId
+        : undefined;
+
       stagingHandle = mountJsxGraph(staging, nextDocument, {
         ...this.bindMountOptions(),
-        stageId: this.stageId,
+        stageId: nextStageId,
         viewId: this.viewId
       });
       await stagingHandle.ready;
 
-      // Restore ephemeral camera/stage/selection against next document.
-      if (previousState.camera && Array.isArray((previousState.camera as { boundingBox?: unknown }).boundingBox)) {
-        const box = (previousState.camera as { boundingBox: [number, number, number, number] }).boundingBox;
-        stagingHandle.board.setBoundingBox?.(box, true);
-      }
-      const stageStillExists = !this.stageId
-        || Boolean(nextDocument.activities?.flatMap(a => a.stages ?? []).some(s => s.id === this.stageId));
-      if (this.stageId && !stageStillExists) {
-        this.stageId = undefined;
-        this.emit({
-          type: "stage.cleared",
-          payload: { reason: "stage_missing_after_rebuild" }
-        });
-      } else if (this.stageId) {
-        stagingHandle.setStage(this.stageId);
-      }
-      if (this.selectedEntityId && !nextDocument.entities.some(e => e.id === this.selectedEntityId)) {
-        this.selectedEntityId = undefined;
-        this.emit({ type: "selection.changed", payload: { entityId: null, reason: "entity_removed" } });
+      if (this.destroyed || this.destroyRequested) {
+        stagingHandle.destroy();
+        staging.remove();
+        return destroyedFailure(previousDocument);
       }
 
+      if (previousCamera && Array.isArray(previousCamera) && previousCamera.length === 4) {
+        stagingHandle.board.setBoundingBox?.(previousCamera as [number, number, number, number], true);
+      }
+      if (nextStageId) stagingHandle.setStage(nextStageId);
+
+      const report = stagingHandle.report();
+      const errorDiagnostics = report.warnings.filter(issue => issue.severity === "error");
+      if (report.skippedEntities.length > 0 || errorDiagnostics.length > 0) {
+        stagingHandle.destroy();
+        staging.remove();
+        return this.failUpdate([{
+          code: "RENDER_INCOMPLETE",
+          severity: "error",
+          message: "Staging board reported skipped entities or error diagnostics; refusing to swap.",
+          retryable: true,
+          actual: toJsonValue({
+            skippedEntities: report.skippedEntities,
+            errors: errorDiagnostics
+          })
+        }]);
+      }
+
+      const warningDiagnostics: Diagnostic<MathOperation>[] = report.warnings
+        .filter(issue => issue.severity === "warning" || issue.severity === "info")
+        .map(issue => ({
+          code: issue.code,
+          severity: issue.severity === "info" ? "info" : "warning",
+          message: issue.message,
+          path: issue.path,
+          expected: issue.expected,
+          actual: issue.actual,
+          retryable: issue.retryable
+        }));
+
+      // Commit only after staging is healthy.
       this.document = nextDocument;
+      this.stageId = nextStageId;
+      this.selectedEntityId = nextSelectedEntityId;
       this.active = stagingHandle;
       staging.style.position = "";
       staging.style.left = "";
       staging.dataset.role = "active";
       this.activeContainer = staging;
-      previousActive?.destroy();
-      previousContainer?.remove();
-      // Ensure only one child remains.
+
+      const cleanupWarnings: Diagnostic<MathOperation>[] = [];
+      try {
+        previousActive?.destroy();
+      } catch (error) {
+        cleanupWarnings.push({
+          code: "BOARD_CLEANUP_WARNING",
+          severity: "warning",
+          message: `Previous board cleanup failed: ${error instanceof Error ? error.message : String(error)}`,
+          retryable: false
+        });
+      }
+      try {
+        previousContainer?.remove();
+      } catch (error) {
+        cleanupWarnings.push({
+          code: "BOARD_CLEANUP_WARNING",
+          severity: "warning",
+          message: `Previous container cleanup failed: ${error instanceof Error ? error.message : String(error)}`,
+          retryable: false
+        });
+      }
       Array.from(this.host.children).forEach(child => {
-        if (child !== staging) child.remove();
+        if (child !== staging) {
+          try { child.remove(); } catch { /* ignore */ }
+        }
       });
 
-      const result: RenderUpdateResult<MathDocument, MathOperation> = {
-        ok: true,
-        strategy: "rebuild",
-        apply,
-        state: this.captureState(),
-        diagnostics: []
-      };
-      this.emit({
+      const newRef = documentRef(this.document);
+      const pendingEvents: Array<Parameters<MathMountedRendererImpl["emit"]>[0]> = [];
+      if (previousStageId && !nextStageId) {
+        pendingEvents.push({
+          type: "stage.cleared",
+          document: newRef,
+          payload: { reason: "stage_missing_after_rebuild", previousStageId }
+        });
+      }
+      if (previousSelectedEntityId && !nextSelectedEntityId) {
+        pendingEvents.push({
+          type: "selection.changed",
+          document: newRef,
+          payload: { entityId: null, reason: "entity_removed", previousEntityId: previousSelectedEntityId }
+        });
+      }
+      pendingEvents.push({
         type: "document.updated",
+        document: newRef,
         payload: {
           strategy: "rebuild",
           revision: nextDocument.revision,
           changeSetId: apply && "changeSetId" in apply ? apply.changeSetId : null
         }
       });
-      return result;
+      for (const event of pendingEvents) this.emit(event);
+
+      return {
+        ok: true,
+        strategy: "rebuild",
+        apply,
+        state: this.captureState(),
+        diagnostics: [...warningDiagnostics, ...cleanupWarnings],
+        effects: {
+          report: toJsonValue(report),
+          skippedCount: report.skippedEntities.length
+        }
+      };
     } catch (error) {
-      stagingHandle?.destroy();
-      staging.remove();
+      try { stagingHandle?.destroy(); } catch { /* ignore */ }
+      try { staging.remove(); } catch { /* ignore */ }
       this.active = previousActive;
       this.activeContainer = previousContainer;
       this.document = previousDocument;
+      this.stageId = previousStageId;
+      this.selectedEntityId = previousSelectedEntityId;
       const message = error instanceof Error ? error.message : String(error);
       return this.failUpdate([{
         code: "REBUILD_FAILED",
@@ -448,10 +704,29 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     }
   }
 
+  private interactionDenied(
+    message: string,
+    actual?: unknown
+  ): InteractionResult<MathDocument, MathOperation> {
+    return {
+      ok: false,
+      revisionChanged: false,
+      document: deepClone(this.document),
+      state: this.captureState(),
+      diagnostics: [{
+        code: "INTERACTION_NOT_ALLOWED",
+        severity: "error",
+        message,
+        actual: actual === undefined ? undefined : String(actual),
+        retryable: false
+      }]
+    };
+  }
+
   private async dispatchLocked(
     action: MathInteractionAction
   ): Promise<InteractionResult<MathDocument, MathOperation>> {
-    if (this.destroyed) {
+    if (this.destroyed || this.destroyRequested) {
       return {
         ok: false,
         revisionChanged: false,
@@ -467,8 +742,17 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     }
 
     if (action.type === "selection.set") {
-      this.selectedEntityId = action.entityId;
-      this.emit({ type: "selection.changed", target: action.entityId, payload: { entityId: action.entityId ?? null } });
+      const entityId = action.payload.entityId;
+      if (entityId !== undefined) {
+        if (!this.document.entities.some(entity => entity.id === entityId)) {
+          return this.interactionDenied(`Selection target '${entityId}' does not exist.`, entityId);
+        }
+        if (!interactionAllows(this.document, entityId, "select")) {
+          return this.interactionDenied(`Entity '${entityId}' does not allow select.`, entityId);
+        }
+      }
+      this.selectedEntityId = entityId;
+      this.emit({ type: "selection.changed", target: entityId, payload: { entityId: entityId ?? null } });
       return {
         ok: true,
         revisionChanged: false,
@@ -479,9 +763,13 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     }
 
     if (action.type === "stage.set") {
-      this.stageId = action.stageId;
-      this.active?.setStage(action.stageId);
-      this.emit({ type: "stage.changed", payload: { stageId: action.stageId ?? null } });
+      const stageId = action.payload.stageId;
+      if (stageId !== undefined && !stageExists(this.document, stageId)) {
+        return this.interactionDenied(`Stage '${stageId}' does not exist.`, stageId);
+      }
+      this.stageId = stageId;
+      this.active?.setStage(stageId);
+      this.emit({ type: "stage.changed", payload: { stageId: stageId ?? null } });
       return {
         ok: true,
         revisionChanged: false,
@@ -491,7 +779,8 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       };
     }
 
-    const nodeId = producerNodeId(this.document, action.target);
+    const target = action.target;
+    const nodeId = producerNodeId(this.document, target);
     if (!nodeId) {
       return {
         ok: false,
@@ -501,22 +790,50 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         diagnostics: [{
           code: "INTERACTION_TARGET_MISSING",
           severity: "error",
-          message: `No producer construction node for '${action.target}'.`,
+          message: `No producer construction node for '${target}'.`,
           path: "target",
-          actual: action.target,
+          actual: target,
           retryable: false
         }]
       };
     }
 
     const node = this.document.construction.find(candidate => candidate.id === nodeId);
+    const entity = this.document.entities.find(candidate => candidate.id === target);
     let patch: Record<string, unknown>;
+
     if (action.type === "point.set") {
-      patch = node?.command === "point.on_path"
-        ? { initial: action.coords }
-        : { coords: action.coords };
+      const coords = action.payload.coords;
+      if (!Array.isArray(coords) || coords.length !== 2 || !finiteNumber(coords[0]) || !finiteNumber(coords[1])) {
+        return this.interactionDenied("point.set requires finite coords [x, y].", coords);
+      }
+      if (!entity || entity.type !== "point2") {
+        return this.interactionDenied(`point.set target '${target}' must be a point2.`, target);
+      }
+      if (node?.command !== "point.free" && node?.command !== "point.on_path") {
+        return this.interactionDenied(`point.set only allows point.free or point.on_path (got '${node?.command}').`, node?.command);
+      }
+      if (!interactionAllows(this.document, target, "drag")) {
+        return this.interactionDenied(`Entity '${target}' does not allow drag.`, target);
+      }
+      patch = node.command === "point.on_path"
+        ? { initial: coords }
+        : { coords };
     } else {
-      patch = { value: action.value };
+      const value = action.payload.value;
+      if (!finiteNumber(value)) {
+        return this.interactionDenied("scalar.set requires a finite numeric value.", value);
+      }
+      if (!entity || entity.type !== "scalar") {
+        return this.interactionDenied(`scalar.set target '${target}' must be a scalar.`, target);
+      }
+      if (node?.command !== "scalar.slider") {
+        return this.interactionDenied(`scalar.set only allows scalar.slider (got '${node?.command}').`, node?.command);
+      }
+      if (!interactionAllows(this.document, target, "set_value")) {
+        return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
+      }
+      patch = { value };
     }
 
     const operation: MathSetParamsOperation = {
@@ -537,11 +854,12 @@ class MathMountedRendererImpl implements MathMountedRenderer {
 
     const update = await this.applyChangeSetLocked(changeSet);
     if (!update.ok) {
-      // Restore native visuals to last canonical document.
-      await this.rebuildWithDocument(deepClone(this.document), undefined);
+      if (!this.destroyed && !this.destroyRequested) {
+        await this.rebuildWithDocument(deepClone(this.document), undefined);
+      }
       this.emit({
         type: "interaction.failed",
-        target: action.target,
+        target,
         payload: { diagnostics: toJsonValue(update.diagnostics) }
       });
       return {
@@ -550,13 +868,13 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         document: deepClone(this.document),
         state: this.captureState(),
         diagnostics: update.diagnostics,
-        apply: update.apply
+        apply: update.apply ? deepClone(update.apply) : undefined
       };
     }
 
     this.emit({
       type: "interaction.committed",
-      target: action.target,
+      target,
       payload: { revision: this.document.revision, actionType: action.type }
     });
     return {
@@ -565,7 +883,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       document: deepClone(this.document),
       state: this.captureState(),
       diagnostics: [],
-      apply: update.apply
+      apply: update.apply ? deepClone(update.apply) : undefined
     };
   }
 }
@@ -582,3 +900,5 @@ export async function mountMathRenderer(
   await renderer.initialize();
   return renderer;
 }
+
+export { MAX_OPERATIONS as MOUNTED_MAX_OPERATIONS };
