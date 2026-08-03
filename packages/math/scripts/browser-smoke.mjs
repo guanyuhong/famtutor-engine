@@ -34,3 +34,6 @@ if (!python) {
 }
 const result = spawnSync(python, [join(root, "scripts/browser-smoke.py")], { cwd: root, stdio: "inherit" });
 if (result.status !== 0) process.exit(result.status ?? 1);
+
+const live = spawnSync(python, [join(root, "scripts/browser-live-smoke.py")], { cwd: root, stdio: "inherit" });
+if (live.status !== 0) process.exit(live.status ?? 1);

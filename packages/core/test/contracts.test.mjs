@@ -14,10 +14,10 @@ const packageRoot = join(root, "..");
 test("CORE_VERSION matches package.json", () => {
   const packageJson = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"));
   assert.equal(CORE_VERSION, packageJson.version);
-  assert.equal(CORE_VERSION, "0.1.0");
+  assert.equal(CORE_VERSION, "0.2.0");
 });
 
-test("Diagnostic / ChangeSet / RenderArtifact survive JSON round-trip", () => {
+test("Diagnostic / ChangeSet / RenderArtifact / RenderResult survive JSON round-trip", () => {
   const diagnostic = {
     code: "REVISION_CONFLICT",
     severity: "error",
@@ -32,7 +32,8 @@ test("Diagnostic / ChangeSet / RenderArtifact survive JSON round-trip", () => {
     schema: "famtutor.engine.change-set.v1",
     changeSetId: "cs-1",
     base: { domain: "example", schema: "famtutor.example.document.v1", documentId: "d1", revision: 1 },
-    operations: [{ op: "noop" }]
+    operations: [{ op: "noop" }],
+    metadata: { origin: "test" }
   };
   const artifact = {
     schema: "famtutor.engine.render-artifact.v1",
@@ -45,12 +46,16 @@ test("Diagnostic / ChangeSet / RenderArtifact survive JSON round-trip", () => {
     diagnostics: [diagnostic],
     metadata: { width: 1 }
   };
+  const renderResult = { ok: true, artifact };
+  const validationReport = { status: "partial", issues: [diagnostic] };
   assert.deepEqual(JSON.parse(JSON.stringify(diagnostic)), diagnostic);
   assert.deepEqual(JSON.parse(JSON.stringify(changeSet)), changeSet);
   assert.deepEqual(JSON.parse(JSON.stringify(artifact)), artifact);
+  assert.deepEqual(JSON.parse(JSON.stringify(renderResult)), renderResult);
+  assert.deepEqual(JSON.parse(JSON.stringify(validationReport)), validationReport);
 });
 
-test("RuntimeRegistry registers, rejects duplicates, and returns diagnostics for unknown domains", async () => {
+test("RuntimeRegistry registers, rejects duplicates, resolves unknown, and clones descriptors", async () => {
   const registry = new RuntimeRegistry();
   const descriptor = {
     name: "@famtutor/example",
@@ -58,7 +63,7 @@ test("RuntimeRegistry registers, rejects duplicates, and returns diagnostics for
     domain: "example",
     documentSchemas: ["famtutor.example.document.v1"],
     operationSchemas: ["famtutor.example.operations.v1"],
-    renderers: [{ id: "direct-svg", mediaTypes: ["image/svg+xml"] }]
+    renderers: [{ id: "direct-svg", mediaTypes: ["image/svg+xml"], modes: ["artifact"] }]
   };
   const runtime = {
     async descriptor() { return descriptor; },
@@ -69,27 +74,37 @@ test("RuntimeRegistry registers, rejects duplicates, and returns diagnostics for
         ok: true,
         changeSetId: changeSet.changeSetId,
         base: changeSet.base,
+        next: { ...changeSet.base, revision: changeSet.base.revision + 1 },
         document,
         diagnostics: []
       };
     },
     async render() {
       return {
-        schema: "famtutor.engine.render-artifact.v1",
-        document: { domain: "example", schema: "famtutor.example.document.v1", documentId: "x", revision: 1 },
-        renderer: "direct-svg",
-        mediaType: "image/svg+xml",
-        encoding: "utf8",
-        content: "<svg/>",
-        digest: { algorithm: "sha256", value: "0" },
-        diagnostics: []
+        ok: true,
+        artifact: {
+          schema: "famtutor.engine.render-artifact.v1",
+          document: { domain: "example", schema: "famtutor.example.document.v1", documentId: "x", revision: 1 },
+          renderer: "direct-svg",
+          mediaType: "image/svg+xml",
+          encoding: "utf8",
+          content: "<svg/>",
+          digest: { algorithm: "sha256", value: "0" },
+          diagnostics: []
+        }
       };
     }
   };
 
-  await registry.register(runtime);
+  const registered = await registry.register(runtime);
   assert.deepEqual(registry.domains(), ["example"]);
   assert.equal(registry.listDescriptors().length, 1);
+
+  registered.version = "mutated";
+  registered.renderers[0].id = "mutated-renderer";
+  const listed = registry.listDescriptors();
+  assert.equal(listed[0].version, "0.0.0");
+  assert.equal(listed[0].renderers[0].id, "direct-svg");
 
   await assert.rejects(() => registry.register(runtime), /already registered/);
 
@@ -101,6 +116,10 @@ test("RuntimeRegistry registers, rejects duplicates, and returns diagnostics for
 
   const found = await registry.resolve("example");
   assert.equal(found.ok, true);
+  if (found.ok) {
+    found.descriptor.domain = "mutated-domain";
+    assert.equal(registry.listDescriptors()[0].domain, "example");
+  }
 });
 
 test("core source and public declarations do not leak domain or host types", () => {

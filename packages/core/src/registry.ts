@@ -1,9 +1,13 @@
 import type { Diagnostic } from "./diagnostics.js";
 import type { DomainRuntime, RuntimeDescriptor } from "./runtime.js";
 
-export interface RegistryResolveSuccess<TDocument, TOperation> {
+function cloneDescriptor(descriptor: RuntimeDescriptor): RuntimeDescriptor {
+  return JSON.parse(JSON.stringify(descriptor)) as RuntimeDescriptor;
+}
+
+export interface RegistryResolveSuccess {
   ok: true;
-  runtime: DomainRuntime<TDocument, TOperation>;
+  runtime: DomainRuntime<unknown, unknown>;
   descriptor: RuntimeDescriptor;
 }
 
@@ -12,13 +16,12 @@ export interface RegistryResolveFailure {
   diagnostics: Diagnostic[];
 }
 
-export type RegistryResolveResult<TDocument = unknown, TOperation = unknown> =
-  | RegistryResolveSuccess<TDocument, TOperation>
-  | RegistryResolveFailure;
+export type RegistryResolveResult = RegistryResolveSuccess | RegistryResolveFailure;
 
 /**
  * In-memory registry of DomainRuntime instances keyed by domain id.
  * Rejects duplicate domains; unknown domains return structured diagnostics.
+ * resolve() returns DomainRuntime<unknown, unknown> — callers must narrow with a type guard.
  */
 export class RuntimeRegistry {
   private readonly runtimes = new Map<string, DomainRuntime<unknown, unknown>>();
@@ -32,14 +35,13 @@ export class RuntimeRegistry {
     if (this.runtimes.has(descriptor.domain)) {
       throw new Error(`Domain '${descriptor.domain}' is already registered.`);
     }
+    const stored = cloneDescriptor(descriptor);
     this.runtimes.set(descriptor.domain, runtime);
-    this.descriptors.set(descriptor.domain, descriptor);
-    return descriptor;
+    this.descriptors.set(descriptor.domain, stored);
+    return cloneDescriptor(stored);
   }
 
-  async resolve<TDocument = unknown, TOperation = unknown>(
-    domain: string
-  ): Promise<RegistryResolveResult<TDocument, TOperation>> {
+  async resolve(domain: string): Promise<RegistryResolveResult> {
     const runtime = this.runtimes.get(domain);
     const descriptor = this.descriptors.get(domain);
     if (!runtime || !descriptor) {
@@ -60,13 +62,13 @@ export class RuntimeRegistry {
     }
     return {
       ok: true,
-      runtime: runtime as DomainRuntime<TDocument, TOperation>,
-      descriptor
+      runtime,
+      descriptor: cloneDescriptor(descriptor)
     };
   }
 
   listDescriptors(): RuntimeDescriptor[] {
-    return [...this.descriptors.values()];
+    return [...this.descriptors.values()].map(cloneDescriptor);
   }
 
   domains(): string[] {

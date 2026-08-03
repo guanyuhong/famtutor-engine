@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://famtutor.dev/schemas/famtutor.engine.runtime.v1.schema.json",
+  "$id": "https://famtutor.ai/schemas/famtutor.engine.runtime.v1.schema.json",
   "title": "FamTutor Engine Runtime Contracts v1",
-  "description": "Cross-domain wire contracts for DocumentRef, ChangeSet, Diagnostic, RenderArtifact, and RuntimeDescriptor. Domain documents stay in per-domain schemas.",
+  "description": "Cross-domain wire contracts for DocumentRef, ChangeSet, Diagnostic, ValidationReport, ApplyResult, RenderRequest/Artifact/Result, RuntimeDescriptor, RuntimeEvent, InteractionAction, MountedRendererState, and RenderUpdateResult. Domain documents stay in per-domain schemas.",
   "$defs": {
     "jsonValue": {
       "oneOf": [
@@ -58,6 +58,18 @@
         }
       }
     },
+    "validationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "issues"],
+      "properties": {
+        "status": { "type": "string", "enum": ["valid", "partial", "invalid"] },
+        "issues": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/diagnostic" }
+        }
+      }
+    },
     "changeSet": {
       "type": "object",
       "additionalProperties": false,
@@ -77,6 +89,74 @@
             },
             "additionalProperties": true
           }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "applySuccess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "changeSetId", "base", "next", "document", "diagnostics"],
+      "properties": {
+        "ok": { "const": true },
+        "changeSetId": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/documentRef" },
+        "next": { "$ref": "#/$defs/documentRef" },
+        "document": { "$ref": "#/$defs/jsonValue" },
+        "created": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "removed": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/diagnostic" }
+        },
+        "effects": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "applyFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "changeSetId", "base", "document", "diagnostics"],
+      "properties": {
+        "ok": { "const": false },
+        "changeSetId": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/documentRef" },
+        "document": { "$ref": "#/$defs/jsonValue" },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/diagnostic" }
+        },
+        "effects": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "renderRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": { "const": "famtutor.engine.render-request.v1" },
+        "renderer": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "viewId": { "type": "string" },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "stageId": { "type": "string" },
+        "options": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
         }
       }
     },
@@ -110,6 +190,31 @@
         }
       }
     },
+    "renderResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ok", "artifact"],
+          "properties": {
+            "ok": { "const": true },
+            "artifact": { "$ref": "#/$defs/renderArtifact" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ok", "diagnostics"],
+          "properties": {
+            "ok": { "const": false },
+            "diagnostics": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/diagnostic" }
+            }
+          }
+        }
+      ]
+    },
     "runtimeDescriptor": {
       "type": "object",
       "additionalProperties": false,
@@ -132,12 +237,20 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["id", "mediaTypes"],
+            "required": ["id", "mediaTypes", "modes"],
             "properties": {
               "id": { "type": "string" },
               "mediaTypes": {
                 "type": "array",
                 "items": { "type": "string" }
+              },
+              "modes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "enum": ["artifact", "mounted", "snapshot"]
+                }
               }
             }
           }
@@ -151,13 +264,99 @@
           "additionalProperties": { "$ref": "#/$defs/jsonValue" }
         }
       }
+    },
+    "runtimeEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "eventId", "sequence", "type", "document", "timestamp"],
+      "properties": {
+        "schema": { "const": "famtutor.engine.runtime-event.v1" },
+        "eventId": { "type": "string", "minLength": 1 },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "type": { "type": "string", "minLength": 1 },
+        "document": { "$ref": "#/$defs/documentRef" },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "target": { "type": "string" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "interactionAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "target": { "type": "string" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "mountedRendererState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "document", "destroyed"],
+      "properties": {
+        "schema": { "const": "famtutor.engine.mounted-renderer-state.v1" },
+        "document": { "$ref": "#/$defs/documentRef" },
+        "viewId": { "type": "string" },
+        "stageId": { "type": "string" },
+        "selectedEntityId": { "type": "string" },
+        "rendererMode": { "type": "string" },
+        "camera": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        },
+        "destroyed": { "type": "boolean" },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
+    },
+    "renderUpdateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "strategy", "state", "diagnostics"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "strategy": { "type": "string", "enum": ["rebuild", "reconcile"] },
+        "apply": {
+          "oneOf": [
+            { "$ref": "#/$defs/applySuccess" },
+            { "$ref": "#/$defs/applyFailure" }
+          ]
+        },
+        "state": { "$ref": "#/$defs/mountedRendererState" },
+        "diagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/diagnostic" }
+        },
+        "effects": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      }
     }
   },
   "oneOf": [
     { "$ref": "#/$defs/documentRef" },
     { "$ref": "#/$defs/diagnostic" },
+    { "$ref": "#/$defs/validationReport" },
     { "$ref": "#/$defs/changeSet" },
+    { "$ref": "#/$defs/applySuccess" },
+    { "$ref": "#/$defs/applyFailure" },
+    { "$ref": "#/$defs/renderRequest" },
     { "$ref": "#/$defs/renderArtifact" },
-    { "$ref": "#/$defs/runtimeDescriptor" }
+    { "$ref": "#/$defs/renderResult" },
+    { "$ref": "#/$defs/runtimeDescriptor" },
+    { "$ref": "#/$defs/runtimeEvent" },
+    { "$ref": "#/$defs/interactionAction" },
+    { "$ref": "#/$defs/mountedRendererState" },
+    { "$ref": "#/$defs/renderUpdateResult" }
   ]
 }

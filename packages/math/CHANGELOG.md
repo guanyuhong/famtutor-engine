@@ -2,6 +2,18 @@
 
 Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
 
+## 0.2.0 — 2026-08-03
+
+Engine PR3 — live MountedRenderer + PR2 contract alignment:
+
+- depend on `@famtutor/core@0.2.0`;
+- deterministic `applyMathChangeSet` (no wall clock; optional `metadata.timestamp`);
+- `AgentMathRuntime.apply` always delegates to `domainRuntime.apply`;
+- `MathDomainRuntime.render` returns `RenderResult`; artifact mode is `direct-svg` only; mounted modes → `UNSUPPORTED_RENDER_MODE`;
+- publish `famtutor.math.operations.v1.schema.json`;
+- **`mountMathRenderer` / `MathMountedRenderer`**: rebuild+staging, camera/stage/selection restore, interaction → `set_params` ChangeSet, honest snapshots;
+- Chromium live smoke + demo event log; strategy honestly reported as `rebuild` (no dirty-set yet).
+
 ## 0.1.2 — 2026-08-03
 
 Engine PR2 — core contracts + publishing harden:

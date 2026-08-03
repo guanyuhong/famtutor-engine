@@ -1,6 +1,6 @@
 {
   "schema": "famtutor.math.agent-tools.v1",
-  "runtimeVersion": "0.1.2",
+  "runtimeVersion": "0.2.0",
   "tools": [
     {
       "name": "math_capabilities",

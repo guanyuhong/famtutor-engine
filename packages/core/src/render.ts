@@ -2,7 +2,7 @@ import type { DocumentRef } from "./document.js";
 import type { Diagnostic } from "./diagnostics.js";
 import type { JsonObject, JsonValue } from "./json.js";
 
-/** Request a single render pass from a DomainRuntime. */
+/** Request a single render pass from a DomainRuntime or MountedRenderer.snapshot. */
 export interface RenderRequest {
   schema?: "famtutor.engine.render-request.v1";
   renderer?: string;
@@ -32,6 +32,10 @@ export interface RenderArtifact {
   diagnostics: Diagnostic[];
   metadata?: JsonObject;
 }
+
+export type RenderResult =
+  | { ok: true; artifact: RenderArtifact }
+  | { ok: false; diagnostics: Diagnostic[] };
 
 export interface SimulationRequest {
   schema?: "famtutor.engine.simulation-request.v1";

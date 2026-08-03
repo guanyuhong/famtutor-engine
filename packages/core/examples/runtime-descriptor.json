@@ -1,13 +1,14 @@
 {
   "name": "@famtutor/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "domain": "example",
   "documentSchemas": ["famtutor.example.document.v1"],
   "operationSchemas": ["famtutor.example.operations.v1"],
   "renderers": [
     {
       "id": "direct-svg",
-      "mediaTypes": ["image/svg+xml"]
+      "mediaTypes": ["image/svg+xml"],
+      "modes": ["artifact", "snapshot"]
     }
   ],
   "limits": {

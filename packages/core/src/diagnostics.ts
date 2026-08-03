@@ -1,3 +1,4 @@
+import type { JsonObject } from "./json.js";
 import type { JsonValue } from "./json.js";
 
 /**
@@ -12,6 +13,7 @@ export interface SuggestedFix<TOperation = JsonValue> {
 /**
  * Structured diagnostic shared across validate/apply/render.
  * Expected protocol failures use Diagnostics inside results — not thrown Errors.
+ * Severity must be preserved end-to-end (do not collapse warning/info to error).
  */
 export interface Diagnostic<TOperation = JsonValue> {
   code: string;
@@ -25,6 +27,8 @@ export interface Diagnostic<TOperation = JsonValue> {
 }
 
 export interface ValidationReport<TOperation = JsonValue> {
-  status: "valid" | "invalid";
+  status: "valid" | "partial" | "invalid";
   issues: Diagnostic<TOperation>[];
 }
+
+export type { JsonObject };

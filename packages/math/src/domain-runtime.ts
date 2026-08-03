@@ -4,8 +4,8 @@ import type {
   ChangeSet,
   Diagnostic,
   DomainRuntime,
-  RenderArtifact,
   RenderRequest,
+  RenderResult,
   RuntimeDescriptor,
   ValidationReport
 } from "@famtutor/core";
@@ -21,15 +21,20 @@ import {
 import { validateMathDocument } from "./protocol/validate.js";
 import { renderDirectSvg } from "./render/direct-svg.js";
 import type { MathDocument } from "./types.js";
-import { toJsonValue } from "./util.js";
+import { stableHash, toJsonValue } from "./util.js";
 import { MATH_RUNTIME_VERSION } from "./version.js";
+
+function mapSeverity(severity: string | undefined): Diagnostic["severity"] {
+  if (severity === "warning" || severity === "info") return severity;
+  return "error";
+}
 
 function toCoreValidation(report: ReturnType<typeof validateMathDocument>): ValidationReport {
   return {
-    status: report.status === "valid" ? "valid" : "invalid",
+    status: report.status,
     issues: report.issues.map(issue => ({
       code: issue.code,
-      severity: issue.severity === "warning" ? "warning" : "error",
+      severity: mapSeverity(issue.severity),
       message: issue.message,
       path: issue.path,
       expected: issue.expected,
@@ -52,9 +57,9 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
       documentSchemas: [MATH_DOCUMENT_SCHEMA],
       operationSchemas: [MATH_OPERATION_SCHEMA],
       renderers: [
-        { id: "direct-svg", mediaTypes: ["image/svg+xml"] },
-        { id: "jsxgraph-svg", mediaTypes: ["image/svg+xml"] },
-        { id: "jsxgraph-canvas", mediaTypes: ["application/vnd.jsxgraph.canvas"] }
+        { id: "direct-svg", mediaTypes: ["image/svg+xml"], modes: ["artifact", "snapshot"] },
+        { id: "jsxgraph-svg", mediaTypes: ["image/svg+xml"], modes: ["mounted", "snapshot"] },
+        { id: "jsxgraph-canvas", mediaTypes: ["application/vnd.jsxgraph.canvas"], modes: ["mounted"] }
       ],
       limits: {
         maxOperations: 128,
@@ -92,7 +97,22 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
     return applyMathChangeSet(document, changeSet);
   }
 
-  async render(document: MathDocument, request: RenderRequest): Promise<RenderArtifact> {
+  async render(document: MathDocument, request: RenderRequest = {}): Promise<RenderResult> {
+    const renderer = request.renderer ?? "direct-svg";
+    if (renderer !== "direct-svg") {
+      return {
+        ok: false,
+        diagnostics: [{
+          code: "UNSUPPORTED_RENDER_MODE",
+          severity: "error",
+          message: `DomainRuntime.render only supports direct-svg artifacts; '${renderer}' requires a MountedRenderer.`,
+          path: "renderer",
+          actual: renderer,
+          retryable: false,
+          suggestedFixes: [{ description: "Omit renderer or set renderer to 'direct-svg'." }]
+        }]
+      };
+    }
     const width = request.width ?? 960;
     const height = request.height ?? 640;
     const result = renderDirectSvg(document, {
@@ -103,7 +123,7 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
     });
     const diagnostics: Diagnostic[] = result.report.warnings.map(issue => ({
       code: issue.code,
-      severity: issue.severity === "warning" ? "warning" as const : "error" as const,
+      severity: mapSeverity(issue.severity),
       message: issue.message,
       path: issue.path,
       expected: issue.expected,
@@ -111,27 +131,31 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
       retryable: issue.retryable,
       suggestedFixes: issue.suggestedFixes
     }));
+    const content = result.svg;
     return {
-      schema: "famtutor.engine.render-artifact.v1",
-      document: {
-        domain: MATH_DOMAIN,
-        schema: MATH_DOCUMENT_SCHEMA,
-        documentId: document.documentId,
-        revision: document.revision
-      },
-      renderer: request.renderer ?? "direct-svg",
-      mediaType: request.mediaType ?? "image/svg+xml",
-      encoding: "utf8",
-      content: result.svg,
-      digest: {
-        algorithm: "famtutor-render-hash",
-        value: result.report.renderHash
-      },
-      diagnostics,
-      metadata: {
-        width,
-        height,
-        report: toJsonValue(result.report)
+      ok: true,
+      artifact: {
+        schema: "famtutor.engine.render-artifact.v1",
+        document: {
+          domain: MATH_DOMAIN,
+          schema: MATH_DOCUMENT_SCHEMA,
+          documentId: document.documentId,
+          revision: document.revision
+        },
+        renderer: "direct-svg",
+        mediaType: "image/svg+xml",
+        encoding: "utf8",
+        content,
+        digest: {
+          algorithm: "sha256-stableHash",
+          value: stableHash(content)
+        },
+        diagnostics,
+        metadata: {
+          width,
+          height,
+          report: toJsonValue(result.report)
+        }
       }
     };
   }

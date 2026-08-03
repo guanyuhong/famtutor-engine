@@ -33,8 +33,8 @@ Intent / Author / Agent
 
 | Domain | Status | Package |
 |---|---|---|
-| Core contracts | **Shipped (v0.1.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
-| Mathematics | **Shipped (v0.1.2)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
+| Core contracts | **Shipped (v0.2.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
+| Mathematics | **Shipped (v0.2.0)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
 | Physics | Planned | — |
 | Science (general) | Planned | — |
 | Computer Science | Planned | — |
@@ -101,11 +101,12 @@ node ./packages/math/bin/famtutor-math-mcp.mjs
 - L0 command catalog + L1 macro expansion (`expand_macro`)
 - Safe expression AST (no arbitrary JavaScript)
 - Headless evaluate / assert / simulate
-- JSXGraph interactive render + Direct SVG → `RenderArtifact`
+- JSXGraph interactive render + Direct SVG → `RenderResult` / `RenderArtifact`
+- **`mountMathRenderer` live MountedRenderer**（首版 **rebuild**；外部 handle 与 entity ID 稳定，不承诺 native object identity）
 - 9 Agent tools + MCP stdio
 - Repair diagnostics (`suggestedFixes`)
 
-Live mounted ChangeSet rendering is **PR3** (not shipped). Render Bundle is **PR4**.
+Render Bundle 仍是 **PR4**（未交付）。
 
 Details: [packages/math/README.md](packages/math/README.md) · [packages/core/README.md](packages/core/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
 
