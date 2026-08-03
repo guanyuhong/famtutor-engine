@@ -603,6 +603,46 @@ def main() -> int:
         summary["mountMathRenderBundleCases"] = bundle_api_checks
         bundle_page.close()
 
+        # User-facing 10-case Gallery acceptance: every CaseSpec is replayed in-browser,
+        # mounted at once, and exposes the honest accepted/unsupported split.
+        gallery_page = browser.new_page(viewport={"width": 1440, "height": 1000})
+        gallery_page.on("console", lambda message: console_messages.append(f"gallery {message.type}: {message.text}"))
+        gallery_page.on("pageerror", lambda error: page_errors.append(f"gallery: {error}"))
+        gallery_page.goto(f"{base_url}/gallery/", wait_until="domcontentloaded")
+        gallery_page.wait_for_function("document.body.dataset.status === 'ready'", timeout=60_000)
+        gallery_checks = gallery_page.evaluate(
+            """async () => {
+              const cards = [...document.querySelectorAll('.case-card')];
+              const accepted = cards.filter(card => card.dataset.status === 'accepted');
+              const unsupported = cards.filter(card => card.dataset.status === 'expected-unsupported');
+              if (cards.length !== 10 || accepted.length !== 9 || unsupported.length !== 1) {
+                throw new Error(`Gallery totals mismatch: ${cards.length}/${accepted.length}/${unsupported.length}`);
+              }
+              if (!cards.every(card => card.dataset.mounted === 'true')) {
+                throw new Error('Gallery has unmounted cards');
+              }
+              const case04 = window.__famtutorGallery.rendererByCase.get('zj8a-1-1-04-adjust-three-segments');
+              const changed = await case04.dispatch({ type: 'scalar.set', target: 'sideA', payload: { value: 10 } });
+              const feedback = window.__famtutorGallery.rendererByCase
+                .get('zj8a-1-1-04-adjust-three-segments')
+                .getDocument().construction.find(node => node.outputs.includes('sideA'))?.params?.value;
+              const case04Card = document.querySelector('[data-case-id="zj8a-1-1-04-adjust-three-segments"]');
+              if (!changed.ok || feedback !== 10 || !case04Card.textContent.includes('不能组成三角形')) {
+                throw new Error('Gallery Case 04 conditional feedback failed');
+              }
+              window.__famtutorGallery.applyFilter('expected-unsupported');
+              const focused = cards.filter(card => !card.classList.contains('is-filtered'));
+              if (focused.length !== 1 || focused[0].dataset.caseId !== 'zj8a-1-1-09-identify-triangle-lines') {
+                throw new Error('Gallery unsupported filter failed');
+              }
+              window.__famtutorGallery.applyFilter('all');
+              return { total: cards.length, accepted: accepted.length, expectedUnsupported: unsupported.length };
+            }"""
+        )
+        summary["gallery"] = gallery_checks
+        gallery_page.screenshot(path=str(ARTIFACTS / "case-gallery.png"), full_page=True)
+        gallery_page.close()
+
         (ARTIFACTS / "browser-live-smoke-summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
         page.screenshot(path=str(ARTIFACTS / "browser-live-smoke.png"), full_page=True)
         browser.close()

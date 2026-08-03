@@ -56,7 +56,8 @@ FamTutor Engine 暂不公开发布。近期只围绕一本真实教材建立案�
 - demonstration、exploration、guided-construction 各有代表案例通过真实 Chromium `mountMathRenderBundle`；
 - 04 已用安全布尔表达式、表达式驱动点和条件文本补齐条件反馈，并覆盖真实 Chromium 滑块状态切换；
 - 09 明确缺少 assessment submit/scoring/evidence，保留为 `expected-unsupported`；
-- 尚待完成 gallery，以及根据首批 gap 决定是否在本 PR 修运行时能力，因此 PR6 仍标记为进行中。
+- 10-case Gallery 已可在浏览器内重放、挂载、聚焦状态并重置全部案例，且进入真实 Chromium 验收；
+- 尚待处理 Case 09 的 assessment evidence 边界，因此 PR6 仍标记为进行中。
 
 范围：
 

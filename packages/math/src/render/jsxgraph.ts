@@ -92,6 +92,8 @@ interface JxgBoard {
   fullUpdate?: () => void;
   update?: () => void;
   resize?: () => void;
+  stopResizeObserver?: () => void;
+  updateContainerDims?: (...args: unknown[]) => unknown;
   getBoundingBox?: () => [number, number, number, number];
   setBoundingBox?: (box: [number, number, number, number], keepAspectRatio?: boolean) => void;
   renderer?: { svgRoot?: SVGElement };
@@ -931,6 +933,10 @@ export function mountJsxGraph(
       };
     },
     destroy() {
+      // JSXGraph throttles ResizeObserver work with setTimeout. An already queued
+      // callback can otherwise run after freeBoard() has removed board.renderer.
+      board.stopResizeObserver?.();
+      board.updateContainerDims = () => board;
       JXG.JSXGraph.freeBoard(board);
       host.replaceChildren();
       objects.clear();

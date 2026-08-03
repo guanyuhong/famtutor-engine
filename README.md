@@ -78,7 +78,14 @@ npm run verify
 
 `npm run verify` builds/tests **core then math**, including schema smoke, Chromium+JSXGraph browser smoke, MCP, CLI, and clean-source consumer pack smoke.
 
-Interactive demo:
+10-case acceptance Gallery:
+
+```bash
+npm run gallery
+# open http://127.0.0.1:4173/gallery/
+```
+
+Single-document interactive demo:
 
 ```bash
 cd packages/math

@@ -29,6 +29,14 @@ The full browser gate additionally mounts demonstration, exploration, and guided
 npm run test:browser -w @famtutor/math-runtime
 ```
 
+## Review all cases in the browser
+
+```bash
+npm run gallery
+```
+
+Then open <http://127.0.0.1:4173/gallery/>. The offline Gallery replays and mounts all 10 cases, exposes the 9 accepted / 1 expected-unsupported split, supports status focus and reset, and keeps the Case 09 capability diagnostic visible.
+
 ## Layout
 
 ```text
