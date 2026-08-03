@@ -1,6 +1,32 @@
 export * from "./types.js";
 export * from "./errors.js";
 export * from "./util.js";
+export * from "./version.js";
+export * from "./operations.js";
+export * from "./apply-changeset.js";
+export * from "./domain-runtime.js";
+
+export type {
+  JsonPrimitive,
+  JsonValue as CoreJsonValue,
+  JsonObject,
+  DocumentRef,
+  ChangeSet,
+  Diagnostic,
+  SuggestedFix,
+  ValidationReport as CoreValidationReport,
+  ApplyResult,
+  RuntimeDescriptor,
+  CapabilityQuery,
+  CapabilityResult,
+  RenderRequest,
+  RenderArtifact,
+  DomainRuntime
+} from "@famtutor/core";
+export {
+  CORE_VERSION,
+  RuntimeRegistry
+} from "@famtutor/core";
 
 export * from "./catalog/commands.js";
 export * from "./catalog/macros.js";
