@@ -8,3 +8,7 @@ artifacts/
 .package-smoke/
 *.tgz
 .npmrc
+
+# Local textbook binaries and page renders (keep out of git / GitHub)
+books/**/*.pdf
+tmp/
