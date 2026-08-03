@@ -19,10 +19,10 @@
 
 - ~~发布基线（PR1）~~
 - ~~`@famtutor/core` + math `DomainRuntime` / `applyMathChangeSet`（PR2）~~
-- Live ChangeSet / `MountedRenderer`（PR3，未做）
+- ~~Live ChangeSet / `MountedRenderer` rebuild（PR3）~~
 - Render Bundle（PR4，未做）
 
-在 PR3/PR4 完成前，不再堆新的 L0 命令，也不开物理/化学包。
+在 PR4 完成前，不再堆新的 L0 命令，也不开物理/化学包。
 
 数学侧在引擎基础之后依次：
 
@@ -30,6 +30,8 @@
 - ~~transformation object~~（已下沉为 L0：`transform2` + `transform.apply`）
 - ~~tangent、angle bisector、perpendicular bisector macro（L1）~~ — 见 `src/catalog/macros.ts`
 - ~~Agent repair diagnostics / suggestedFixes~~（v0.1.1 已有初版）
+- ~~`mountMathRenderer` live rebuild + interaction ChangeSet~~（v0.2.0）
+- dirty-set / native object reconcile（后续）；
 - label layout / priority；
 - Direct SVG 与 JSXGraph 视觉 parity；
 - Construction View；

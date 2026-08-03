@@ -185,7 +185,19 @@ construction semantics > symbolic (future) > numeric > visual appearance (never 
 
 ## 8. Renderers
 
-### JSXGraph Adapter
+### MathMountedRenderer（PR3）
+
+高层 API：`mountMathRenderer(host, document)`。
+
+- `applyChangeSet` / `replaceDocument`：staging rebuild → swap；`strategy: "rebuild"`
+- 保留外部 renderer 对象 identity；恢复 camera / stage / selection
+- 交互 `point.set` / `scalar.set` 经 ChangeSet 提交；stage/selection 为 ephemeral
+- snapshot：`direct-svg` / `jsxgraph-svg` 诚实 mediaType；canvas → `UNSUPPORTED_SNAPSHOT`
+- **不**承诺 JSXGraph native object identity；dirty-set reconcile 属后续
+
+### JSXGraph Adapter（低层）
+
+`mountJsxGraph` 仍保留为低层 API。
 
 负责：
 

@@ -28,19 +28,21 @@ Events · Assertions · Simulation · Evidence
 
 ## 已实现能力
 
-| 模块 | v0.1.2 能力 |
+| 模块 | v0.2.0 能力 |
 |---|---|
-| Core contracts | 实现 `@famtutor/core` `DomainRuntime`；纯事务 `applyMathChangeSet`；`RenderArtifact` |
-| Canonical protocol | `famtutor.math.document.v1`，闭合 JSON Schema、稳定 ID、revision、provenance |
+| Core contracts | `@famtutor/core@0.2.0`：`ApplyResult` union、`RenderResult`、`MountedRenderer` 契约 |
+| Domain apply | 确定性 `applyMathChangeSet`；Agent 必须委托 `domainRuntime.apply` |
+| Live renderer | **`mountMathRenderer`**：rebuild+staging、状态保留、交互 ChangeSet、诚实 snapshot |
+| Canonical protocol | `famtutor.math.document.v1`（不变）+ operations schema |
 | 数学命令 | **47** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |
 | Assertions | 构造语义证明 + 数值残差；支持等距、点在线上、共线、平行、垂直、等长、等角等 |
 | Simulation | 点拖动、滑块变化、插值采样、事件轨迹、观察值、断言证据、最终状态提交 |
-| Interactive renderer | JSXGraph SVG/Canvas，动态依赖、拖动、滑块、stage、事件桥接、SVG 快照 |
-| Static renderer | 后端无关 Direct SVG，适合缩略图、PDF/Word、服务端批量输出 |
-| Agent runtime | 9 个稳定工具；作为 **stateful adapter**（DocumentStore dry-run/idempotency/undo）叠在无状态 DomainRuntime 之上 |
+| Interactive renderer | JSXGraph 低层 `mountJsxGraph` + 高层 `MathMountedRenderer` |
+| Static renderer | 后端无关 Direct SVG（DomainRuntime artifact 默认） |
+| Agent runtime | 9 个稳定工具；作为 **stateful adapter** 叠在无状态 DomainRuntime 之上 |
 | MCP | stdio JSON-RPC；支持现代 `2026-07-28` 发现协议，同时兼容 `2025-06-18` initialize 客户端 |
 | CLI | validate、render、simulate、inspect、capabilities |
 
