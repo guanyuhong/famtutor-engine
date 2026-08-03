@@ -13,9 +13,10 @@ import {
   type MathOperation
 } from "../operations.js";
 import { validateMathDocument } from "../protocol/validate.js";
+import { createMathRenderBundle, mathRenderBundleCapabilities, RENDER_BUNDLE_MIME } from "../render/bundle.js";
 import { renderDirectSvg } from "../render/direct-svg.js";
 import type { JsonValue, MathDocument, SuggestedFix } from "../types.js";
-import { deepClone, finiteNumber, isPlainObject, nowIso, stableHash, toJsonValue } from "../util.js";
+import { deepClone, finiteNumber, isPlainObject, nowIso, canonicalizeJson, sha256Utf8, stableHash, toJsonValue } from "../util.js";
 import { MATH_RUNTIME_VERSION } from "../version.js";
 import { enrichIssuesWithRepair, repairSuggestionsForError } from "./repair.js";
 import { DocumentStore } from "./store.js";
@@ -157,7 +158,7 @@ export class AgentMathRuntime {
         case "math_validate": return this.validate(args);
         case "math_render": return this.render(args);
         case "math_simulate": return this.simulate(args);
-        case "math_export": return this.export(args);
+        case "math_export": return await this.export(args);
         case "math_evaluate": return this.evaluate(args);
         default: throw new MathEngineError("UNKNOWN_TOOL", `Unknown Agent Math tool '${name}'.`, { actual: name });
       }
@@ -195,7 +196,8 @@ export class AgentMathRuntime {
       macros: toJsonValue(macroCapabilities()) as JsonValue,
       tools: toJsonValue(this.listTools().map(tool => tool.name)),
       limits: toJsonValue({ maxOperations: this.maxOperations, maxSimulationSamples: 256, maxRenderDimension: 4096 }),
-      workflow: toJsonValue(["math_capabilities", "math_create", "math_apply(expand_macro|construct)", "math_validate", "math_render", "math_simulate", "math_inspect"])
+      renderBundle: toJsonValue(mathRenderBundleCapabilities()),
+      workflow: toJsonValue(["math_capabilities", "math_create", "math_apply(expand_macro|construct)", "math_validate", "math_render", "math_simulate", "math_inspect", "math_export"])
     };
   }
 
@@ -220,9 +222,23 @@ export class AgentMathRuntime {
     const expectedRevision = args.expectedRevision === undefined ? undefined : numberArg(args.expectedRevision, "expectedRevision");
     const current = this.store.get(documentId);
     const idempotencyKey = typeof args.idempotencyKey === "string" ? args.idempotencyKey : undefined;
+    // Fingerprint excludes runtime-generated timestamps — only caller-controlled request fields.
+    const requestFingerprint = canonicalizeJson({
+      documentId,
+      operations,
+      expectedRevision: expectedRevision ?? null,
+      dryRun: booleanArg(args.dryRun, false)
+    });
     if (idempotencyKey) {
-      const cached = this.store.getIdempotent(documentId, idempotencyKey);
-      if (cached && isPlainObject(cached)) return cached as AgentToolCallResult;
+      const cached = this.store.lookupIdempotent(documentId, idempotencyKey, requestFingerprint);
+      if (cached.hit && cached.conflict) {
+        throw new MathEngineError("IDEMPOTENCY_KEY_REUSED", `idempotencyKey '${idempotencyKey}' was reused with a different payload.`, {
+          path: "idempotencyKey",
+          actual: idempotencyKey,
+          retryable: false
+        });
+      }
+      if (cached.hit && !cached.conflict) return cached.result as AgentToolCallResult;
     }
     if (expectedRevision !== undefined && current.revision !== expectedRevision) {
       throw new MathEngineError("REVISION_CONFLICT", `Expected revision ${expectedRevision}, but current revision is ${current.revision}.`, {
@@ -285,7 +301,7 @@ export class AgentMathRuntime {
       documentHash: stableHash(saved),
       changeSetId: applied.changeSetId
     };
-    if (idempotencyKey && !dryRun) this.store.setIdempotent(documentId, idempotencyKey, toJsonValue(result));
+    if (idempotencyKey && !dryRun) this.store.setIdempotent(documentId, idempotencyKey, requestFingerprint, toJsonValue(result));
     return result;
   }
 
@@ -390,7 +406,7 @@ export class AgentMathRuntime {
     return { ok: true, simulation: toJsonValue(result) };
   }
 
-  private export(args: Record<string, unknown>): AgentToolCallResult {
+  private async export(args: Record<string, unknown>): Promise<AgentToolCallResult> {
     const documentId = stringArg(args.documentId, "documentId")!;
     const document = this.store.get(documentId);
     const format = stringArg(args.format, "format")!;
@@ -415,7 +431,27 @@ export class AgentMathRuntime {
         contentType: "image/svg+xml",
         content: rendered.svg,
         hash: rendered.report.renderHash,
+        digest: await sha256Utf8(rendered.svg),
         report: toJsonValue(rendered.report)
+      };
+    }
+    if (format === "render-bundle") {
+      const created = await createMathRenderBundle(document, {
+        viewId: typeof args.viewId === "string" ? args.viewId : undefined,
+        width: Math.trunc(numberArg(args.width, "width", 960)),
+        height: Math.trunc(numberArg(args.height, "height", 640))
+      });
+      if (!created.ok) {
+        throw new MathEngineError("BUNDLE_CREATE_FAILED", created.diagnostics[0]?.message ?? "Failed to create render bundle.", {
+          actual: toJsonValue(created.diagnostics.slice(0, 12))
+        });
+      }
+      return {
+        ok: true,
+        format,
+        contentType: RENDER_BUNDLE_MIME,
+        content: toJsonValue(created.bundle),
+        digest: created.bundle.integrity.value
       };
     }
     throw new MathEngineError("UNSUPPORTED_EXPORT_FORMAT", `Unsupported export format '${format}'.`);

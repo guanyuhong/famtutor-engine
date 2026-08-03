@@ -21,8 +21,11 @@ import {
 import { validateMathDocument } from "./protocol/validate.js";
 import { renderDirectSvg } from "./render/direct-svg.js";
 import type { MathDocument } from "./types.js";
-import { stableHash, toJsonValue } from "./util.js";
+import { sha256Utf8, toJsonValue } from "./util.js";
 import { MATH_RUNTIME_VERSION } from "./version.js";
+
+const MIN_DIMENSION = 64;
+const MAX_DIMENSION = 4096;
 
 function mapSeverity(severity: string | undefined): Diagnostic["severity"] {
   if (severity === "warning" || severity === "info") return severity;
@@ -45,6 +48,10 @@ function toCoreValidation(report: ReturnType<typeof validateMathDocument>): Vali
   };
 }
 
+function dimensionOk(value: unknown): value is number {
+  return typeof value === "number" && Number.isInteger(value) && value >= MIN_DIMENSION && value <= MAX_DIMENSION;
+}
+
 /**
  * Stateless math DomainRuntime. No DocumentStore, undo, or idempotency.
  */
@@ -64,7 +71,7 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
       limits: {
         maxOperations: 128,
         maxSimulationSamples: 256,
-        maxRenderDimension: 4096
+        maxRenderDimension: MAX_DIMENSION
       },
       capabilities: {
         commands: commandCapabilities().length,
@@ -113,8 +120,65 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
         }]
       };
     }
+    if (request.mediaType !== undefined && request.mediaType !== "image/svg+xml") {
+      return {
+        ok: false,
+        diagnostics: [{
+          code: "UNSUPPORTED_MEDIA_TYPE",
+          severity: "error",
+          message: "direct-svg only supports mediaType image/svg+xml.",
+          path: "mediaType",
+          expected: "image/svg+xml",
+          actual: request.mediaType,
+          retryable: false
+        }]
+      };
+    }
     const width = request.width ?? 960;
     const height = request.height ?? 640;
+    if (!dimensionOk(width) || !dimensionOk(height)) {
+      return {
+        ok: false,
+        diagnostics: [{
+          code: "INVALID_RENDER_DIMENSION",
+          severity: "error",
+          message: `width/height must be integers in [${MIN_DIMENSION}, ${MAX_DIMENSION}].`,
+          path: "width",
+          expected: `${MIN_DIMENSION}..${MAX_DIMENSION}`,
+          actual: `${width}x${height}`,
+          retryable: false
+        }]
+      };
+    }
+    if (request.viewId && !document.views.some(view => view.id === request.viewId)) {
+      return {
+        ok: false,
+        diagnostics: [{
+          code: "VIEW_NOT_FOUND",
+          severity: "error",
+          message: `View '${request.viewId}' was not found.`,
+          path: "viewId",
+          actual: request.viewId,
+          retryable: false
+        }]
+      };
+    }
+    if (request.stageId) {
+      const stages = document.activities?.flatMap(activity => activity.stages ?? []) ?? [];
+      if (!stages.some(stage => stage.id === request.stageId)) {
+        return {
+          ok: false,
+          diagnostics: [{
+            code: "STAGE_NOT_FOUND",
+            severity: "error",
+            message: `Stage '${request.stageId}' was not found.`,
+            path: "stageId",
+            actual: request.stageId,
+            retryable: false
+          }]
+        };
+      }
+    }
     const result = renderDirectSvg(document, {
       viewId: request.viewId,
       width,
@@ -147,8 +211,8 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
         encoding: "utf8",
         content,
         digest: {
-          algorithm: "sha256-stableHash",
-          value: stableHash(content)
+          algorithm: "sha256",
+          value: await sha256Utf8(content)
         },
         diagnostics,
         metadata: {

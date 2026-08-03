@@ -420,6 +420,16 @@ export function applyMathChangeSet(
   document: MathDocument,
   changeSet: ChangeSet<MathOperation>
 ): ApplyResult<MathDocument, MathOperation> {
+  if (typeof changeSet.changeSetId !== "string" || !changeSet.changeSetId.trim()) {
+    return fail(changeSet, document, {
+      code: "INVALID_CHANGE_SET_ID",
+      severity: "error",
+      message: "changeSetId must be a non-empty string.",
+      path: "changeSetId",
+      actual: String(changeSet.changeSetId ?? ""),
+      retryable: false
+    });
+  }
   if (changeSet.schema !== "famtutor.engine.change-set.v1") {
     return fail(changeSet, document, {
       code: "INVALID_CHANGE_SET_SCHEMA",
@@ -436,6 +446,17 @@ export function applyMathChangeSet(
       severity: "error",
       message: "operations must be a non-empty array.",
       path: "operations",
+      retryable: false
+    });
+  }
+  if (changeSet.operations.length > 128) {
+    return fail(changeSet, document, {
+      code: "OPERATION_LIMIT",
+      severity: "error",
+      message: "At most 128 operations are allowed per ChangeSet.",
+      path: "operations",
+      expected: 128,
+      actual: changeSet.operations.length,
       retryable: false
     });
   }

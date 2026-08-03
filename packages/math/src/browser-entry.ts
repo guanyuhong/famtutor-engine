@@ -29,9 +29,5 @@ export * from "./render/direct-svg.js";
 export * from "./render/jsxgraph.js";
 export * from "./render/mounted-renderer.js";
 
-export * from "./agent/store.js";
-export * from "./agent/tools.js";
-export * from "./agent/runtime.js";
-export * from "./agent/repair.js";
-
-export * from "./mcp/protocol.js";
+// Agent / MCP / RenderBundle stay Node-only — they import @famtutor/core value APIs
+// that cannot be inlined into the self-contained AMD smoke outFile.
