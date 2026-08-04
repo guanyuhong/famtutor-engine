@@ -103,6 +103,7 @@
         "polygon2",
         "conic2",
         "transform2",
+        "interval1",
         "function1",
         "curve2",
         "text"
@@ -218,6 +219,7 @@
         "scalar.constant",
         "scalar.slider",
         "boolean.expression",
+        "interval.from_bounds",
         "point.free",
         "point.from_expressions",
         "point.on_path",
@@ -243,6 +245,9 @@
         "sector.from_arc",
         "polygon.vertices",
         "angle.three_points",
+        "marker.right_angle",
+        "marker.segment_tick",
+        "marker.parallel_chevron",
         "conic.ellipse_foci",
         "conic.parabola_focus_directrix",
         "conic.hyperbola_foci",
@@ -360,6 +365,10 @@
         "keepAspectRatio": {
           "type": "boolean"
         },
+        "background": {
+          "type": "string",
+          "minLength": 1
+        },
         "cameraPolicy": {
           "enum": [
             "document",
@@ -461,6 +470,41 @@
         },
         "labelVisible": {
           "type": "boolean"
+        },
+        "labelPlacement": {
+          "enum": [
+            "auto",
+            "top",
+            "top-right",
+            "right",
+            "bottom-right",
+            "bottom",
+            "bottom-left",
+            "left",
+            "top-left"
+          ]
+        },
+        "labelOffset": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number" },
+            { "type": "number" }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "lineLabelPosition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "lineLabelSide": {
+          "enum": ["left", "right"]
+        },
+        "lineLabelDistance": {
+          "type": "number",
+          "minimum": 1
         },
         "pointSize": {
           "type": "number",

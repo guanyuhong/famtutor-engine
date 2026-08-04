@@ -9,7 +9,7 @@ import {
 } from "./corpus-lib.mjs";
 
 const cases = await loadCases();
-if (cases.length !== 10) throw new Error(`Expected exactly 10 seed cases, found ${cases.length}.`);
+if (cases.length !== 41) throw new Error(`Expected exactly 41 textbook cases, found ${cases.length}.`);
 await validateCorpusSources(cases);
 
 const results = [];

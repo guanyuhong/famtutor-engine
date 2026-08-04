@@ -26,7 +26,7 @@ const NODE_KEYS = new Set(["id", "command", "inputs", "params", "outputs", "desc
 const INPUT_KEYS = new Set(["ref", "value"]);
 const GRAPHICS_VIEW_KEYS = new Set([
   "id", "kind", "visible", "renderer", "boundingBox", "axes", "grid", "keepAspectRatio",
-  "cameraPolicy", "entityIds", "title"
+  "background", "cameraPolicy", "entityIds", "title"
 ]);
 const SIMPLE_VIEW_KEYS = new Set(["id", "kind", "visible", "renderer", "title"]);
 const STYLE_KEYS = new Set(["targets", "style"]);

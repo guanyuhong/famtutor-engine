@@ -177,6 +177,70 @@ main { padding: 1.5rem clamp(1rem, 4vw, 4rem) 5rem; }
 
 .loading-mask[hidden] { display: none; }
 
+.stage-panel {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.85rem 1rem 0;
+  padding: 0.8rem;
+  border: 1px solid #dce5e8;
+  border-radius: 0.8rem;
+  background: #f8fbfb;
+}
+
+.stage-panel[hidden] { display: none; }
+
+.stage-toolbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stage-tabs {
+  display: flex;
+  gap: 0.4rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.stage-tab,
+.stage-step {
+  border: 1px solid #c8d8dc;
+  color: #31525c;
+  background: #fff;
+  cursor: pointer;
+}
+
+.stage-tab {
+  flex: 0 0 auto;
+  padding: 0.42rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+}
+
+.stage-tab[aria-selected="true"] {
+  border-color: #0e8378;
+  color: #fff;
+  background: #0e8378;
+}
+
+.stage-step {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.stage-step:disabled { cursor: default; opacity: 0.35; }
+
+.stage-narration {
+  min-height: 2.7em;
+  margin: 0;
+  color: #294b55;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
 .interaction-hint {
   margin: 0.75rem 1.25rem 0;
   color: #245d6c;

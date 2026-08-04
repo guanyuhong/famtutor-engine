@@ -16,6 +16,7 @@ export const ENTITY_TYPES = [
   "polygon2",
   "conic2",
   "transform2",
+  "interval1",
   "function1",
   "curve2",
   "text"
@@ -73,6 +74,8 @@ export interface Graphics2DView {
   axes?: boolean;
   grid?: boolean;
   keepAspectRatio?: boolean;
+  /** Canvas background color shared by static and mounted renderers. */
+  background?: string;
   cameraPolicy?: "document" | "fit" | "stable_across_stages";
   entityIds?: string[];
   title?: string;
@@ -105,6 +108,16 @@ export interface EntityStyle {
   fillOpacity?: number;
   dash?: "solid" | "dashed" | "dotted";
   labelVisible?: boolean;
+  /** Preferred point-label anchor. `auto` uses deterministic collision avoidance. */
+  labelPlacement?: "auto" | "top" | "top-right" | "right" | "bottom-right" | "bottom" | "bottom-left" | "left" | "top-left";
+  /** Final pixel correction from the selected point or path-label anchor. */
+  labelOffset?: [number, number];
+  /** Fractional position of a line/segment/ray label from its first point. */
+  lineLabelPosition?: number;
+  /** Side of a directed line/segment/ray used for its label. */
+  lineLabelSide?: "left" | "right";
+  /** Orthogonal path-label distance, as a factor of half the text-box height. */
+  lineLabelDistance?: number;
   pointSize?: number;
   fontSize?: number;
 }
@@ -332,6 +345,18 @@ export interface Function1Value {
   domain: [number, number];
 }
 
+/** A connected subset of the real line. `null` denotes an infinite bound. */
+export interface Interval1Value {
+  kind: "interval1";
+  lower: number | null;
+  upper: number | null;
+  lowerClosed: boolean;
+  upperClosed: boolean;
+  /** Visual track coordinate; it does not change the represented set. */
+  y: number;
+  empty: boolean;
+}
+
 export interface Curve2Value {
   kind: "curve2";
   xExpression: string;
@@ -361,6 +386,7 @@ export type RuntimeValue =
   | Conic2Value
   | Transform2Value
   | AngleValue
+  | Interval1Value
   | Function1Value
   | Curve2Value
   | TextValue;

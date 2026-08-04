@@ -1,0 +1,746 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-23-sss-stability",
+  "title": "三角形的稳定性与 SSS",
+  "description": "按教材图 1-22、1-23、1-24实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      25,
+      26
+    ],
+    "pdfPages": [
+      28,
+      29
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "sss",
+    "triangle-stability"
+  ],
+  "learningObjective": "比较只固定两边时的可变形状态与三边固定后的唯一形状。",
+  "caseType": "exploration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "marker.segment_tick",
+    "assertion.equal_length",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 223,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-23-sss-stability",
+      "revision": 1,
+      "seed": 223,
+      "metadata": {
+        "title": "三角形的稳定性与 SSS",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "sss",
+          "triangle-stability"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            4,
+            10,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-23",
+          "title": "三角形的稳定性与 SSS",
+          "stages": [
+            {
+              "id": "hinge",
+              "narration": "只固定两根木条的一端，另两个端点之间没有连接，夹角可以改变。",
+              "reveal": [
+                "A",
+                "B",
+                "C1",
+                "C2",
+                "AB",
+                "AC1",
+                "BC1",
+                "AC2",
+                "BC2"
+              ]
+            },
+            {
+              "id": "compare",
+              "narration": "同样的两边可以形成不同夹角，因此只给两边不能唯一确定三角形。",
+              "reveal": [
+                "A",
+                "B",
+                "C1",
+                "C2",
+                "AB",
+                "AC1",
+                "BC1",
+                "AC2",
+                "BC2"
+              ],
+              "focus": [
+                "AC2",
+                "BC2"
+              ]
+            },
+            {
+              "id": "locked",
+              "narration": "加入第三根木条后，三边长度全部固定，形状和大小也随之确定；这就是三角形的稳定性。",
+              "reveal": [
+                "D",
+                "E",
+                "F",
+                "DE",
+                "DF",
+                "EF",
+                "lockedTriangle",
+                "tickAB",
+                "tickDE",
+                "tickAC1",
+                "tickDF",
+                "tickBC1a",
+                "tickBC1b",
+                "tickEFa",
+                "tickEFb"
+              ],
+              "focus": [
+                "lockedTriangle"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-25-26:figure-1-22",
+          "zjedu-math-8a-2013:printed-25-26:figure-1-23",
+          "zjedu-math-8a-2013:printed-25-26:figure-1-24"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-23-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-23-sss-stability",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                3.2,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C1",
+                "label": "C1"
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                2.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C2",
+                "label": "C2"
+              }
+            ],
+            "params": {
+              "coords": [
+                2.1,
+                2.1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C1"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C1"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "E",
+                "label": "E"
+              }
+            ],
+            "params": {
+              "coords": [
+                9.2,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "F",
+                "label": "F"
+              }
+            ],
+            "params": {
+              "coords": [
+                7,
+                2.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "DE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "DF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "EF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "lockedTriangle"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "bases-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "DE"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "两组底边等长。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "left-bars-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AC1"
+                },
+                {
+                  "ref": "DF"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "对应木条等长。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "right-bars-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "BC1"
+                },
+                {
+                  "ref": "EF"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "第三条木条锁定形状。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickDE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "DE"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAC1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AC1"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.48
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickDF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "DF"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.48
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickBC1a"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BC1"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.46
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickBC1b"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BC1"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.54
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickEFa"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "EF"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.46
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickEFb"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "EF"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.54
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AC1",
+              "BC1",
+              "AC2",
+              "BC2",
+              "DE",
+              "DF",
+              "EF",
+              "lockedTriangle"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickAB",
+              "tickDE",
+              "tickAC1",
+              "tickDF",
+              "tickBC1a",
+              "tickBC1b",
+              "tickEFa",
+              "tickEFb"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AC2",
+              "BC2"
+            ],
+            "style": {
+              "stroke": "#EF6C22",
+              "strokeWidth": 1.9,
+              "dash": "dashed",
+              "opacity": 0.7
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C1",
+              "C2",
+              "D",
+              "E",
+              "F"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "2ba3f9a9b0c1ecd9fe00a6d2b6ee6d4baea8b43d1867f766bf0d26a2413e5f22",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C1",
+          "C2",
+          "AB",
+          "AC1",
+          "BC1",
+          "AC2"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

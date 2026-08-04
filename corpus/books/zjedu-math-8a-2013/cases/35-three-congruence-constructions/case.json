@@ -1,0 +1,1233 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-6-35-three-congruence-constructions",
+  "title": "用三种条件作全等三角形",
+  "description": "按教材印刷页 39实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.6 尺规作图",
+    "printedPages": [
+      39
+    ],
+    "pdfPages": [
+      42
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "ruler-compass-construction",
+    "sss",
+    "sas",
+    "asa"
+  ],
+  "learningObjective": "对同一个目标三角形，分别选择 SSS、SAS、ASA 数据完成三种全等构造。",
+  "caseType": "demonstration",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "marker.segment_tick",
+    "angle.three_points",
+    "assertion.equal_length",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 235,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-35-three-congruence-constructions",
+      "revision": 1,
+      "seed": 235,
+      "metadata": {
+        "title": "用三种条件作全等三角形",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.6",
+          "ruler-compass-construction",
+          "sss",
+          "sas",
+          "asa"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -7,
+            7.5,
+            8,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-35",
+          "title": "用三种条件作全等三角形",
+          "stages": [
+            {
+              "id": "target",
+              "narration": "目标：作 △PRS，使它与给定的 △ABC 全等。下面分别使用三种充分条件。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC"
+              ]
+            },
+            {
+              "id": "sss-method",
+              "narration": "SSS：依次复制 AB、AC、BC 三条边，用两圆交点确定 P₁。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC",
+                "sssR",
+                "sssS",
+                "sssP",
+                "sssRS",
+                "sssRP",
+                "sssSP",
+                "tickSourceAB",
+                "tickSssRS",
+                "tickSourceAC1",
+                "tickSourceAC2",
+                "tickSssRP1",
+                "tickSssRP2",
+                "tickSourceBC1",
+                "tickSourceBC2",
+                "tickSourceBC3",
+                "tickSssSP1",
+                "tickSssSP2",
+                "tickSssSP3"
+              ]
+            },
+            {
+              "id": "sas-method",
+              "narration": "SAS：复制两边 AB、AC 及其夹角 ∠A，确定 P₂。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "sourceA",
+                "sasR",
+                "sasS",
+                "sasP",
+                "sasRS",
+                "sasRP",
+                "sasSP",
+                "sasA"
+              ]
+            },
+            {
+              "id": "asa-method",
+              "narration": "ASA：复制两角 ∠A、∠B 及夹边 AB，两射线交于 P₃。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "sourceA",
+                "sourceB",
+                "asaR",
+                "asaS",
+                "asaP",
+                "asaRS",
+                "asaRP",
+                "asaSP",
+                "asaA",
+                "asaB"
+              ]
+            },
+            {
+              "id": "compare",
+              "narration": "三种方法得到的三角形方向和位置不同，但都与 △ABC 全等；关键是选择一组充分且可作出的条件。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC",
+                "sssR",
+                "sssS",
+                "sssP",
+                "sssRS",
+                "sssRP",
+                "sssSP",
+                "sasR",
+                "sasS",
+                "sasP",
+                "sasRS",
+                "sasRP",
+                "sasSP",
+                "asaR",
+                "asaS",
+                "asaP",
+                "asaRS",
+                "asaRP",
+                "asaSP"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-39"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-35-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-35-three-congruence-constructions",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                6.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sssR",
+                "label": "R₁"
+              }
+            ],
+            "params": {
+              "coords": [
+                -6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sssS",
+                "label": "S₁"
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sssP",
+                "label": "P₁"
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                2.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sssRS"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssR"
+              },
+              {
+                "ref": "sssS"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sssRP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssR"
+              },
+              {
+                "ref": "sssP"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sssSP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssS"
+              },
+              {
+                "ref": "sssP"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "sss-base",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "sssRS"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "SSS 构造的底边与 AB 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "sss-side",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AC"
+                },
+                {
+                  "ref": "sssRP"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "SSS 构造的对应边与 AC 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sasR",
+                "label": "R₂"
+              }
+            ],
+            "params": {
+              "coords": [
+                -1,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sasS",
+                "label": "S₂"
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "sasP",
+                "label": "P₂"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                2.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sasRS"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sasR"
+              },
+              {
+                "ref": "sasS"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sasRP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sasR"
+              },
+              {
+                "ref": "sasP"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "sasSP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sasS"
+              },
+              {
+                "ref": "sasP"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "sas-base",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "sasRS"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "SAS 构造的底边与 AB 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "sas-side",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AC"
+                },
+                {
+                  "ref": "sasRP"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "SAS 构造的对应边与 AC 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "asaR",
+                "label": "R₃"
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "asaS",
+                "label": "S₃"
+              }
+            ],
+            "params": {
+              "coords": [
+                7,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "asaP",
+                "label": "P₃"
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                2.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "asaRS"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "asaR"
+              },
+              {
+                "ref": "asaS"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "asaRP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "asaR"
+              },
+              {
+                "ref": "asaP"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "asaSP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "asaS"
+              },
+              {
+                "ref": "asaP"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "asa-base",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "asaRS"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "ASA 构造的底边与 AB 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "asa-side",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AC"
+                },
+                {
+                  "ref": "asaRP"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "ASA 构造的对应边与 AC 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "sourceA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "sasA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sasS"
+              },
+              {
+                "ref": "sasR"
+              },
+              {
+                "ref": "sasP"
+              }
+            ],
+            "params": {
+              "radius": 0.4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "asaA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "asaS"
+              },
+              {
+                "ref": "asaR"
+              },
+              {
+                "ref": "asaP"
+              }
+            ],
+            "params": {
+              "radius": 0.4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "sourceB",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              }
+            ],
+            "params": {
+              "radius": 0.4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "asaB",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "asaP"
+              },
+              {
+                "ref": "asaS"
+              },
+              {
+                "ref": "asaR"
+              }
+            ],
+            "params": {
+              "radius": 0.4
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "sas-angle",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "sourceA"
+                },
+                {
+                  "ref": "sasA"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "SAS 的夹角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "asa-angle-a",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "sourceA"
+                },
+                {
+                  "ref": "asaA"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "ASA 第一组角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "asa-angle-b",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "sourceB"
+                },
+                {
+                  "ref": "asaB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "ASA 第二组角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceAB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssRS"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssRS"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceAC1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AC"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.46
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceAC2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AC"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.54
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssRP1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssRP"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.46
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssRP2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssRP"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.54
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceBC1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BC"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.44
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceBC2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BC"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.5
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSourceBC3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BC"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.56
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssSP1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssSP"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.44
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssSP2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssSP"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.5
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickSssSP3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "sssSP"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.56
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AC",
+              "BC",
+              "sssRS",
+              "sssRP",
+              "sssSP",
+              "sasRS",
+              "sasRP",
+              "sasSP",
+              "asaRS",
+              "asaRP",
+              "asaSP"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickSourceAB",
+              "tickSssRS",
+              "tickSourceAC1",
+              "tickSourceAC2",
+              "tickSssRP1",
+              "tickSssRP2",
+              "tickSourceBC1",
+              "tickSourceBC2",
+              "tickSourceBC3",
+              "tickSssSP1",
+              "tickSssSP2",
+              "tickSssSP3",
+              "sourceA",
+              "sourceB",
+              "sasA",
+              "asaA",
+              "asaB"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "sssR",
+              "sssS",
+              "sssP",
+              "sasR",
+              "sasS",
+              "sasP",
+              "asaR",
+              "asaS",
+              "asaP"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "0517faba0cfd88e9f78a03f8cf5eb0ab594dc96896aeddeb2d15c06ad15a6b22",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C",
+          "AB",
+          "AC",
+          "BC",
+          "sssR",
+          "sssS"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

@@ -1,0 +1,689 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-6-32-copy-angle",
+  "title": "用尺规复制已知角",
+  "description": "按教材图 1-41、1-42实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.6 尺规作图",
+    "printedPages": [
+      37
+    ],
+    "pdfPages": [
+      40
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "ruler-compass-construction",
+    "copy-angle",
+    "sss"
+  ],
+  "learningObjective": "按同半径弧、等弦和目标射线四步复制已知角，并用 SSS 解释作法。",
+  "caseType": "guided-construction",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "circle.through_points",
+    "measurement.distance",
+    "point.intersection_circle_circle",
+    "ray.from_points",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 232,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-32-copy-angle",
+      "revision": 1,
+      "seed": 232,
+      "metadata": {
+        "title": "用尺规复制已知角",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.6",
+          "ruler-compass-construction",
+          "copy-angle",
+          "sss"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -2.5,
+            4,
+            10.5,
+            -1.5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-32",
+          "title": "用尺规复制已知角",
+          "stages": [
+            {
+              "id": "source-arc",
+              "narration": "以 O 为圆心作弧，分别交角的两边于 C、D。",
+              "reveal": [
+                "O",
+                "A",
+                "B",
+                "C",
+                "D",
+                "OA",
+                "OB",
+                "sourceCircle",
+                "sourceAngle"
+              ]
+            },
+            {
+              "id": "target-arc",
+              "narration": "作射线 O′A′，以 O′ 为圆心、OC 为半径作弧，交 O′A′ 于 C′。",
+              "reveal": [
+                "O2",
+                "A2",
+                "C2",
+                "O2A2",
+                "targetCircle"
+              ]
+            },
+            {
+              "id": "copy-chord",
+              "narration": "以 C′ 为圆心、CD 为半径作弧，与前一弧交于 D′。",
+              "reveal": [
+                "C",
+                "D",
+                "C2",
+                "D2",
+                "CD",
+                "C2D2",
+                "targetCircle",
+                "chordCircle"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "过 O′、D′ 作射线。由 OC=O′C′、OD=O′D′、CD=C′D′，两三角形按 SSS 全等，所以复制角等于已知角。",
+              "reveal": [
+                "O",
+                "A",
+                "B",
+                "O2",
+                "A2",
+                "D2",
+                "OA",
+                "OB",
+                "O2A2",
+                "O2D2",
+                "sourceAngle",
+                "copiedAngle"
+              ],
+              "focus": [
+                "copiedAngle"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-37:figure-1-41",
+          "zjedu-math-8a-2013:printed-37:figure-1-42"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-32-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-32-copy-angle",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "O",
+                "label": "O"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                2.2,
+                3.2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                1.414214,
+                2.414214
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "OA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "OB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.through_points",
+            "outputs": [
+              {
+                "id": "sourceCircle"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "O2",
+                "label": "O′"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A2",
+                "label": "A′"
+              }
+            ],
+            "params": {
+              "coords": [
+                9,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C2",
+                "label": "C′"
+              }
+            ],
+            "params": {
+              "coords": [
+                8,
+                1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "O2A2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O2"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.through_points",
+            "outputs": [
+              {
+                "id": "targetCircle"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "measurement.distance",
+            "outputs": [
+              {
+                "id": "chordLength"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "chordCircle"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C2"
+              },
+              {
+                "ref": "chordLength"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_circle_circle",
+            "outputs": [
+              {
+                "id": "D2low",
+                "label": "D2low",
+                "visible": false
+              },
+              {
+                "id": "D2",
+                "label": "D2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "targetCircle"
+              },
+              {
+                "ref": "chordCircle"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "O2D2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O2"
+              },
+              {
+                "ref": "D2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "C2D2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C2"
+              },
+              {
+                "ref": "D2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "sourceAngle",
+                "label": "∠AOB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "B"
+              }
+            ],
+            "params": {
+              "radius": 0.58,
+              "labelRadius": 1.05
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "copiedAngle",
+                "label": "∠A′O′B′"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "O2"
+              },
+              {
+                "ref": "D2"
+              }
+            ],
+            "params": {
+              "radius": 0.58,
+              "labelRadius": 1.05
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "copied",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "sourceAngle"
+                },
+                {
+                  "ref": "copiedAngle"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "复制角与已知角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "equal-chords",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "CD"
+                },
+                {
+                  "ref": "C2D2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "CD=C′D′。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "OA",
+              "OB",
+              "O2A2",
+              "O2D2"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "sourceCircle",
+              "targetCircle",
+              "chordCircle",
+              "CD",
+              "C2D2"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "sourceAngle",
+              "copiedAngle"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "O",
+              "A",
+              "B",
+              "C",
+              "D",
+              "O2",
+              "A2",
+              "C2",
+              "D2low",
+              "D2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "a406f95f90f73c9c5c543eae0f9c345259942f544f8c3dbebd680285c5c28c89",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "O",
+          "A",
+          "B",
+          "C",
+          "D",
+          "OA",
+          "OB",
+          "sourceCircle"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

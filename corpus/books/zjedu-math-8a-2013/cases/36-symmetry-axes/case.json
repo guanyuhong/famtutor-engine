@@ -1,0 +1,1002 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-2-1-36-symmetry-axes",
+  "title": "比较长方形、正方形和圆的对称轴",
+  "description": "按教材图 2-1、2-2、2-3 实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "2 特殊三角形",
+    "section": "2.1 图形的轴对称",
+    "printedPages": [
+      48
+    ],
+    "pdfPages": [
+      51
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "axial-symmetry",
+    "axis-of-symmetry"
+  ],
+  "learningObjective": "通过长方形、正方形和圆比较轴对称图形的对称轴数量，并理解对称轴必须使两侧折叠重合。",
+  "caseType": "demonstration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "polygon.vertices",
+    "circle.center_radius",
+    "line.through_points",
+    "assertion.perpendicular",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch2-source-faithful-v1",
+    "seed": 336,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch2-01-symmetry-axes",
+      "revision": 1,
+      "seed": 336,
+      "metadata": {
+        "title": "比较长方形、正方形和圆的对称轴",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "2.1",
+          "axial-symmetry",
+          "axis-of-symmetry"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -8,
+            4.5,
+            8,
+            -4.5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-36",
+          "title": "比较长方形、正方形和圆的对称轴",
+          "stages": [
+            {
+              "id": "rectangle",
+              "narration": "图 2-1：长方形沿水平或竖直中线折叠都能重合，因此有两条对称轴。",
+              "reveal": [
+                "rectangle",
+                "rectVertical",
+                "rectHorizontal"
+              ]
+            },
+            {
+              "id": "square",
+              "narration": "图 2-2：正方形除两条中线外，两条对角线所在直线也是对称轴，共四条。",
+              "reveal": [
+                "rectangle",
+                "rectVertical",
+                "rectHorizontal",
+                "square",
+                "squareVertical",
+                "squareHorizontal",
+                "squareDiagonal1",
+                "squareDiagonal2"
+              ]
+            },
+            {
+              "id": "circle",
+              "narration": "图 2-3：圆的任意一条直径所在直线都是对称轴；图中只画出三条代表，实际有无数条。",
+              "reveal": [
+                "rectangle",
+                "rectVertical",
+                "rectHorizontal",
+                "square",
+                "squareVertical",
+                "squareHorizontal",
+                "squareDiagonal1",
+                "squareDiagonal2",
+                "O",
+                "circle",
+                "circleVertical",
+                "circleHorizontal",
+                "circleDiagonal"
+              ],
+              "focus": [
+                "circleVertical",
+                "circleHorizontal",
+                "circleDiagonal"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-48:figure-2-1",
+          "zjedu-math-8a-2013:printed-48:figure-2-2",
+          "zjedu-math-8a-2013:printed-48:figure-2-3"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-36-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch2-01-symmetry-axes",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "R1",
+                "label": "R1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -7,
+                -1.2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "R2",
+                "label": "R2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                -1.2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "R3",
+                "label": "R3",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                1.2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "R4",
+                "label": "R4",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -7,
+                1.2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "rectangle",
+                "label": "长方形"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "R1"
+              },
+              {
+                "ref": "R2"
+              },
+              {
+                "ref": "R3"
+              },
+              {
+                "ref": "R4"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "RV1",
+                "label": "RV1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                -3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "RV2",
+                "label": "RV2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "RH1",
+                "label": "RH1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -7.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "RH2",
+                "label": "RH2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -2.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "rectVertical"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "RV1"
+              },
+              {
+                "ref": "RV2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "rectHorizontal"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "RH1"
+              },
+              {
+                "ref": "RH2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "S1",
+                "label": "S1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -1.5,
+                -1.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "S2",
+                "label": "S2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                1.5,
+                -1.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "S3",
+                "label": "S3",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                1.5,
+                1.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "S4",
+                "label": "S4",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -1.5,
+                1.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "square",
+                "label": "正方形"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "S1"
+              },
+              {
+                "ref": "S2"
+              },
+              {
+                "ref": "S3"
+              },
+              {
+                "ref": "S4"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SV1",
+                "label": "SV1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SV2",
+                "label": "SV2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SH1",
+                "label": "SH1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -2.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SH2",
+                "label": "SH2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SD11",
+                "label": "SD11",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -2.4,
+                -2.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SD12",
+                "label": "SD12",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2.4,
+                2.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SD21",
+                "label": "SD21",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -2.4,
+                2.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "SD22",
+                "label": "SD22",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2.4,
+                -2.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "squareVertical"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "SV1"
+              },
+              {
+                "ref": "SV2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "squareHorizontal"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "SH1"
+              },
+              {
+                "ref": "SH2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "squareDiagonal1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "SD11"
+              },
+              {
+                "ref": "SD12"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "squareDiagonal2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "SD21"
+              },
+              {
+                "ref": "SD22"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "O",
+                "label": "O"
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "circle",
+                "label": "圆"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              }
+            ],
+            "params": {
+              "radius": 1.6
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CV1",
+                "label": "CV1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                -3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CV2",
+                "label": "CV2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CH1",
+                "label": "CH1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CH2",
+                "label": "CH2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                7.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CD1",
+                "label": "CD1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                3.2,
+                -1.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "CD2",
+                "label": "CD2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                6.8,
+                1.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "circleVertical"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CV1"
+              },
+              {
+                "ref": "CV2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "circleHorizontal"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CH1"
+              },
+              {
+                "ref": "CH2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "circleDiagonal"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CD1"
+              },
+              {
+                "ref": "CD2"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "rectangle-axes-perpendicular",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "rectVertical"
+                },
+                {
+                  "ref": "rectHorizontal"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "长方形的两条对称轴互相垂直。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "square-diagonals-perpendicular",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "squareDiagonal1"
+                },
+                {
+                  "ref": "squareDiagonal2"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "正方形的两条对角线互相垂直。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "rectangle",
+              "square",
+              "circle"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "rectVertical",
+              "rectHorizontal",
+              "squareVertical",
+              "squareHorizontal",
+              "squareDiagonal1",
+              "squareDiagonal2",
+              "circleVertical",
+              "circleHorizontal",
+              "circleDiagonal"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.7,
+              "dash": "dashed",
+              "opacity": 0.75
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "rectangle",
+              "square",
+              "circle"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "fill": "#DCEFE7",
+              "fillOpacity": 0.18,
+              "strokeWidth": 2.3,
+              "fontSize": 15,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "RV1",
+              "RV2",
+              "RH1",
+              "RH2",
+              "S1",
+              "S2",
+              "S3",
+              "S4",
+              "SV1",
+              "SV2",
+              "SH1",
+              "SH2",
+              "SD11",
+              "SD12",
+              "SD21",
+              "SD22",
+              "O",
+              "CV1",
+              "CV2",
+              "CH1",
+              "CH2",
+              "CD1",
+              "CD2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "38c1ada815b10985e94f46c2917b394b2dffc566275f7fb4a74f9c55e4142012",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "rectangle",
+          "RV1",
+          "RV2",
+          "RH1"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

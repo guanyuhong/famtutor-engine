@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FamTutor 10-Case 验收 Gallery</title>
+  <title>FamTutor 教材案例验收 Gallery</title>
   <link rel="stylesheet" href="/packages/math/vendor/jsxgraph/jsxgraph.css" />
   <link rel="stylesheet" href="./styles.css" />
   <script type="importmap">
@@ -18,7 +18,7 @@
   <header class="hero">
     <div>
       <p class="eyebrow">FAMTUTOR ENGINE · TEXTBOOK CORPUS</p>
-      <h1>10-Case 验收 Gallery</h1>
+      <h1>教材案例验收 Gallery</h1>
       <p class="hero-copy">浏览器内重放 CaseSpec，并以真实 MountedRenderer 挂载全部种子案例。</p>
     </div>
     <div class="summary" aria-label="案例验收统计">
@@ -56,6 +56,14 @@
         <div class="case-board"></div>
         <div class="loading-mask">重放并挂载中…</div>
       </div>
+      <section class="stage-panel" aria-label="教学阶段" hidden>
+        <div class="stage-toolbar">
+          <button class="stage-step stage-previous" type="button" aria-label="上一步">←</button>
+          <div class="stage-tabs" role="tablist" aria-label="选择教学阶段"></div>
+          <button class="stage-step stage-next" type="button" aria-label="下一步">→</button>
+        </div>
+        <p class="stage-narration" aria-live="polite"></p>
+      </section>
       <div class="interaction-hint"></div>
       <div class="diagnostic" hidden></div>
       <footer class="case-footer">
@@ -66,6 +74,6 @@
   </template>
 
   <script src="/packages/math/vendor/jsxgraph/jsxgraphcore.js"></script>
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=ch3-3"></script>
 </body>
 </html>

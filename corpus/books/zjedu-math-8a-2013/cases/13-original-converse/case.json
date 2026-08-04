@@ -1,0 +1,587 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-2-13-original-converse",
+  "title": "原命题与逆命题",
+  "description": "按教材印刷页 14–15实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.2 定义与命题",
+    "printedPages": [
+      14,
+      15
+    ],
+    "pdfPages": [
+      17,
+      18
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "original-and-converse",
+    "parallel-lines"
+  ],
+  "learningObjective": "交换条件与结论形成逆命题，并在同一几何图中核对两种推理方向。",
+  "caseType": "demonstration",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "marker.parallel_chevron",
+    "angle.three_points",
+    "assertion.parallel",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 213,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-13-original-converse",
+      "revision": 1,
+      "seed": 213,
+      "metadata": {
+        "title": "原命题与逆命题",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.2",
+          "original-and-converse",
+          "parallel-lines"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            5,
+            8,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-13",
+          "title": "原命题与逆命题",
+          "stages": [
+            {
+              "id": "original",
+              "narration": "原命题：如果两条直线平行，那么内错角相等。条件是 AB∥CD，结论是 ∠1=∠2。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "CD",
+                "EF",
+                "parallelAB1",
+                "parallelAB2",
+                "parallelCD1",
+                "parallelCD2",
+                "alternate1",
+                "alternate2"
+              ]
+            },
+            {
+              "id": "swap",
+              "narration": "交换条件和结论，得到逆命题：如果内错角相等，那么两条直线平行。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "CD",
+                "EF",
+                "alternate1",
+                "alternate2"
+              ]
+            },
+            {
+              "id": "converse",
+              "narration": "本例中逆命题也是真命题；∠1=∠2 可作为判定 AB∥CD 的依据。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "CD",
+                "EF",
+                "parallelAB1",
+                "parallelAB2",
+                "parallelCD1",
+                "parallelCD2",
+                "alternate1",
+                "alternate2"
+              ],
+              "focus": [
+                "parallelAB1",
+                "parallelAB2",
+                "parallelCD1",
+                "parallelCD2"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-14",
+          "zjedu-math-8a-2013:printed-15"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-13-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-13-original-converse",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                7,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                7,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "E",
+                "label": "E"
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "F",
+                "label": "F"
+              }
+            ],
+            "params": {
+              "coords": [
+                4.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "EF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "alternate1",
+                "label": "∠1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ],
+            "params": {
+              "radius": 0.52,
+              "labelRadius": 0.9
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "alternate2",
+                "label": "∠2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.52,
+              "labelRadius": 0.9
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "M1",
+                "label": "M1",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "M2",
+                "label": "M2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "parallelAB1"
+              },
+              {
+                "id": "parallelAB2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "M1"
+              },
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "parallelCD1"
+              },
+              {
+                "id": "parallelCD2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "M2"
+              },
+              {
+                "ref": "CD"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "parallel-lines",
+              "predicate": "parallel",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "CD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AB∥CD。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "alternate-equal",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "alternate1"
+                },
+                {
+                  "ref": "alternate2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "内错角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "CD",
+              "EF"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "alternate1",
+              "alternate2",
+              "parallelAB1",
+              "parallelAB2",
+              "parallelCD1",
+              "parallelCD2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "M1",
+              "M2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "0c0aa29e20df39e71519032bb3c863c3d20526cdb829f7ca1ad38376709d7e32",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "AB",
+          "CD"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

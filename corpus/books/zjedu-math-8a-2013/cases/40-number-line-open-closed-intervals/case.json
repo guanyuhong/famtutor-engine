@@ -1,0 +1,1231 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-3-1-40-number-line-open-closed-intervals",
+  "title": "用空心、实心端点表示不等式",
+  "description": "按教材图 3-4、3-5、3-6 实现的来源可追溯不等式案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "3 一元一次不等式",
+    "section": "3.1 认识不等式",
+    "printedPages": [
+      91
+    ],
+    "pdfPages": [
+      94
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "inequality-number-line",
+    "open-endpoint",
+    "closed-endpoint",
+    "bounded-interval"
+  ],
+  "learningObjective": "区分严格不等式与含等号不等式在数轴上的端点语义，并认识单侧和双侧区间。",
+  "caseType": "demonstration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "interval.from_bounds",
+    "ray.from_points",
+    "segment.through_points",
+    "text.at",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch3-source-faithful-v1",
+    "seed": 440,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch3-02-number-line-open-closed-intervals",
+      "revision": 1,
+      "seed": 440,
+      "metadata": {
+        "title": "用空心、实心端点表示不等式",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "3.1",
+          "inequality-number-line",
+          "open-endpoint",
+          "closed-endpoint",
+          "bounded-interval"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            3.6,
+            6,
+            -3.6
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": false,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-40",
+          "title": "用空心、实心端点表示不等式",
+          "stages": [
+            {
+              "id": "strict",
+              "narration": "图 3-4：x<a 不包含 a；在 a=2 处画空心端点，解集向左无限延伸。",
+              "reveal": [
+                "topAxis",
+                "topTickm3",
+                "topLabelm3",
+                "topTick0",
+                "topLabel0",
+                "topTick2",
+                "topLabel2",
+                "lessThanA",
+                "lessText"
+              ],
+              "focus": [
+                "lessThanA"
+              ]
+            },
+            {
+              "id": "inclusive",
+              "narration": "图 3-5：x≥a 包含 a；在 a=2 处画实心端点，解集向右无限延伸。",
+              "reveal": [
+                "topAxis",
+                "topTickm3",
+                "topLabelm3",
+                "topTick0",
+                "topLabel0",
+                "topTick2",
+                "topLabel2",
+                "lessThanA",
+                "lessText",
+                "middleAxis",
+                "middleTickm3",
+                "middleLabelm3",
+                "middleTick0",
+                "middleLabel0",
+                "middleTick2",
+                "middleLabel2",
+                "greaterEqualA",
+                "greaterText"
+              ],
+              "focus": [
+                "greaterEqualA"
+              ]
+            },
+            {
+              "id": "bounded",
+              "narration": "图 3-6：b<x<a 同时排除 b、a 两个端点，只保留两者之间的点。",
+              "reveal": [
+                "topAxis",
+                "topTickm3",
+                "topLabelm3",
+                "topTick0",
+                "topLabel0",
+                "topTick2",
+                "topLabel2",
+                "lessThanA",
+                "lessText",
+                "middleAxis",
+                "middleTickm3",
+                "middleLabelm3",
+                "middleTick0",
+                "middleLabel0",
+                "middleTick2",
+                "middleLabel2",
+                "greaterEqualA",
+                "greaterText",
+                "bottomAxis",
+                "bottomTickm3",
+                "bottomLabelm3",
+                "bottomTick0",
+                "bottomLabel0",
+                "bottomTick2",
+                "bottomLabel2",
+                "betweenBA",
+                "betweenText"
+              ],
+              "focus": [
+                "betweenBA"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-91:figure-3-4",
+          "zjedu-math-8a-2013:printed-91:figure-3-5",
+          "zjedu-math-8a-2013:printed-91:figure-3-6"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-40-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch3-02-number-line-open-closed-intervals",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "scalar.constant",
+            "outputs": [
+              {
+                "id": "bValue"
+              }
+            ],
+            "params": {
+              "value": -3
+            }
+          },
+          {
+            "op": "construct",
+            "command": "scalar.constant",
+            "outputs": [
+              {
+                "id": "aValue"
+              }
+            ],
+            "params": {
+              "value": 2
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topStart",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                2.1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topThrough",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                2.1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "topAxis"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "topStart"
+              },
+              {
+                "ref": "topThrough"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTickm3Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTickm3High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "topTickm3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "topTickm3Low"
+              },
+              {
+                "ref": "topTickm3High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "topLabelm3"
+              }
+            ],
+            "params": {
+              "text": "-3",
+              "at": [
+                -3.22,
+                1.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTick0Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTick0High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "topTick0"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "topTick0Low"
+              },
+              {
+                "ref": "topTick0High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "topLabel0"
+              }
+            ],
+            "params": {
+              "text": "0",
+              "at": [
+                -0.22,
+                1.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTick2Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "topTick2High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "topTick2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "topTick2Low"
+              },
+              {
+                "ref": "topTick2High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "topLabel2"
+              }
+            ],
+            "params": {
+              "text": "2",
+              "at": [
+                1.78,
+                1.55
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "topAxis",
+              "topTickm3",
+              "topLabelm3",
+              "topTick0",
+              "topLabel0",
+              "topTick2",
+              "topLabel2"
+            ],
+            "style": {
+              "stroke": "#6F7F8C",
+              "fill": "#6F7F8C",
+              "strokeWidth": 1.5,
+              "fontSize": 13,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleStart",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleThrough",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "middleAxis"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "middleStart"
+              },
+              {
+                "ref": "middleThrough"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTickm3Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTickm3High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "middleTickm3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "middleTickm3Low"
+              },
+              {
+                "ref": "middleTickm3High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "middleLabelm3"
+              }
+            ],
+            "params": {
+              "text": "-3",
+              "at": [
+                -3.22,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTick0Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTick0High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "middleTick0"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "middleTick0Low"
+              },
+              {
+                "ref": "middleTick0High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "middleLabel0"
+              }
+            ],
+            "params": {
+              "text": "0",
+              "at": [
+                -0.22,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTick2Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "middleTick2High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "middleTick2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "middleTick2Low"
+              },
+              {
+                "ref": "middleTick2High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "middleLabel2"
+              }
+            ],
+            "params": {
+              "text": "2",
+              "at": [
+                1.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "middleAxis",
+              "middleTickm3",
+              "middleLabelm3",
+              "middleTick0",
+              "middleLabel0",
+              "middleTick2",
+              "middleLabel2"
+            ],
+            "style": {
+              "stroke": "#6F7F8C",
+              "fill": "#6F7F8C",
+              "strokeWidth": 1.5,
+              "fontSize": 13,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomStart",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                -2.1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomThrough",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                -2.1
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "bottomAxis"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "bottomStart"
+              },
+              {
+                "ref": "bottomThrough"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTickm3Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                -2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTickm3High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                -1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "bottomTickm3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "bottomTickm3Low"
+              },
+              {
+                "ref": "bottomTickm3High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "bottomLabelm3"
+              }
+            ],
+            "params": {
+              "text": "-3",
+              "at": [
+                -3.22,
+                -2.6500000000000004
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTick0Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTick0High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "bottomTick0"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "bottomTick0Low"
+              },
+              {
+                "ref": "bottomTick0High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "bottomLabel0"
+              }
+            ],
+            "params": {
+              "text": "0",
+              "at": [
+                -0.22,
+                -2.6500000000000004
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTick2Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                -2.22
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "bottomTick2High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                -1.98
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "bottomTick2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "bottomTick2Low"
+              },
+              {
+                "ref": "bottomTick2High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "bottomLabel2"
+              }
+            ],
+            "params": {
+              "text": "2",
+              "at": [
+                1.78,
+                -2.6500000000000004
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "bottomAxis",
+              "bottomTickm3",
+              "bottomLabelm3",
+              "bottomTick0",
+              "bottomLabel0",
+              "bottomTick2",
+              "bottomLabel2"
+            ],
+            "style": {
+              "stroke": "#6F7F8C",
+              "fill": "#6F7F8C",
+              "strokeWidth": 1.5,
+              "fontSize": 13,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "construct",
+            "command": "interval.from_bounds",
+            "outputs": [
+              {
+                "id": "lessThanA"
+              }
+            ],
+            "params": {
+              "upper": "aValue",
+              "upperClosed": false,
+              "y": 2.28
+            }
+          },
+          {
+            "op": "construct",
+            "command": "interval.from_bounds",
+            "outputs": [
+              {
+                "id": "greaterEqualA"
+              }
+            ],
+            "params": {
+              "lower": "aValue",
+              "lowerClosed": true,
+              "y": 0.18
+            }
+          },
+          {
+            "op": "construct",
+            "command": "interval.from_bounds",
+            "outputs": [
+              {
+                "id": "betweenBA"
+              }
+            ],
+            "params": {
+              "lower": "bValue",
+              "upper": "aValue",
+              "lowerClosed": false,
+              "upperClosed": false,
+              "y": -1.92
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "lessText"
+              }
+            ],
+            "params": {
+              "text": "x < a（a=2，不包含端点）",
+              "at": [
+                -5.5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "greaterText"
+              }
+            ],
+            "params": {
+              "text": "x ≥ a（a=2，包含端点）",
+              "at": [
+                -5.5,
+                0.9
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "betweenText"
+              }
+            ],
+            "params": {
+              "text": "b < x < a（b=-3，a=2）",
+              "at": [
+                -5.5,
+                -1.2
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "lessThanA",
+              "greaterEqualA",
+              "betweenBA"
+            ],
+            "style": {
+              "stroke": "#D06A3A",
+              "fill": "#D06A3A",
+              "strokeWidth": 3,
+              "pointSize": 5.2,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "lessText",
+              "greaterText",
+              "betweenText"
+            ],
+            "style": {
+              "stroke": "#155A73",
+              "fontSize": 14
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "zero-between-b-and-a",
+              "predicate": "value_in_range",
+              "arguments": [
+                {
+                  "value": 0
+                },
+                {
+                  "ref": "bValue"
+                },
+                {
+                  "ref": "aValue"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "0 位于 b=-3 与 a=2 之间。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "topStart",
+              "topThrough",
+              "topTickm3Low",
+              "topTickm3High",
+              "topTick0Low",
+              "topTick0High",
+              "topTick2Low",
+              "topTick2High",
+              "middleStart",
+              "middleThrough",
+              "middleTickm3Low",
+              "middleTickm3High",
+              "middleTick0Low",
+              "middleTick0High",
+              "middleTick2Low",
+              "middleTick2High",
+              "bottomStart",
+              "bottomThrough",
+              "bottomTickm3Low",
+              "bottomTickm3High",
+              "bottomTick0Low",
+              "bottomTick0High",
+              "bottomTick2Low",
+              "bottomTick2High"
+            ],
+            "style": {
+              "pointSize": 4.8,
+              "fontSize": 14,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "929adb47dc3ab71ca6666ed6905c9ca65ef3ea87ba4ad2c13094c3d4cf0cc12b",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "bValue",
+          "aValue",
+          "topStart",
+          "topThrough",
+          "topAxis",
+          "topTickm3Low",
+          "topTickm3High",
+          "topTickm3",
+          "topLabelm3",
+          "topTick0Low"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

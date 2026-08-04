@@ -20,6 +20,7 @@ export interface CommandDefinition {
     | "circle"
     | "polygon"
     | "transform"
+    | "interval"
     | "function"
     | "annotation"
     | "measurement"
@@ -75,6 +76,16 @@ const definitions: CommandDefinition[] = [
     expressionParams: ["expression"],
     category: "scalar",
     renderer: "computed"
+  },
+  {
+    name: "interval.from_bounds",
+    title: "Real interval from bounds",
+    description: "Create a real interval from optional finite lower/upper bounds, endpoint inclusion flags, and an optional visual track y-coordinate. An omitted bound is infinite.",
+    inputTypes: [],
+    outputTypes: ["interval1"],
+    expressionParams: ["lower", "upper", "y"],
+    category: "interval",
+    renderer: "both"
   },
   {
     name: "point.free",
@@ -309,10 +320,40 @@ const definitions: CommandDefinition[] = [
   {
     name: "angle.three_points",
     title: "Angle through three points",
-    description: "Create angle ABC, with the second point as vertex.",
+    description: "Create angle ABC, with the second point as vertex. Optional params.radius controls the arc radius in document units (default 0.6); optional params.labelRadius places the label center on the angle bisector and must be greater than radius. Without labelRadius, both renderers choose a text-aware automatic distance.",
     inputTypes: ["point2", "point2", "point2"],
     outputTypes: ["angle"],
     category: "polygon",
+    renderer: "both"
+  },
+  {
+    name: "marker.right_angle",
+    title: "Right-angle marker",
+    description: "Render a square marker for an existing 90-degree angle. Input: one angle entity. params.size: positive marker side length in document units. Fails with NOT_RIGHT_ANGLE when the angle differs from 90 degrees by more than 1e-6 radians.",
+    inputTypes: ["angle"],
+    outputTypes: ["polygon2"],
+    requiredParams: ["size"],
+    category: "annotation",
+    renderer: "both"
+  },
+  {
+    name: "marker.segment_tick",
+    title: "Segment equality tick",
+    description: "Create one segment perpendicular to an existing segment as a standard equality tick. params.size is the full tick length in document units; optional params.position is the fraction from the segment's first endpoint (default 0.5, range 0..1). Compose two or more calls at distinct positions for double- or triple-tick conventions.",
+    inputTypes: ["segment2"],
+    outputTypes: ["segment2"],
+    requiredParams: ["size"],
+    category: "annotation",
+    renderer: "both"
+  },
+  {
+    name: "marker.parallel_chevron",
+    title: "Parallel-line chevron",
+    description: "Create one standard open chevron centered at a point and aligned with a line, segment, or ray. Inputs are the marker anchor point and the referenced line-like object; params.size is the full marker width in document units. The command returns the two segment arms. Compose repeated calls at distinct anchor points for double-chevron conventions.",
+    inputTypes: ["point2", LINE_LIKE],
+    outputTypes: ["segment2", "segment2"],
+    requiredParams: ["size"],
+    category: "annotation",
     renderer: "both"
   },
   {

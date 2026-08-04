@@ -187,9 +187,8 @@ function evaluateCall(name: string, args: ExpressionRuntimeValue[]): ExpressionR
 export function evaluateExpressionAst(node: ExpressionNode, resolve: IdentifierResolver): ExpressionRuntimeValue {
   if (node.type === "number" || node.type === "boolean") return node.value;
   if (node.type === "identifier") {
-    const lowered = node.name.toLowerCase();
-    if (lowered === "pi") return Math.PI;
-    if (lowered === "e") return Math.E;
+    if (node.name === "pi") return Math.PI;
+    if (node.name === "e") return Math.E;
     const resolved = resolve(node.name);
     if (resolved === undefined) {
       throw new MathEngineError("EXPRESSION_UNKNOWN_IDENTIFIER", `Unknown or undefined identifier '${node.name}'.`, {

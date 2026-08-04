@@ -93,6 +93,9 @@ def main() -> int:
         "zj8a-1-1-02-drag-angle-sum",
         "zj8a-1-1-04-adjust-three-segments",
         "zj8a-1-1-05-angle-bisector",
+        "zj8a-1-4-19-congruent-figures",
+        "zj8a-1-4-20-corresponding-parts",
+        "zj8a-1-4-21-fold-congruent-triangles",
     ], cwd=str(ROOT.parent.parent), text=True))
     amd_source = AMD_BUNDLE.read_text()
     console_messages: list[str] = []
@@ -480,7 +483,7 @@ def main() -> int:
 
                 // PR6 seed acceptance: one demonstration, exploration, and guided-construction
                 // case is replayed + bundled in Node, then its mounted payload is exercised here.
-                assert('27_seed_case_count', seedCases.length === 4);
+                assert('27_seed_case_count', seedCases.length === 7);
                 const mountedTypes = new Set();
                 for (const seedCase of seedCases) {
                   assert(`28_${seedCase.caseId}_bundle`, seedCase.bundle?.schema === 'famtutor.render.bundle.v1');
@@ -490,6 +493,23 @@ def main() -> int:
                     { viewId: seedCase.bundle.entrypoint.viewId }
                   );
                   mountedTypes.add(seedCase.caseType);
+                  if (seedCase.caseId === 'zj8a-1-1-01-triangle-elements') {
+                    const renderedText = bundleHost.textContent ?? '';
+                    const visibleLabels = [...bundleHost.querySelectorAll('text')]
+                      .filter(element => element.getClientRects().length > 0)
+                      .map(element => (element.textContent ?? '').trim());
+                    assert('28_case01_native_path_labels',
+                      ['AB', 'BC', 'CA'].every(label => visibleLabels.includes(label))
+                      && !renderedText.includes('[object Object]'));
+                  }
+                  if (seedCase.caseId === 'zj8a-1-1-02-drag-angle-sum') {
+                    const visibleLabels = [...bundleHost.querySelectorAll('text')]
+                      .filter(element => element.getClientRects().length > 0)
+                      .map(element => (element.textContent ?? '').trim());
+                    assert('28_case02_polygon_text_anchor',
+                      visibleLabels.includes('△ABC')
+                      && !bundleHost.textContent.includes('[object Object]'));
+                  }
                   if (seedCase.caseId === 'zj8a-1-1-04-adjust-three-segments') {
                     const initialEvaluation = runtime.evaluateMathDocument(seedRenderer.getDocument());
                     assert('28_case04_initial_feedback',
@@ -598,12 +618,12 @@ def main() -> int:
             }""",
             seed_cases,
         )
-        if len(bundle_api_checks) != 4 or not all(item["ok"] for item in bundle_api_checks):
+        if len(bundle_api_checks) != 7 or not all(item["ok"] for item in bundle_api_checks):
             raise RuntimeError(f"mountMathRenderBundle seed checks failed: {bundle_api_checks}")
         summary["mountMathRenderBundleCases"] = bundle_api_checks
         bundle_page.close()
 
-        # User-facing 10-case Gallery acceptance: every CaseSpec is replayed in-browser,
+        # User-facing 13-case Gallery acceptance: every CaseSpec is replayed in-browser,
         # mounted at once, and exposes the honest accepted/unsupported split.
         gallery_page = browser.new_page(viewport={"width": 1440, "height": 1000})
         gallery_page.on("console", lambda message: console_messages.append(f"gallery {message.type}: {message.text}"))
@@ -615,7 +635,7 @@ def main() -> int:
               const cards = [...document.querySelectorAll('.case-card')];
               const accepted = cards.filter(card => card.dataset.status === 'accepted');
               const unsupported = cards.filter(card => card.dataset.status === 'expected-unsupported');
-              if (cards.length !== 10 || accepted.length !== 9 || unsupported.length !== 1) {
+              if (cards.length !== 13 || accepted.length !== 12 || unsupported.length !== 1) {
                 throw new Error(`Gallery totals mismatch: ${cards.length}/${accepted.length}/${unsupported.length}`);
               }
               if (!cards.every(card => card.dataset.mounted === 'true')) {
@@ -629,6 +649,80 @@ def main() -> int:
               const case04Card = document.querySelector('[data-case-id="zj8a-1-1-04-adjust-three-segments"]');
               if (!changed.ok || feedback !== 10 || !case04Card.textContent.includes('不能组成三角形')) {
                 throw new Error('Gallery Case 04 conditional feedback failed');
+              }
+              const case08Id = 'zj8a-1-1-08-altitude-bisector-angle';
+              const case08 = window.__famtutorGallery.rendererByCase.get(case08Id);
+              const case08Card = document.querySelector(`[data-case-id="${case08Id}"]`);
+              const stageButtons = [...case08Card.querySelectorAll('.stage-tab')];
+              const beforeStageRevision = case08.getDocument().revision;
+              const visibleBoardText = () => [...case08Card.querySelectorAll('.case-board text')]
+                .filter(element => element.getClientRects().length > 0)
+                .map(element => element.textContent ?? '')
+                .join(' ');
+              if (stageButtons.length !== 6
+                || case08.getState().stageId !== 'source'
+                || visibleBoardText().includes('10°')
+                || visibleBoardText().includes('∠DAC=180°')) {
+                throw new Error('Gallery Case 08 initial stage controls failed');
+              }
+              const staged = await window.__famtutorGallery.setCaseStage(case08Id, 5);
+              const stageSnapshot = await case08.snapshot({ renderer: 'direct-svg' });
+              if (!staged
+                || case08.getState().stageId !== 'conclude'
+                || case08.getDocument().revision !== beforeStageRevision
+                || case08Card.dataset.stageId !== 'conclude'
+                || !case08Card.textContent.includes('∠DAE=∠DAC-∠EAC=50°-40°=10°')
+                || !visibleBoardText().includes('10°')
+                || !stageSnapshot.ok
+                || !stageSnapshot.artifact.content.includes('data-entity-id="rightAngleD"')
+                || !stageSnapshot.artifact.content.includes('10°')) {
+                throw new Error('Gallery Case 08 staged derivation failed');
+              }
+              const case19Id = 'zj8a-1-4-19-congruent-figures';
+              const case19 = window.__famtutorGallery.rendererByCase.get(case19Id);
+              const case19Card = document.querySelector(`[data-case-id="${case19Id}"]`);
+              const case19Revision = case19.getDocument().revision;
+              const case19Staged = await window.__famtutorGallery.setCaseStage(case19Id, 2);
+              const case19Polygons = [...case19Card.querySelectorAll('svg polygon')]
+                .filter(element => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden');
+              if (!case19Staged
+                || case19.getState().stageId !== 'fold'
+                || case19.getDocument().revision !== case19Revision
+                || case19Polygons.length < 3) {
+                throw new Error('Gallery Case 19 reflected polygon overlap failed');
+              }
+              const case21Id = 'zj8a-1-4-21-fold-congruent-triangles';
+              const case21 = window.__famtutorGallery.rendererByCase.get(case21Id);
+              const case21Card = document.querySelector(`[data-case-id="${case21Id}"]`);
+              const case21Revision = case21.getDocument().revision;
+              const case21Staged = await window.__famtutorGallery.setCaseStage(case21Id, 2);
+              const case21Polygons = [...case21Card.querySelectorAll('svg polygon')]
+                .filter(element => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden');
+              if (!case21Staged
+                || case21.getState().stageId !== 'overlap'
+                || case21.getDocument().revision !== case21Revision
+                || !case21Card.textContent.includes('B(C)')
+                || case21Polygons.length < 2) {
+                throw new Error('Gallery Case 21 folded triangle overlap failed');
+              }
+              const case09Card = document.querySelector('[data-case-id="zj8a-1-1-09-identify-triangle-lines"]');
+              const case09LabelA = [...case09Card.querySelectorAll('.JXGtext')]
+                .find(element => element.textContent?.trim() === 'A'
+                  && element.getClientRects().length > 0
+                  && getComputedStyle(element).visibility !== 'hidden');
+              const labelRect = case09LabelA?.getBoundingClientRect();
+              const pointCenters = [...case09Card.querySelectorAll('svg ellipse')].map(element => {
+                const rect = element.getBoundingClientRect();
+                return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+              });
+              const pointA = labelRect && pointCenters
+                .map(point => ({ ...point, distance: Math.hypot(
+                  point.x - (labelRect.x + labelRect.width / 2),
+                  point.y - (labelRect.y + labelRect.height / 2)
+                ) }))
+                .sort((left, right) => left.distance - right.distance)[0];
+              if (!labelRect || !pointA || labelRect.y + labelRect.height / 2 >= pointA.y) {
+                throw new Error('Gallery Case 09 apex label must stay outside and above the triangle');
               }
               window.__famtutorGallery.applyFilter('expected-unsupported');
               const focused = cards.filter(card => !card.classList.contains('is-filtered'));

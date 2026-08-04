@@ -32,6 +32,7 @@ import {
   lineFromPoints,
   lineLikeToLine,
   midpoint,
+  parallelChevronMarker,
   parabolaFromFocusDirectrix,
   point,
   polygonArea,
@@ -40,8 +41,10 @@ import {
   ray,
   reflectPointAcrossLine,
   reflectTransform,
+  rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  segmentTickMarker,
   sectorArea,
   sectorFromArc,
   segment,
@@ -65,8 +68,11 @@ import type {
   ValidationIssue
 } from "../types.js";
 import { stableHash, toJsonValue } from "../util.js";
+import { angleLabelPoint } from "./angle-layout.js";
 import { renderDirectSvg } from "./direct-svg.js";
+import { layoutPointLabels, type LabelViewport } from "./point-label-layout.js";
 import { styleForEntity } from "./style.js";
+import { intervalFromBounds } from "../kernel/interval.js";
 
 interface JxgObject {
   X?: () => number;
@@ -74,6 +80,7 @@ interface JxgObject {
   Value?: () => number;
   L?: () => number;
   Radius?: () => number;
+  getTextAnchor?: () => unknown;
   setValue?: (value: number) => void;
   setPosition?: (mode: number, coords: [number, number]) => void;
   setAttribute?: (attributes: Record<string, unknown>) => void;
@@ -81,6 +88,8 @@ interface JxgObject {
   label?: JxgObject;
   borders?: JxgObject[];
   vertices?: JxgObject[];
+  fmeChildren?: JxgObject[];
+  fmeVisibility?: () => boolean;
   rendNode?: SVGElement;
   [key: string]: unknown;
 }
@@ -170,6 +179,15 @@ function numericParam(node: ConstructionNode, key: string, fallback?: number): n
   throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires numeric params.${key}.`);
 }
 
+function sliderDigits(step: number): number {
+  if (!Number.isFinite(step) || step <= 0) return 2;
+  for (let digits = 0; digits <= 6; digits += 1) {
+    const scale = 10 ** digits;
+    if (Math.abs(Math.round(step * scale) - step * scale) < 1e-9) return digits;
+  }
+  return 6;
+}
+
 function pairParam(node: ConstructionNode, key: string, fallback: [number, number] = [0, 0]): [number, number] {
   const raw = node.params?.[key];
   if (Array.isArray(raw) && raw.length === 2 && typeof raw[0] === "number" && typeof raw[1] === "number" && Number.isFinite(raw[0]) && Number.isFinite(raw[1])) {
@@ -206,9 +224,32 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
   const style = styleForEntity(document, entity);
   const color = style.stroke ?? "#2855d9";
   const movable = isMovable(document, entityId) && !forceFixed;
+  const label: Record<string, unknown> = {
+    fontSize: style.fontSize ?? 15,
+    color,
+    cssStyle: "white-space:nowrap; paint-order:stroke; stroke:#ffffff; stroke-width:3px; stroke-linejoin:round;"
+  };
+  if (entity.type === "point2") {
+    Object.assign(label, {
+      anchorX: "middle",
+      anchorY: "middle",
+      offset: [10, 10],
+      autoPosition: false
+    });
+  }
+  if (entity.type === "line2" || entity.type === "segment2" || entity.type === "ray2") {
+    Object.assign(label, {
+      anchorX: "middle",
+      anchorY: "middle",
+      offset: style.labelOffset,
+      position: `${style.lineLabelPosition}fr ${style.lineLabelSide}`,
+      distance: style.lineLabelDistance,
+      autoPosition: false
+    });
+  }
   const attributes: Record<string, unknown> = {
-    name: entity.label ?? (entity.type === "point2" ? entity.id : ""),
-    withLabel: Boolean(entity.label ?? (entity.type === "point2" ? entity.id : "")),
+    name: style.labelVisible ? (entity.label ?? (entity.type === "point2" ? entity.id : "")) : "",
+    withLabel: entity.type === "polygon2" ? false : style.labelVisible && Boolean(entity.label),
     visible: entity.visible !== false,
     fixed: !movable,
     highlight: true,
@@ -228,11 +269,7 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
     size: style.pointSize ?? 4,
     fontSize: style.fontSize ?? 15,
     dash: style.dashArray === "8 6" ? 2 : style.dashArray === "2 5" ? 1 : 0,
-    label: {
-      fontSize: style.fontSize ?? 15,
-      color,
-      cssStyle: "white-space:nowrap;"
-    }
+    label
   };
   if (entity.type === "polygon2") {
     attributes.vertices = { visible: false };
@@ -260,9 +297,11 @@ function safeRuntimePoint(native: JxgObject): RuntimeValue | undefined {
 }
 
 function setVisibility(native: JxgObject | undefined, visible: boolean): void {
-  native?.setAttribute?.({ visible });
-  native?.label?.setAttribute?.({ visible });
+  const resolved = visible && native?.fmeVisibility ? native.fmeVisibility : visible;
+  native?.setAttribute?.({ visible: resolved });
+  native?.label?.setAttribute?.({ visible: resolved });
   native?.borders?.forEach(border => border.setAttribute?.({ visible }));
+  native?.fmeChildren?.forEach(child => setVisibility(child, visible));
 }
 
 function normalizeSvg(svg: string): string {
@@ -290,6 +329,7 @@ export function mountJsxGraph(
   container.style.width = "100%";
   container.style.height = "100%";
   container.style.minHeight = "320px";
+  container.style.background = view.background ?? "#ffffff";
   container.setAttribute("role", "img");
   container.setAttribute("aria-label", document.metadata.title);
   container.dataset.documentId = document.documentId;
@@ -316,6 +356,7 @@ export function mountJsxGraph(
   const warnings: ValidationIssue[] = [];
   const createdIds: string[] = [];
   let stageId = options.stageId;
+  let updatePointLabels = (): void => {};
 
   const valueOf = (id: string): RuntimeValue | undefined => valueResolvers.get(id)?.();
   const expressionValue = (source: string | number, locals: Record<string, number> = {}): number =>
@@ -326,6 +367,44 @@ export function mountJsxGraph(
     const value = valueOf(id);
     if (!isPoint(value)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${id}' is not a point2 at runtime.`);
     return value;
+  };
+
+  const visibleIdsForStage = (nextStage?: string): Set<string> => {
+    const stage = document.activities?.flatMap(activity => activity.stages ?? []).find(candidate => candidate.id === nextStage);
+    const authoredVisibleIds = new Set(document.entities.filter(entity => entity.visible !== false).map(entity => entity.id));
+    const visibleIds = stage?.reveal
+      ? new Set(stage.reveal.filter(id => authoredVisibleIds.has(id)))
+      : new Set(authoredVisibleIds);
+    stage?.hide?.forEach(id => visibleIds.delete(id));
+    return visibleIds;
+  };
+
+  const labelViewport = (): LabelViewport => {
+    const [xmin, ymax, xmax, ymin] = view.boundingBox;
+    const width = Math.max(container.clientWidth, 1);
+    const height = Math.max(container.clientHeight, 1);
+    const rawScaleX = width / (xmax - xmin);
+    const rawScaleY = height / (ymax - ymin);
+    const scaleX = view.keepAspectRatio === false ? rawScaleX : Math.min(rawScaleX, rawScaleY);
+    const scaleY = view.keepAspectRatio === false ? rawScaleY : Math.min(rawScaleX, rawScaleY);
+    const offsetX = (width - (xmax - xmin) * scaleX) / 2;
+    const offsetY = (height - (ymax - ymin) * scaleY) / 2;
+    return {
+      width,
+      height,
+      pixelsPerUnit: Math.min(scaleX, scaleY),
+      toScreen: value => [offsetX + (value.x - xmin) * scaleX, offsetY + (ymax - value.y) * scaleY],
+      toWorld: value => ({ x: xmin + (value[0] - offsetX) / scaleX, y: ymax - (value[1] - offsetY) / scaleY })
+    };
+  };
+
+  const currentPointLabelLayout = () => {
+    const values = new Map<string, RuntimeValue>();
+    for (const entity of document.entities) {
+      const value = valueOf(entity.id);
+      if (value !== undefined) values.set(entity.id, value);
+    }
+    return layoutPointLabels(document, values, visibleIdsForStage(stageId), labelViewport());
   };
   const lineLikeOf = (id: string) => {
     const value = valueOf(id);
@@ -347,6 +426,7 @@ export function mountJsxGraph(
     });
     if (isMovable(document, entityId)) {
       native.on?.("drag", () => {
+        updatePointLabels();
         const value = valueOf(entityId);
         options.onEvent?.({
           type: "object.drag",
@@ -392,12 +472,13 @@ export function mountJsxGraph(
         const min = numericParam(node, "min");
         const max = numericParam(node, "max");
         const value = numericParam(node, "value");
+        const step = numericParam(node, "step", -1);
         const position = pairParam(node, "position", [view.boundingBox[0] + 1, view.boundingBox[3] + 1]);
         const length = numericParam(node, "length", Math.max(2, (view.boundingBox[2] - view.boundingBox[0]) / 4));
         native = board.create("slider", [position, [position[0] + length, position[1]], [min, value, max]], {
           ...attributes,
-          snapWidth: typeof node.params?.step === "number" ? node.params.step : -1,
-          precision: 4
+          snapWidth: step,
+          digits: sliderDigits(step)
         });
         objects.set(output, native);
         valueResolvers.set(output, () => native?.Value?.());
@@ -407,6 +488,65 @@ export function mountJsxGraph(
         const expression = stringParam(node, "expression");
         valueResolvers.set(output, () => booleanValue(expression));
         return;
+      }
+      case "interval.from_bounds": {
+        const style = styleForEntity(document, document.entities.find(entity => entity.id === output)!);
+        const hasLower = node.params?.lower !== undefined;
+        const hasUpper = node.params?.upper !== undefined;
+        const lowerExpression = hasLower ? expressionParam(node, "lower") : undefined;
+        const upperExpression = hasUpper ? expressionParam(node, "upper") : undefined;
+        const yExpression = node.params?.y === undefined ? 0 : expressionParam(node, "y");
+        const lowerClosed = node.params?.lowerClosed === true;
+        const upperClosed = node.params?.upperClosed === true;
+        const current = () => intervalFromBounds({
+          lower: lowerExpression === undefined ? undefined : expressionValue(lowerExpression),
+          upper: upperExpression === undefined ? undefined : expressionValue(upperExpression),
+          lowerClosed,
+          upperClosed,
+          y: expressionValue(yExpression)
+        });
+        const [xmin, , xmax] = view.boundingBox;
+        const inset = Math.max((xmax - xmin) * 0.025, 0.12);
+        const startX = () => current().lower ?? xmin + inset;
+        const endX = () => current().upper ?? xmax - inset;
+        const trackY = () => current().y;
+        const endpointAttributes = (closed: boolean, finite: () => boolean) => ({
+          ...jxgAttributes(document, output, true),
+          name: "",
+          withLabel: false,
+          size: style.pointSize,
+          face: "o",
+          fillColor: style.fill,
+          fillOpacity: closed ? 1 : 0,
+          strokeColor: style.stroke,
+          strokeWidth: Math.max(1.5, style.strokeWidth * 0.75),
+          visible: () => !current().empty && finite()
+        });
+        const lowerPoint = board.create("point", [startX, trackY], endpointAttributes(lowerClosed, () => current().lower !== null));
+        const upperPoint = board.create("point", [endX, trackY], endpointAttributes(upperClosed, () => current().upper !== null && current().upper !== current().lower));
+        lowerPoint.fmeVisibility = () => !current().empty && current().lower !== null;
+        upperPoint.fmeVisibility = () => !current().empty && current().upper !== null && current().upper !== current().lower;
+        native = board.create("segment", [lowerPoint, upperPoint], {
+          ...jxgAttributes(document, output, true),
+          firstArrow: !hasLower,
+          lastArrow: !hasUpper,
+          visible: () => !current().empty && Math.abs(endX() - startX()) > 1e-12
+        });
+        native.fmeVisibility = () => !current().empty && Math.abs(endX() - startX()) > 1e-12;
+        const emptyText = board.create("text", [() => (xmin + xmax) / 2, trackY, () => current().empty ? "∅" : ""], {
+          fixed: true,
+          visible: () => current().empty,
+          fontSize: style.fontSize + 4,
+          color: style.stroke,
+          anchorX: "middle",
+          anchorY: "middle",
+          highlight: false
+        });
+        emptyText.fmeVisibility = () => current().empty;
+        native.fmeChildren = [lowerPoint, upperPoint, emptyText];
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
       }
       case "point.free": {
         const at = pairParam(node, "coords");
@@ -499,7 +639,8 @@ export function mountJsxGraph(
         native = board.create("line", [pointNative(objects, refs[0]!), pointNative(objects, refs[1]!)], {
           ...jxgAttributes(document, output, true),
           straightFirst: false,
-          straightLast: true
+          straightLast: true,
+          lastArrow: true
         });
         objects.set(output, native);
         valueResolvers.set(output, () => ray(pointOf(refs[0]!), pointOf(refs[1]!)));
@@ -638,15 +779,131 @@ export function mountJsxGraph(
       }
       case "polygon.vertices": {
         native = board.create("polygon", refs.map(ref => pointNative(objects, ref)), jxgAttributes(document, output, true));
+        const entity = document.entities.find(candidate => candidate.id === output);
+        const style = entity ? styleForEntity(document, entity) : undefined;
+        if (native && entity?.label && style?.labelVisible) {
+          native.label = board.create("text", [
+            () => native?.getTextAnchor?.(),
+            () => entity.label
+          ], {
+            fixed: true,
+            visible: entity.visible !== false,
+            fontSize: style.fontSize,
+            color: style.stroke,
+            opacity: style.opacity,
+            highlight: false,
+            anchorX: "middle",
+            anchorY: "middle",
+            offset: style.labelOffset,
+            cssStyle: "white-space:nowrap; paint-order:stroke; stroke:#ffffff; stroke-width:3px; stroke-linejoin:round;"
+          });
+        }
         objects.set(output, native);
         valueResolvers.set(output, () => ({ kind: "polygon2", vertices: refs.map(pointOf) }));
         break;
       }
       case "angle.three_points": {
-        native = board.create("angle", refs.map(ref => pointNative(objects, ref)), { ...jxgAttributes(document, output, true), radius: numericParam(node, "radius", 0.6) });
+        const entity = document.entities.find(candidate => candidate.id === output);
+        const style = entity ? styleForEntity(document, entity) : undefined;
+        const radius = numericParam(node, "radius", 0.6);
+        const current = () => angleValue(pointOf(refs[0]!), pointOf(refs[1]!), pointOf(refs[2]!));
+        native = board.create("angle", refs.map(ref => pointNative(objects, ref)), {
+          ...jxgAttributes(document, output, true),
+          name: "",
+          withLabel: false,
+          selection: "minor",
+          radius
+        });
+        if (native && entity?.label && style?.labelVisible) {
+          const authoredLabelRadius = typeof node.params?.labelRadius === "number" ? node.params.labelRadius : undefined;
+          const labelPoint = () => {
+            const [xmin, ymax, xmax, ymin] = view.boundingBox;
+            const pixelsPerUnit = Math.min(
+              Math.max(container.clientWidth, 1) / (xmax - xmin),
+              Math.max(container.clientHeight, 1) / (ymax - ymin)
+            );
+            return angleLabelPoint(current(), radius, entity.label!, style.fontSize, pixelsPerUnit, authoredLabelRadius);
+          };
+          native.label = board.create("text", [
+            () => labelPoint().x,
+            () => labelPoint().y,
+            entity.label
+          ], {
+            fixed: true,
+            visible: entity.visible !== false,
+            fontSize: style.fontSize,
+            color: style.stroke,
+            opacity: style.opacity,
+            highlight: false,
+            anchorX: "middle",
+            anchorY: "middle",
+            cssStyle: "white-space:nowrap; paint-order:stroke; stroke:#ffffff; stroke-width:3px; stroke-linejoin:round;"
+          });
+        }
         objects.set(output, native);
-        valueResolvers.set(output, () => angleValue(pointOf(refs[0]!), pointOf(refs[1]!), pointOf(refs[2]!)));
+        valueResolvers.set(output, current);
         break;
+      }
+      case "marker.right_angle": {
+        const current = () => {
+          const angle = valueOf(refs[0]!);
+          if (!isAngle(angle)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[0]}' is not an angle at runtime.`);
+          return rightAngleMarkerPolygon(angle, numericParam(node, "size"));
+        };
+        const markerVertices = [0, 1, 2, 3].map(index => board.create("point", [
+          () => current().vertices[index]!.x,
+          () => current().vertices[index]!.y
+        ], { fixed: true, visible: false, name: "", withLabel: false }));
+        native = board.create("polygon", markerVertices, jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
+      case "marker.segment_tick": {
+        const current = () => {
+          const source = valueOf(refs[0]!);
+          if (!isSegment(source)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[0]}' is not a segment at runtime.`);
+          return segmentTickMarker(
+            source,
+            numericParam(node, "position", 0.5),
+            numericParam(node, "size")
+          );
+        };
+        const from = board.create("point", [
+          () => current().from.x,
+          () => current().from.y
+        ], { fixed: true, visible: false, name: "", withLabel: false });
+        const to = board.create("point", [
+          () => current().to.x,
+          () => current().to.y
+        ], { fixed: true, visible: false, name: "", withLabel: false });
+        native = board.create("segment", [from, to], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
+      case "marker.parallel_chevron": {
+        const current = () => parallelChevronMarker(
+          pointOf(refs[0]!),
+          lineLikeOf(refs[1]!),
+          numericParam(node, "size")
+        );
+        node.outputs.forEach((id, index) => {
+          const from = board.create("point", [
+            () => current()[index]!.from.x,
+            () => current()[index]!.from.y
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          const to = board.create("point", [
+            () => current()[index]!.to.x,
+            () => current()[index]!.to.y
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          const arm = board.create("segment", [from, to], jxgAttributes(document, id, true));
+          objects.set(id, arm);
+          valueResolvers.set(id, () => current()[index]!);
+          bindEvents(id, arm);
+          createdIds.push(id);
+        });
+        return;
       }
       case "conic.ellipse_foci":
       case "conic.parabola_focus_directrix":
@@ -748,6 +1005,210 @@ export function mountJsxGraph(
           valueResolvers.set(output, () => {
             const value = current();
             return isPoint(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isSegment(sample)) {
+          const from = board.create("point", [
+            () => {
+              const value = current();
+              return isSegment(value) ? value.from.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isSegment(value) ? value.from.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          const to = board.create("point", [
+            () => {
+              const value = current();
+              return isSegment(value) ? value.to.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isSegment(value) ? value.to.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          native = board.create("segment", [from, to], jxgAttributes(document, output, true));
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isSegment(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isRay(sample)) {
+          const from = board.create("point", [
+            () => {
+              const value = current();
+              return isRay(value) ? value.from.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isRay(value) ? value.from.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          const through = board.create("point", [
+            () => {
+              const value = current();
+              return isRay(value) ? value.through.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isRay(value) ? value.through.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          native = board.create("line", [from, through], {
+            ...jxgAttributes(document, output, true),
+            straightFirst: false,
+            straightLast: true,
+            lastArrow: true
+          });
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isRay(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isLine(sample)) {
+          const first = board.create("point", [
+            () => {
+              const value = current();
+              return isLine(value) ? value.point.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isLine(value) ? value.point.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          const second = board.create("point", [
+            () => {
+              const value = current();
+              return isLine(value) ? value.point.x + value.direction.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isLine(value) ? value.point.y + value.direction.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          native = board.create("line", [first, second], jxgAttributes(document, output, true));
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isLine(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isCircle(sample)) {
+          const center = board.create("point", [
+            () => {
+              const value = current();
+              return isCircle(value) ? value.center.x : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isCircle(value) ? value.center.y : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false });
+          native = board.create("circle", [center, () => {
+            const value = current();
+            return isCircle(value) ? value.radius : Number.NaN;
+          }], jxgAttributes(document, output, true));
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isCircle(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isPolygon(sample)) {
+          const vertices = sample.vertices.map((_, index) => board.create("point", [
+            () => {
+              const value = current();
+              return isPolygon(value) ? value.vertices[index]?.x ?? Number.NaN : Number.NaN;
+            },
+            () => {
+              const value = current();
+              return isPolygon(value) ? value.vertices[index]?.y ?? Number.NaN : Number.NaN;
+            }
+          ], { fixed: true, visible: false, name: "", withLabel: false }));
+          native = board.create("polygon", vertices, jxgAttributes(document, output, true));
+          const entity = document.entities.find(candidate => candidate.id === output);
+          const style = entity ? styleForEntity(document, entity) : undefined;
+          if (native && entity?.label && style?.labelVisible) {
+            native.label = board.create("text", [
+              () => native?.getTextAnchor?.(),
+              () => entity.label
+            ], {
+              fixed: true,
+              visible: entity.visible !== false,
+              fontSize: style.fontSize,
+              color: style.stroke,
+              opacity: style.opacity,
+              highlight: false,
+              anchorX: "middle",
+              anchorY: "middle",
+              offset: style.labelOffset,
+              cssStyle: "white-space:nowrap; paint-order:stroke; stroke:#ffffff; stroke-width:3px; stroke-linejoin:round;"
+            });
+          }
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isPolygon(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isArc(sample)) {
+          native = board.create("curve", [
+            (t: number) => {
+              const value = current();
+              if (!isArc(value)) return Number.NaN;
+              const sweep = ((value.endAngle - value.startAngle) + Math.PI * 4) % (Math.PI * 2);
+              return value.center.x + value.radius * Math.cos(value.startAngle + sweep * t);
+            },
+            (t: number) => {
+              const value = current();
+              if (!isArc(value)) return Number.NaN;
+              const sweep = ((value.endAngle - value.startAngle) + Math.PI * 4) % (Math.PI * 2);
+              return value.center.y + value.radius * Math.sin(value.startAngle + sweep * t);
+            },
+            0,
+            1
+          ], jxgAttributes(document, output, true));
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isArc(value) ? value : undefined;
+          });
+          break;
+        }
+        if (isSector(sample)) {
+          native = board.create("curve", [
+            (t: number) => {
+              const value = current();
+              if (!isSector(value)) return Number.NaN;
+              if (t < 0.02 || t > 0.98) return value.arc.center.x;
+              const sweep = ((value.arc.endAngle - value.arc.startAngle) + Math.PI * 4) % (Math.PI * 2);
+              const angle = value.arc.startAngle + sweep * ((t - 0.02) / 0.96);
+              return value.arc.center.x + value.arc.radius * Math.cos(angle);
+            },
+            (t: number) => {
+              const value = current();
+              if (!isSector(value)) return Number.NaN;
+              if (t < 0.02 || t > 0.98) return value.arc.center.y;
+              const sweep = ((value.arc.endAngle - value.arc.startAngle) + Math.PI * 4) % (Math.PI * 2);
+              const angle = value.arc.startAngle + sweep * ((t - 0.02) / 0.96);
+              return value.arc.center.y + value.arc.radius * Math.sin(angle);
+            },
+            0,
+            1
+          ], jxgAttributes(document, output, true));
+          objects.set(output, native);
+          valueResolvers.set(output, () => {
+            const value = current();
+            return isSector(value) ? value : undefined;
           });
           break;
         }
@@ -871,15 +1332,30 @@ export function mountJsxGraph(
   board.unsuspendUpdate?.();
   board.fullUpdate?.();
 
+  updatePointLabels = (): void => {
+    const viewport = labelViewport();
+    const layout = currentPointLabelLayout();
+    for (const entity of document.entities) {
+      if (entity.type !== "point2" || !entity.label || !styleForEntity(document, entity).labelVisible) continue;
+      const nativePoint = objects.get(entity.id);
+      const placement = layout.get(entity.id);
+      if (!nativePoint?.label || !placement) continue;
+      const pointScreen = viewport.toScreen(pointOf(entity.id));
+      nativePoint.label.setAttribute?.({
+        anchorX: "middle",
+        anchorY: "middle",
+        offset: [placement.x - pointScreen[0], pointScreen[1] - placement.y]
+      });
+    }
+  };
+  updatePointLabels();
+  board.fullUpdate?.();
+
   const applyStage = (nextStage?: string): void => {
     stageId = nextStage;
-    const stage = document.activities?.flatMap(activity => activity.stages ?? []).find(candidate => candidate.id === nextStage);
-    const visibleIds = new Set(document.entities.filter(entity => entity.visible !== false).map(entity => entity.id));
-    if (stage) {
-      stage.hide?.forEach(id => visibleIds.delete(id));
-      stage.reveal?.forEach(id => visibleIds.add(id));
-    }
+    const visibleIds = visibleIdsForStage(nextStage);
     for (const entity of document.entities) setVisibility(objects.get(entity.id), visibleIds.has(entity.id));
+    updatePointLabels();
     board.fullUpdate?.();
   };
   applyStage(stageId);
@@ -896,12 +1372,14 @@ export function mountJsxGraph(
       const native = pointNative(objects, entityId);
       if (!isMovable(document, entityId)) throw new MathEngineError("INTERACTION_NOT_ALLOWED", `Point '${entityId}' is not movable.`);
       native.setPosition?.(JXG.COORDS_BY_USER ?? 0, coords);
+      updatePointLabels();
       board.fullUpdate?.();
     },
     setScalar(entityId, value) {
       const native = objects.get(entityId);
       if (!native?.setValue) throw new MathEngineError("SCALAR_NOT_INTERACTIVE", `Scalar '${entityId}' is not an interactive slider.`);
       native.setValue(value);
+      updatePointLabels();
       board.fullUpdate?.();
     },
     setStage: applyStage,

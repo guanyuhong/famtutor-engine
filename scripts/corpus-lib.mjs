@@ -81,6 +81,16 @@ function checkCaseAssertion(caseSpec, document, assertion, evaluation) {
     case "activity-stages": {
       const stages = document.activities?.flatMap(activity => activity.stages ?? []) ?? [];
       assert(stages.length >= assertion.minimum, `${caseSpec.caseId}: expected at least ${assertion.minimum} activity stages`);
+      const stageIds = stages.map(stage => stage.id);
+      assert(new Set(stageIds).size === stageIds.length, `${caseSpec.caseId}: activity stage ids must be unique`);
+      const entityIds = new Set(document.entities.map(entity => entity.id));
+      for (const stage of stages) {
+        for (const field of ["reveal", "hide", "focus"]) {
+          for (const entityId of stage[field] ?? []) {
+            assert(entityIds.has(entityId), `${caseSpec.caseId}: stage '${stage.id}' ${field} references missing entity '${entityId}'`);
+          }
+        }
+      }
       return;
     }
     case "static-render":
@@ -124,6 +134,15 @@ export async function verifyAcceptedCase(caseSpec) {
   const rendered = await runtime.render(first.document, { width: 720, height: 480 });
   assert(rendered.ok, `${caseSpec.caseId}: direct SVG render failed: ${JSON.stringify(rendered.diagnostics)}`);
   assert(rendered.artifact.content.startsWith("<svg"), `${caseSpec.caseId}: direct SVG artifact is malformed`);
+
+  const stages = first.document.activities?.flatMap(activity => activity.stages ?? []) ?? [];
+  for (const stage of stages) {
+    const stageRender = await runtime.render(first.document, { width: 720, height: 480, stageId: stage.id });
+    assert(stageRender.ok, `${caseSpec.caseId}: stage '${stage.id}' direct SVG render failed: ${JSON.stringify(stageRender.diagnostics)}`);
+    assert(stageRender.artifact.content.startsWith("<svg"), `${caseSpec.caseId}: stage '${stage.id}' SVG artifact is malformed`);
+    assert(stageRender.artifact.document.revision === first.document.revision,
+      `${caseSpec.caseId}: stage '${stage.id}' render changed document revision`);
+  }
 
   const created = await createMathRenderBundle(first.document, { width: 720, height: 480 });
   assert(created.ok, `${caseSpec.caseId}: Render Bundle creation failed: ${JSON.stringify(created.diagnostics)}`);

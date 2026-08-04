@@ -1,4 +1,4 @@
-import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js";
+import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=interval-2";
 
 const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/01-triangle-elements/case.json",
@@ -10,7 +10,38 @@ const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/07-altitudes/case.json",
   "/corpus/books/zjedu-math-8a-2013/cases/08-altitude-bisector-angle/case.json",
   "/corpus/books/zjedu-math-8a-2013/cases/09-identify-triangle-lines/case.json",
-  "/corpus/books/zjedu-math-8a-2013/cases/10-midpoint-area/case.json"
+  "/corpus/books/zjedu-math-8a-2013/cases/10-midpoint-area/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/11-condition-conclusion/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/12-counterexample/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/13-original-converse/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/14-definition-right-triangle/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/15-proof-format-angle-bisector/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/16-parallel-bisectors-right-angle/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/17-triangle-angle-sum-proof/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/18-auxiliary-line-parallel-proof/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/19-congruent-figures/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/20-corresponding-parts/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/21-fold-congruent-triangles/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/22-sss-construct-triangle/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/23-sss-stability/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/24-sss-proof-application/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/25-sas-uniqueness/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/26-perpendicular-bisector-property/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/27-asa-criterion/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/28-asa-proof-application/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/29-aas-criterion/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/30-angle-bisector-distance/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/31-congruence-boundaries/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/32-copy-angle/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/33-construct-perpendicular-bisector/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/34-construct-triangle-asa/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/35-three-congruence-constructions/case.json",
+  "/corpus/books/zjedu-math-8a-2013/cases/36-symmetry-axes/case.json?v=ch2-3",
+  "/corpus/books/zjedu-math-8a-2013/cases/37-reflect-triangle-across-line/case.json?v=ch2-3",
+  "/corpus/books/zjedu-math-8a-2013/cases/38-reflection-shortest-path/case.json?v=ch2-3",
+  "/corpus/books/zjedu-math-8a-2013/cases/39-speed-limit-inequality/case.json?v=ch3-2",
+  "/corpus/books/zjedu-math-8a-2013/cases/40-number-line-open-closed-intervals/case.json?v=ch3-2",
+  "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2"
 ];
 
 const runtime = new MathDomainRuntime();
@@ -19,6 +50,75 @@ const template = document.querySelector("#case-card-template");
 const errorPanel = document.querySelector("#error-panel");
 const rendererByCase = new Map();
 const replayedDocumentByCase = new Map();
+
+const STAGE_LABELS = {
+  source: "来源",
+  triangle: "已知",
+  bisector: "角平分线",
+  altitude: "高",
+  derive: "推导",
+  conclude: "结论",
+  pair: "成对",
+  fold: "翻折",
+  triangles: "全等三角形",
+  vertices: "对应顶点",
+  edges: "对应边",
+  angles: "对应角",
+  given: "已知",
+  "fold-axis": "翻折轴",
+  overlap: "重合",
+  correspondence: "对应顺序",
+  statement: "命题",
+  condition: "条件",
+  conclusion: "结论",
+  claim: "待判断",
+  conditions: "核对条件",
+  counterexample: "反例",
+  original: "原命题",
+  swap: "交换",
+  converse: "逆命题",
+  object: "对象",
+  property: "性质",
+  definition: "定义",
+  construct: "辅助构造",
+  base: "第一步",
+  arcs: "作弧",
+  intersection: "交点",
+  hinge: "活动铰链",
+  locked: "三边锁定",
+  sss: "SSS",
+  sas: "SAS",
+  asa: "ASA",
+  aas: "AAS",
+  "source-arc": "已知角作弧",
+  "target-arc": "目标弧",
+  "copy-chord": "复制弦",
+  "equal-arcs": "等半径弧",
+  join: "连接交点",
+  givens: "已知数据",
+  "copy-angles": "复制角",
+  target: "目标",
+  "sss-method": "SSS 作法",
+  "sas-method": "SAS 作法",
+  "asa-method": "ASA 作法",
+  compare: "比较",
+  rectangle: "长方形",
+  square: "正方形",
+  circle: "圆",
+  perpendicular: "作垂线",
+  "equal-distance": "取等距点",
+  connect: "连接",
+  problem: "问题",
+  reflect: "作对称点",
+  straighten: "化为直线",
+  meaning: "理解语义",
+  "test-value": "检验取值",
+  strict: "严格不等式",
+  inclusive: "含等号",
+  bounded: "有限区间",
+  range: "工作范围",
+  check: "动态检验"
+};
 
 function caseNumber(caseId) {
   return caseId.match(/-(\d{2})-/)?.[1] ?? "??";
@@ -60,12 +160,75 @@ async function replayCase(caseSpec) {
   return documentValue;
 }
 
+function caseStages(caseSpec) {
+  return caseSpec.inputs.initialDocument.activities?.flatMap(activity => activity.stages ?? []) ?? [];
+}
+
+function updateStagePanel(caseSpec, card, stageIndex) {
+  const stages = caseStages(caseSpec);
+  if (stages.length === 0) return;
+  const boundedIndex = Math.max(0, Math.min(stageIndex, stages.length - 1));
+  const stage = stages[boundedIndex];
+  card.dataset.stageIndex = String(boundedIndex);
+  card.dataset.stageId = stage.id;
+  card.querySelectorAll(".stage-tab").forEach((button, index) => {
+    button.setAttribute("aria-selected", String(index === boundedIndex));
+    button.tabIndex = index === boundedIndex ? 0 : -1;
+  });
+  card.querySelector(".stage-previous").disabled = boundedIndex === 0;
+  card.querySelector(".stage-next").disabled = boundedIndex === stages.length - 1;
+  card.querySelector(".stage-narration").textContent = `${boundedIndex + 1}/${stages.length} · ${stage.narration ?? stage.id}`;
+}
+
+async function setCaseStage(caseSpec, card, stageIndex) {
+  const stages = caseStages(caseSpec);
+  const stage = stages[stageIndex];
+  const renderer = rendererByCase.get(caseSpec.caseId);
+  if (!stage || !renderer) return false;
+  const beforeRevision = renderer.getDocument().revision;
+  const result = await renderer.dispatch({ type: "stage.set", payload: { stageId: stage.id } });
+  if (!result.ok || result.revisionChanged || renderer.getDocument().revision !== beforeRevision) {
+    throw new Error(`${caseSpec.caseId} 阶段切换失败或意外修改了文档 revision`);
+  }
+  updateStagePanel(caseSpec, card, stageIndex);
+  return true;
+}
+
+function setupStagePanel(caseSpec, card) {
+  const stages = caseStages(caseSpec);
+  if (stages.length === 0) return;
+  const panel = card.querySelector(".stage-panel");
+  const tabs = card.querySelector(".stage-tabs");
+  panel.hidden = false;
+  stages.forEach((stage, index) => {
+    const button = document.createElement("button");
+    button.className = "stage-tab";
+    button.type = "button";
+    button.role = "tab";
+    button.textContent = `${index + 1} ${STAGE_LABELS[stage.id] ?? stage.id}`;
+    button.addEventListener("click", () => setCaseStage(caseSpec, card, index));
+    tabs.append(button);
+  });
+  card.querySelector(".stage-previous").addEventListener("click", () => {
+    setCaseStage(caseSpec, card, Number(card.dataset.stageIndex ?? 0) - 1);
+  });
+  card.querySelector(".stage-next").addEventListener("click", () => {
+    setCaseStage(caseSpec, card, Number(card.dataset.stageIndex ?? 0) + 1);
+  });
+  updateStagePanel(caseSpec, card, 0);
+}
+
 async function mountCase(caseSpec, card, documentValue) {
   const previous = rendererByCase.get(caseSpec.caseId);
   if (previous) await previous.destroy();
   const host = card.querySelector(".case-board");
-  const renderer = await mountMathRenderer(host, structuredClone(documentValue));
+  const stages = caseStages(caseSpec);
+  const stageIndex = Math.max(0, Math.min(Number(card.dataset.stageIndex ?? 0), stages.length - 1));
+  const renderer = await mountMathRenderer(host, structuredClone(documentValue), {
+    stageId: stages[stageIndex]?.id
+  });
   rendererByCase.set(caseSpec.caseId, renderer);
+  if (stages.length > 0) updateStagePanel(caseSpec, card, stageIndex);
   card.querySelector(".loading-mask").hidden = true;
   card.dataset.mounted = "true";
 }
@@ -86,6 +249,7 @@ function createCard(caseSpec) {
   card.querySelector(".case-meta").textContent = `${sourceLabel(caseSpec)} · ${caseSpec.difficulty}`;
   card.querySelector(".interaction-hint").textContent = interactionLabel(caseSpec);
   card.querySelector(".capabilities").textContent = caseSpec.requiredCapabilities.join(" · ");
+  setupStagePanel(caseSpec, card);
 
   if (caseSpec.status === "expected-unsupported") {
     const diagnostic = card.querySelector(".diagnostic");
@@ -151,7 +315,13 @@ async function main() {
     cases,
     rendererByCase,
     replayedDocumentByCase,
-    applyFilter
+    applyFilter,
+    setCaseStage: async (caseId, stageIndex) => {
+      const caseSpec = cases.find(item => item.caseId === caseId);
+      const card = document.querySelector(`[data-case-id="${caseId}"]`);
+      if (!caseSpec || !card) return false;
+      return setCaseStage(caseSpec, card, stageIndex);
+    }
   };
   applyFilter("all");
   document.body.dataset.status = "ready";

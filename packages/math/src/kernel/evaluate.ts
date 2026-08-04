@@ -6,10 +6,13 @@ import type {
   EntityType,
   EvaluationResult,
   JsonValue,
+  Line2Value,
   MathDocument,
   Point2Value,
+  Ray2Value,
   RuntimeEntity,
   RuntimeValue,
+  Segment2Value,
   ValidationIssue
 } from "../types.js";
 import { finiteNumber } from "../util.js";
@@ -34,6 +37,7 @@ import {
   intersectLineCircle,
   intersectLineConic,
   intersectLines,
+  isAngle,
   isArc,
   isCircle,
   isConic,
@@ -49,6 +53,7 @@ import {
   lineFromPoints,
   lineLikeToLine,
   midpoint,
+  parallelChevronMarker,
   parabolaFromFocusDirectrix,
   point,
   polygonArea,
@@ -57,8 +62,10 @@ import {
   ray,
   reflectPointAcrossLine,
   reflectTransform,
+  rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  segmentTickMarker,
   sectorArea,
   sectorFromArc,
   segment,
@@ -68,6 +75,7 @@ import {
   valueLength,
   vector
 } from "./geometry.js";
+import { intervalFromBounds, isInterval } from "./interval.js";
 
 export interface EvaluationOverrides {
   points?: Record<string, [number, number]>;
@@ -90,10 +98,15 @@ function requirePointValue(value: RuntimeValue | JsonValue, context: string): Po
   return value;
 }
 
-function requireLineLikeValue(value: RuntimeValue | JsonValue, context: string): RuntimeValue {
+function requireLineLikeValue(value: RuntimeValue | JsonValue, context: string): Line2Value | Segment2Value | Ray2Value {
   if (!isLine(value) && !isSegment(value) && !isRay(value)) {
     throw new MathEngineError("TYPE_MISMATCH", `${context} requires line2, segment2, or ray2.`);
   }
+  return value;
+}
+
+function requireSegmentValue(value: RuntimeValue | JsonValue, context: string) {
+  if (!isSegment(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires segment2.`);
   return value;
 }
 
@@ -204,6 +217,7 @@ function runtimeTypeMatches(type: EntityType, value: RuntimeValue): boolean {
   if (type === "conic2") return isConic(value);
   if (type === "transform2") return isTransform(value);
   if (type === "angle") return typeof value === "object" && value.kind === "angle";
+  if (type === "interval1") return isInterval(value);
   if (type === "function1") return typeof value === "object" && value.kind === "function1";
   if (type === "curve2") return typeof value === "object" && value.kind === "curve2";
   if (type === "text") return typeof value === "object" && value.kind === "text";
@@ -251,6 +265,11 @@ function requireArcValue(value: RuntimeValue | JsonValue, context: string) {
   return value;
 }
 
+function requireAngleValue(value: RuntimeValue | JsonValue, context: string) {
+  if (!isAngle(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires angle.`);
+  return value;
+}
+
 function requireConicValue(value: RuntimeValue | JsonValue, context: string) {
   if (!isConic(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires conic2.`);
   return value;
@@ -284,6 +303,18 @@ function executeNode(
     }
     case "boolean.expression":
       return [expressionBoolean(params.expression, values)];
+    case "interval.from_bounds": {
+      const lower = params.lower === undefined ? undefined : expressionNumber(params.lower, values);
+      const upper = params.upper === undefined ? undefined : expressionNumber(params.upper, values);
+      const y = params.y === undefined ? undefined : expressionNumber(params.y, values);
+      return [intervalFromBounds({
+        lower,
+        upper,
+        lowerClosed: params.lowerClosed === true,
+        upperClosed: params.upperClosed === true,
+        y
+      })];
+    }
     case "point.free": {
       const coords = firstOutput ? overrides.points?.[firstOutput] : undefined;
       const [x, y] = coords ?? pairParam(node, "coords");
@@ -396,6 +427,23 @@ function executeNode(
         requirePointValue(inputs[1]!, "angle input 2"),
         requirePointValue(inputs[2]!, "angle input 3")
       )];
+    case "marker.right_angle":
+      return [rightAngleMarkerPolygon(
+        requireAngleValue(inputs[0]!, "right-angle marker input"),
+        numberParam(node, "size")
+      )];
+    case "marker.segment_tick":
+      return [segmentTickMarker(
+        requireSegmentValue(inputs[0]!, "segment tick marker input"),
+        params.position === undefined ? 0.5 : numberParam(node, "position"),
+        numberParam(node, "size")
+      )];
+    case "marker.parallel_chevron":
+      return parallelChevronMarker(
+        requirePointValue(inputs[0]!, "parallel chevron anchor"),
+        requireLineLikeValue(inputs[1]!, "parallel chevron line"),
+        numberParam(node, "size")
+      );
     case "conic.ellipse_foci":
       return [ellipseFromFoci(
         requirePointValue(inputs[0]!, "ellipse focus 1"),
