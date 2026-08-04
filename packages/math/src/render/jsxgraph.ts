@@ -787,6 +787,7 @@ export function mountJsxGraph(
             () => native?.getTextAnchor?.(),
             () => entity.label
           ], {
+            display: "internal",
             fixed: true,
             visible: entity.visible !== false,
             fontSize: style.fontSize,
@@ -1142,6 +1143,7 @@ export function mountJsxGraph(
               () => native?.getTextAnchor?.(),
               () => entity.label
             ], {
+              display: "internal",
               fixed: true,
               visible: entity.visible !== false,
               fontSize: style.fontSize,
