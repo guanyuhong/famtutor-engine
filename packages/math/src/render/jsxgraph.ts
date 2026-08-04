@@ -239,6 +239,7 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
   }
   if (entity.type === "line2" || entity.type === "segment2" || entity.type === "ray2") {
     Object.assign(label, {
+      display: "internal",
       anchorX: "middle",
       anchorY: "middle",
       offset: style.labelOffset,
