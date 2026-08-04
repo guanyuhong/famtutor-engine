@@ -1,0 +1,3199 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-kktgdvAH.ggb",
+    "materialId": "kktgdvAH",
+    "sourceUrl": "https://www.geogebra.org/m/kktgdvAH",
+    "bytes": 19249,
+    "sha256": "392675b623339b98456ef3de0392f49d1b3bf3f67067ee3b5567698a5d7bf69e"
+  },
+  "archive": {
+    "entryCount": 4,
+    "entries": [
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 10693,
+        "sha256": "c92748139bd3edd8fc76f8b1dd9c934078fce9556e297c88cbe3ff998f28167d"
+      },
+      {
+        "fileName": "geogebra_macro.xml",
+        "bytes": 13380,
+        "sha256": "a4d69babb04a8ac7961439ddca5cc00ac024f2b635a4d0f94bf9c2cb2fae6fce"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 24,
+        "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 88448,
+        "sha256": "b66b1567e6afb3d512b7a5df7042ed1307998b5a9b414fbe5589b2f5daa6baa7"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.42.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 288,
+      "byType": {
+        "numeric": 212,
+        "point": 18,
+        "conic": 20,
+        "line": 2,
+        "segment": 2,
+        "text": 12,
+        "boolean": 22
+      },
+      "inventory": [
+        {
+          "label": "E1",
+          "type": "numeric"
+        },
+        {
+          "label": "D1",
+          "type": "numeric"
+        },
+        {
+          "label": "F1",
+          "type": "numeric"
+        },
+        {
+          "label": "G1",
+          "type": "numeric"
+        },
+        {
+          "label": "H1",
+          "type": "numeric"
+        },
+        {
+          "label": "I1",
+          "type": "numeric"
+        },
+        {
+          "label": "J1",
+          "type": "numeric"
+        },
+        {
+          "label": "K1",
+          "type": "numeric"
+        },
+        {
+          "label": "L1",
+          "type": "numeric"
+        },
+        {
+          "label": "M1",
+          "type": "numeric"
+        },
+        {
+          "label": "N1",
+          "type": "numeric"
+        },
+        {
+          "label": "O1",
+          "type": "numeric"
+        },
+        {
+          "label": "G",
+          "type": "point"
+        },
+        {
+          "label": "O_3",
+          "type": "point"
+        },
+        {
+          "label": "F",
+          "type": "point"
+        },
+        {
+          "label": "K_3",
+          "type": "conic"
+        },
+        {
+          "label": "r_3",
+          "type": "numeric"
+        },
+        {
+          "label": "O_1",
+          "type": "point"
+        },
+        {
+          "label": "K",
+          "type": "point"
+        },
+        {
+          "label": "K_1",
+          "type": "conic"
+        },
+        {
+          "label": "r_1",
+          "type": "numeric"
+        },
+        {
+          "label": "s",
+          "type": "numeric"
+        },
+        {
+          "label": "L_3",
+          "type": "conic"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "O_2",
+          "type": "point"
+        },
+        {
+          "label": "K_2",
+          "type": "conic"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "c",
+          "type": "conic"
+        },
+        {
+          "label": "d'",
+          "type": "conic"
+        },
+        {
+          "label": "e'",
+          "type": "conic"
+        },
+        {
+          "label": "L_1",
+          "type": "conic"
+        },
+        {
+          "label": "Mirror",
+          "type": "conic"
+        },
+        {
+          "label": "M_1",
+          "type": "conic"
+        },
+        {
+          "label": "M_3",
+          "type": "conic"
+        },
+        {
+          "label": "r_2",
+          "type": "numeric"
+        },
+        {
+          "label": "L_2",
+          "type": "conic"
+        },
+        {
+          "label": "M_2",
+          "type": "conic"
+        },
+        {
+          "label": "e",
+          "type": "line"
+        },
+        {
+          "label": "E",
+          "type": "point"
+        },
+        {
+          "label": "J",
+          "type": "point"
+        },
+        {
+          "label": "U",
+          "type": "point"
+        },
+        {
+          "label": "k",
+          "type": "line"
+        },
+        {
+          "label": "V",
+          "type": "point"
+        },
+        {
+          "label": "r'_2",
+          "type": "numeric"
+        },
+        {
+          "label": "d",
+          "type": "conic"
+        },
+        {
+          "label": "W",
+          "type": "point"
+        },
+        {
+          "label": "Z",
+          "type": "point"
+        },
+        {
+          "label": "h",
+          "type": "numeric"
+        },
+        {
+          "label": "f",
+          "type": "conic"
+        },
+        {
+          "label": "g",
+          "type": "conic"
+        },
+        {
+          "label": "f'",
+          "type": "conic"
+        },
+        {
+          "label": "g'",
+          "type": "conic"
+        },
+        {
+          "label": "a",
+          "type": "segment"
+        },
+        {
+          "label": "b",
+          "type": "segment"
+        },
+        {
+          "label": "H",
+          "type": "point"
+        },
+        {
+          "label": "s_4",
+          "type": "numeric"
+        },
+        {
+          "label": "p",
+          "type": "conic"
+        },
+        {
+          "label": "I",
+          "type": "point"
+        },
+        {
+          "label": "s_5",
+          "type": "numeric"
+        },
+        {
+          "label": "q",
+          "type": "conic"
+        },
+        {
+          "label": "t",
+          "type": "numeric"
+        },
+        {
+          "label": "B1",
+          "type": "text"
+        },
+        {
+          "label": "B2",
+          "type": "text"
+        },
+        {
+          "label": "B4",
+          "type": "text"
+        },
+        {
+          "label": "B3",
+          "type": "text"
+        },
+        {
+          "label": "B5",
+          "type": "text"
+        },
+        {
+          "label": "D2",
+          "type": "numeric"
+        },
+        {
+          "label": "E2",
+          "type": "numeric"
+        },
+        {
+          "label": "F2",
+          "type": "numeric"
+        },
+        {
+          "label": "G2",
+          "type": "numeric"
+        },
+        {
+          "label": "H2",
+          "type": "numeric"
+        },
+        {
+          "label": "I2",
+          "type": "numeric"
+        },
+        {
+          "label": "J2",
+          "type": "numeric"
+        },
+        {
+          "label": "K2",
+          "type": "numeric"
+        },
+        {
+          "label": "L2",
+          "type": "numeric"
+        },
+        {
+          "label": "M2",
+          "type": "numeric"
+        },
+        {
+          "label": "N2",
+          "type": "numeric"
+        },
+        {
+          "label": "D3",
+          "type": "numeric"
+        },
+        {
+          "label": "F3",
+          "type": "numeric"
+        },
+        {
+          "label": "E4",
+          "type": "numeric"
+        },
+        {
+          "label": "F5",
+          "type": "numeric"
+        },
+        {
+          "label": "E3",
+          "type": "numeric"
+        },
+        {
+          "label": "G3",
+          "type": "numeric"
+        },
+        {
+          "label": "H3",
+          "type": "numeric"
+        },
+        {
+          "label": "I3",
+          "type": "numeric"
+        },
+        {
+          "label": "J3",
+          "type": "numeric"
+        },
+        {
+          "label": "K3",
+          "type": "numeric"
+        },
+        {
+          "label": "L3",
+          "type": "numeric"
+        },
+        {
+          "label": "M3",
+          "type": "numeric"
+        },
+        {
+          "label": "N3",
+          "type": "numeric"
+        },
+        {
+          "label": "D4",
+          "type": "numeric"
+        },
+        {
+          "label": "F4",
+          "type": "numeric"
+        },
+        {
+          "label": "G4",
+          "type": "numeric"
+        },
+        {
+          "label": "H4",
+          "type": "numeric"
+        },
+        {
+          "label": "I4",
+          "type": "numeric"
+        },
+        {
+          "label": "J4",
+          "type": "numeric"
+        },
+        {
+          "label": "K4",
+          "type": "numeric"
+        },
+        {
+          "label": "L4",
+          "type": "numeric"
+        },
+        {
+          "label": "M4",
+          "type": "numeric"
+        },
+        {
+          "label": "N4",
+          "type": "numeric"
+        },
+        {
+          "label": "D5",
+          "type": "numeric"
+        },
+        {
+          "label": "E5",
+          "type": "numeric"
+        },
+        {
+          "label": "G5",
+          "type": "numeric"
+        },
+        {
+          "label": "H5",
+          "type": "numeric"
+        },
+        {
+          "label": "I5",
+          "type": "numeric"
+        },
+        {
+          "label": "J5",
+          "type": "numeric"
+        },
+        {
+          "label": "K5",
+          "type": "numeric"
+        },
+        {
+          "label": "L5",
+          "type": "numeric"
+        },
+        {
+          "label": "M5",
+          "type": "numeric"
+        },
+        {
+          "label": "N5",
+          "type": "numeric"
+        },
+        {
+          "label": "A2",
+          "type": "numeric"
+        },
+        {
+          "label": "A3",
+          "type": "numeric"
+        },
+        {
+          "label": "A4",
+          "type": "numeric"
+        },
+        {
+          "label": "A5",
+          "type": "numeric"
+        },
+        {
+          "label": "C2",
+          "type": "boolean"
+        },
+        {
+          "label": "show3Circles",
+          "type": "boolean"
+        },
+        {
+          "label": "C3",
+          "type": "boolean"
+        },
+        {
+          "label": "C4",
+          "type": "boolean"
+        },
+        {
+          "label": "C5",
+          "type": "boolean"
+        },
+        {
+          "label": "show3CirclesAug",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsExt",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsExtAug",
+          "type": "boolean"
+        },
+        {
+          "label": "A6",
+          "type": "numeric"
+        },
+        {
+          "label": "A7",
+          "type": "numeric"
+        },
+        {
+          "label": "A8",
+          "type": "numeric"
+        },
+        {
+          "label": "A9",
+          "type": "numeric"
+        },
+        {
+          "label": "A10",
+          "type": "numeric"
+        },
+        {
+          "label": "B6",
+          "type": "text"
+        },
+        {
+          "label": "D6",
+          "type": "numeric"
+        },
+        {
+          "label": "E6",
+          "type": "numeric"
+        },
+        {
+          "label": "F6",
+          "type": "numeric"
+        },
+        {
+          "label": "G6",
+          "type": "numeric"
+        },
+        {
+          "label": "H6",
+          "type": "numeric"
+        },
+        {
+          "label": "I6",
+          "type": "numeric"
+        },
+        {
+          "label": "J6",
+          "type": "numeric"
+        },
+        {
+          "label": "K6",
+          "type": "numeric"
+        },
+        {
+          "label": "L6",
+          "type": "numeric"
+        },
+        {
+          "label": "M6",
+          "type": "numeric"
+        },
+        {
+          "label": "N6",
+          "type": "numeric"
+        },
+        {
+          "label": "D7",
+          "type": "numeric"
+        },
+        {
+          "label": "E7",
+          "type": "numeric"
+        },
+        {
+          "label": "F7",
+          "type": "numeric"
+        },
+        {
+          "label": "G7",
+          "type": "numeric"
+        },
+        {
+          "label": "H7",
+          "type": "numeric"
+        },
+        {
+          "label": "I7",
+          "type": "numeric"
+        },
+        {
+          "label": "J7",
+          "type": "numeric"
+        },
+        {
+          "label": "K7",
+          "type": "numeric"
+        },
+        {
+          "label": "L7",
+          "type": "numeric"
+        },
+        {
+          "label": "M7",
+          "type": "numeric"
+        },
+        {
+          "label": "N7",
+          "type": "numeric"
+        },
+        {
+          "label": "D8",
+          "type": "numeric"
+        },
+        {
+          "label": "E8",
+          "type": "numeric"
+        },
+        {
+          "label": "F8",
+          "type": "numeric"
+        },
+        {
+          "label": "G8",
+          "type": "numeric"
+        },
+        {
+          "label": "H8",
+          "type": "numeric"
+        },
+        {
+          "label": "I8",
+          "type": "numeric"
+        },
+        {
+          "label": "J8",
+          "type": "numeric"
+        },
+        {
+          "label": "K8",
+          "type": "numeric"
+        },
+        {
+          "label": "L8",
+          "type": "numeric"
+        },
+        {
+          "label": "M8",
+          "type": "numeric"
+        },
+        {
+          "label": "N8",
+          "type": "numeric"
+        },
+        {
+          "label": "D9",
+          "type": "numeric"
+        },
+        {
+          "label": "E9",
+          "type": "numeric"
+        },
+        {
+          "label": "F9",
+          "type": "numeric"
+        },
+        {
+          "label": "G9",
+          "type": "numeric"
+        },
+        {
+          "label": "H9",
+          "type": "numeric"
+        },
+        {
+          "label": "I9",
+          "type": "numeric"
+        },
+        {
+          "label": "J9",
+          "type": "numeric"
+        },
+        {
+          "label": "K9",
+          "type": "numeric"
+        },
+        {
+          "label": "L9",
+          "type": "numeric"
+        },
+        {
+          "label": "M9",
+          "type": "numeric"
+        },
+        {
+          "label": "N9",
+          "type": "numeric"
+        },
+        {
+          "label": "D10",
+          "type": "numeric"
+        },
+        {
+          "label": "E10",
+          "type": "numeric"
+        },
+        {
+          "label": "F10",
+          "type": "numeric"
+        },
+        {
+          "label": "G10",
+          "type": "numeric"
+        },
+        {
+          "label": "H10",
+          "type": "numeric"
+        },
+        {
+          "label": "I10",
+          "type": "numeric"
+        },
+        {
+          "label": "J10",
+          "type": "numeric"
+        },
+        {
+          "label": "K10",
+          "type": "numeric"
+        },
+        {
+          "label": "L10",
+          "type": "numeric"
+        },
+        {
+          "label": "M10",
+          "type": "numeric"
+        },
+        {
+          "label": "N10",
+          "type": "numeric"
+        },
+        {
+          "label": "C6",
+          "type": "boolean"
+        },
+        {
+          "label": "C7",
+          "type": "boolean"
+        },
+        {
+          "label": "C8",
+          "type": "boolean"
+        },
+        {
+          "label": "C9",
+          "type": "boolean"
+        },
+        {
+          "label": "C10",
+          "type": "boolean"
+        },
+        {
+          "label": "showInvCircle",
+          "type": "boolean"
+        },
+        {
+          "label": "B7",
+          "type": "text"
+        },
+        {
+          "label": "show3CirclesAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "B8",
+          "type": "text"
+        },
+        {
+          "label": "showAuxLines",
+          "type": "boolean"
+        },
+        {
+          "label": "B9",
+          "type": "text"
+        },
+        {
+          "label": "showAnsExtAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "B10",
+          "type": "text"
+        },
+        {
+          "label": "P2",
+          "type": "numeric"
+        },
+        {
+          "label": "P3",
+          "type": "numeric"
+        },
+        {
+          "label": "P4",
+          "type": "numeric"
+        },
+        {
+          "label": "P5",
+          "type": "numeric"
+        },
+        {
+          "label": "P6",
+          "type": "numeric"
+        },
+        {
+          "label": "P7",
+          "type": "numeric"
+        },
+        {
+          "label": "P8",
+          "type": "numeric"
+        },
+        {
+          "label": "P9",
+          "type": "numeric"
+        },
+        {
+          "label": "P10",
+          "type": "numeric"
+        },
+        {
+          "label": "B11",
+          "type": "text"
+        },
+        {
+          "label": "B12",
+          "type": "text"
+        },
+        {
+          "label": "A11",
+          "type": "numeric"
+        },
+        {
+          "label": "A12",
+          "type": "numeric"
+        },
+        {
+          "label": "P1",
+          "type": "numeric"
+        },
+        {
+          "label": "Q1",
+          "type": "numeric"
+        },
+        {
+          "label": "R1",
+          "type": "numeric"
+        },
+        {
+          "label": "Q2",
+          "type": "numeric"
+        },
+        {
+          "label": "R2",
+          "type": "numeric"
+        },
+        {
+          "label": "S2",
+          "type": "numeric"
+        },
+        {
+          "label": "Q3",
+          "type": "numeric"
+        },
+        {
+          "label": "R3",
+          "type": "numeric"
+        },
+        {
+          "label": "S3",
+          "type": "numeric"
+        },
+        {
+          "label": "Q4",
+          "type": "numeric"
+        },
+        {
+          "label": "R4",
+          "type": "numeric"
+        },
+        {
+          "label": "S4",
+          "type": "numeric"
+        },
+        {
+          "label": "Q5",
+          "type": "numeric"
+        },
+        {
+          "label": "R5",
+          "type": "numeric"
+        },
+        {
+          "label": "S5",
+          "type": "numeric"
+        },
+        {
+          "label": "Q6",
+          "type": "numeric"
+        },
+        {
+          "label": "R6",
+          "type": "numeric"
+        },
+        {
+          "label": "S6",
+          "type": "numeric"
+        },
+        {
+          "label": "Q7",
+          "type": "numeric"
+        },
+        {
+          "label": "R7",
+          "type": "numeric"
+        },
+        {
+          "label": "S7",
+          "type": "numeric"
+        },
+        {
+          "label": "Q8",
+          "type": "numeric"
+        },
+        {
+          "label": "R8",
+          "type": "numeric"
+        },
+        {
+          "label": "S8",
+          "type": "numeric"
+        },
+        {
+          "label": "Q9",
+          "type": "numeric"
+        },
+        {
+          "label": "R9",
+          "type": "numeric"
+        },
+        {
+          "label": "S9",
+          "type": "numeric"
+        },
+        {
+          "label": "Q10",
+          "type": "numeric"
+        },
+        {
+          "label": "R10",
+          "type": "numeric"
+        },
+        {
+          "label": "S10",
+          "type": "numeric"
+        },
+        {
+          "label": "D11",
+          "type": "numeric"
+        },
+        {
+          "label": "E11",
+          "type": "numeric"
+        },
+        {
+          "label": "F11",
+          "type": "numeric"
+        },
+        {
+          "label": "G11",
+          "type": "numeric"
+        },
+        {
+          "label": "H11",
+          "type": "numeric"
+        },
+        {
+          "label": "I11",
+          "type": "numeric"
+        },
+        {
+          "label": "J11",
+          "type": "numeric"
+        },
+        {
+          "label": "K11",
+          "type": "numeric"
+        },
+        {
+          "label": "L11",
+          "type": "numeric"
+        },
+        {
+          "label": "M11",
+          "type": "numeric"
+        },
+        {
+          "label": "N11",
+          "type": "numeric"
+        },
+        {
+          "label": "C11",
+          "type": "boolean"
+        },
+        {
+          "label": "P11",
+          "type": "numeric"
+        },
+        {
+          "label": "Q11",
+          "type": "numeric"
+        },
+        {
+          "label": "R11",
+          "type": "numeric"
+        },
+        {
+          "label": "S11",
+          "type": "numeric"
+        },
+        {
+          "label": "D12",
+          "type": "numeric"
+        },
+        {
+          "label": "E12",
+          "type": "numeric"
+        },
+        {
+          "label": "F12",
+          "type": "numeric"
+        },
+        {
+          "label": "G12",
+          "type": "numeric"
+        },
+        {
+          "label": "H12",
+          "type": "numeric"
+        },
+        {
+          "label": "I12",
+          "type": "numeric"
+        },
+        {
+          "label": "J12",
+          "type": "numeric"
+        },
+        {
+          "label": "K12",
+          "type": "numeric"
+        },
+        {
+          "label": "L12",
+          "type": "numeric"
+        },
+        {
+          "label": "M12",
+          "type": "numeric"
+        },
+        {
+          "label": "N12",
+          "type": "numeric"
+        },
+        {
+          "label": "C12",
+          "type": "boolean"
+        },
+        {
+          "label": "P12",
+          "type": "numeric"
+        },
+        {
+          "label": "Q12",
+          "type": "numeric"
+        },
+        {
+          "label": "R12",
+          "type": "numeric"
+        },
+        {
+          "label": "S12",
+          "type": "numeric"
+        },
+        {
+          "label": "showAnsIntAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsIntAug",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsInt",
+          "type": "boolean"
+        },
+        {
+          "label": "S1",
+          "type": "numeric"
+        },
+        {
+          "label": "O2",
+          "type": "numeric"
+        },
+        {
+          "label": "O3",
+          "type": "numeric"
+        },
+        {
+          "label": "O4",
+          "type": "numeric"
+        },
+        {
+          "label": "O5",
+          "type": "numeric"
+        },
+        {
+          "label": "O6",
+          "type": "numeric"
+        },
+        {
+          "label": "O7",
+          "type": "numeric"
+        },
+        {
+          "label": "O8",
+          "type": "numeric"
+        },
+        {
+          "label": "O9",
+          "type": "numeric"
+        },
+        {
+          "label": "O10",
+          "type": "numeric"
+        },
+        {
+          "label": "O11",
+          "type": "numeric"
+        },
+        {
+          "label": "O12",
+          "type": "numeric"
+        }
+      ]
+    },
+    "commands": {
+      "total": 42,
+      "byName": {
+        "Circle": 13,
+        "Radius": 6,
+        "Intersect": 5,
+        "Point": 1,
+        "Mirror": 7,
+        "OrthogonalLine": 2,
+        "ClosestPoint": 1,
+        "Midpoint": 1,
+        "Center": 3,
+        "Distance": 1,
+        "Segment": 2
+      },
+      "signatures": [
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_3",
+            "F"
+          ],
+          "outputs": [
+            "K_3"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "K_3"
+          ],
+          "outputs": [
+            "r_3"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_1",
+            "K"
+          ],
+          "outputs": [
+            "K_1"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "K_1"
+          ],
+          "outputs": [
+            "r_1"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_3",
+            "r_3 + s"
+          ],
+          "outputs": [
+            "L_3"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "L_3",
+            "Segment[O_1, O_3]"
+          ],
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_2",
+            "D"
+          ],
+          "outputs": [
+            "K_2"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "xAxis",
+            "yAxis"
+          ],
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "xAxis"
+          ],
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "K_2",
+            "c"
+          ],
+          "outputs": [
+            "d'"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "K_3",
+            "c"
+          ],
+          "outputs": [
+            "e'"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_1",
+            "r_1 + s"
+          ],
+          "outputs": [
+            "L_1"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "C",
+            "G"
+          ],
+          "outputs": [
+            "Mirror"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "L_1",
+            "Mirror"
+          ],
+          "outputs": [
+            "M_1"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "L_3",
+            "Mirror"
+          ],
+          "outputs": [
+            "M_3"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "K_2"
+          ],
+          "outputs": [
+            "r_2"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O_2",
+            "abs(r_2 + s)"
+          ],
+          "outputs": [
+            "L_2"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "L_2",
+            "Mirror"
+          ],
+          "outputs": [
+            "M_2"
+          ]
+        },
+        {
+          "name": "OrthogonalLine",
+          "inputs": [
+            "C",
+            "M_1"
+          ],
+          "outputs": [
+            "e"
+          ]
+        },
+        {
+          "name": "ClosestPoint",
+          "inputs": [
+            "M_1",
+            "C"
+          ],
+          "outputs": []
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "M_1",
+            "e"
+          ],
+          "outputs": [
+            "E"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "M_3",
+            "e"
+          ],
+          "outputs": [
+            "J"
+          ]
+        },
+        {
+          "name": "Midpoint",
+          "inputs": [
+            "E",
+            "J"
+          ],
+          "outputs": [
+            "U"
+          ]
+        },
+        {
+          "name": "OrthogonalLine",
+          "inputs": [
+            "U",
+            "e"
+          ],
+          "outputs": [
+            "k"
+          ]
+        },
+        {
+          "name": "Center",
+          "inputs": [
+            "M_2"
+          ],
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "M_2"
+          ],
+          "outputs": [
+            "r'_2"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "V",
+            "r'_2 + Distance[J, U]"
+          ],
+          "outputs": [
+            "d"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "d",
+            "k"
+          ],
+          "outputs": [
+            "W",
+            "Z"
+          ]
+        },
+        {
+          "name": "Distance",
+          "inputs": [
+            "U",
+            "J"
+          ],
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "Z",
+            "h"
+          ],
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "W",
+            "h"
+          ],
+          "outputs": [
+            "g"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "f",
+            "Mirror"
+          ],
+          "outputs": [
+            "f'"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "g",
+            "Mirror"
+          ],
+          "outputs": [
+            "g'"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "V",
+            "Z"
+          ],
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "V",
+            "W"
+          ],
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "name": "Center",
+          "inputs": [
+            "g'"
+          ],
+          "outputs": [
+            "H"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "g'"
+          ],
+          "outputs": [
+            "s_4"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "H",
+            "s_4 + s"
+          ],
+          "outputs": [
+            "p"
+          ]
+        },
+        {
+          "name": "Center",
+          "inputs": [
+            "f'"
+          ],
+          "outputs": [
+            "I"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "f'"
+          ],
+          "outputs": [
+            "s_5"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "I",
+            "s_5 - s"
+          ],
+          "outputs": [
+            "q"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "t",
+          "min": "0",
+          "max": "15",
+          "width": "100.0",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [
+        {
+          "label": "C2",
+          "type": "boolean"
+        },
+        {
+          "label": "show3Circles",
+          "type": "boolean"
+        },
+        {
+          "label": "C3",
+          "type": "boolean"
+        },
+        {
+          "label": "C4",
+          "type": "boolean"
+        },
+        {
+          "label": "C5",
+          "type": "boolean"
+        },
+        {
+          "label": "show3CirclesAug",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsExt",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsExtAug",
+          "type": "boolean"
+        },
+        {
+          "label": "C6",
+          "type": "boolean"
+        },
+        {
+          "label": "C7",
+          "type": "boolean"
+        },
+        {
+          "label": "C8",
+          "type": "boolean"
+        },
+        {
+          "label": "C9",
+          "type": "boolean"
+        },
+        {
+          "label": "C10",
+          "type": "boolean"
+        },
+        {
+          "label": "showInvCircle",
+          "type": "boolean"
+        },
+        {
+          "label": "show3CirclesAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "showAuxLines",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsExtAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "C11",
+          "type": "boolean"
+        },
+        {
+          "label": "C12",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsIntAugInv",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsIntAug",
+          "type": "boolean"
+        },
+        {
+          "label": "showAnsInt",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "E1",
+        "step": "0.1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D1",
+        "step": "0.1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "O_3",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "F",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "O_1",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "K",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "D",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "O_2",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "B",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "t",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D2",
+        "step": "0.1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "A2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "A3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "E12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "F12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "G12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "I12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "J12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "K12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "L12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "M12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "N12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "Q12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "R12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "S12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O4",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O5",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O6",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O7",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O8",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O9",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O10",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O11",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O12",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 2,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [
+    {
+      "commandName": "CommonTangents",
+      "toolName": "CommonTangents",
+      "inputLabels": [
+        "c",
+        "d"
+      ],
+      "outputLabels": [
+        "i",
+        "j",
+        "m",
+        "l",
+        "G",
+        "K",
+        "L",
+        "S",
+        "T",
+        "H",
+        "M",
+        "N",
+        "P",
+        "Q"
+      ],
+      "sourceFile": "geogebra_macro.xml"
+    }
+  ],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 24,
+      "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 10693,
+      "sha256": "c92748139bd3edd8fc76f8b1dd9c934078fce9556e297c88cbe3ff998f28167d"
+    }
+  },
+  "assets": [],
+  "capabilityTags": [
+    "animation",
+    "curve",
+    "custom_tool",
+    "geometry",
+    "script",
+    "transform"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Center",
+        "count": 3,
+        "mapsTo": "point.circle_center"
+      },
+      {
+        "command": "Circle",
+        "count": 13,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Distance",
+        "count": 1,
+        "mapsTo": "measurement.distance"
+      },
+      {
+        "command": "Intersect",
+        "count": 5,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "Midpoint",
+        "count": 1,
+        "mapsTo": "point.midpoint"
+      },
+      {
+        "command": "OrthogonalLine",
+        "count": 2,
+        "mapsTo": "line.perpendicular_through"
+      },
+      {
+        "command": "Point",
+        "count": 1,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Radius",
+        "count": 6,
+        "mapsTo": "measurement.circle_radius"
+      },
+      {
+        "command": "Segment",
+        "count": 2,
+        "mapsTo": "segment.through_points"
+      }
+    ],
+    "gaps": [
+      {
+        "command": "ClosestPoint",
+        "count": 1,
+        "requiredCapability": "closest_point_on_path"
+      },
+      {
+        "command": "Mirror",
+        "count": 7,
+        "requiredCapability": "circle_inversion",
+        "condition": "circle/conic mirror"
+      }
+    ],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

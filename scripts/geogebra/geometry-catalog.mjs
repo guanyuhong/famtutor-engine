@@ -69,6 +69,9 @@ function validateIndex(index) {
 export function buildGeometryCatalog(index, options = {}) {
   validateIndex(index);
   const evidenceMap = evidenceByMaterial(index);
+  const manifestsById = new Map((options.manifests ?? [])
+    .filter(manifest => manifest?.source?.materialId)
+    .map(manifest => [manifest.source.materialId, manifest]));
   const geometryTitles = index.unique_book_entries.filter(entry => (entry.capability_tags ?? []).includes("geometry"));
   const domainGeometryOnlyTitles = index.unique_book_entries.filter(entry =>
     (entry.domains ?? []).includes("math.geometry") && !(entry.capability_tags ?? []).includes("geometry")
@@ -122,10 +125,37 @@ export function buildGeometryCatalog(index, options = {}) {
         scriptKinds: unique(evidence?.scripts ?? [])
       }
     };
+    const manifest = manifestsById.get(raw.materialId);
+    const inspection = manifest ? {
+      manifestSchema: manifest.schema,
+      fileName: manifest.source.fileName,
+      sha256: manifest.source.sha256,
+      bytes: manifest.source.bytes,
+      elementCount: manifest.construction.elements.total,
+      elementTypes: manifest.construction.elements.byType,
+      commandCount: manifest.construction.commands.total,
+      commandNames: manifest.construction.commands.byName,
+      exactCommandCount: manifest.engineMapping.exact.reduce((sum, item) => sum + item.count, 0),
+      gapCommandCount: manifest.engineMapping.gaps.reduce((sum, item) => sum + item.count, 0),
+      unknownCommandCount: manifest.engineMapping.unknown.reduce((sum, item) => sum + item.count, 0),
+      controlCount: Object.values(manifest.construction.controls).reduce((sum, items) => sum + items.length, 0),
+      animationCount: manifest.construction.animations.length,
+      macroCount: manifest.macros.length,
+      macroNames: manifest.macros.map(macro => macro.commandName),
+      gapCapabilities: manifest.engineMapping.gaps.map(item => ({
+        command: item.command,
+        count: item.count,
+        requiredCapability: item.requiredCapability,
+        ...(item.condition ? { condition: item.condition } : {})
+      })),
+      scriptCount: manifest.scripts.length,
+      scriptsExecuted: manifest.security.scriptsExecuted
+    } : undefined;
     return {
       ...record,
       inspectionPriority: priorityFor(record),
-      extractionState: extractionState(record)
+      extractionState: manifest ? "ggb-inspected-needs-semantic-review" : extractionState(record),
+      ...(inspection ? { inspection } : {})
     };
   }).sort((a, b) => {
     const rank = { A: 0, B: 1, "review-source-quality": 2, "deferred-specialized-renderer": 3 };
@@ -170,6 +200,7 @@ export function buildGeometryCatalog(index, options = {}) {
       geometryTitles: geometryTitles.length,
       titlesWithMaterialIds: geometryTitles.length - unresolvedTitles.length,
       uniqueMaterialIds: materials.length,
+      inspectedMaterials: materials.filter(material => material.inspection).length,
       unresolvedTitles: unresolvedTitles.length,
       domainGeometryOnlyLeads: domainGeometryOnlyTitles.length,
       familyCounts: Object.fromEntries(Object.entries(familyCounts).sort(([a], [b]) => a.localeCompare(b))),
@@ -185,6 +216,16 @@ export function buildGeometryCatalog(index, options = {}) {
     firstWave: firstWave.map(material => material.materialId),
     materials,
     unresolvedTitles,
+    externalInspectedSamples: [...manifestsById.entries()]
+      .filter(([materialId]) => !byMaterial.has(materialId))
+      .map(([materialId, manifest]) => ({
+        materialId,
+        sourceUrl: manifest.source.sourceUrl,
+        manifestFile: manifest.source.fileName,
+        sha256: manifest.source.sha256,
+        extractionState: "ggb-inspected-needs-semantic-review"
+      }))
+      .sort((a, b) => a.materialId.localeCompare(b.materialId)),
     domainGeometryOnlyLeads: domainGeometryOnlyTitles.map(entry => ({
       title: entry.title,
       normalizedTitle: entry.normalized_title,

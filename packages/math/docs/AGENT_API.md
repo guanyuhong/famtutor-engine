@@ -148,6 +148,28 @@ undo
 }
 ```
 
+圆的组成量使用两个只读原子命令，不要让模型重新猜测圆心或用圆周长反推半径：
+
+```json
+{
+  "op": "construct",
+  "command": "point.circle_center",
+  "inputs": [{ "ref": "circle" }],
+  "outputs": [{ "id": "center", "role": "derived" }]
+}
+```
+
+```json
+{
+  "op": "construct",
+  "command": "measurement.circle_radius",
+  "inputs": [{ "ref": "circle" }],
+  "outputs": [{ "id": "radius", "role": "measurement" }]
+}
+```
+
+两者都要求输入为 `circle2`；圆必须已经有效且半径为正。输出随上游圆确定性更新，不产生独立可拖动状态。
+
 ### L1 宏展开
 
 ```json

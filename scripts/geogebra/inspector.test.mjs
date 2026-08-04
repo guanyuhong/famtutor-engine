@@ -73,6 +73,7 @@ test("offline inspector extracts construction, controls, animation, macros and r
         <macro cmdName="InlineTool" toolName="Inline Tool"><input a0="A"/><output a0="B"/></macro>
         <construction>
           <element type="point" label="A"><show object="true"/></element>
+          <element type="line" label="axis"/>
           <element type="numeric" label="t">
             <slider min="0" max="2" width="220" horizontal="true"/>
             <animation step="0.02" speed="1" type="1" playing="true"/>
@@ -80,10 +81,10 @@ test("offline inspector extracts construction, controls, animation, macros and r
           <element type="boolean" label="showPieces"/>
           <element type="button" label="reset"><ggbscript val="SetValue[t,0]"/></element>
           <javascript>function update(){ return 1; }</javascript>
-          <command name="Rotate"/><command name="Sequence"/><command name="SetValue"/><command name="MysteryCommand"/>
+          <command name="Rotate"><input a0="A" a1="t"/><output a0="B"/></command><command name="Mirror"><input a0="A" a1="axis"/><output a0="M"/></command><command name="Sequence"/><command name="SetValue"/><command name="MysteryCommand"/>
         </construction>
       </geogebra>`,
-    "geogebra_macro.xml": `<geogebra><macro cmdName="RotationArrow" toolName="Rotation Arrow"><input a0="A" a1="B"/><output a0="arrow"/></macro></geogebra>`,
+    "geogebra_macro.xml": `<geogebra><macro cmdName="RotationArrow" toolName="Rotation Arrow"><macroInput a0="A" a1="B"/><macroOutput a0="arrow"/><construction><input a0="ignored"/></construction></macro></geogebra>`,
     "geogebra_javascript.js": "function ggbOnInit(){ applet.setValue('t', 0); }",
     "geogebra_thumbnail.png": Buffer.from([9, 8, 7]),
     "images/icon.png": Buffer.from([1, 2, 3, 4])
@@ -91,8 +92,9 @@ test("offline inspector extracts construction, controls, animation, macros and r
   const manifest = inspectGgb(ggb, { fileName: "motion.ggb", materialId: "demo123" });
   assert.equal(manifest.schema, "famtutor.geogebra.manifest.v1");
   assert.equal(manifest.source.materialId, "demo123");
-  assert.equal(manifest.construction.elements.total, 4);
-  assert.equal(manifest.construction.commands.total, 4);
+  assert.equal(manifest.construction.elements.total, 5);
+  assert.equal(manifest.construction.commands.total, 5);
+  assert.deepEqual(manifest.construction.commands.signatures[0], { name: "Rotate", inputs: ["A", "t"], outputs: ["B"] });
   assert.equal(manifest.construction.controls.sliders[0].label, "t");
   assert.equal(manifest.construction.controls.checkboxes[0].label, "showPieces");
   assert.equal(manifest.construction.controls.buttons[0].label, "reset");
@@ -107,6 +109,7 @@ test("offline inspector extracts construction, controls, animation, macros and r
   assert.equal(manifest.preview.thumbnail.bytes, 3);
   assert.deepEqual(manifest.capabilityTags, ["animation", "custom_tool", "geometry", "script", "sequence", "simulation", "spreadsheet", "transform"]);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Rotate"), true);
+  assert.equal(manifest.engineMapping.exact.some(item => item.command === "Mirror" && item.condition === "line-like mirror"), true);
   assert.equal(manifest.engineMapping.gaps.some(item => item.requiredCapability === "declarative_sequence"), true);
   assert.equal(manifest.engineMapping.gaps.some(item => item.requiredCapability === "control_action"), true);
   assert.deepEqual(manifest.engineMapping.unknown, [{ command: "MysteryCommand", count: 1 }]);
@@ -159,15 +162,24 @@ test("geometry catalog deduplicates titles by material ID and separates unresolv
       { title: "空間曲線", normalized_title: "空間曲線", known_material_ids: ["m2"], domains: ["math.geometry"], capability_tags: ["geometry", "3d", "curve"], books: [{ book_id: "b1", book_title: "平面幾何", ownership: "author" }] },
       { title: "未知圓作圖", normalized_title: "未知圓作圖", known_material_ids: [], domains: ["math.geometry"], capability_tags: ["geometry"], books: [{ book_id: "b1", book_title: "平面幾何", ownership: "author" }] }
     ]
-  });
+  }, { manifests: [{
+    schema: "famtutor.geogebra.manifest.v1",
+    source: { materialId: "m1", fileName: "m1.ggb", sha256: "abc", bytes: 12 },
+    construction: { elements: { total: 3, byType: { point: 3 } }, commands: { total: 1, byName: { Polygon: 1 } }, controls: { sliders: [], checkboxes: [], buttons: [], inputs: [] }, animations: [] },
+    engineMapping: { exact: [{ command: "Polygon", count: 1 }], gaps: [], unknown: [] },
+    macros: [], scripts: [], security: { scriptsExecuted: false }
+  }] });
   assert.equal(catalog.summary.geometryTitles, 4);
   assert.equal(catalog.summary.titlesWithMaterialIds, 3);
   assert.equal(catalog.summary.uniqueMaterialIds, 2);
+  assert.equal(catalog.summary.inspectedMaterials, 1);
   assert.equal(catalog.summary.unresolvedTitles, 1);
   assert.equal(catalog.summary.domainGeometryOnlyLeads, 0);
   assert.deepEqual(catalog.materials[0].titles, ["三角形面積", "最大三角形面積"]);
   assert.deepEqual(catalog.materials[0].families, ["area", "triangle"]);
   assert.equal(catalog.materials[0].inspectionPriority, "A");
+  assert.equal(catalog.materials[0].extractionState, "ggb-inspected-needs-semantic-review");
+  assert.equal(catalog.materials[0].inspection.commandCount, 1);
   assert.equal(catalog.materials[1].inspectionPriority, "deferred-specialized-renderer");
   assert.equal(catalog.extractionPolicy.rawGgbCommitted, false);
 });

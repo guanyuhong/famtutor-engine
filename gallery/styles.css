@@ -52,6 +52,9 @@ h1 {
   line-height: 1.7;
 }
 
+.research-link { color: #bce8df; font-size: .82rem; font-weight: 750; text-decoration: none; }
+.research-link:hover { color: #fff; }
+
 .summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(6.8rem, 1fr));

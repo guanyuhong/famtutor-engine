@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FamTutor 几何素材研究库</title>
+  <link rel="stylesheet" href="./geometry-materials.css?v=1" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="top-nav" aria-label="研究库导航">
+      <a href="/gallery/">← 教材案例 Gallery</a>
+      <span>GeoGebra Research</span>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">FAMTUTOR · GEOMETRY MATERIAL RESEARCH</p>
+        <h1>几何素材研究库</h1>
+        <p class="hero-copy">按 material ID 去重，从公开线索进入离线检查、语义归纳、原创复现与跨渲染器验证。这里展示的是研究管线，不把标题数量包装成已完成素材。</p>
+      </div>
+      <div class="summary" aria-label="几何素材统计">
+        <div><strong id="material-count">—</strong><span>唯一 ID</span></div>
+        <div><strong id="priority-count">—</strong><span>A 级队列</span></div>
+        <div><strong id="unresolved-count">—</strong><span>待定位标题</span></div>
+        <div><strong id="inspected-count">—</strong><span>已检查 GGB</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="pipeline" aria-label="素材完成流程">
+      <div><b>1</b><span>Cataloged</span><small>按 ID 去重</small></div>
+      <div><b>2</b><span>GGB Inspected</span><small>离线安全检查</small></div>
+      <div><b>3</b><span>Pattern Reviewed</span><small>确认数学语义</small></div>
+      <div><b>4</b><span>FamTutor Reproduced</span><small>底层接口复现</small></div>
+      <div><b>5</b><span>Cross-renderer Verified</span><small>完整回归</small></div>
+    </section>
+
+    <section class="toolbar" aria-label="筛选几何素材">
+      <div class="mode-tabs" role="tablist" aria-label="目录层级">
+        <button type="button" class="mode-tab active" data-mode="materials" role="tab" aria-selected="true">可定位素材</button>
+        <button type="button" class="mode-tab" data-mode="unresolved" role="tab" aria-selected="false">待定位线索</button>
+      </div>
+      <label class="search-field">
+        <span>搜索</span>
+        <input id="search" type="search" placeholder="标题、ID、Book…" autocomplete="off" />
+      </label>
+      <label>
+        <span>家族</span>
+        <select id="family-filter"><option value="all">全部家族</option></select>
+      </label>
+      <label id="priority-field">
+        <span>优先级</span>
+        <select id="priority-filter"><option value="all">全部优先级</option></select>
+      </label>
+      <p id="visible-count" aria-live="polite">正在加载目录…</p>
+    </section>
+
+    <section id="error-panel" class="error-panel" hidden></section>
+    <section id="catalog" class="catalog" aria-live="polite"></section>
+  </main>
+
+  <dialog id="material-dialog">
+    <form method="dialog"><button class="dialog-close" aria-label="关闭">×</button></form>
+    <div id="dialog-content"></div>
+  </dialog>
+
+  <script type="module" src="./geometry-materials.js?v=1"></script>
+</body>
+</html>

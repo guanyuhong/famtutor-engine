@@ -1,0 +1,59 @@
+{
+  "schema": "famtutor.geometry.pattern.v1",
+  "patternId": "circle.apollonius-tangent-to-three-circles",
+  "title": "与三个给定圆相切的阿波罗尼亚圆",
+  "status": "semantic-review-partial",
+  "kind": "construction-pattern",
+  "sourceResearch": {
+    "materialId": "kktgdvAH",
+    "sourceUrl": "https://www.geogebra.org/m/kktgdvAH",
+    "manifest": "../manifests/kktgdvAH.manifest.json"
+  },
+  "intent": "研究给定三个圆时的内切、外切组合解。源文件使用圆反演、两圆公切线工具和偏移参数 s 组织多个分支。",
+  "inputs": [
+    { "id": "c1", "type": "circle2" },
+    { "id": "c2", "type": "circle2" },
+    { "id": "c3", "type": "circle2" },
+    { "id": "s", "type": "scalar", "description": "有向半径偏移，用于内切/外切分支" }
+  ],
+  "construction": [
+    { "id": "components", "semantic": "读取三个圆的圆心和半径，构造有向偏移圆", "mapsTo": ["point.circle_center", "measurement.circle_radius", "circle.center_radius"] },
+    { "id": "inversion", "semantic": "选择反演圆，将偏移后的圆族映射为更易处理的圆或直线", "mapsTo": [], "gap": "circle_inversion" },
+    { "id": "common-tangents", "semantic": "对反演后的两圆构造内外公切线候选", "mapsTo": [], "gap": "macro.line.common_tangents" },
+    { "id": "recover-centers", "semantic": "利用垂线、交点与中点恢复候选解圆心", "mapsTo": ["line.perpendicular_through", "point.intersection_line_line", "point.midpoint"] },
+    { "id": "inverse-back", "semantic": "将候选解反演回原圆系并按内切/外切符号筛选", "mapsTo": [], "gap": "circle_inversion" }
+  ],
+  "invariants": [
+    "每个输出圆与三个输入圆分别满足指定的内切或外切关系",
+    "一般位置最多产生八种有向相切分支",
+    "退化、包含、同心或相切输入会使部分分支重合、消失或转化为直线"
+  ],
+  "famTutorMapping": {
+    "existingCommands": ["circle.center_radius", "line.perpendicular_through", "measurement.circle_radius", "measurement.distance", "point.circle_center", "point.intersection_circle_circle", "point.intersection_line_line", "point.midpoint"],
+    "gaps": [
+      { "id": "circle_inversion", "reason": "GeoGebra Mirror(circle, circle) 是圆反演，不是直线反射；输出还可能在圆与直线之间改变类型。" },
+      { "id": "macro.line.common_tangents", "reason": "源文件携带 CommonTangents 自定义工具；现有宏只有圆上一点切线和外点引切线。" }
+    ],
+    "decision": "已补圆心/半径两个通用只读原语。圆反演涉及类型变化和退化语义，先保持明确缺口；取得第二个独立反演案例后再设计 Transform/Relation 层接口。"
+  },
+  "visualRecipe": {
+    "primary": "三个输入圆使用稳定中性色，当前候选解圆使用单一强调色",
+    "branches": "八种分支按教学阶段或筛选控件拆开，不同时显示全部 22 个布尔层",
+    "auxiliary": "反演圆、公切线、垂线默认隐藏，仅在解释构造时逐阶段显示",
+    "labels": "圆以中心标签和内/外切符号说明，不在密集切点附近堆放长文本"
+  },
+  "interactionRecipe": {
+    "draggable": ["三个圆心", "三个半径"],
+    "controls": ["选择切向符号组合", "显示辅助构造", "复位"],
+    "clock": null
+  },
+  "evidence": {
+    "sourceSha256": "392675b623339b98456ef3de0392f49d1b3bf3f67067ee3b5567698a5d7bf69e",
+    "commands": 42,
+    "exactMappedAfterCircleComponents": 34,
+    "remainingGapOccurrences": 8,
+    "customTools": ["CommonTangents"],
+    "scriptsExecuted": false,
+    "reviewNote": "源文件包含大量分支布尔量；当前仅提取数学核心，不复制其 UI 和脚本。"
+  }
+}

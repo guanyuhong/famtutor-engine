@@ -56,6 +56,18 @@
 | `wqYQetXz` | 歪斜线与三角形面积 | 面积、三角形 | 无 | 2 |
 | `XmvnxSZT` | 两椭圆交集 | 圆锥曲线 | `boolean-region` | 5 |
 
+## 第一批语义提取结果
+
+目前已有 3 个目录内 material 完成离线 `.ggb` 检查，另有三角形内角和 `GqrfqFBB` 作为目录外机制样本：
+
+| Material | 元素 / 命令 | 结果 | 底层判断 |
+| --- | ---: | --- | --- |
+| `uEsyxQdV` 垂足三角形 | 41 / 34 | 完整 Construction Pattern | 全部由现有 L0 组合，不新增命令 |
+| `f9tcjter` 三同心圆正三角形 | 69 / 36 | 完整 Mechanism Pattern | 复用旋转、圆交点与 Clock；补圆半径读取 |
+| `kktgdvAH` 阿波罗尼亚圆 | 288 / 42 | 部分语义 Pattern | 补圆心/半径读取；保留圆反演与公切线 Macro 缺口 |
+
+对应 Pattern 位于 `research/geogebra/patterns/`。`point.circle_center` 与 `measurement.circle_radius` 是两个独立素材共同暴露的原子缺口；它们直接读取已有 `circle2` 状态，不引入渲染特例。GeoGebra `Mirror` 的语义由输入类型决定：线性对象对应轴反射、点对应中心对称、圆锥对象对应圆反演；Inspector 必须做上下文映射，禁止仅按命令名归类。
+
 ## 素材最终形态
 
 不把每个 GeoGebra Activity 当成一个独立底层 API。每个完成的素材应该拆成四层：
@@ -76,6 +88,7 @@ cd /Users/guanyuhong/solo/famtutor-engine
 npm run geogebra:geometry-catalog -- \
   /Users/guanyuhong/Downloads/pegasusroe_geogebra_public_corpus_index_v0.2.json \
   --first-wave 12 \
+  --manifest-dir research/geogebra/manifests \
   --output research/geogebra/geometry-material-catalog.v1.json
 ```
 

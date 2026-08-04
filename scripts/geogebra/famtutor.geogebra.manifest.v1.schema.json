@@ -150,9 +150,31 @@
       "properties": {
         "total": { "type": "integer", "minimum": 0 },
         "byType": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
-        "byName": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+        "byName": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "inventory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": { "label": { "type": "string" }, "type": { "type": "string" } },
+            "additionalProperties": false
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "inputs", "outputs"],
+            "properties": {
+              "name": { "type": "string" },
+              "inputs": { "type": "array", "items": { "type": "string" } },
+              "outputs": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
       },
-      "oneOf": [{ "required": ["byType"] }, { "required": ["byName"] }],
+      "oneOf": [{ "required": ["byType", "inventory"] }, { "required": ["byName", "signatures"] }],
       "additionalProperties": false
     }
   }

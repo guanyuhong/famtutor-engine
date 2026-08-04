@@ -1,0 +1,58 @@
+{
+  "schema": "famtutor.geometry.pattern.v1",
+  "patternId": "triangle.equilateral-on-three-concentric-circles",
+  "title": "三个同心圆上的正三角形",
+  "status": "semantic-pattern-reviewed",
+  "kind": "mechanism-pattern",
+  "sourceResearch": {
+    "materialId": "f9tcjter",
+    "sourceUrl": "https://www.geogebra.org/m/f9tcjter",
+    "manifest": "../manifests/f9tcjter.manifest.json"
+  },
+  "intent": "给定同一圆心 O 的三个半径，寻找顶点分别位于三个同心圆上的正三角形，并展示两组交点分支和连续旋转。",
+  "inputs": [
+    { "id": "O", "type": "point2", "description": "公共圆心" },
+    { "id": "rA", "type": "scalar", "constraint": "> 0" },
+    { "id": "rB", "type": "scalar", "constraint": "> 0" },
+    { "id": "rC", "type": "scalar", "constraint": "> 0" },
+    { "id": "t", "type": "scalar", "constraint": "0..1，旋转进度" }
+  ],
+  "construction": [
+    { "id": "base-circles", "semantic": "以 O 为圆心构造三个同心圆，并在第一个圆上选 A", "mapsTo": ["circle.center_radius", "point.on_path"] },
+    { "id": "rotated-center", "semantic": "将 O 绕 A 旋转 60° 得 Q", "mapsTo": ["transform.rotate_point"] },
+    { "id": "candidate-c", "semantic": "以 Q 为圆心、rB 为半径的圆与第三同心圆相交，得到 C 的两个候选", "mapsTo": ["circle.center_radius", "point.intersection_circle_circle"] },
+    { "id": "candidate-b", "semantic": "将每个 C 候选绕 A 反向旋转 60° 得到对应 B", "mapsTo": ["transform.rotate_point"] },
+    { "id": "triangles", "semantic": "连接 A、B、C 得到至多两个正三角形分支", "mapsTo": ["polygon.vertices"] },
+    { "id": "motion", "semantic": "用 t 同步旋转 O、B 和辅助弧，展示构造连续性", "mapsTo": ["transform.rotate_point", "arc.center_points", "clock.step"] }
+  ],
+  "invariants": [
+    "A 到 O 的距离为 rA",
+    "B 到 O 的距离为 rB",
+    "C 到 O 的距离为 rC",
+    "AB = BC = CA",
+    "交点不存在时该半径组合没有实数构型；相切时两个分支合并"
+  ],
+  "famTutorMapping": {
+    "existingCommands": ["arc.center_points", "circle.center_radius", "measurement.circle_radius", "point.intersection_circle_circle", "point.on_path", "polygon.vertices", "transform.rotate_point"],
+    "gaps": [],
+    "decision": "新增 measurement.circle_radius 作为通用只读原语；核心模式其余部分由现有命令和 Deterministic Clock 组合，不新增案例专属图元。"
+  },
+  "visualRecipe": {
+    "primary": "三条同心圆使用低对比辅助色，候选正三角形使用两组稳定强调色",
+    "branches": "两个交点分支必须保持确定顺序；不依赖颜色表达唯一性",
+    "markers": "正三角形结论使用三边同组 marker.segment_tick 或角标记",
+    "narration": "存在条件与分支说明放活动阶段，不堆入主图"
+  },
+  "interactionRecipe": {
+    "draggable": ["A"],
+    "controls": ["播放", "暂停", "单步", "复位"],
+    "clock": { "target": "t", "start": 0, "end": 1, "loop": "repeat", "deterministic": true }
+  },
+  "evidence": {
+    "sourceSha256": "eb0fe8e433a0204eadb3b69014791fd75879c6d4e7fca85b64ccbf9cd177cef8",
+    "commands": 36,
+    "exactMappedAfterCircleComponents": 36,
+    "gaps": 0,
+    "scriptsExecuted": false
+  }
+}

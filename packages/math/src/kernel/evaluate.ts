@@ -331,6 +331,10 @@ function executeNode(
     }
     case "point.midpoint":
       return [midpoint(requirePointValue(inputs[0]!, "point.midpoint input 1"), requirePointValue(inputs[1]!, "point.midpoint input 2"))];
+    case "point.circle_center": {
+      const source = requireCircleValue(inputs[0]!, "point.circle_center input");
+      return [point(source.center.x, source.center.y)];
+    }
     case "point.projection": {
       const source = requirePointValue(inputs[0]!, "point.projection input 1");
       const path = requireProjectableValue(inputs[1]!, "point.projection input 2");
@@ -555,6 +559,8 @@ function executeNode(
       }
       return [valueLength(value as RuntimeValue)];
     }
+    case "measurement.circle_radius":
+      return [requireCircleValue(inputs[0]!, "measurement.circle_radius input").radius];
     case "measurement.angle":
       return [angleValue(
         requirePointValue(inputs[0]!, "angle measure input 1"),

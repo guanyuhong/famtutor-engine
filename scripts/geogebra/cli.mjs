@@ -29,6 +29,7 @@ function parseArgs(argv) {
     if (value === "--output") options.output = argv[++index];
     else if (value === "--top") options.top = Number(argv[++index]);
     else if (value === "--first-wave") options.firstWave = Number(argv[++index]);
+    else if (value === "--manifest-dir") options.manifestDir = argv[++index];
     else if (value === "--material-id") options.materialId = argv[++index];
     else if (value === "--source-url") options.sourceUrl = argv[++index];
     else if (value === "--help" || value === "-h") options.help = true;
@@ -82,8 +83,14 @@ async function planCommand(file, options) {
 async function geometryCatalogCommand(file, options) {
   if (!file) throw new Error("geometry-catalog requires a public-index JSON file.");
   const index = JSON.parse(await fs.readFile(file, "utf8"));
+  const manifests = [];
+  if (options.manifestDir) {
+    const names = (await fs.readdir(options.manifestDir)).filter(name => name.endsWith(".manifest.json")).sort();
+    for (const name of names) manifests.push(JSON.parse(await fs.readFile(path.join(options.manifestDir, name), "utf8")));
+  }
   const catalog = buildGeometryCatalog(index, {
-    firstWaveSize: Number.isInteger(options.firstWave) && options.firstWave > 0 ? options.firstWave : 12
+    firstWaveSize: Number.isInteger(options.firstWave) && options.firstWave > 0 ? options.firstWave : 12,
+    manifests
   });
   if (options.output) await writeJson(options.output, catalog);
   else process.stdout.write(`${JSON.stringify(catalog, null, 2)}\n`);

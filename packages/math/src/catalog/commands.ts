@@ -128,6 +128,15 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
+    name: "point.circle_center",
+    title: "Circle center",
+    description: "Extract the center point from a circle. This is a pure computed projection of circle2 state.",
+    inputTypes: ["circle2"],
+    outputTypes: ["point2"],
+    category: "point",
+    renderer: "computed"
+  },
+  {
     name: "point.projection",
     title: "Orthogonal projection",
     description: "Project a point orthogonally onto a line-like object or circle.",
@@ -549,6 +558,15 @@ const definitions: CommandDefinition[] = [
     title: "Segment length",
     description: "Measure the length of a segment or vector.",
     inputTypes: [["segment2", "vector2"]],
+    outputTypes: ["scalar"],
+    category: "measurement",
+    renderer: "computed"
+  },
+  {
+    name: "measurement.circle_radius",
+    title: "Circle radius",
+    description: "Extract the positive radius from a circle as a scalar measurement.",
+    inputTypes: ["circle2"],
     outputTypes: ["scalar"],
     category: "measurement",
     renderer: "computed"

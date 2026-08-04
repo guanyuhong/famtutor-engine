@@ -19,11 +19,15 @@ const EXACT_COMMANDS = new Map(Object.entries({
   segment: "segment.through_points",
   line: "line.through_points",
   ray: "ray.from_points",
+  orthogonalline: "line.perpendicular_through",
   parallelline: "line.parallel_through",
   perpendicularline: "line.perpendicular_through",
   circle: "circle.*",
+  center: "point.circle_center",
+  radius: "measurement.circle_radius",
   circumcircle: "circle.through_three_points",
   arc: "arc.*",
+  circlearc: "arc.center_points",
   circumcirculararc: "arc.three_points",
   sector: "sector.from_arc",
   polygon: "polygon.vertices",
@@ -66,7 +70,8 @@ const GAP_COMMANDS = new Map(Object.entries({
   integral: "calculus_kernel",
   coefficients: "symbolic_polynomial",
   sum: "declarative_aggregation",
-  binomialcoefficient: "combinatorics_kernel"
+  binomialcoefficient: "combinatorics_kernel",
+  closestpoint: "closest_point_on_path"
 }));
 
 const crcTable = (() => {
@@ -205,12 +210,23 @@ function booleanAttribute(value) {
   return value === "true" || value === "1";
 }
 
+function orderedAttributeValues(attrs) {
+  return Object.entries(attrs)
+    .sort(([left], [right]) => {
+      const leftIndex = Number(left.replace(/^\D+/, ""));
+      const rightIndex = Number(right.replace(/^\D+/, ""));
+      return leftIndex - rightIndex || left.localeCompare(right);
+    })
+    .map(([, value]) => value)
+    .filter(value => value !== "");
+}
+
 function parseConstructionXml(xml, fileName) {
   const result = {
     fileName,
     format: {},
-    elements: { total: 0, byType: {} },
-    commands: { total: 0, byName: {} },
+    elements: { total: 0, byType: {}, inventory: [] },
+    commands: { total: 0, byName: {}, signatures: [] },
     controls: { sliders: [], checkboxes: [], buttons: [], inputs: [] },
     animations: [],
     scripts: [],
@@ -218,6 +234,7 @@ function parseConstructionXml(xml, fileName) {
     warnings: []
   };
   let currentElement;
+  let currentCommand;
   scanXml(xml, {
     open(name, attrs, token) {
       const lowered = name.toLowerCase();
@@ -226,6 +243,7 @@ function parseConstructionXml(xml, fileName) {
         currentElement = { label: attrs.label, type: attrs.type ?? "unknown", hasSlider: false };
         result.elements.total += 1;
         increment(result.elements.byType, currentElement.type);
+        result.elements.inventory.push({ label: currentElement.label, type: currentElement.type });
         if (currentElement.type === "boolean") result.controls.checkboxes.push({ label: currentElement.label, type: currentElement.type });
         if (currentElement.type === "button") result.controls.buttons.push({ label: currentElement.label, type: currentElement.type });
         if (["textfield", "inputbox"].includes(currentElement.type?.toLowerCase())) result.controls.inputs.push({ label: currentElement.label, type: currentElement.type });
@@ -233,6 +251,12 @@ function parseConstructionXml(xml, fileName) {
         const command = attrs.name ?? "unknown";
         result.commands.total += 1;
         increment(result.commands.byName, command);
+        currentCommand = { name: command, inputs: [], outputs: [] };
+        result.commands.signatures.push(currentCommand);
+      } else if (lowered === "input" && currentCommand) {
+        currentCommand.inputs.push(...orderedAttributeValues(attrs));
+      } else if (lowered === "output" && currentCommand) {
+        currentCommand.outputs.push(...orderedAttributeValues(attrs));
       } else if (lowered === "slider" && currentElement) {
         currentElement.hasSlider = true;
         result.controls.sliders.push({
@@ -270,6 +294,7 @@ function parseConstructionXml(xml, fileName) {
     },
     close(name) {
       if (name.toLowerCase() === "element") currentElement = undefined;
+      if (name.toLowerCase() === "command") currentCommand = undefined;
     }
   });
   const bodyScriptPattern = /<(ggbscript|javascript)\b([^>]*)>([\s\S]*?)<\/\1\s*>/gi;
@@ -294,6 +319,7 @@ function parseConstructionXml(xml, fileName) {
 function parseMacros(xml, fileName) {
   const macros = [];
   let current;
+  let insideConstruction = false;
   scanXml(xml, {
     open(name, attrs, token) {
       const lowered = name.toLowerCase();
@@ -306,24 +332,37 @@ function parseMacros(xml, fileName) {
           sourceFile: fileName
         };
         macros.push(current);
-      } else if (current && lowered === "input") current.inputLabels.push(...Object.values(attrs));
-      else if (current && lowered === "output") current.outputLabels.push(...Object.values(attrs));
+      } else if (current && lowered === "construction") insideConstruction = true;
+      else if (current && !insideConstruction && ["input", "macroinput"].includes(lowered)) current.inputLabels.push(...orderedAttributeValues(attrs));
+      else if (current && !insideConstruction && ["output", "macrooutput"].includes(lowered)) current.outputLabels.push(...orderedAttributeValues(attrs));
       if (token.selfClosing && lowered === "macro") current = undefined;
     },
     close(name) {
+      if (name.toLowerCase() === "construction") insideConstruction = false;
       if (name.toLowerCase() === "macro") current = undefined;
     }
   });
   return macros;
 }
 
-function analyzeCommands(byName) {
+function analyzeCommands(commands, elements) {
   const exact = [];
   const gaps = [];
   const unknown = [];
-  for (const [command, count] of Object.entries(byName).sort(([a], [b]) => a.localeCompare(b))) {
+  const typeByLabel = new Map(elements.inventory.map(element => [element.label, element.type]));
+  for (const [command, count] of Object.entries(commands.byName).sort(([a], [b]) => a.localeCompare(b))) {
     const normalized = command.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
-    if (EXACT_COMMANDS.has(normalized)) exact.push({ command, count, mapsTo: EXACT_COMMANDS.get(normalized) });
+    if (normalized === "mirror") {
+      const signatures = commands.signatures.filter(signature => signature.name.toLowerCase().replaceAll(/[^a-z0-9]/g, "") === "mirror");
+      const lineLike = signatures.filter(signature => ["line", "segment", "ray"].includes(typeByLabel.get(signature.inputs[1]))).length;
+      const point = signatures.filter(signature => typeByLabel.get(signature.inputs[1]) === "point").length;
+      const conic = signatures.filter(signature => typeByLabel.get(signature.inputs[1]) === "conic").length;
+      const unresolved = count - lineLike - point - conic;
+      if (lineLike) exact.push({ command, count: lineLike, mapsTo: "transform.reflect/transform.apply", condition: "line-like mirror" });
+      if (point) exact.push({ command, count: point, mapsTo: "transform.rotate(angle=pi)/transform.apply", condition: "point reflection" });
+      if (conic) gaps.push({ command, count: conic, requiredCapability: "circle_inversion", condition: "circle/conic mirror" });
+      if (unresolved) gaps.push({ command, count: unresolved, requiredCapability: "mirror_overload_type_resolution" });
+    } else if (EXACT_COMMANDS.has(normalized)) exact.push({ command, count, mapsTo: EXACT_COMMANDS.get(normalized) });
     else if (GAP_COMMANDS.has(normalized)) gaps.push({ command, count, requiredCapability: GAP_COMMANDS.get(normalized) });
     else unknown.push({ command, count });
   }
@@ -338,7 +377,7 @@ function capabilityTags(parsed, macros, globalScripts) {
   if (types.some(type => /function/.test(type))) tags.add("function_plot");
   if (types.some(type => /curve|conic/.test(type)) || commands.some(command => /curve|locus|envelope/.test(command))) tags.add("curve");
   if (types.some(type => /vector|matrix/.test(type)) || commands.some(command => /vector|matrix|determinant/.test(command))) tags.add("vector_matrix");
-  if (commands.some(command => /translate|rotate|reflect|dilate/.test(command))) tags.add("transform");
+  if (commands.some(command => /translate|rotate|reflect|mirror|dilate/.test(command))) tags.add("transform");
   if (parsed.animations.length > 0 || commands.includes("startanimation")) tags.add("animation");
   if (commands.some(command => /sequence|zip|iteration/.test(command))) tags.add("sequence");
   if (commands.some(command => /integral|derivative|tangent/.test(command))) tags.add("calculus");
@@ -354,8 +393,8 @@ function capabilityTags(parsed, macros, globalScripts) {
 function mergeParsed(parts) {
   const merged = {
     format: {},
-    elements: { total: 0, byType: {} },
-    commands: { total: 0, byName: {} },
+    elements: { total: 0, byType: {}, inventory: [] },
+    commands: { total: 0, byName: {}, signatures: [] },
     controls: { sliders: [], checkboxes: [], buttons: [], inputs: [] },
     animations: [],
     scripts: [],
@@ -367,7 +406,9 @@ function mergeParsed(parts) {
     merged.elements.total += part.elements.total;
     merged.commands.total += part.commands.total;
     for (const [key, count] of Object.entries(part.elements.byType)) merged.elements.byType[key] = (merged.elements.byType[key] ?? 0) + count;
+    merged.elements.inventory.push(...part.elements.inventory);
     for (const [key, count] of Object.entries(part.commands.byName)) merged.commands.byName[key] = (merged.commands.byName[key] ?? 0) + count;
+    merged.commands.signatures.push(...part.commands.signatures);
     for (const key of Object.keys(merged.controls)) merged.controls[key].push(...part.controls[key]);
     merged.animations.push(...part.animations);
     merged.scripts.push(...part.scripts);
@@ -404,7 +445,7 @@ export function inspectGgb(input, options = {}) {
     .filter(([name]) => !knownCoreFiles.has(name) && !name.endsWith("/geogebra.xml") && !name.endsWith("/geogebra_macro.xml"))
     .map(([name, data]) => ({ fileName: name, bytes: data.length, sha256: sha256(data) }));
   const thumbnailEntry = [...entries.entries()].find(([name]) => /(^|\/)geogebra_thumbnail\.png$/i.test(name));
-  const commandAnalysis = analyzeCommands(parsed.commands.byName);
+  const commandAnalysis = analyzeCommands(parsed.commands, parsed.elements);
   const tags = capabilityTags(parsed, macros, globalScripts);
   const warnings = [];
   if (globalScripts.length || parsed.scripts.length) warnings.push({ code: "GGB_SCRIPT_REDACTED", message: "Scripts were fingerprinted but never executed or copied into the manifest." });

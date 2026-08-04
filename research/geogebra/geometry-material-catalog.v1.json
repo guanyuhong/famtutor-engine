@@ -14,6 +14,7 @@
     "geometryTitles": 145,
     "titlesWithMaterialIds": 50,
     "uniqueMaterialIds": 47,
+    "inspectedMaterials": 3,
     "unresolvedTitles": 95,
     "domainGeometryOnlyLeads": 11,
     "familyCounts": {
@@ -303,7 +304,49 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-f9tcjter.ggb",
+        "sha256": "eb0fe8e433a0204eadb3b69014791fd75879c6d4e7fca85b64ccbf9cd177cef8",
+        "bytes": 52177,
+        "elementCount": 69,
+        "elementTypes": {
+          "point": 18,
+          "ray": 1,
+          "conic": 5,
+          "numeric": 8,
+          "polygon": 6,
+          "boolean": 1,
+          "text": 23,
+          "button": 1,
+          "conicpart": 2,
+          "angle": 4
+        },
+        "commandCount": 36,
+        "commandNames": {
+          "Ray": 1,
+          "Point": 5,
+          "Circle": 5,
+          "Rotate": 6,
+          "Radius": 3,
+          "Polygon": 6,
+          "Intersect": 2,
+          "CircleArc": 2,
+          "Angle": 4,
+          "Distance": 2
+        },
+        "exactCommandCount": 36,
+        "gapCommandCount": 0,
+        "unknownCommandCount": 0,
+        "controlCount": 3,
+        "animationCount": 8,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [],
+        "scriptCount": 2,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "naZHdGcY",
@@ -559,7 +602,61 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-kktgdvAH.ggb",
+        "sha256": "392675b623339b98456ef3de0392f49d1b3bf3f67067ee3b5567698a5d7bf69e",
+        "bytes": 19249,
+        "elementCount": 288,
+        "elementTypes": {
+          "numeric": 212,
+          "point": 18,
+          "conic": 20,
+          "line": 2,
+          "segment": 2,
+          "text": 12,
+          "boolean": 22
+        },
+        "commandCount": 42,
+        "commandNames": {
+          "Circle": 13,
+          "Radius": 6,
+          "Intersect": 5,
+          "Point": 1,
+          "Mirror": 7,
+          "OrthogonalLine": 2,
+          "ClosestPoint": 1,
+          "Midpoint": 1,
+          "Center": 3,
+          "Distance": 1,
+          "Segment": 2
+        },
+        "exactCommandCount": 34,
+        "gapCommandCount": 8,
+        "unknownCommandCount": 0,
+        "controlCount": 23,
+        "animationCount": 189,
+        "macroCount": 1,
+        "macroNames": [
+          "CommonTangents"
+        ],
+        "gapCapabilities": [
+          {
+            "command": "ClosestPoint",
+            "count": 1,
+            "requiredCapability": "closest_point_on_path"
+          },
+          {
+            "command": "Mirror",
+            "count": 7,
+            "requiredCapability": "circle_inversion",
+            "condition": "circle/conic mirror"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "TMTB7pCJ",
@@ -825,7 +922,42 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-uEsyxQdV.ggb",
+        "sha256": "d5e3e622d2d984b6f3b18bac208915c8e0ad9a342915708d25b975217dbedb26",
+        "bytes": 8513,
+        "elementCount": 41,
+        "elementTypes": {
+          "point": 13,
+          "segment": 19,
+          "angle": 4,
+          "line": 3,
+          "polygon": 1,
+          "boolean": 1
+        },
+        "commandCount": 34,
+        "commandNames": {
+          "Segment": 16,
+          "Point": 3,
+          "Mirror": 4,
+          "Angle": 4,
+          "OrthogonalLine": 3,
+          "Intersect": 3,
+          "Polygon": 1
+        },
+        "exactCommandCount": 34,
+        "gapCommandCount": 0,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 6,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "zPJSKHVC",
@@ -3717,6 +3849,15 @@
         "平面幾何新路"
       ],
       "discoveryState": "material-id-unknown"
+    }
+  ],
+  "externalInspectedSamples": [
+    {
+      "materialId": "GqrfqFBB",
+      "sourceUrl": "https://www.geogebra.org/m/GqrfqFBB",
+      "manifestFile": "geogebra-GqrfqFBB.ggb",
+      "sha256": "d18b61cacfc31bbc43b8bb027dc7818487ad89b90fae8088f05a991d9335547b",
+      "extractionState": "ggb-inspected-needs-semantic-review"
     }
   ],
   "domainGeometryOnlyLeads": [
