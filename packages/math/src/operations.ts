@@ -4,6 +4,8 @@ import type {
   EntityType,
   InteractionPolicy,
   JsonValue,
+  MathClock,
+  MathControl,
   MathAssertion,
   StyleBinding
 } from "./types.js";
@@ -19,6 +21,8 @@ export type MathOperation =
   | MathRemoveAssertionOperation
   | MathSetStyleOperation
   | MathSetInteractionOperation
+  | MathSetControlOperation
+  | MathSetClockOperation
   | MathSetViewOperation;
 
 export interface MathConstructOperation {
@@ -90,6 +94,18 @@ export interface MathSetStyleOperation {
 export interface MathSetInteractionOperation {
   op: "set_interaction";
   policy: InteractionPolicy;
+}
+
+/** Add or replace a document-owned control by id. */
+export interface MathSetControlOperation {
+  op: "set_control";
+  control: MathControl;
+}
+
+/** Add or replace a deterministic clock by id. */
+export interface MathSetClockOperation {
+  op: "set_clock";
+  clock: MathClock;
 }
 
 export interface MathSetViewOperation {

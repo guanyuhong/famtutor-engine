@@ -85,8 +85,8 @@ Manifest 契约位于 `scripts/geogebra/famtutor.geogebra.manifest.v1.schema.jso
 
 按底层依赖排序，而不是逐作品仿制：
 
-1. **Control / Action**：声明式按钮、复选框、可见性、样式和值变更；事件必须可审计、可重放，不执行任意脚本。基准资源：中国剩余定理 `esztrerw`。
-2. **Deterministic Clock**：统一 slider autoplay、play/pause/reset、离散阶段和连续时间；同一输入必须得到同一帧。基准资源：三角形内角和 `GqrfqFBB`、科氏力 `gtdhuqdq`。
+1. **Control / Action（已实现首版）**：声明式按钮与受限 scalar/stage/clock 动作；事件可审计、可重放，不执行任意脚本。基准资源：中国剩余定理 `esztrerw`。
+2. **Deterministic Clock（已实现首版）**：统一 play/pause/reset/step 与固定逻辑步；同一初态和动作序列得到同一状态。基准资源：三角形内角和 `GqrfqFBB`、科氏力 `gtdhuqdq`。
 3. **Declarative Sequence**：用受限表达式生成同类实体，支持 repeat / sequence / zip，设数量上限和确定性 ID。基准资源：谢尔宾斯基三角形 `wEkG5mAm`、Bezier Curve `CKPUxFfh`。
 4. **Macro Package**：复用现有宏内核，增加显式输入/输出签名、版本、依赖和允许命令集合；不导入任意脚本。基准资源：Bezier `CKPUxFfh`、RotationArrow `xKqy8t59`。
 5. **Boolean Region**：为相交、并、差增加真正的数学 Region 实体，并保持 Direct SVG 与 JSXGraph 一致。基准资源：两椭圆交集 `XmvnxSZT`。

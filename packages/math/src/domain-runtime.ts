@@ -76,7 +76,9 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
       capabilities: {
         commands: commandCapabilities().length,
         macros: macroCapabilities().length,
-        agentTools: 9
+        agentTools: 9,
+        controlActions: 6,
+        deterministicClock: true
       }
     };
   }
@@ -91,7 +93,11 @@ export class MathDomainRuntime implements DomainRuntime<MathDocument, MathOperat
       descriptor,
       items: toJsonValue(commands) as CapabilityResult["items"],
       metadata: {
-        macros: toJsonValue(macroCapabilities())
+        macros: toJsonValue(macroCapabilities()),
+        interactionProtocols: toJsonValue({
+          controls: ["scalar.set", "stage.set", "clock.play", "clock.pause", "clock.reset", "clock.step"],
+          clocks: { operations: ["set_clock"], mountedActions: ["clock.play", "clock.pause", "clock.reset", "clock.step"] }
+        })
       }
     };
   }

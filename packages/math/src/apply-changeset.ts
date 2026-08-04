@@ -23,6 +23,8 @@ import type {
   InteractionPolicy,
   JsonValue,
   MathAssertion,
+  MathClock,
+  MathControl,
   MathDocument,
   MathEntity,
   MathView,
@@ -314,6 +316,16 @@ function operationDelete(document: MathDocument, operation: Record<string, unkno
     ?.map(binding => ({ ...binding, targets: binding.targets.filter(target => !deleteEntities.has(target)) }))
     .filter(binding => binding.targets.length > 0);
   document.interactions = document.interactions?.filter(policy => !deleteEntities.has(policy.target) && !deleteEntities.has(policy.dragTarget ?? ""));
+  document.clocks = document.clocks?.filter(clock => !deleteEntities.has(clock.target));
+  const remainingClockIds = new Set(document.clocks?.map(clock => clock.id) ?? []);
+  document.controls = document.controls?.filter(control => {
+    if (control.action.type === "scalar.set") return !deleteEntities.has(control.action.target);
+    if (control.action.type === "clock.play" || control.action.type === "clock.pause"
+      || control.action.type === "clock.reset" || control.action.type === "clock.step") {
+      return remainingClockIds.has(control.action.target);
+    }
+    return true;
+  });
   document.assertions = document.assertions?.filter(assertion => !assertionReferences(assertion, deleteEntities));
   document.views = document.views.map(view => view.kind === "graphics2d" && view.entityIds
     ? { ...view, entityIds: view.entityIds.filter(id => !deleteEntities.has(id)) }
@@ -356,6 +368,18 @@ function operationSetInteraction(document: MathDocument, operation: Record<strin
   document.interactions = [...(document.interactions ?? []).filter(candidate => candidate.target !== policy.target), policy];
 }
 
+function operationSetControl(document: MathDocument, operation: Record<string, unknown>): void {
+  const control = deepClone(objectArg(operation.control, "set_control.control")) as unknown as MathControl;
+  if (typeof control.id !== "string") throw new MathEngineError("INVALID_CONTROL", "set_control.control.id is required.");
+  document.controls = [...(document.controls ?? []).filter(candidate => candidate.id !== control.id), control];
+}
+
+function operationSetClock(document: MathDocument, operation: Record<string, unknown>): void {
+  const clock = deepClone(objectArg(operation.clock, "set_clock.clock")) as unknown as MathClock;
+  if (typeof clock.id !== "string") throw new MathEngineError("INVALID_CLOCK", "set_clock.clock.id is required.");
+  document.clocks = [...(document.clocks ?? []).filter(candidate => candidate.id !== clock.id), clock];
+}
+
 function operationSetView(document: MathDocument, operation: Record<string, unknown>): void {
   const viewId = stringArg(operation.viewId, "set_view.viewId")!;
   const index = document.views.findIndex(view => view.id === viewId);
@@ -395,6 +419,12 @@ function applyOne(document: MathDocument, operation: MathOperation | Record<stri
       return undefined;
     case "set_interaction":
       operationSetInteraction(document, raw);
+      return undefined;
+    case "set_control":
+      operationSetControl(document, raw);
+      return undefined;
+    case "set_clock":
+      operationSetClock(document, raw);
       return undefined;
     case "set_view":
       operationSetView(document, raw);

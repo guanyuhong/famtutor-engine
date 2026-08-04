@@ -42,6 +42,8 @@
     "transform.translate",
     "transform.apply",
     "interaction.set_value",
+    "control.action",
+    "clock.deterministic",
     "activity.stages"
   ],
   "generation": {
@@ -670,20 +672,12 @@
               "min": 0,
               "max": 2,
               "value": 0,
-              "step": 0.02,
-              "position": [
-                -1.2,
-                -0.8
-              ],
-              "length": 3.4,
-              "animation": {
-                "autoStart": true,
-                "direction": 1,
-                "stepCount": 100,
-                "delayMs": 30,
-                "maxRounds": 1,
-                "startDelayMs": 650
-              }
+      "step": 0.02,
+      "position": [
+        -1.2,
+        -0.8
+      ],
+      "length": 3.4
             }
           },
           {
@@ -1061,15 +1055,44 @@
               "radius": 0.58
             }
           },
-          {
-            "op": "set_interaction",
+  {
+    "op": "set_interaction",
             "policy": {
               "target": "t",
               "permissions": [
                 "set_value"
               ]
-            }
-          },
+    }
+  },
+  {
+    "op": "set_clock",
+    "clock": {
+      "id": "assemblyClock",
+      "target": "t",
+      "start": 0,
+      "end": 2,
+      "step": 0.02,
+      "intervalMs": 30,
+      "loop": "none",
+      "resetValue": 0
+    }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyPlay", "kind": "button", "label": "播放", "action": { "type": "clock.play", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyPause", "kind": "button", "label": "暂停", "action": { "type": "clock.pause", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyStep", "kind": "button", "label": "单步", "action": { "type": "clock.step", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyReset", "kind": "button", "label": "复位", "action": { "type": "clock.reset", "target": "assemblyClock" } }
+  },
           {
             "op": "add_assertion",
             "assertion": {
@@ -1315,7 +1338,7 @@
     ]
   },
   "expected": {
-    "documentFingerprint": "74d9a5d2c69ddc7b46a7eb04d1f79a4ffa1284bf2ab795b5b7f2161355cd8e3c",
+    "documentFingerprint": "ceec88e06fa8a441c519a3561025e99030157d250ff8e61d300ccdb321e54ce5",
     "assertions": [
       {
         "kind": "entity-exists",

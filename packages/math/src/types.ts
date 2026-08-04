@@ -140,6 +140,39 @@ export interface InteractionPolicy {
   };
 }
 
+export type MathControlAction =
+  | { type: "scalar.set"; target: string; value: number }
+  | { type: "stage.set"; stageId: string }
+  | { type: "clock.play"; target: string }
+  | { type: "clock.pause"; target: string }
+  | { type: "clock.reset"; target: string }
+  | { type: "clock.step"; target: string };
+
+/** A host-rendered, document-owned control with one auditable action. */
+export interface MathControl {
+  id: string;
+  kind: "button";
+  label: string;
+  action: MathControlAction;
+  description?: string;
+}
+
+/**
+ * A deterministic logical clock. Each tick advances exactly `step`; elapsed
+ * wall time never changes the mathematical state transition.
+ */
+export interface MathClock {
+  id: string;
+  target: string;
+  start: number;
+  end: number;
+  step: number;
+  intervalMs: number;
+  loop?: "none" | "repeat" | "alternate";
+  resetValue?: number;
+  autoStart?: boolean;
+}
+
 export interface ExpressionArgument {
   expr: string;
   variables?: string[];
@@ -224,6 +257,8 @@ export interface MathDocument {
   views: MathView[];
   styles?: StyleBinding[];
   interactions?: InteractionPolicy[];
+  controls?: MathControl[];
+  clocks?: MathClock[];
   assertions?: MathAssertion[];
   activities?: MathActivity[];
   provenance?: Provenance;

@@ -95,9 +95,47 @@ add_assertion
 remove_assertion
 set_style
 set_interaction
+set_control
+set_clock
 set_view
 undo
 ```
+
+### 声明式 Control / Action 与确定性 Clock
+
+`set_control` 添加或按 ID 替换一个按钮。按钮只允许执行受限、可审计的 `scalar.set`、`stage.set`、`clock.play`、`clock.pause`、`clock.reset` 或 `clock.step`，不接受 JavaScript：
+
+```json
+{
+  "op": "set_control",
+  "control": {
+    "id": "play",
+    "kind": "button",
+    "label": "播放",
+    "action": { "type": "clock.play", "target": "motionClock" }
+  }
+}
+```
+
+`set_clock` 将一个 `scalar.slider` 声明为逻辑时钟目标。每个 tick 恒定增加 `step`，`intervalMs` 只决定展示间隔，不参与数学状态计算：
+
+```json
+{
+  "op": "set_clock",
+  "clock": {
+    "id": "motionClock",
+    "target": "t",
+    "start": 0,
+    "end": 2,
+    "step": 0.02,
+    "intervalMs": 30,
+    "loop": "none",
+    "resetValue": 0
+  }
+}
+```
+
+宿主把 `document.controls` 渲染成合适的 UI，并向 MountedRenderer 派发 `control.invoke`。时钟状态位于 `MountedRendererState.metadata.clocks`；用户手动修改目标滑块时，对应时钟自动暂停。
 
 ### 构造
 

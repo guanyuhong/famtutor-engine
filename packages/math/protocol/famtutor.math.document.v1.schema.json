@@ -64,6 +64,14 @@
         "$ref": "#/$defs/interaction"
       }
     },
+    "controls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/control" }
+    },
+    "clocks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/clock" }
+    },
     "assertions": {
       "type": "array",
       "items": {
@@ -585,6 +593,66 @@
             }
           }
         }
+      }
+    },
+    "controlAction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "const": "scalar.set" },
+            "target": { "$ref": "#/$defs/id" },
+            "value": { "type": "number" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "stageId"],
+          "properties": {
+            "type": { "const": "stage.set" },
+            "stageId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "enum": ["clock.play", "clock.pause", "clock.reset", "clock.step"] },
+            "target": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "label", "action"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "const": "button" },
+        "label": { "type": "string", "minLength": 1 },
+        "action": { "$ref": "#/$defs/controlAction" },
+        "description": { "type": "string" }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target", "start", "end", "step", "intervalMs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target": { "$ref": "#/$defs/id" },
+        "start": { "type": "number" },
+        "end": { "type": "number" },
+        "step": { "type": "number", "exclusiveMinimum": 0 },
+        "intervalMs": { "type": "integer", "minimum": 16, "maximum": 60000 },
+        "loop": { "enum": ["none", "repeat", "alternate"] },
+        "resetValue": { "type": "number" },
+        "autoStart": { "type": "boolean" }
       }
     },
     "assertionArgument": {

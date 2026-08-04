@@ -164,6 +164,24 @@
         "policy": { "type": "object", "additionalProperties": true }
       }
     },
+    "set_control": {
+      "type": "object",
+      "required": ["op", "control"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_control" },
+        "control": { "$ref": "famtutor.math.document.v1.schema.json#/$defs/control" }
+      }
+    },
+    "set_clock": {
+      "type": "object",
+      "required": ["op", "clock"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_clock" },
+        "clock": { "$ref": "famtutor.math.document.v1.schema.json#/$defs/clock" }
+      }
+    },
     "set_view": {
       "type": "object",
       "required": ["op", "viewId", "patch"],
@@ -185,6 +203,8 @@
     { "$ref": "#/$defs/remove_assertion" },
     { "$ref": "#/$defs/set_style" },
     { "$ref": "#/$defs/set_interaction" },
+    { "$ref": "#/$defs/set_control" },
+    { "$ref": "#/$defs/set_clock" },
     { "$ref": "#/$defs/set_view" }
   ]
 }

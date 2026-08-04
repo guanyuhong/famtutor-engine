@@ -279,7 +279,7 @@ measurement.slope
 
 v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。`vector.scale` 组合已有 `vector2` 与数值或安全表达式 `params.factor`，用于滑块驱动的向量缩放和平移，不需要重复计算向量的方向。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
 
-`scalar.slider` 可选的声明式动画使用 JSXGraph 原生 glider 动画，不创建 Case 专属计时器。滑块进入可见阶段时自动播放；用户按下滑块或运行时调用 `scalar.set` 后立即停止自动播放，保证手动控制优先：
+`scalar.slider.params.animation` 保留为 JSXGraph 原生 glider 动画，适合无控制面板的轻量视觉演示。需要播放、暂停、复位、单步、确定性重放或跨宿主一致状态时，应使用文档级 `clocks[]` 与 `controls[]`；不要创建 Case 专属计时器。用户手动修改目标滑块时，确定性时钟自动暂停。
 
 ```json
 {
@@ -306,6 +306,8 @@ v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform �
 ```
 
 `direction` 只接受 `1` 或 `-1`；`stepCount` 为每轮步数，`delayMs` 为帧间隔，`maxRounds=-1` 表示循环播放。教材演示通常使用 `maxRounds=1`，避免持续运动干扰阅读。
+
+确定性时钟的状态转移只依赖 `{start,end,step,loop}` 与当前逻辑状态；`intervalMs` 不进入数学计算。MountedRenderer 支持 `control.invoke` 与 `clock.play/pause/reset/step`，状态通过 `MountedRendererState.metadata.clocks` 暴露给宿主。
 
 `vector.scale` 的最小用法：
 

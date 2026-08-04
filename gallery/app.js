@@ -1,4 +1,4 @@
-import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=interval-2";
+import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=controls-clock-1";
 
 const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/01-triangle-elements/case.json",
@@ -41,7 +41,8 @@ const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/38-reflection-shortest-path/case.json?v=ch2-3",
   "/corpus/books/zjedu-math-8a-2013/cases/39-speed-limit-inequality/case.json?v=ch3-2",
   "/corpus/books/zjedu-math-8a-2013/cases/40-number-line-open-closed-intervals/case.json?v=ch3-2",
-  "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2"
+  "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2",
+  "/research/geogebra/cases/01-chinese-remainder-controls/case.json?v=controls-clock-1"
 ];
 
 const runtime = new MathDomainRuntime();
@@ -127,6 +128,9 @@ function caseNumber(caseId) {
 }
 
 function sourceLabel(caseSpec) {
+  if ((caseSpec.source.printedPages ?? []).length === 0 && (caseSpec.source.pdfPages ?? []).length === 0) {
+    return "GeoGebra 机制研究 · FamTutor 原创复现";
+  }
   const printed = caseSpec.source.printedPages.join("–");
   const pdf = caseSpec.source.pdfPages.join("–");
   return `印刷页 ${printed} · PDF ${pdf}`;
@@ -140,7 +144,54 @@ function interactionLabel(caseSpec) {
   const parts = [];
   if (dragCount) parts.push(`可拖动 ${dragCount} 个对象`);
   if (scalarCount) parts.push(`可调整 ${scalarCount} 个滑块`);
+  const documentValue = caseSpec.inputs.initialDocument;
+  const tracedOperations = caseSpec.trace.changeSets.flatMap(changeSet => changeSet.operations ?? []);
+  const controlCount = (documentValue.controls ?? []).length + tracedOperations.filter(operation => operation.op === "set_control").length;
+  const clockCount = (documentValue.clocks ?? []).length + tracedOperations.filter(operation => operation.op === "set_clock").length;
+  if (controlCount) parts.push(`${controlCount} 个声明式控制`);
+  if (clockCount) parts.push(`${clockCount} 个确定性时钟`);
   return parts.join(" · ") || `${interactions.length} 个可交互对象`;
+}
+
+function clockSummary(renderer) {
+  const clocks = renderer.getState().metadata?.clocks;
+  if (!Array.isArray(clocks) || clocks.length === 0) return "";
+  return clocks.map(clock => `${clock.clockId}: ${clock.status} · t=${clock.value} · tick ${clock.tick}`).join(" ｜ ");
+}
+
+function setupRuntimeControls(card, renderer) {
+  const panel = card.querySelector(".runtime-control-panel");
+  const buttons = card.querySelector(".runtime-control-buttons");
+  const status = card.querySelector(".runtime-control-status");
+  const runtimeDocument = renderer.getDocument();
+  const controls = runtimeDocument.controls ?? [];
+  const clocks = runtimeDocument.clocks ?? [];
+  buttons.replaceChildren();
+  panel.hidden = controls.length === 0 && clocks.length === 0;
+  if (panel.hidden) return;
+
+  for (const control of controls) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "runtime-control";
+    button.textContent = control.label;
+    if (control.description) button.title = control.description;
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        const result = await renderer.dispatch({ type: "control.invoke", target: control.id, payload: {} });
+        if (!result.ok) throw new Error(result.diagnostics.map(item => `${item.code}: ${item.message}`).join("\n"));
+        status.textContent = clockSummary(renderer) || `已执行：${control.label}`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+    buttons.append(button);
+  }
+  status.textContent = clockSummary(renderer) || "所有按钮动作均来自 MathDocument.controls。";
+  renderer.subscribe(event => {
+    if (event.type.startsWith("clock.")) status.textContent = clockSummary(renderer);
+  });
 }
 
 async function fetchCase(path) {
@@ -230,6 +281,7 @@ async function mountCase(caseSpec, card, documentValue) {
     stageId: stages[stageIndex]?.id
   });
   rendererByCase.set(caseSpec.caseId, renderer);
+  setupRuntimeControls(card, renderer);
   if (stages.length > 0) updateStagePanel(caseSpec, card, stageIndex);
   card.querySelector(".loading-mask").hidden = true;
   card.dataset.mounted = "true";
@@ -241,7 +293,7 @@ function createCard(caseSpec) {
   card.dataset.caseId = caseSpec.caseId;
   card.dataset.status = caseSpec.status;
   card.dataset.caseType = caseSpec.caseType;
-  card.querySelector(".case-id").textContent = `CASE ${number} · ${caseSpec.caseType}`;
+  card.querySelector(".case-id").textContent = `${caseSpec.caseId.startsWith("research-") ? "RESEARCH" : "CASE"} ${number} · ${caseSpec.caseType}`;
   card.querySelector(".case-title").textContent = caseSpec.title;
 
   const chip = card.querySelector(".status-chip");

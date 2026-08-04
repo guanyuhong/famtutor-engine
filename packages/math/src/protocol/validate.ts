@@ -19,7 +19,7 @@ import { ID_PATTERN, finiteNumber, isPlainObject } from "../util.js";
 
 const TOP_LEVEL_KEYS = new Set([
   "schema", "documentId", "revision", "seed", "metadata", "entities", "construction", "views",
-  "styles", "interactions", "assertions", "activities", "provenance"
+  "styles", "interactions", "controls", "clocks", "assertions", "activities", "provenance"
 ]);
 const ENTITY_KEYS = new Set(["id", "type", "label", "role", "visible", "description"]);
 const NODE_KEYS = new Set(["id", "command", "inputs", "params", "outputs", "description"]);
@@ -31,6 +31,8 @@ const GRAPHICS_VIEW_KEYS = new Set([
 const SIMPLE_VIEW_KEYS = new Set(["id", "kind", "visible", "renderer", "title"]);
 const STYLE_KEYS = new Set(["targets", "style"]);
 const INTERACTION_KEYS = new Set(["target", "permissions", "dragMode", "dragTarget", "snap"]);
+const CONTROL_KEYS = new Set(["id", "kind", "label", "action", "description"]);
+const CLOCK_KEYS = new Set(["id", "target", "start", "end", "step", "intervalMs", "loop", "resetValue", "autoStart"]);
 const ASSERTION_KEYS = new Set([
   "id", "predicate", "arguments", "expected", "tolerance", "requiredMethod", "severity", "message"
 ]);
@@ -336,6 +338,118 @@ function structuralValidation(value: unknown): ValidationIssue[] {
         issue(issues, "INVALID_PERMISSIONS", `${path}.permissions`, "Unsupported interaction permission.");
       }
       if (policy.dragTarget !== undefined && (typeof policy.dragTarget !== "string" || !entityIds.has(policy.dragTarget))) issue(issues, "INVALID_DRAG_TARGET", `${path}.dragTarget`, "dragTarget must reference a declared entity.");
+    });
+  }
+
+  const clockIds = new Set<string>();
+  const clockTargets = new Set<string>();
+  if (value.clocks !== undefined) {
+    if (!Array.isArray(value.clocks)) issue(issues, "INVALID_CLOCKS", "$.clocks", "clocks must be an array.");
+    else value.clocks.forEach((clock, index) => {
+      const path = `$.clocks[${index}]`;
+      if (!isPlainObject(clock)) { issue(issues, "INVALID_CLOCK", path, "Clock must be an object."); return; }
+      checkClosedObject(clock, CLOCK_KEYS, path, issues);
+      const start = typeof clock.start === "number" ? clock.start : Number.NaN;
+      const end = typeof clock.end === "number" ? clock.end : Number.NaN;
+      const step = typeof clock.step === "number" ? clock.step : Number.NaN;
+      const intervalMs = typeof clock.intervalMs === "number" ? clock.intervalMs : Number.NaN;
+      if (checkId(clock.id, `${path}.id`, issues)) {
+        if (clockIds.has(clock.id)) issue(issues, "DUPLICATE_CLOCK_ID", `${path}.id`, `Duplicate clock ID '${clock.id}'.`);
+        clockIds.add(clock.id);
+      }
+      if (typeof clock.target !== "string" || entityTypeById.get(clock.target) !== "scalar") {
+        issue(issues, "INVALID_CLOCK_TARGET", `${path}.target`, "Clock target must reference a declared scalar entity.");
+      } else {
+        const producerId = produced.get(clock.target);
+        const producer = Array.isArray(value.construction)
+          ? value.construction.find(node => isPlainObject(node) && node.id === producerId)
+          : undefined;
+        if (!producer || producer.command !== "scalar.slider") {
+          issue(issues, "INVALID_CLOCK_TARGET", `${path}.target`, "Clock target must be produced by scalar.slider.", { actual: producer?.command as never });
+        } else if (clockTargets.has(clock.target)) {
+          issue(issues, "DUPLICATE_CLOCK_TARGET", `${path}.target`, "A scalar may be driven by at most one deterministic clock.", { actual: clock.target });
+        } else {
+          clockTargets.add(clock.target);
+          const min = isPlainObject(producer.params) && typeof producer.params.min === "number" ? producer.params.min : Number.NaN;
+          const max = isPlainObject(producer.params) && typeof producer.params.max === "number" ? producer.params.max : Number.NaN;
+          if (finiteNumber(min) && finiteNumber(max) && (start < min || end > max)) {
+            issue(issues, "CLOCK_OUTSIDE_SLIDER_RANGE", path, "Clock [start,end] must lie inside the target slider range.", { expected: [min, max], actual: [start, end] });
+          }
+        }
+      }
+      if (!finiteNumber(start) || !finiteNumber(end) || start >= end) {
+        issue(issues, "INVALID_CLOCK_RANGE", path, "Clock requires finite start < end.");
+      }
+      if (!finiteNumber(step) || step <= 0 || (finiteNumber(end) && finiteNumber(start) && step > end - start)) {
+        issue(issues, "INVALID_CLOCK_STEP", `${path}.step`, "Clock step must be positive and no larger than its range.");
+      }
+      if (!Number.isInteger(intervalMs) || intervalMs < 16 || intervalMs > 60_000) {
+        issue(issues, "INVALID_CLOCK_INTERVAL", `${path}.intervalMs`, "Clock intervalMs must be an integer in [16, 60000].");
+      }
+      if (clock.loop !== undefined && !["none", "repeat", "alternate"].includes(String(clock.loop))) {
+        issue(issues, "INVALID_CLOCK_LOOP", `${path}.loop`, "Clock loop must be none, repeat, or alternate.");
+      }
+      const resetValue = typeof clock.resetValue === "number" ? clock.resetValue : Number.NaN;
+      if (clock.resetValue !== undefined && (!finiteNumber(resetValue) || resetValue < start || resetValue > end)) {
+        issue(issues, "INVALID_CLOCK_RESET", `${path}.resetValue`, "Clock resetValue must lie inside [start,end].");
+      }
+      if (clock.autoStart !== undefined && typeof clock.autoStart !== "boolean") {
+        issue(issues, "INVALID_CLOCK_AUTOSTART", `${path}.autoStart`, "Clock autoStart must be boolean.");
+      }
+    });
+  }
+
+  const stageIds = new Set<string>();
+  if (Array.isArray(value.activities)) {
+    for (const activity of value.activities) {
+      if (!isPlainObject(activity) || !Array.isArray(activity.stages)) continue;
+      for (const stage of activity.stages) if (isPlainObject(stage) && typeof stage.id === "string") stageIds.add(stage.id);
+    }
+  }
+  const controlIds = new Set<string>();
+  if (value.controls !== undefined) {
+    if (!Array.isArray(value.controls)) issue(issues, "INVALID_CONTROLS", "$.controls", "controls must be an array.");
+    else value.controls.forEach((control, index) => {
+      const path = `$.controls[${index}]`;
+      if (!isPlainObject(control)) { issue(issues, "INVALID_CONTROL", path, "Control must be an object."); return; }
+      checkClosedObject(control, CONTROL_KEYS, path, issues);
+      if (checkId(control.id, `${path}.id`, issues)) {
+        if (controlIds.has(control.id)) issue(issues, "DUPLICATE_CONTROL_ID", `${path}.id`, `Duplicate control ID '${control.id}'.`);
+        controlIds.add(control.id);
+      }
+      if (control.kind !== "button") issue(issues, "INVALID_CONTROL_KIND", `${path}.kind`, "Only the atomic button control is supported.");
+      if (typeof control.label !== "string" || !control.label.trim()) issue(issues, "INVALID_CONTROL_LABEL", `${path}.label`, "Control label is required.");
+      if (!isPlainObject(control.action)) { issue(issues, "INVALID_CONTROL_ACTION", `${path}.action`, "Control action must be an object."); return; }
+      const action = control.action;
+      const actionType = String(action.type);
+      const allowedActionTypes = ["scalar.set", "stage.set", "clock.play", "clock.pause", "clock.reset", "clock.step"];
+      if (!allowedActionTypes.includes(actionType)) {
+        issue(issues, "INVALID_CONTROL_ACTION", `${path}.action.type`, "Unsupported control action.", { actual: actionType });
+        return;
+      }
+      const allowedActionKeys = actionType === "scalar.set"
+        ? new Set(["type", "target", "value"])
+        : actionType === "stage.set" ? new Set(["type", "stageId"]) : new Set(["type", "target"]);
+      checkClosedObject(action, allowedActionKeys, `${path}.action`, issues);
+      if (actionType === "scalar.set") {
+        if (typeof action.target !== "string" || entityTypeById.get(action.target) !== "scalar") issue(issues, "INVALID_CONTROL_TARGET", `${path}.action.target`, "scalar.set must target a scalar.");
+        if (!finiteNumber(action.value)) issue(issues, "INVALID_CONTROL_VALUE", `${path}.action.value`, "scalar.set value must be finite.");
+        if (typeof action.target === "string" && finiteNumber(action.value)) {
+          const producerId = produced.get(action.target);
+          const producer = Array.isArray(value.construction)
+            ? value.construction.find(node => isPlainObject(node) && node.id === producerId)
+            : undefined;
+          const min = isPlainObject(producer?.params) && typeof producer.params.min === "number" ? producer.params.min : Number.NaN;
+          const max = isPlainObject(producer?.params) && typeof producer.params.max === "number" ? producer.params.max : Number.NaN;
+          if (finiteNumber(min) && finiteNumber(max) && (action.value < min || action.value > max)) {
+            issue(issues, "CONTROL_VALUE_OUTSIDE_SLIDER_RANGE", `${path}.action.value`, "scalar.set value must lie inside the target slider range.", { expected: [min, max], actual: action.value });
+          }
+        }
+      } else if (actionType === "stage.set") {
+        if (typeof action.stageId !== "string" || !stageIds.has(action.stageId)) issue(issues, "INVALID_CONTROL_STAGE", `${path}.action.stageId`, "stage.set must reference a declared activity stage.");
+      } else if (typeof action.target !== "string" || !clockIds.has(action.target)) {
+        issue(issues, "INVALID_CONTROL_CLOCK", `${path}.action.target`, "Clock action must reference a declared clock.");
+      }
     });
   }
 
