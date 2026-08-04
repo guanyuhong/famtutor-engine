@@ -41,6 +41,7 @@ npm run gallery
 - 目录：`geometry-material-catalog.v1.json`
 - 已检查 Manifest：`manifests/`
 - 已归纳几何 Pattern：`patterns/`
+- Circle / Triangle Wave 01：`batches/circle-triangle-wave-01.md`
 - 设计与第一批队列：`../../docs/geogebra-geometry-material-library.md`
 
 原始 `.ggb` 不提交；Manifest 不含脚本正文，也不执行脚本。

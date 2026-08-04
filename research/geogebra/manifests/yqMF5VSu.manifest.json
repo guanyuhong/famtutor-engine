@@ -1,0 +1,554 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-yqMF5VSu.ggb",
+    "materialId": "yqMF5VSu",
+    "sourceUrl": "https://www.geogebra.org/m/yqMF5VSu",
+    "bytes": 7689,
+    "sha256": "c4da625931d6eb3612f51b5833db91de4e0072e5ffabdfec9588450439642480"
+  },
+  "archive": {
+    "entryCount": 4,
+    "entries": [
+      {
+        "fileName": "f21db64a267c5abcda69ae596299a083/hand_property.png",
+        "bytes": 1660,
+        "sha256": "afbc8bc13c64954d94d2c219dbe2b5c050fa1807eb1f325bf007c90b736d82ba"
+      },
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 2547,
+        "sha256": "248b1e6034eb666318e042277410a5aa5051f768adcda4e53553d2b472ef48bb"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 23,
+        "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 16611,
+        "sha256": "9bde20bbcf609474ac07f5cd04c1f449375c0231a7a629bf1c2530ab328ccad7"
+      }
+    ]
+  },
+  "format": {
+    "version": "4.3.51.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 33,
+      "byType": {
+        "point": 10,
+        "segment": 11,
+        "line": 2,
+        "polygon": 2,
+        "angle": 2,
+        "boolean": 1,
+        "text": 2,
+        "conic": 1,
+        "image": 2
+      },
+      "inventory": [
+        {
+          "label": "P",
+          "type": "point"
+        },
+        {
+          "label": "O",
+          "type": "point"
+        },
+        {
+          "label": "a",
+          "type": "segment"
+        },
+        {
+          "label": "b",
+          "type": "line"
+        },
+        {
+          "label": "A_1",
+          "type": "point"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "c",
+          "type": "segment"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "d",
+          "type": "segment"
+        },
+        {
+          "label": "poly1",
+          "type": "polygon"
+        },
+        {
+          "label": "e",
+          "type": "segment"
+        },
+        {
+          "label": "o",
+          "type": "segment"
+        },
+        {
+          "label": "d_1",
+          "type": "segment"
+        },
+        {
+          "label": "f",
+          "type": "line"
+        },
+        {
+          "label": "F",
+          "type": "point"
+        },
+        {
+          "label": "G",
+          "type": "point"
+        },
+        {
+          "label": "poly2",
+          "type": "polygon"
+        },
+        {
+          "label": "g",
+          "type": "segment"
+        },
+        {
+          "label": "o_1",
+          "type": "segment"
+        },
+        {
+          "label": "f_1",
+          "type": "segment"
+        },
+        {
+          "label": "h",
+          "type": "segment"
+        },
+        {
+          "label": "i",
+          "type": "segment"
+        },
+        {
+          "label": "α",
+          "type": "angle"
+        },
+        {
+          "label": "β",
+          "type": "angle"
+        },
+        {
+          "label": "j",
+          "type": "boolean"
+        },
+        {
+          "label": "text1",
+          "type": "text"
+        },
+        {
+          "label": "text2",
+          "type": "text"
+        },
+        {
+          "label": "k",
+          "type": "conic"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "PointerOffset",
+          "type": "point"
+        },
+        {
+          "label": "pic2",
+          "type": "image"
+        },
+        {
+          "label": "pic3",
+          "type": "image"
+        }
+      ]
+    },
+    "commands": {
+      "total": 19,
+      "byName": {
+        "Segment": 5,
+        "OrthogonalLine": 1,
+        "Intersect": 5,
+        "Point": 1,
+        "Polygon": 2,
+        "LineBisector": 1,
+        "Angle": 2,
+        "Circle": 1,
+        "Center": 1
+      },
+      "signatures": [
+        {
+          "name": "Segment",
+          "inputs": [
+            "O",
+            "P"
+          ],
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "name": "OrthogonalLine",
+          "inputs": [
+            "P",
+            "a"
+          ],
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "b",
+            "xAxis"
+          ],
+          "outputs": [
+            "A_1"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "b",
+            "yAxis"
+          ],
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "Segment[O, A_1]"
+          ],
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "A",
+            "P"
+          ],
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "yAxis",
+            "OrthogonalLine[P, c]"
+          ],
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "B"
+          ],
+          "outputs": [
+            "d"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "O",
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "poly1",
+            "e",
+            "o",
+            "d_1"
+          ]
+        },
+        {
+          "name": "LineBisector",
+          "inputs": [
+            "a"
+          ],
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "f",
+            "xAxis"
+          ],
+          "outputs": [
+            "F"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "f",
+            "yAxis"
+          ],
+          "outputs": [
+            "G"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "O",
+            "F",
+            "G"
+          ],
+          "outputs": [
+            "poly2",
+            "g",
+            "o_1",
+            "f_1"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "F",
+            "P"
+          ],
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "G"
+          ],
+          "outputs": [
+            "i"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "A",
+            "O",
+            "B"
+          ],
+          "outputs": [
+            "α"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "B",
+            "P",
+            "A"
+          ],
+          "outputs": [
+            "β"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "A",
+            "B",
+            "O"
+          ],
+          "outputs": [
+            "k"
+          ]
+        },
+        {
+          "name": "Center",
+          "inputs": [
+            "k"
+          ],
+          "outputs": [
+            "D"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [],
+      "checkboxes": [
+        {
+          "label": "j",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "P",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "A",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "PointerOffset",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "pic2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "pic3",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 23,
+      "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 2547,
+      "sha256": "248b1e6034eb666318e042277410a5aa5051f768adcda4e53553d2b472ef48bb"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "f21db64a267c5abcda69ae596299a083/hand_property.png",
+      "bytes": 1660,
+      "sha256": "afbc8bc13c64954d94d2c219dbe2b5c050fa1807eb1f325bf007c90b736d82ba"
+    }
+  ],
+  "capabilityTags": [
+    "animation",
+    "curve",
+    "geometry",
+    "script"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 2,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "Center",
+        "count": 1,
+        "mapsTo": "point.circle_center"
+      },
+      {
+        "command": "Circle",
+        "count": 1,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Intersect",
+        "count": 5,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "LineBisector",
+        "count": 1,
+        "mapsTo": "macro.line.perpendicular_bisector"
+      },
+      {
+        "command": "OrthogonalLine",
+        "count": 1,
+        "mapsTo": "line.perpendicular_through"
+      },
+      {
+        "command": "Point",
+        "count": 1,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Polygon",
+        "count": 2,
+        "mapsTo": "polygon.vertices"
+      },
+      {
+        "command": "Segment",
+        "count": 5,
+        "mapsTo": "segment.through_points"
+      }
+    ],
+    "gaps": [],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

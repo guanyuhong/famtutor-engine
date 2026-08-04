@@ -20,11 +20,14 @@ const EXACT_COMMANDS = new Map(Object.entries({
   line: "line.through_points",
   ray: "ray.from_points",
   orthogonalline: "line.perpendicular_through",
+  angularbisector: "macro.ray.angle_bisector",
+  linebisector: "macro.line.perpendicular_bisector",
   parallelline: "line.parallel_through",
   perpendicularline: "line.perpendicular_through",
   circle: "circle.*",
   center: "point.circle_center",
   radius: "measurement.circle_radius",
+  closestpoint: "point.projection",
   circumcircle: "circle.through_three_points",
   arc: "arc.*",
   circlearc: "arc.center_points",
@@ -63,6 +66,10 @@ const GAP_COMMANDS = new Map(Object.entries({
   element: "list_data_kernel",
   surface: "scene3d",
   plane: "scene3d",
+  sphere: "scene3d",
+  infinitecone: "scene3d",
+  intersectpath: "generalized_path_intersection",
+  pointin: "point_in_region",
   prism: "scene3d",
   pyramid: "scene3d",
   locus: "locus_trace",
@@ -70,8 +77,9 @@ const GAP_COMMANDS = new Map(Object.entries({
   integral: "calculus_kernel",
   coefficients: "symbolic_polynomial",
   sum: "declarative_aggregation",
-  binomialcoefficient: "combinatorics_kernel",
-  closestpoint: "closest_point_on_path"
+  min: "scalar_aggregation",
+  max: "scalar_aggregation",
+  binomialcoefficient: "combinatorics_kernel"
 }));
 
 const crcTable = (() => {
@@ -345,24 +353,31 @@ function parseMacros(xml, fileName) {
   return macros;
 }
 
-function analyzeCommands(commands, elements) {
+function analyzeCommands(commands, elements, macros) {
   const exact = [];
   const gaps = [];
   const unknown = [];
   const typeByLabel = new Map(elements.inventory.map(element => [element.label, element.type]));
+  const circleLabels = new Set(commands.signatures
+    .filter(signature => signature.name.toLowerCase().replaceAll(/[^a-z0-9]/g, "") === "circle")
+    .flatMap(signature => signature.outputs));
+  const importedMacroNames = new Set(macros.map(macro => macro.commandName.toLowerCase().replaceAll(/[^a-z0-9]/g, "")));
   for (const [command, count] of Object.entries(commands.byName).sort(([a], [b]) => a.localeCompare(b))) {
     const normalized = command.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
     if (normalized === "mirror") {
       const signatures = commands.signatures.filter(signature => signature.name.toLowerCase().replaceAll(/[^a-z0-9]/g, "") === "mirror");
       const lineLike = signatures.filter(signature => ["line", "segment", "ray"].includes(typeByLabel.get(signature.inputs[1]))).length;
       const point = signatures.filter(signature => typeByLabel.get(signature.inputs[1]) === "point").length;
-      const conic = signatures.filter(signature => typeByLabel.get(signature.inputs[1]) === "conic").length;
-      const unresolved = count - lineLike - point - conic;
+      const circleInversion = signatures.filter(signature => circleLabels.has(signature.inputs[0]) && circleLabels.has(signature.inputs[1])).length;
+      const conic = signatures.filter(signature => typeByLabel.get(signature.inputs[1]) === "conic").length - circleInversion;
+      const unresolved = count - lineLike - point - circleInversion - conic;
       if (lineLike) exact.push({ command, count: lineLike, mapsTo: "transform.reflect/transform.apply", condition: "line-like mirror" });
       if (point) exact.push({ command, count: point, mapsTo: "transform.rotate(angle=pi)/transform.apply", condition: "point reflection" });
-      if (conic) gaps.push({ command, count: conic, requiredCapability: "circle_inversion", condition: "circle/conic mirror" });
+      if (circleInversion) exact.push({ command, count: circleInversion, mapsTo: "circle.invert_in_circle", condition: "Circle-command source and inversion circle" });
+      if (conic) gaps.push({ command, count: conic, requiredCapability: "generalized_conic_inversion", condition: "non-circle conic mirror" });
       if (unresolved) gaps.push({ command, count: unresolved, requiredCapability: "mirror_overload_type_resolution" });
-    } else if (EXACT_COMMANDS.has(normalized)) exact.push({ command, count, mapsTo: EXACT_COMMANDS.get(normalized) });
+    } else if (importedMacroNames.has(normalized)) gaps.push({ command, count, requiredCapability: "imported_macro_semantic_review", condition: "custom tool invocation" });
+    else if (EXACT_COMMANDS.has(normalized)) exact.push({ command, count, mapsTo: EXACT_COMMANDS.get(normalized) });
     else if (GAP_COMMANDS.has(normalized)) gaps.push({ command, count, requiredCapability: GAP_COMMANDS.get(normalized) });
     else unknown.push({ command, count });
   }
@@ -445,7 +460,7 @@ export function inspectGgb(input, options = {}) {
     .filter(([name]) => !knownCoreFiles.has(name) && !name.endsWith("/geogebra.xml") && !name.endsWith("/geogebra_macro.xml"))
     .map(([name, data]) => ({ fileName: name, bytes: data.length, sha256: sha256(data) }));
   const thumbnailEntry = [...entries.entries()].find(([name]) => /(^|\/)geogebra_thumbnail\.png$/i.test(name));
-  const commandAnalysis = analyzeCommands(parsed.commands, parsed.elements);
+  const commandAnalysis = analyzeCommands(parsed.commands, parsed.elements, macros);
   const tags = capabilityTags(parsed, macros, globalScripts);
   const warnings = [];
   if (globalScripts.length || parsed.scripts.length) warnings.push({ code: "GGB_SCRIPT_REDACTED", message: "Scripts were fingerprinted but never executed or copied into the manifest." });

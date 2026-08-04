@@ -1,0 +1,464 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-m8SXgrNh.ggb",
+    "materialId": "m8SXgrNh",
+    "sourceUrl": "https://www.geogebra.org/m/m8SXgrNh",
+    "bytes": 63303,
+    "sha256": "0148a5cf904dae89394a0184efa2fccd8829ba43bac89028629f01c7169d44fc"
+  },
+  "archive": {
+    "entryCount": 4,
+    "entries": [
+      {
+        "fileName": "c29f976f68f0766957abc9ef9143b76c/檔案 2015-3-30 22 28 11.jpeg",
+        "bytes": 34873,
+        "sha256": "f6ac88baa7635cda293bb57781ece334ed38e70533ec3ddc5874b98e6d5ac607"
+      },
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 25821,
+        "sha256": "c23a5520e12c4d870d94305e7135c9d96e2c836917cbb395e01d15e74e396bd7"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 23,
+        "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 13378,
+        "sha256": "5e3bab89a0d293d2147bce888b551e5fd3a1f4e097ae47572a1dc8158ccf362b"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.42.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 23,
+      "byType": {
+        "numeric": 6,
+        "point": 7,
+        "conic": 5,
+        "angle": 1,
+        "list": 3,
+        "image": 1
+      },
+      "inventory": [
+        {
+          "label": "n",
+          "type": "numeric"
+        },
+        {
+          "label": "s",
+          "type": "numeric"
+        },
+        {
+          "label": "r2",
+          "type": "numeric"
+        },
+        {
+          "label": "r1",
+          "type": "numeric"
+        },
+        {
+          "label": "O",
+          "type": "point"
+        },
+        {
+          "label": "c1",
+          "type": "conic"
+        },
+        {
+          "label": "c2",
+          "type": "conic"
+        },
+        {
+          "label": "P",
+          "type": "point"
+        },
+        {
+          "label": "θ",
+          "type": "angle"
+        },
+        {
+          "label": "dθ",
+          "type": "numeric"
+        },
+        {
+          "label": "centers",
+          "type": "list"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "c",
+          "type": "conic"
+        },
+        {
+          "label": "c2'",
+          "type": "conic"
+        },
+        {
+          "label": "c1'",
+          "type": "conic"
+        },
+        {
+          "label": "circles",
+          "type": "list"
+        },
+        {
+          "label": "list1",
+          "type": "list"
+        },
+        {
+          "label": "O'",
+          "type": "point"
+        },
+        {
+          "label": "r2'",
+          "type": "numeric"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "pic1",
+          "type": "image"
+        }
+      ]
+    },
+    "commands": {
+      "total": 12,
+      "byName": {
+        "Circle": 3,
+        "Point": 1,
+        "Angle": 1,
+        "Sequence": 1,
+        "Mirror": 2,
+        "Zip": 2,
+        "Center": 1,
+        "Radius": 1
+      },
+      "signatures": [
+        {
+          "name": "Circle",
+          "inputs": [
+            "O",
+            "r1"
+          ],
+          "outputs": [
+            "c1"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "O",
+            "r2"
+          ],
+          "outputs": [
+            "c2"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "Circle[O, (r1 + r2) / 2]"
+          ],
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "P"
+          ],
+          "outputs": [
+            "θ"
+          ]
+        },
+        {
+          "name": "Sequence",
+          "inputs": [
+            "((r1 + r2) / 2; θ + (k * dθ))",
+            "k",
+            "0",
+            "n - 1"
+          ],
+          "outputs": [
+            "centers"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "c2",
+            "c"
+          ],
+          "outputs": [
+            "c2'"
+          ]
+        },
+        {
+          "name": "Mirror",
+          "inputs": [
+            "c1",
+            "c"
+          ],
+          "outputs": [
+            "c1'"
+          ]
+        },
+        {
+          "name": "Zip",
+          "inputs": [
+            "Circle[p, (r2 - r1) / 2]",
+            "p",
+            "centers"
+          ],
+          "outputs": [
+            "circles"
+          ]
+        },
+        {
+          "name": "Zip",
+          "inputs": [
+            "Mirror[cir, c]",
+            "cir",
+            "circles"
+          ],
+          "outputs": [
+            "list1"
+          ]
+        },
+        {
+          "name": "Center",
+          "inputs": [
+            "c2'"
+          ],
+          "outputs": [
+            "O'"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "c2'"
+          ],
+          "outputs": [
+            "r2'"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "n",
+          "min": "3",
+          "max": "40",
+          "width": "100.0",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "n",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "r2",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "O",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "P",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": true
+      },
+      {
+        "label": "A",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "B",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "C",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "D",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "pic1",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 2,
+      "euclidian3d": 1,
+      "spreadsheet": 1,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 23,
+      "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 25821,
+      "sha256": "c23a5520e12c4d870d94305e7135c9d96e2c836917cbb395e01d15e74e396bd7"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "c29f976f68f0766957abc9ef9143b76c/檔案 2015-3-30 22 28 11.jpeg",
+      "bytes": 34873,
+      "sha256": "f6ac88baa7635cda293bb57781ece334ed38e70533ec3ddc5874b98e6d5ac607"
+    }
+  ],
+  "capabilityTags": [
+    "3d",
+    "animation",
+    "curve",
+    "geometry",
+    "script",
+    "sequence",
+    "spreadsheet",
+    "transform"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 1,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "Center",
+        "count": 1,
+        "mapsTo": "point.circle_center"
+      },
+      {
+        "command": "Circle",
+        "count": 3,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Mirror",
+        "count": 2,
+        "mapsTo": "circle.invert_in_circle",
+        "condition": "Circle-command source and inversion circle"
+      },
+      {
+        "command": "Point",
+        "count": 1,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Radius",
+        "count": 1,
+        "mapsTo": "measurement.circle_radius"
+      }
+    ],
+    "gaps": [
+      {
+        "command": "Sequence",
+        "count": 1,
+        "requiredCapability": "declarative_sequence"
+      },
+      {
+        "command": "Zip",
+        "count": 2,
+        "requiredCapability": "declarative_sequence"
+      }
+    ],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

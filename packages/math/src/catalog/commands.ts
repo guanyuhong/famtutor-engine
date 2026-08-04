@@ -30,7 +30,6 @@ export interface CommandDefinition {
 
 const LINE_LIKE = ["line2", "segment2", "ray2"] as const;
 const PATH_LIKE = ["line2", "segment2", "ray2", "circle2", "arc2", "polygon2"] as const;
-const PROJECTABLE = ["line2", "segment2", "ray2", "circle2"] as const;
 const MEASURE_AREA = ["polygon2", "circle2", "sector2"] as const;
 const MEASURE_PERIMETER = ["polygon2", "circle2", "arc2", "segment2"] as const;
 const TRANSFORMABLE = [
@@ -138,11 +137,20 @@ const definitions: CommandDefinition[] = [
   },
   {
     name: "point.projection",
-    title: "Orthogonal projection",
-    description: "Project a point orthogonally onto a line-like object or circle.",
-    inputTypes: ["point2", PROJECTABLE],
+    title: "Closest point on path",
+    description: "Return the nearest point on a line, segment, ray, circle, arc, or polygon boundary. For unbounded linear paths this is the orthogonal projection.",
+    inputTypes: ["point2", PATH_LIKE],
     outputTypes: ["point2"],
     category: "point",
+    renderer: "computed"
+  },
+  {
+    name: "point.invert_in_circle",
+    title: "Point inversion in circle",
+    description: "Invert a point in a circle using OP × OP' = R². The inversion center itself is undefined.",
+    inputTypes: ["point2", "circle2"],
+    outputTypes: ["point2"],
+    category: "transform",
     renderer: "computed"
   },
   {
@@ -227,6 +235,16 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
+    name: "line.common_tangent",
+    title: "Oriented common tangent",
+    description: "Construct one common tangent of two circles selected by params.side1 and params.side2, each -1 or 1. Impossible branches are undefined.",
+    inputTypes: ["circle2", "circle2"],
+    outputTypes: ["line2"],
+    requiredParams: ["side1", "side2"],
+    category: "line",
+    renderer: "both"
+  },
+  {
     name: "vector.between_points",
     title: "Vector between points",
     description: "Create the directed vector from the first point to the second.",
@@ -297,6 +315,15 @@ const definitions: CommandDefinition[] = [
     outputTypes: ["circle2"],
     category: "circle",
     renderer: "both"
+  },
+  {
+    name: "circle.invert_in_circle",
+    title: "Circle inversion in circle",
+    description: "Invert a circle in another circle. The source must not pass through the inversion center because that image is a line rather than circle2.",
+    inputTypes: ["circle2", "circle2"],
+    outputTypes: ["circle2"],
+    category: "transform",
+    renderer: "computed"
   },
   {
     name: "arc.center_points",

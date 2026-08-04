@@ -42,7 +42,8 @@ const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/39-speed-limit-inequality/case.json?v=ch3-2",
   "/corpus/books/zjedu-math-8a-2013/cases/40-number-line-open-closed-intervals/case.json?v=ch3-2",
   "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2",
-  "/research/geogebra/cases/01-chinese-remainder-controls/case.json?v=controls-clock-1"
+  "/research/geogebra/cases/01-chinese-remainder-controls/case.json?v=controls-clock-1",
+  "/research/geogebra/cases/02-circle-inversion-common-tangents/case.json?v=circle-inversion-1"
 ];
 
 const runtime = new MathDomainRuntime();

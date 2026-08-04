@@ -3130,6 +3130,11 @@
         "mapsTo": "circle.*"
       },
       {
+        "command": "ClosestPoint",
+        "count": 1,
+        "mapsTo": "point.projection"
+      },
+      {
         "command": "Distance",
         "count": 1,
         "mapsTo": "measurement.distance"
@@ -3143,6 +3148,12 @@
         "command": "Midpoint",
         "count": 1,
         "mapsTo": "point.midpoint"
+      },
+      {
+        "command": "Mirror",
+        "count": 7,
+        "mapsTo": "circle.invert_in_circle",
+        "condition": "Circle-command source and inversion circle"
       },
       {
         "command": "OrthogonalLine",
@@ -3165,19 +3176,7 @@
         "mapsTo": "segment.through_points"
       }
     ],
-    "gaps": [
-      {
-        "command": "ClosestPoint",
-        "count": 1,
-        "requiredCapability": "closest_point_on_path"
-      },
-      {
-        "command": "Mirror",
-        "count": 7,
-        "requiredCapability": "circle_inversion",
-        "condition": "circle/conic mirror"
-      }
-    ],
+    "gaps": [],
     "unknown": []
   },
   "security": {

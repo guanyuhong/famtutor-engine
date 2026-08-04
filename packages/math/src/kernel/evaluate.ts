@@ -27,6 +27,7 @@ import {
   circle,
   circleArea,
   circlePerimeter,
+  commonTangentLine,
   circumcircle,
   dilatePoint,
   dilateTransform,
@@ -37,6 +38,8 @@ import {
   intersectLineCircle,
   intersectLineConic,
   intersectLines,
+  invertCircleInCircle,
+  invertPointInCircle,
   isAngle,
   isArc,
   isCircle,
@@ -249,13 +252,6 @@ function requirePathValue(value: RuntimeValue | JsonValue, context: string): Run
   return value;
 }
 
-function requireProjectableValue(value: RuntimeValue | JsonValue, context: string): RuntimeValue {
-  if (!isLine(value) && !isSegment(value) && !isRay(value) && !isCircle(value)) {
-    throw new MathEngineError("TYPE_MISMATCH", `${context} requires line2, segment2, ray2, or circle2.`);
-  }
-  return value;
-}
-
 function requireTransformValue(value: RuntimeValue | JsonValue, context: string) {
   if (!isTransform(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires transform2.`);
   return value;
@@ -337,9 +333,14 @@ function executeNode(
     }
     case "point.projection": {
       const source = requirePointValue(inputs[0]!, "point.projection input 1");
-      const path = requireProjectableValue(inputs[1]!, "point.projection input 2");
+      const path = requirePathValue(inputs[1]!, "point.projection input 2");
       return [projectPointToPath(source, path)];
     }
+    case "point.invert_in_circle":
+      return [invertPointInCircle(
+        requirePointValue(inputs[0]!, "point.invert_in_circle input 1"),
+        requireCircleValue(inputs[1]!, "point.invert_in_circle input 2")
+      )];
     case "point.intersection_line_line": {
       const left = lineLikeToLine(requireLineLikeValue(inputs[0]!, "intersection input 1"));
       const right = lineLikeToLine(requireLineLikeValue(inputs[1]!, "intersection input 2"));
@@ -376,6 +377,13 @@ function executeNode(
       const target = lineLikeToLine(requireLineLikeValue(inputs[1]!, "perpendicular input 2"));
       return [lineFromPointDirection(through, vector(-target.direction.y, target.direction.x))];
     }
+    case "line.common_tangent":
+      return [commonTangentLine(
+        requireCircleValue(inputs[0]!, "line.common_tangent input 1"),
+        requireCircleValue(inputs[1]!, "line.common_tangent input 2"),
+        numberParam(node, "side1"),
+        numberParam(node, "side2")
+      )];
     case "vector.between_points": {
       const from = requirePointValue(inputs[0]!, "vector input 1");
       const to = requirePointValue(inputs[1]!, "vector input 2");
@@ -412,6 +420,11 @@ function executeNode(
         requirePointValue(inputs[0]!, "circumcircle input 1"),
         requirePointValue(inputs[1]!, "circumcircle input 2"),
         requirePointValue(inputs[2]!, "circumcircle input 3")
+      )];
+    case "circle.invert_in_circle":
+      return [invertCircleInCircle(
+        requireCircleValue(inputs[0]!, "circle.invert_in_circle input 1"),
+        requireCircleValue(inputs[1]!, "circle.invert_in_circle input 2")
       )];
     case "arc.center_points":
       return [arcFromCenterPoints(

@@ -14,7 +14,7 @@
     "geometryTitles": 145,
     "titlesWithMaterialIds": 50,
     "uniqueMaterialIds": 47,
-    "inspectedMaterials": 3,
+    "inspectedMaterials": 12,
     "unresolvedTitles": 95,
     "domainGeometryOnlyLeads": 11,
     "familyCounts": {
@@ -128,7 +128,83 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-cmHVCnAy.ggb",
+        "sha256": "b252c1f3fc50f425a2f02e4855ef84d5aba620ef7a1f6cf2fac3978e4e717947",
+        "bytes": 133663,
+        "elementCount": 76,
+        "elementTypes": {
+          "point3d": 18,
+          "point": 2,
+          "line3d": 8,
+          "plane3d": 4,
+          "numeric": 2,
+          "conic3d": 5,
+          "quadric": 3,
+          "vector3d": 2,
+          "segment3d": 8,
+          "boolean": 10,
+          "angle": 2,
+          "text": 4,
+          "polygon3d": 2,
+          "angle3d": 5,
+          "button": 1
+        },
+        "commandCount": 51,
+        "commandNames": {
+          "Point": 2,
+          "Line": 4,
+          "PointIn": 2,
+          "AngularBisector": 1,
+          "Intersect": 14,
+          "Distance": 2,
+          "Circle": 2,
+          "InfiniteCone": 1,
+          "Sphere": 2,
+          "Vector": 1,
+          "IntersectPath": 5,
+          "Segment": 8,
+          "Polygon": 2,
+          "Angle": 5
+        },
+        "exactCommandCount": 41,
+        "gapCommandCount": 10,
+        "unknownCommandCount": 0,
+        "controlCount": 12,
+        "animationCount": 6,
+        "macroCount": 3,
+        "macroNames": [
+          "Grids",
+          "TextPinNormal",
+          "TextPin"
+        ],
+        "gapCapabilities": [
+          {
+            "command": "InfiniteCone",
+            "count": 1,
+            "requiredCapability": "scene3d"
+          },
+          {
+            "command": "IntersectPath",
+            "count": 5,
+            "requiredCapability": "generalized_path_intersection"
+          },
+          {
+            "command": "PointIn",
+            "count": 2,
+            "requiredCapability": "point_in_region"
+          },
+          {
+            "command": "Sphere",
+            "count": 2,
+            "requiredCapability": "scene3d"
+          }
+        ],
+        "scriptCount": 2,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "XmvnxSZT",
@@ -197,7 +273,53 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "inspect-then-resolve-dependencies"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-XmvnxSZT.ggb",
+        "sha256": "b90dc56bd48ad45be568e40e8fd356d42ffe5fca1d5188d5e9429693075374b4",
+        "bytes": 56562,
+        "elementCount": 29,
+        "elementTypes": {
+          "numeric": 1,
+          "point": 10,
+          "conic": 6,
+          "list": 1,
+          "functionNVar": 11
+        },
+        "commandCount": 12,
+        "commandNames": {
+          "Circle": 3,
+          "Ellipse": 2,
+          "Point": 1,
+          "Coefficients": 1,
+          "ineq": 5
+        },
+        "exactCommandCount": 6,
+        "gapCommandCount": 6,
+        "unknownCommandCount": 0,
+        "controlCount": 0,
+        "animationCount": 12,
+        "macroCount": 1,
+        "macroNames": [
+          "ineq"
+        ],
+        "gapCapabilities": [
+          {
+            "command": "Coefficients",
+            "count": 1,
+            "requiredCapability": "symbolic_polynomial"
+          },
+          {
+            "command": "ineq",
+            "count": 5,
+            "requiredCapability": "imported_macro_semantic_review",
+            "condition": "custom tool invocation"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "XhPbjqrv",
@@ -450,7 +572,52 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "inspect-then-resolve-dependencies"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-wEkG5mAm.ggb",
+        "sha256": "8e70fb42b507b5f7306a19ef6efef738a81b63c75ba57f1f20c23ee9111b9d24",
+        "bytes": 22063,
+        "elementCount": 344,
+        "elementTypes": {
+          "point": 48,
+          "polygon": 74,
+          "segment": 222
+        },
+        "commandCount": 25,
+        "commandNames": {
+          "Polygon": 6,
+          "Midpoint": 3,
+          "Tri": 12,
+          "工具2": 4
+        },
+        "exactCommandCount": 9,
+        "gapCommandCount": 16,
+        "unknownCommandCount": 0,
+        "controlCount": 0,
+        "animationCount": 5,
+        "macroCount": 2,
+        "macroNames": [
+          "Tri",
+          "工具2"
+        ],
+        "gapCapabilities": [
+          {
+            "command": "Tri",
+            "count": 12,
+            "requiredCapability": "imported_macro_semantic_review",
+            "condition": "custom tool invocation"
+          },
+          {
+            "command": "工具2",
+            "count": 4,
+            "requiredCapability": "imported_macro_semantic_review",
+            "condition": "custom tool invocation"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "AFFXmJTw",
@@ -632,8 +799,8 @@
           "Distance": 1,
           "Segment": 2
         },
-        "exactCommandCount": 34,
-        "gapCommandCount": 8,
+        "exactCommandCount": 42,
+        "gapCommandCount": 0,
         "unknownCommandCount": 0,
         "controlCount": 23,
         "animationCount": 189,
@@ -641,19 +808,7 @@
         "macroNames": [
           "CommonTangents"
         ],
-        "gapCapabilities": [
-          {
-            "command": "ClosestPoint",
-            "count": 1,
-            "requiredCapability": "closest_point_on_path"
-          },
-          {
-            "command": "Mirror",
-            "count": 7,
-            "requiredCapability": "circle_inversion",
-            "condition": "circle/conic mirror"
-          }
-        ],
+        "gapCapabilities": [],
         "scriptCount": 1,
         "scriptsExecuted": false
       }
@@ -699,7 +854,43 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-TMTB7pCJ.ggb",
+        "sha256": "0aa721e15d5961df6809602b340b55e9de5b5bf855f7d0a3607cf2ee88651f4d",
+        "bytes": 7925,
+        "elementCount": 31,
+        "elementTypes": {
+          "line": 6,
+          "point": 7,
+          "polygon": 2,
+          "segment": 7,
+          "angle": 8,
+          "boolean": 1
+        },
+        "commandCount": 15,
+        "commandNames": {
+          "Point": 3,
+          "Polygon": 2,
+          "OrthogonalLine": 1,
+          "Intersect": 2,
+          "Segment": 1,
+          "Angle": 4,
+          "Rotate": 1,
+          "Line": 1
+        },
+        "exactCommandCount": 15,
+        "gapCommandCount": 0,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 5,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "css4XDST",
@@ -742,7 +933,40 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-css4XDST.ggb",
+        "sha256": "cca82e5d3a835c5eb1a5552116dcea8a05a27a080eabe30cecc4bc2c89cf84d9",
+        "bytes": 7563,
+        "elementCount": 30,
+        "elementTypes": {
+          "line": 5,
+          "point": 10,
+          "polygon": 3,
+          "segment": 9,
+          "angle": 2,
+          "numeric": 1
+        },
+        "commandCount": 12,
+        "commandNames": {
+          "Point": 3,
+          "Intersect": 3,
+          "Polygon": 3,
+          "OrthogonalLine": 1,
+          "Angle": 2
+        },
+        "exactCommandCount": 12,
+        "gapCommandCount": 0,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 5,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "X2VCHbkp",
@@ -835,7 +1059,47 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-yqMF5VSu.ggb",
+        "sha256": "c4da625931d6eb3612f51b5833db91de4e0072e5ffabdfec9588450439642480",
+        "bytes": 7689,
+        "elementCount": 33,
+        "elementTypes": {
+          "point": 10,
+          "segment": 11,
+          "line": 2,
+          "polygon": 2,
+          "angle": 2,
+          "boolean": 1,
+          "text": 2,
+          "conic": 1,
+          "image": 2
+        },
+        "commandCount": 19,
+        "commandNames": {
+          "Segment": 5,
+          "OrthogonalLine": 1,
+          "Intersect": 5,
+          "Point": 1,
+          "Polygon": 2,
+          "LineBisector": 1,
+          "Angle": 2,
+          "Circle": 1,
+          "Center": 1
+        },
+        "exactCommandCount": 19,
+        "gapCommandCount": 0,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 5,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "m8SXgrNh",
@@ -878,7 +1142,54 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-m8SXgrNh.ggb",
+        "sha256": "0148a5cf904dae89394a0184efa2fccd8829ba43bac89028629f01c7169d44fc",
+        "bytes": 63303,
+        "elementCount": 23,
+        "elementTypes": {
+          "numeric": 6,
+          "point": 7,
+          "conic": 5,
+          "angle": 1,
+          "list": 3,
+          "image": 1
+        },
+        "commandCount": 12,
+        "commandNames": {
+          "Circle": 3,
+          "Point": 1,
+          "Angle": 1,
+          "Sequence": 1,
+          "Mirror": 2,
+          "Zip": 2,
+          "Center": 1,
+          "Radius": 1
+        },
+        "exactCommandCount": 9,
+        "gapCommandCount": 3,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 9,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [
+          {
+            "command": "Sequence",
+            "count": 1,
+            "requiredCapability": "declarative_sequence"
+          },
+          {
+            "command": "Zip",
+            "count": 2,
+            "requiredCapability": "declarative_sequence"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "uEsyxQdV",
@@ -1098,7 +1409,46 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-VjyumMQh.ggb",
+        "sha256": "860c9b5a4cade7bdf191c81168b06907642e6245cd992b9f1eac1947f709cbdb",
+        "bytes": 19605,
+        "elementCount": 12,
+        "elementTypes": {
+          "numeric": 1,
+          "point": 4,
+          "conic": 3,
+          "segment": 3,
+          "boolean": 1
+        },
+        "commandCount": 9,
+        "commandNames": {
+          "Circle": 2,
+          "PointIn": 1,
+          "Ellipse": 1,
+          "Point": 1,
+          "Intersect": 1,
+          "Segment": 3
+        },
+        "exactCommandCount": 8,
+        "gapCommandCount": 1,
+        "unknownCommandCount": 0,
+        "controlCount": 1,
+        "animationCount": 4,
+        "macroCount": 0,
+        "macroNames": [],
+        "gapCapabilities": [
+          {
+            "command": "PointIn",
+            "count": 1,
+            "requiredCapability": "point_in_region"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "wqYQetXz",
@@ -1142,7 +1492,78 @@
         "scriptKinds": []
       },
       "inspectionPriority": "A",
-      "extractionState": "ready-for-ggb-inspection"
+      "extractionState": "ggb-inspected-needs-semantic-review",
+      "inspection": {
+        "manifestSchema": "famtutor.geogebra.manifest.v1",
+        "fileName": "geogebra-wqYQetXz.ggb",
+        "sha256": "1d7a042e8321d2ea88d141ea18d2f934c87fdc92221a4bf3cd692845a074c564",
+        "bytes": 15260,
+        "elementCount": 73,
+        "elementTypes": {
+          "plane3d": 1,
+          "point3d": 12,
+          "numeric": 5,
+          "point": 6,
+          "polygon": 2,
+          "segment": 9,
+          "polyhedron": 1,
+          "polygon3d": 7,
+          "segment3d": 20,
+          "line3d": 2,
+          "line": 1,
+          "angle3d": 4,
+          "text": 3
+        },
+        "commandCount": 31,
+        "commandNames": {
+          "PointIn": 2,
+          "Min": 2,
+          "Max": 2,
+          "Point": 4,
+          "Polygon": 3,
+          "Prism": 1,
+          "Line": 2,
+          "Segment": 7,
+          "Intersect": 3,
+          "Angle": 4,
+          "OrthogonalLine": 1
+        },
+        "exactCommandCount": 24,
+        "gapCommandCount": 7,
+        "unknownCommandCount": 0,
+        "controlCount": 0,
+        "animationCount": 6,
+        "macroCount": 3,
+        "macroNames": [
+          "Grids",
+          "TextPinNormal",
+          "TextPin"
+        ],
+        "gapCapabilities": [
+          {
+            "command": "Max",
+            "count": 2,
+            "requiredCapability": "scalar_aggregation"
+          },
+          {
+            "command": "Min",
+            "count": 2,
+            "requiredCapability": "scalar_aggregation"
+          },
+          {
+            "command": "PointIn",
+            "count": 2,
+            "requiredCapability": "point_in_region"
+          },
+          {
+            "command": "Prism",
+            "count": 1,
+            "requiredCapability": "scene3d"
+          }
+        ],
+        "scriptCount": 1,
+        "scriptsExecuted": false
+      }
     },
     {
       "materialId": "CKPUxFfh",

@@ -1,0 +1,343 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-VjyumMQh.ggb",
+    "materialId": "VjyumMQh",
+    "sourceUrl": "https://www.geogebra.org/m/VjyumMQh",
+    "bytes": 19605,
+    "sha256": "860c9b5a4cade7bdf191c81168b06907642e6245cd992b9f1eac1947f709cbdb"
+  },
+  "archive": {
+    "entryCount": 5,
+    "entries": [
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 14986,
+        "sha256": "a0668f4f53ea999c25a0e0fb8675ffcc74bc69a32f2d485e335802843278b2c2"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 23,
+        "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2"
+      },
+      {
+        "fileName": "geogebra_defaults2d.xml",
+        "bytes": 9857,
+        "sha256": "a2e5db32edb3116027b5a5dc6256d4715ae7728d52c2eb80ea8df947daa13cdc"
+      },
+      {
+        "fileName": "geogebra_defaults3d.xml",
+        "bytes": 3469,
+        "sha256": "838effa2c133213d8994e0b0b676775c1da1943970c37281fb6143334996c00a"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 9215,
+        "sha256": "ff8336be1f7efb6304a451221de946bb831f0ed470c29ae100af27ece17939a5"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.363.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 12,
+      "byType": {
+        "numeric": 1,
+        "point": 4,
+        "conic": 3,
+        "segment": 3,
+        "boolean": 1
+      },
+      "inventory": [
+        {
+          "label": "r",
+          "type": "numeric"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "c",
+          "type": "conic"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "d",
+          "type": "conic"
+        },
+        {
+          "label": "P",
+          "type": "point"
+        },
+        {
+          "label": "e",
+          "type": "conic"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "BC",
+          "type": "segment"
+        },
+        {
+          "label": "BD",
+          "type": "segment"
+        },
+        {
+          "label": "BA",
+          "type": "segment"
+        },
+        {
+          "label": "a",
+          "type": "boolean"
+        }
+      ]
+    },
+    "commands": {
+      "total": 9,
+      "byName": {
+        "Circle": 2,
+        "PointIn": 1,
+        "Ellipse": 1,
+        "Point": 1,
+        "Intersect": 1,
+        "Segment": 3
+      },
+      "signatures": [
+        {
+          "name": "Circle",
+          "inputs": [
+            "A",
+            "r"
+          ],
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "name": "PointIn",
+          "inputs": [
+            "c"
+          ],
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "name": "Ellipse",
+          "inputs": [
+            "A",
+            "C",
+            "r / 2"
+          ],
+          "outputs": [
+            "d"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "d"
+          ],
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "P",
+            "C"
+          ],
+          "outputs": [
+            "e"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "c",
+            "Ray[A, P]"
+          ],
+          "outputs": [
+            "D"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "C"
+          ],
+          "outputs": [
+            "BC"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "D"
+          ],
+          "outputs": [
+            "BD"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "A"
+          ],
+          "outputs": [
+            "BA"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [],
+      "checkboxes": [
+        {
+          "label": "a",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "r",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "A",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "C",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P",
+        "step": "0.1",
+        "speed": "1",
+        "type": "1",
+        "playing": true
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 23,
+      "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 14986,
+      "sha256": "a0668f4f53ea999c25a0e0fb8675ffcc74bc69a32f2d485e335802843278b2c2"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "geogebra_defaults2d.xml",
+      "bytes": 9857,
+      "sha256": "a2e5db32edb3116027b5a5dc6256d4715ae7728d52c2eb80ea8df947daa13cdc"
+    },
+    {
+      "fileName": "geogebra_defaults3d.xml",
+      "bytes": 3469,
+      "sha256": "838effa2c133213d8994e0b0b676775c1da1943970c37281fb6143334996c00a"
+    }
+  ],
+  "capabilityTags": [
+    "animation",
+    "curve",
+    "geometry",
+    "script"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Circle",
+        "count": 2,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Ellipse",
+        "count": 1,
+        "mapsTo": "conic.ellipse_foci"
+      },
+      {
+        "command": "Intersect",
+        "count": 1,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "Point",
+        "count": 1,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Segment",
+        "count": 3,
+        "mapsTo": "segment.through_points"
+      }
+    ],
+    "gaps": [
+      {
+        "command": "PointIn",
+        "count": 1,
+        "requiredCapability": "point_in_region"
+      }
+    ],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

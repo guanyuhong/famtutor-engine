@@ -302,6 +302,19 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
       { command: "line.through_points", inputRefs: [P, T1], outputKeys: [tangent1], outputTypes: ["line2"] },
       { command: "line.through_points", inputRefs: [P, T2], outputKeys: [tangent2], outputTypes: ["line2"] }
     );
+  } else if (name === "macro.line.common_tangents") {
+    const circle1 = requireInput(bindings, "circle1", name);
+    const circle2 = requireInput(bindings, "circle2", name);
+    const external1 = allocOutput("external1");
+    const external2 = allocOutput("external2");
+    const internal1 = allocOutput("internal1");
+    const internal2 = allocOutput("internal2");
+    steps.push(
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [external1], outputTypes: ["line2"], params: { side1: 1, side2: 1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [external2], outputTypes: ["line2"], params: { side1: -1, side2: -1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [internal1], outputTypes: ["line2"], params: { side1: 1, side2: -1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [internal2], outputTypes: ["line2"], params: { side1: -1, side2: 1 } }
+    );
   } else {
     throw new MathEngineError("MACRO_NOT_EXECUTABLE", `Macro '${name}' has no executable expander yet.`, {
       actual: name,

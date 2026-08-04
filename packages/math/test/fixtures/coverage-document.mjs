@@ -31,6 +31,13 @@ export function coverageDocument() {
   add("vScaled", "vector2", "derived", "vector.scale", [{ ref: "v" }], { factor: "max(s - 1, 0)" });
   add("circleR", "circle2", "derived", "circle.center_radius", [{ ref: "A" }, { ref: "s" }]);
   add("circleP", "circle2", "derived", "circle.through_points", [{ ref: "A" }, { ref: "B" }]);
+  add("circleCenter", "point2", "derived", "point.circle_center", [{ ref: "circleP" }]);
+  add("circleRadius", "scalar", "measurement", "measurement.circle_radius", [{ ref: "circleP" }]);
+  add("invertedPoint", "point2", "derived", "point.invert_in_circle", [{ ref: "D" }, { ref: "circleR" }]);
+  add("invertedCircle", "circle2", "derived", "circle.invert_in_circle", [{ ref: "circleP" }, { ref: "circleR" }]);
+  add("farCenter", "point2", "free", "point.free", [], { coords: [7, 4] });
+  add("farCircle", "circle2", "derived", "circle.center_radius", [{ ref: "farCenter" }, { ref: "k" }]);
+  add("commonTangent", "line2", "derived", "line.common_tangent", [{ ref: "circleR" }, { ref: "farCircle" }], { side1: 1, side2: 1 });
   add("circum", "circle2", "derived", "circle.through_three_points", [{ ref: "A" }, { ref: "B" }, { ref: "C" }]);
   add("lineCircle", ["point2", "point2"], "derived", "point.intersection_line_circle", [{ ref: "lineAB" }, { ref: "circleP" }], undefined, ["LC1", "LC2"]);
   add("circleCircle", ["point2", "point2"], "derived", "point.intersection_circle_circle", [{ ref: "circleP" }, { ref: "circum" }], undefined, ["CC1", "CC2"]);

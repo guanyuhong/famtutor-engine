@@ -1,0 +1,442 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-css4XDST.ggb",
+    "materialId": "css4XDST",
+    "sourceUrl": "https://www.geogebra.org/m/css4XDST",
+    "bytes": 7563,
+    "sha256": "cca82e5d3a835c5eb1a5552116dcea8a05a27a080eabe30cecc4bc2c89cf84d9"
+  },
+  "archive": {
+    "entryCount": 3,
+    "entries": [
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 4346,
+        "sha256": "a134c69be2a472ba2be88f85dc7c3a161582611041f69415860b805a90aa2682"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 23,
+        "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 15436,
+        "sha256": "2973aee268f9036517a4193b60c2044a63d74c50a11454b67de03fafd3671aae"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.42.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 30,
+      "byType": {
+        "line": 5,
+        "point": 10,
+        "polygon": 3,
+        "segment": 9,
+        "angle": 2,
+        "numeric": 1
+      },
+      "inventory": [
+        {
+          "label": "d",
+          "type": "line"
+        },
+        {
+          "label": "H",
+          "type": "point"
+        },
+        {
+          "label": "G",
+          "type": "point"
+        },
+        {
+          "label": "I",
+          "type": "point"
+        },
+        {
+          "label": "a",
+          "type": "line"
+        },
+        {
+          "label": "c",
+          "type": "line"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "poly1",
+          "type": "polygon"
+        },
+        {
+          "label": "e",
+          "type": "segment"
+        },
+        {
+          "label": "f",
+          "type": "segment"
+        },
+        {
+          "label": "g",
+          "type": "segment"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "h",
+          "type": "line"
+        },
+        {
+          "label": "b",
+          "type": "line"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "poly2",
+          "type": "polygon"
+        },
+        {
+          "label": "i",
+          "type": "segment"
+        },
+        {
+          "label": "j",
+          "type": "segment"
+        },
+        {
+          "label": "k",
+          "type": "segment"
+        },
+        {
+          "label": "E",
+          "type": "point"
+        },
+        {
+          "label": "α",
+          "type": "angle"
+        },
+        {
+          "label": "β",
+          "type": "angle"
+        },
+        {
+          "label": "t",
+          "type": "numeric"
+        },
+        {
+          "label": "P",
+          "type": "point"
+        },
+        {
+          "label": "poly3",
+          "type": "polygon"
+        },
+        {
+          "label": "l",
+          "type": "segment"
+        },
+        {
+          "label": "m",
+          "type": "segment"
+        },
+        {
+          "label": "n",
+          "type": "segment"
+        },
+        {
+          "label": "F",
+          "type": "point"
+        }
+      ]
+    },
+    "commands": {
+      "total": 12,
+      "byName": {
+        "Point": 3,
+        "Intersect": 3,
+        "Polygon": 3,
+        "OrthogonalLine": 1,
+        "Angle": 2
+      },
+      "signatures": [
+        {
+          "name": "Point",
+          "inputs": [
+            "d"
+          ],
+          "outputs": [
+            "H"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "d"
+          ],
+          "outputs": [
+            "G"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "Segment[H, G]"
+          ],
+          "outputs": [
+            "I"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "c",
+            "d"
+          ],
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "a",
+            "d"
+          ],
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "B",
+            "A",
+            "3"
+          ],
+          "outputs": [
+            "poly1",
+            "e",
+            "f",
+            "g",
+            "C"
+          ]
+        },
+        {
+          "name": "OrthogonalLine",
+          "inputs": [
+            "C",
+            "g"
+          ],
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "b",
+            "h"
+          ],
+          "outputs": [
+            "D"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "D",
+            "B",
+            "3"
+          ],
+          "outputs": [
+            "poly2",
+            "i",
+            "j",
+            "k",
+            "E"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "E",
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "α"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "D",
+            "C",
+            "B"
+          ],
+          "outputs": [
+            "β"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "B",
+            "P",
+            "3"
+          ],
+          "outputs": [
+            "poly3",
+            "l",
+            "m",
+            "n",
+            "F"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "t",
+          "min": "0",
+          "max": "1",
+          "width": "100.0",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "d",
+        "step": "0.1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "H",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "G",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "I",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "t",
+        "step": "0.1",
+        "speed": "2",
+        "type": "0",
+        "playing": true
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 23,
+      "sha256": "3aa5d8316bbad619954d1c93da49792492f64eaed2efe3aada9985cce9c75bf2",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 4346,
+      "sha256": "a134c69be2a472ba2be88f85dc7c3a161582611041f69415860b805a90aa2682"
+    }
+  },
+  "assets": [],
+  "capabilityTags": [
+    "animation",
+    "geometry",
+    "script"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 2,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "Intersect",
+        "count": 3,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "OrthogonalLine",
+        "count": 1,
+        "mapsTo": "line.perpendicular_through"
+      },
+      {
+        "command": "Point",
+        "count": 3,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Polygon",
+        "count": 3,
+        "mapsTo": "polygon.vertices"
+      }
+    ],
+    "gaps": [],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

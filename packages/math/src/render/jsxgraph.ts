@@ -9,6 +9,7 @@ import {
   circle,
   circleArea,
   circlePerimeter,
+  commonTangentLine,
   conicSamplePoints,
   dilatePoint,
   dilateTransform,
@@ -16,6 +17,8 @@ import {
   ellipseFromFoci,
   hyperbolaFromFoci,
   intersectLineConic,
+  invertCircleInCircle,
+  invertPointInCircle,
   isAngle,
   isArc,
   isCircle,
@@ -651,6 +654,17 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => safeRuntimePoint(native!));
         break;
       }
+      case "point.invert_in_circle": {
+        const current = () => {
+          const inversion = valueOf(refs[1]!);
+          if (!isCircle(inversion)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[1]}' is not circle2 at runtime.`);
+          return invertPointInCircle(pointOf(refs[0]!), inversion);
+        };
+        native = board.create("point", [() => current().x, () => current().y], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "point.intersection_line_line": {
         native = board.create("intersection", [lineLikeNative(objects, refs[0]!), lineLikeNative(objects, refs[1]!), 0], jxgAttributes(document, output, true));
         objects.set(output, native);
@@ -722,6 +736,23 @@ export function mountJsxGraph(
         });
         break;
       }
+      case "line.common_tangent": {
+        const current = () => {
+          const first = valueOf(refs[0]!);
+          const second = valueOf(refs[1]!);
+          if (!isCircle(first) || !isCircle(second)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "line.common_tangent inputs must be circle2 at runtime.");
+          return commonTangentLine(first, second, Number(node.params?.side1), Number(node.params?.side2));
+        };
+        const anchor = board.create("point", [() => current().point.x, () => current().point.y], { visible: false, fixed: true, withLabel: false });
+        const directionPoint = board.create("point", [
+          () => current().point.x + current().direction.x,
+          () => current().point.y + current().direction.y
+        ], { visible: false, fixed: true, withLabel: false });
+        native = board.create("line", [anchor, directionPoint], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "vector.between_points": {
         native = board.create("arrow", [pointNative(objects, refs[0]!), pointNative(objects, refs[1]!)], jxgAttributes(document, output, true));
         objects.set(output, native);
@@ -778,6 +809,19 @@ export function mountJsxGraph(
           if (!isPoint(center)) return undefined;
           return circle(center, distance(center, pointOf(refs[0]!)));
         });
+        break;
+      }
+      case "circle.invert_in_circle": {
+        const current = () => {
+          const source = valueOf(refs[0]!);
+          const inversion = valueOf(refs[1]!);
+          if (!isCircle(source) || !isCircle(inversion)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "circle.invert_in_circle inputs must be circle2 at runtime.");
+          return invertCircleInCircle(source, inversion);
+        };
+        const center = board.create("point", [() => current().center.x, () => current().center.y], { visible: false, fixed: true, withLabel: false });
+        native = board.create("circle", [center, () => current().radius], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "arc.center_points": {

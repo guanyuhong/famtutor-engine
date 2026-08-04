@@ -170,6 +170,21 @@ undo
 
 两者都要求输入为 `circle2`；圆必须已经有效且半径为正。输出随上游圆确定性更新，不产生独立可拖动状态。
 
+圆反演同样使用类型明确的原子命令：
+
+```json
+{
+  "op": "construct",
+  "command": "circle.invert_in_circle",
+  "inputs": [{ "ref": "sourceCircle" }, { "ref": "inversionCircle" }],
+  "outputs": [{ "id": "imageCircle", "role": "derived" }]
+}
+```
+
+点使用 `point.invert_in_circle(point2, circle2) -> point2`。源圆经过反演中心时其像是直线，因此 `circle.invert_in_circle` 返回 `INVERSION_OUTPUT_NOT_CIRCLE`，模型不能把该退化分支继续声明为 `circle2`。
+
+路径最近点继续使用 `point.projection(point2, path) -> point2`；`path` 可以是 line、segment、ray、circle、arc 或 polygon boundary。区域内部自由点不是最近点语义，不应由此命令替代。
+
 ### L1 宏展开
 
 ```json
@@ -182,6 +197,8 @@ undo
 ```
 
 宏不是 L0 command：运行时展开为若干 `construct` 等价节点，并写入 `provenance.sourceRefs`。可用宏列表见 `math_capabilities.macros`。
+
+两圆严格分离并需要四条公切线时使用 `macro.line.common_tangents`，绑定 `circle1` 与 `circle2`；输出为 `external1`、`external2`、`internal1`、`internal2`。宏内部仅组合四个带 `side1` / `side2` 的 `line.common_tangent` L0 节点。
 
 `outputs` 可以是 ID 字符串，也可以带 entity metadata：
 

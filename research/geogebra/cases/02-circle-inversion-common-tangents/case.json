@@ -1,0 +1,97 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-02-circle-inversion-common-tangents",
+  "title": "圆反演与两圆公切线",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": ["https://www.geogebra.org/m/kktgdvAH"],
+    "note": "Mechanism study; original FamTutor construction using reusable inversion and tangent APIs."
+  },
+  "requiredCapabilities": [
+    "point.invert_in_circle",
+    "circle.invert_in_circle",
+    "line.common_tangent",
+    "macro.line.common_tangents"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-circle-inversion-common-tangents",
+      "revision": 1,
+      "seed": 4202,
+      "metadata": {
+        "title": "圆反演与四条公切线",
+        "description": "两个分离圆的四条有向公切线，以及点和圆关于左圆的反演。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "tags": ["geogebra-study", "circle-inversion", "common-tangents"]
+      },
+      "entities": [
+        { "id": "O1", "type": "point2", "label": "O₁", "role": "free" },
+        { "id": "P1", "type": "point2", "role": "free", "visible": false },
+        { "id": "c1", "type": "circle2", "label": "反演圆 c₁", "role": "derived" },
+        { "id": "O2", "type": "point2", "label": "O₂", "role": "free" },
+        { "id": "P2", "type": "point2", "role": "free", "visible": false },
+        { "id": "c2", "type": "circle2", "label": "c₂", "role": "derived" },
+        { "id": "external1", "type": "line2", "role": "derived" },
+        { "id": "external2", "type": "line2", "role": "derived" },
+        { "id": "internal1", "type": "line2", "role": "derived" },
+        { "id": "internal2", "type": "line2", "role": "derived" },
+        { "id": "Q", "type": "point2", "label": "Q", "role": "free" },
+        { "id": "Qinv", "type": "point2", "label": "Q′", "role": "derived" },
+        { "id": "c2inv", "type": "circle2", "label": "c₂′", "role": "derived" }
+      ],
+      "construction": [
+        { "id": "op-o1", "command": "point.free", "params": { "coords": [-3, 0] }, "outputs": ["O1"] },
+        { "id": "op-p1", "command": "point.free", "params": { "coords": [-1.5, 0] }, "outputs": ["P1"] },
+        { "id": "op-c1", "command": "circle.through_points", "inputs": [{ "ref": "O1" }, { "ref": "P1" }], "outputs": ["c1"] },
+        { "id": "op-o2", "command": "point.free", "params": { "coords": [3, 0.5] }, "outputs": ["O2"] },
+        { "id": "op-p2", "command": "point.free", "params": { "coords": [4, 0.5] }, "outputs": ["P2"] },
+        { "id": "op-c2", "command": "circle.through_points", "inputs": [{ "ref": "O2" }, { "ref": "P2" }], "outputs": ["c2"] },
+        { "id": "op-external1", "command": "line.common_tangent", "inputs": [{ "ref": "c1" }, { "ref": "c2" }], "params": { "side1": 1, "side2": 1 }, "outputs": ["external1"] },
+        { "id": "op-external2", "command": "line.common_tangent", "inputs": [{ "ref": "c1" }, { "ref": "c2" }], "params": { "side1": -1, "side2": -1 }, "outputs": ["external2"] },
+        { "id": "op-internal1", "command": "line.common_tangent", "inputs": [{ "ref": "c1" }, { "ref": "c2" }], "params": { "side1": 1, "side2": -1 }, "outputs": ["internal1"] },
+        { "id": "op-internal2", "command": "line.common_tangent", "inputs": [{ "ref": "c1" }, { "ref": "c2" }], "params": { "side1": -1, "side2": 1 }, "outputs": ["internal2"] },
+        { "id": "op-q", "command": "point.free", "params": { "coords": [0, 3] }, "outputs": ["Q"] },
+        { "id": "op-qinv", "command": "point.invert_in_circle", "inputs": [{ "ref": "Q" }, { "ref": "c1" }], "outputs": ["Qinv"] },
+        { "id": "op-c2inv", "command": "circle.invert_in_circle", "inputs": [{ "ref": "c2" }, { "ref": "c1" }], "outputs": ["c2inv"] }
+      ],
+      "views": [
+        { "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 5, 7, -4], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FAF8F2", "cameraPolicy": "document" }
+      ],
+      "styles": [
+        { "targets": ["c1"], "style": { "stroke": "#315CF4", "strokeWidth": 2.4, "fill": "#315CF4", "fillOpacity": 0.04, "fontSize": 13 } },
+        { "targets": ["c2"], "style": { "stroke": "#D06A3A", "strokeWidth": 2.4, "fill": "#D06A3A", "fillOpacity": 0.04, "fontSize": 13 } },
+        { "targets": ["external1", "external2"], "style": { "stroke": "#0E8378", "strokeWidth": 1.8, "labelVisible": false } },
+        { "targets": ["internal1", "internal2"], "style": { "stroke": "#9B6ACB", "strokeWidth": 1.8, "dash": 2, "labelVisible": false } },
+        { "targets": ["Q", "Qinv"], "style": { "stroke": "#15365F", "fill": "#15365F", "pointSize": 5, "fontSize": 13, "labelPlacement": "top" } },
+        { "targets": ["c2inv"], "style": { "stroke": "#E14B45", "strokeWidth": 2, "dash": 2, "fillOpacity": 0, "fontSize": 13 } }
+      ],
+      "interactions": [
+        { "target": "O2", "permissions": ["drag"] },
+        { "target": "P2", "permissions": ["drag"] },
+        { "target": "Q", "permissions": ["drag"] }
+      ],
+      "activities": [{
+        "id": "explore",
+        "title": "比较公切线与反演像",
+        "stages": [
+          { "id": "tangents", "narration": "绿色是两条外公切线，紫色虚线是两条内公切线。拖动 O₂ 观察四个有向分支。", "hide": ["Q", "Qinv", "c2inv"] },
+          { "id": "inversion", "narration": "左圆作为反演圆。拖动 Q，Q′ 始终位于射线 O₁Q 上并满足 O₁Q·O₁Q′=R²。", "hide": ["external1", "external2", "internal1", "internal2"] },
+          { "id": "all", "narration": "同时观察公切线与圆 c₂ 的反演像 c₂′。" }
+        ]
+      }],
+      "provenance": { "generator": "agent", "sourceRefs": ["geogebra:kktgdvAH", "pattern:circle.apollonius-tangent-to-three-circles"] }
+    }
+  },
+  "trace": { "changeSets": [] },
+  "expected": {
+    "assertions": [{ "kind": "static-render" }, { "kind": "render-bundle" }],
+    "interactions": [{ "target": "O2", "permission": "drag" }, { "target": "Q", "permission": "drag" }]
+  }
+}

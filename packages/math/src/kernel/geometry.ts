@@ -449,6 +449,90 @@ export function projectPointToPath(source: Point2Value, target: RuntimeValue): P
   throw new MathEngineError("UNSUPPORTED_PATH", "Point-on-path supports line, segment, ray, circle, arc, and polygon.");
 }
 
+/** Invert a point in a circle. The inversion center itself has no finite image. */
+export function invertPointInCircle(source: Point2Value, inversion: Circle2Value): Point2Value {
+  const delta = subtractPoints(source, inversion.center);
+  const distanceSquared = dot(delta, delta);
+  if (distanceSquared <= DEFAULT_TOLERANCE ** 2) {
+    throw new MathEngineError("INVERSION_CENTER_UNDEFINED", "The inversion center has no finite inverse point.", {
+      actual: [source.x, source.y],
+      retryable: true
+    });
+  }
+  return addPointVector(inversion.center, scaleVector(delta, inversion.radius ** 2 / distanceSquared));
+}
+
+/**
+ * Invert a circle in another circle.
+ *
+ * A source circle through the inversion center maps to a line and is rejected
+ * because this command has the intentionally narrow `circle2 -> circle2`
+ * contract. This keeps entity typing deterministic without introducing a
+ * generalized-circle union before a real downstream need exists.
+ */
+export function invertCircleInCircle(source: Circle2Value, inversion: Circle2Value): Circle2Value {
+  const centerDelta = subtractPoints(source.center, inversion.center);
+  const denominator = dot(centerDelta, centerDelta) - source.radius ** 2;
+  if (Math.abs(denominator) <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVERSION_OUTPUT_NOT_CIRCLE", "A circle through the inversion center maps to a line, not circle2.", {
+      actual: {
+        source: [source.center.x, source.center.y, source.radius],
+        inversion: [inversion.center.x, inversion.center.y, inversion.radius]
+      },
+      expected: "source circle not passing through inversion center",
+      retryable: true
+    });
+  }
+  const scale = inversion.radius ** 2 / denominator;
+  return circle(
+    addPointVector(inversion.center, scaleVector(centerDelta, scale)),
+    Math.abs(scale) * source.radius
+  );
+}
+
+/**
+ * Select one oriented common tangent of two circles.
+ *
+ * `side1` and `side2` are signed contact sides (`-1` or `1`). Calling this
+ * atom for all four sign pairs yields the four common tangents of strictly
+ * disjoint circles; impossible branches fail with `COMMON_TANGENT_UNDEFINED`.
+ */
+export function commonTangentLine(
+  first: Circle2Value,
+  second: Circle2Value,
+  side1: number,
+  side2: number
+): Line2Value {
+  if (![side1, side2].every(side => side === -1 || side === 1)) {
+    throw new MathEngineError("INVALID_TANGENT_SIDE", "Common-tangent sides must be -1 or 1.", {
+      actual: [side1, side2],
+      expected: [-1, 1]
+    });
+  }
+  const between = subtractPoints(second.center, first.center);
+  const centerDistance = norm(between);
+  if (centerDistance <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("CONCENTRIC_CIRCLES", "Concentric circles do not define a unique common-tangent branch.");
+  }
+  const signedRadiusDelta = side1 * first.radius - side2 * second.radius;
+  const cosine = signedRadiusDelta / centerDistance;
+  if (Math.abs(cosine) > 1 + DEFAULT_TOLERANCE) {
+    throw new MathEngineError("COMMON_TANGENT_UNDEFINED", "The selected common-tangent branch does not exist for these circles.", {
+      actual: { centerDistance, signedRadiusDelta, side1, side2 },
+      retryable: true
+    });
+  }
+  const axis = scaleVector(between, 1 / centerDistance);
+  const boundedCosine = clamp(cosine, -1, 1);
+  const sine = Math.sqrt(Math.max(0, 1 - boundedCosine ** 2));
+  const normalVector = vector(
+    axis.x * boundedCosine - axis.y * sine,
+    axis.y * boundedCosine + axis.x * sine
+  );
+  const firstContact = addPointVector(first.center, scaleVector(normalVector, side1 * first.radius));
+  return lineFromPointDirection(firstContact, vector(-normalVector.y, normalVector.x));
+}
+
 /** Stable order: increasing signed parameter t along the line direction. Tangent → duplicate point. */
 export function intersectLineCircle(lineValue: Line2Value, circleValue: Circle2Value): [Point2Value, Point2Value] {
   const foot = projectPointToLine(circleValue.center, lineValue);

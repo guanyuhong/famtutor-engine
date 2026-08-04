@@ -18,6 +18,8 @@ test("headless kernel covers every command in the v0.1 catalog", () => {
   assert.equal(evaluation.issues.length, 0, JSON.stringify(evaluation.issues));
   assert.equal(evaluation.entities.size, document.entities.length);
   assert.ok([...evaluation.entities.values()].every(entity => entity.defined));
+  assert.deepEqual(evaluation.entities.get("circleCenter")?.value, { kind: "point2", x: -2, y: 0 });
+  assert.equal(evaluation.entities.get("circleRadius")?.value, 4);
   const svg = renderDirectSvg(document, { width: 1000, height: 700 });
   assert.ok(svg.report.renderedEntities.length >= 20);
   assert.ok(svg.svg.includes("<path"));

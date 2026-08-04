@@ -131,6 +131,20 @@ export const MACRO_DEFINITIONS: readonly MacroDefinition[] = Object.freeze([
       "line.through_points(P,T2) -> tangent2"
     ],
     reasonKeptAsMacro: "Contact points are constructed; keep as recipe above L0."
+  },
+  {
+    name: "macro.line.common_tangents",
+    title: "Four common tangents of disjoint circles",
+    description: "Construct the two external and two internal common tangents of two strictly disjoint circles.",
+    inputs: ["circle1", "circle2"],
+    outputs: ["external1", "external2", "internal1", "internal2"],
+    expandsTo: [
+      "line.common_tangent(circle1,circle2, side1=1, side2=1) -> external1",
+      "line.common_tangent(circle1,circle2, side1=-1, side2=-1) -> external2",
+      "line.common_tangent(circle1,circle2, side1=1, side2=-1) -> internal1",
+      "line.common_tangent(circle1,circle2, side1=-1, side2=1) -> internal2"
+    ],
+    reasonKeptAsMacro: "One oriented tangent is the atomic relation; the conventional four-line package is reusable L1 composition."
   }
 ]);
 
