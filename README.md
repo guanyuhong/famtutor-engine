@@ -11,6 +11,7 @@ An agent-native engine for building, simulating, rendering, and assessing intera
 - [Textbook case corpus](corpus/README.md) — 10 sourced, deterministic Grade 8 seed cases
 - [Core package](packages/core/README.md) — `@famtutor/core` runtime contracts
 - [Math package](packages/math/README.md) — `@famtutor/math-runtime` details
+- [GeoGebra capability mining](docs/geogebra-capability-mining.md) — safe offline `.ggb` inspection and reusable capability planning
 
 ## Positioning
 
@@ -56,7 +57,7 @@ npm test
 npm run test:corpus
 ```
 
-`npm ci` / `npm test` cover Node unit tests for **core then math**. They do **not** install Python Playwright/Chromium.
+`npm ci` / `npm test` cover Node unit tests for **core, math, then the offline GeoGebra inspector**. They do **not** install Python Playwright/Chromium.
 
 ### Full verify (including browser + pack)
 
