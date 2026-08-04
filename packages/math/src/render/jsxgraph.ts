@@ -278,6 +278,7 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
   }
   if (entity.type === "text") {
     return {
+      display: "internal",
       fixed: true,
       visible: entity.visible !== false,
       fontSize: style.fontSize ?? 16,
@@ -535,6 +536,7 @@ export function mountJsxGraph(
         });
         native.fmeVisibility = () => !current().empty && Math.abs(endX() - startX()) > 1e-12;
         const emptyText = board.create("text", [() => (xmin + xmax) / 2, trackY, () => current().empty ? "∅" : ""], {
+          display: "internal",
           fixed: true,
           visible: () => current().empty,
           fontSize: style.fontSize + 4,
@@ -831,6 +833,7 @@ export function mountJsxGraph(
             () => labelPoint().y,
             entity.label
           ], {
+            display: "internal",
             fixed: true,
             visible: entity.visible !== false,
             fontSize: style.fontSize,
