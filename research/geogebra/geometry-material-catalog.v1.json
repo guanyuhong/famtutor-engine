@@ -1,0 +1,3866 @@
+{
+  "schema": "famtutor.geogebra.geometry-catalog.v1",
+  "source": {
+    "schema": "famtutor.geogebra.public-corpus-index.v0.2",
+    "generatedAt": "2026-08-04T05:41:30.637921+00:00",
+    "profile": {
+      "display_name": "羅驥韡 (Pegasus Roe)",
+      "username": "pegasusroe",
+      "url": "https://www.geogebra.org/u/pegasusroe"
+    },
+    "rawGgbIncluded": false
+  },
+  "summary": {
+    "geometryTitles": 145,
+    "titlesWithMaterialIds": 50,
+    "uniqueMaterialIds": 47,
+    "unresolvedTitles": 95,
+    "domainGeometryOnlyLeads": 11,
+    "familyCounts": {
+      "angle-trigonometry": 5,
+      "area": 6,
+      "circle": 9,
+      "conic": 4,
+      "construction": 5,
+      "curve": 8,
+      "general-geometry": 4,
+      "locus": 1,
+      "solid-3d": 8,
+      "triangle": 13,
+      "vector": 3
+    },
+    "priorityCounts": {
+      "A": 20,
+      "B": 18,
+      "review-source-quality": 1,
+      "deferred-specialized-renderer": 8
+    }
+  },
+  "extractionPolicy": {
+    "identityKey": "materialId",
+    "rawGgbCommitted": false,
+    "scriptsExecuted": false,
+    "outputStages": [
+      "cataloged",
+      "ggb-inspected",
+      "semantic-pattern-reviewed",
+      "famtutor-reproduced",
+      "cross-renderer-verified"
+    ],
+    "note": "A catalog entry is a research candidate, not a completed FamTutor asset."
+  },
+  "firstWave": [
+    "cmHVCnAy",
+    "f9tcjter",
+    "kktgdvAH",
+    "TMTB7pCJ",
+    "css4XDST",
+    "yqMF5VSu",
+    "m8SXgrNh",
+    "uEsyxQdV",
+    "zPJSKHVC",
+    "VjyumMQh",
+    "wqYQetXz",
+    "XmvnxSZT"
+  ],
+  "materials": [
+    {
+      "materialId": "cmHVCnAy",
+      "sourceUrl": "https://www.geogebra.org/m/cmHVCnAy",
+      "titles": [
+        "圓錐截痕"
+      ],
+      "normalizedTitles": [
+        "圓錐截痕"
+      ],
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "domains": [
+        "math.conics",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 6,
+        "books": [
+          {
+            "bookId": "q7eGEeWG",
+            "title": "圓錐曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "S928dA9y",
+            "title": "平面幾何",
+            "ownership": "author"
+          },
+          {
+            "bookId": "f3ggW5A3",
+            "title": "幾何原理",
+            "ownership": "author"
+          },
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "XmvnxSZT",
+      "sourceUrl": "https://www.geogebra.org/m/XmvnxSZT",
+      "titles": [
+        "兩橢圓交集"
+      ],
+      "normalizedTitles": [
+        "兩橢圓交集"
+      ],
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "domains": [
+        "math.conics",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "region_boolean"
+      ],
+      "dependencies": [
+        "boolean-region"
+      ],
+      "reuse": {
+        "bookCount": 5,
+        "books": [
+          {
+            "bookId": "QNjUJCnX",
+            "title": "JavaScript",
+            "ownership": "author"
+          },
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          },
+          {
+            "bookId": "q7eGEeWG",
+            "title": "圓錐曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "rnm9psHy",
+            "title": "技巧",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "explicit",
+        "commands": [
+          "boolean !",
+          "boolean &&",
+          "Coefficients"
+        ],
+        "customTools": [
+          "ineq"
+        ],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "XhPbjqrv",
+      "sourceUrl": "https://www.geogebra.org/m/XhPbjqrv",
+      "titles": [
+        "愛上貝氏曲線 (Love for Bezier)"
+      ],
+      "normalizedTitles": [
+        "愛上貝氏曲線 (love for bezier)"
+      ],
+      "families": [
+        "curve"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "custom_tool",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "macro-package"
+      ],
+      "reuse": {
+        "bookCount": 4,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          },
+          {
+            "bookId": "fsaeBqSg",
+            "title": "藝術",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "f9tcjter",
+      "sourceUrl": "https://www.geogebra.org/m/f9tcjter",
+      "titles": [
+        "三同心圓上的正三角形"
+      ],
+      "normalizedTitles": [
+        "三同心圓上的正三角形"
+      ],
+      "families": [
+        "circle",
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          },
+          {
+            "bookId": "S928dA9y",
+            "title": "平面幾何",
+            "ownership": "author"
+          },
+          {
+            "bookId": "f3ggW5A3",
+            "title": "幾何原理",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "naZHdGcY",
+      "sourceUrl": "https://www.geogebra.org/m/naZHdGcY",
+      "titles": [
+        "哈里斯螺旋 - 框線版 (Harriss Spiral)"
+      ],
+      "normalizedTitles": [
+        "哈里斯螺旋 - 框線版 (harriss spiral)"
+      ],
+      "families": [
+        "curve"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry",
+        "sequence"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "declarative-sequence"
+      ],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "YgsAMjfJ",
+            "title": "研習講義",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ACqyWHnu",
+            "title": "碎形",
+            "ownership": "author"
+          },
+          {
+            "bookId": "fsaeBqSg",
+            "title": "藝術",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "wEkG5mAm",
+      "sourceUrl": "https://www.geogebra.org/m/wEkG5mAm",
+      "titles": [
+        "謝爾賓斯基三角形"
+      ],
+      "normalizedTitles": [
+        "謝爾賓斯基三角形"
+      ],
+      "families": [
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "sequence"
+      ],
+      "dependencies": [
+        "declarative-sequence"
+      ],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "YgsAMjfJ",
+            "title": "研習講義",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ACqyWHnu",
+            "title": "碎形",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "AFFXmJTw",
+      "sourceUrl": "https://www.geogebra.org/m/AFFXmJTw",
+      "titles": [
+        "貝氏曲線"
+      ],
+      "normalizedTitles": [
+        "貝氏曲線"
+      ],
+      "families": [
+        "curve"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel"
+      ],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "Kv8t7f74",
+      "sourceUrl": "https://www.geogebra.org/m/Kv8t7f74",
+      "titles": [
+        "貝氏曲線 (Bezier Curve)"
+      ],
+      "normalizedTitles": [
+        "貝氏曲線 (bezier curve)"
+      ],
+      "families": [
+        "curve"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "custom_tool",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "macro-package"
+      ],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "kktgdvAH",
+      "sourceUrl": "https://www.geogebra.org/m/kktgdvAH",
+      "titles": [
+        "阿波羅尼亞圓"
+      ],
+      "normalizedTitles": [
+        "阿波羅尼亞圓"
+      ],
+      "families": [
+        "circle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 3,
+        "books": [
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          },
+          {
+            "bookId": "S928dA9y",
+            "title": "平面幾何",
+            "ownership": "author"
+          },
+          {
+            "bookId": "f3ggW5A3",
+            "title": "幾何原理",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "TMTB7pCJ",
+      "sourceUrl": "https://www.geogebra.org/m/TMTB7pCJ",
+      "titles": [
+        "三條線上的三角形"
+      ],
+      "normalizedTitles": [
+        "三條線上的三角形"
+      ],
+      "families": [
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          },
+          {
+            "bookId": "f3ggW5A3",
+            "title": "幾何原理",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "css4XDST",
+      "sourceUrl": "https://www.geogebra.org/m/css4XDST",
+      "titles": [
+        "三條線上的正三角形"
+      ],
+      "normalizedTitles": [
+        "三條線上的正三角形"
+      ],
+      "families": [
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          },
+          {
+            "bookId": "f3ggW5A3",
+            "title": "幾何原理",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "X2VCHbkp",
+      "sourceUrl": "https://www.geogebra.org/m/X2VCHbkp",
+      "titles": [
+        "三次多項式的切線"
+      ],
+      "normalizedTitles": [
+        "三次多項式的切線"
+      ],
+      "families": [
+        "general-geometry"
+      ],
+      "domains": [
+        "math.calculus",
+        "math.functions",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "function_plot",
+        "geometry"
+      ],
+      "dependencies": [
+        "calculus-kernel"
+      ],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "YqJre9kk",
+            "title": "多項式",
+            "ownership": "author"
+          },
+          {
+            "bookId": "GkfH9rfm",
+            "title": "微積分",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "yqMF5VSu",
+      "sourceUrl": "https://www.geogebra.org/m/yqMF5VSu",
+      "titles": [
+        "最大三角形面積"
+      ],
+      "normalizedTitles": [
+        "最大三角形面積"
+      ],
+      "families": [
+        "area",
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "jmyCFRjU",
+            "title": "不等式",
+            "ownership": "author"
+          },
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "m8SXgrNh",
+      "sourceUrl": "https://www.geogebra.org/m/m8SXgrNh",
+      "titles": [
+        "史坦納圓鍊 (Steiner Chain)"
+      ],
+      "normalizedTitles": [
+        "史坦納圓鍊 (steiner chain)"
+      ],
+      "families": [
+        "circle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "b9zEUg8f",
+            "title": "動畫",
+            "ownership": "author"
+          },
+          {
+            "bookId": "S928dA9y",
+            "title": "平面幾何",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "uEsyxQdV",
+      "sourceUrl": "https://www.geogebra.org/m/uEsyxQdV",
+      "titles": [
+        "垂足三角形"
+      ],
+      "normalizedTitles": [
+        "垂足三角形"
+      ],
+      "families": [
+        "construction",
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "jmyCFRjU",
+            "title": "不等式",
+            "ownership": "author"
+          },
+          {
+            "bookId": "S928dA9y",
+            "title": "平面幾何",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "zPJSKHVC",
+      "sourceUrl": "https://www.geogebra.org/m/zPJSKHVC",
+      "titles": [
+        "平行四邊形面積"
+      ],
+      "normalizedTitles": [
+        "平行四邊形面積"
+      ],
+      "families": [
+        "area"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "W9hqtSmT",
+            "title": "平面向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "Q9YQr5Z3",
+            "title": "矩陣",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "xVh3fBWx",
+      "sourceUrl": "https://www.geogebra.org/m/xVh3fBWx",
+      "titles": [
+        "幾何作圖動畫示範"
+      ],
+      "normalizedTitles": [
+        "幾何作圖動畫示範"
+      ],
+      "families": [
+        "construction"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "animation",
+        "geometry"
+      ],
+      "dependencies": [
+        "control-clock"
+      ],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "b9zEUg8f",
+            "title": "動畫",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "VjyumMQh",
+      "sourceUrl": "https://www.geogebra.org/m/VjyumMQh",
+      "titles": [
+        "橢圓軌跡",
+        "橢圓軌跡 (2)",
+        "橢圓軌跡 (3)",
+        "橢圓軌跡 (4)"
+      ],
+      "normalizedTitles": [
+        "橢圓軌跡",
+        "橢圓軌跡 (2)",
+        "橢圓軌跡 (3)",
+        "橢圓軌跡 (4)"
+      ],
+      "families": [
+        "circle",
+        "conic",
+        "locus"
+      ],
+      "domains": [
+        "math.conics",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "b9zEUg8f",
+            "title": "動畫",
+            "ownership": "author"
+          },
+          {
+            "bookId": "q7eGEeWG",
+            "title": "圓錐曲線",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "wqYQetXz",
+      "sourceUrl": "https://www.geogebra.org/m/wqYQetXz",
+      "titles": [
+        "歪斜線與三角形面積"
+      ],
+      "normalizedTitles": [
+        "歪斜線與三角形面積"
+      ],
+      "families": [
+        "area",
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "CKPUxFfh",
+      "sourceUrl": "https://www.geogebra.org/m/CKPUxFfh",
+      "titles": [
+        "貝式曲線 (Bezier Curve)"
+      ],
+      "normalizedTitles": [
+        "貝式曲線 (bezier curve)"
+      ],
+      "families": [
+        "curve"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "custom_tool",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "macro-package"
+      ],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "explicit",
+        "commands": [
+          "BinomialCoefficient",
+          "Curve",
+          "Length",
+          "Sequence",
+          "Sum",
+          "Zip"
+        ],
+        "customTools": [
+          "Bezier"
+        ],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "A",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "WGjFz5ez",
+      "sourceUrl": "https://www.geogebra.org/m/WGjFz5ez",
+      "titles": [
+        "三角函數圖形（全）"
+      ],
+      "normalizedTitles": [
+        "三角函數圖形(全)"
+      ],
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "domains": [
+        "math.functions",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "p2wBYq85",
+            "title": "三角",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "aX7mKMPT",
+      "sourceUrl": "https://www.geogebra.org/m/aX7mKMPT",
+      "titles": [
+        "兩面角"
+      ],
+      "normalizedTitles": [
+        "兩面角"
+      ],
+      "families": [
+        "general-geometry"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "pdgZ7NKq",
+      "sourceUrl": "https://www.geogebra.org/m/pdgZ7NKq",
+      "titles": [
+        "共頂點、底共線"
+      ],
+      "normalizedTitles": [
+        "共頂點、底共線"
+      ],
+      "families": [
+        "construction"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "xVXbxXbJ",
+            "title": "平面幾何新路",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "bPwppamC",
+      "sourceUrl": "https://www.geogebra.org/m/bPwppamC",
+      "titles": [
+        "函數的面積 (黎曼和)"
+      ],
+      "normalizedTitles": [
+        "函數的面積 (黎曼和)"
+      ],
+      "families": [
+        "area"
+      ],
+      "domains": [
+        "math.calculus",
+        "math.functions",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "function_plot",
+        "geometry"
+      ],
+      "dependencies": [
+        "calculus-kernel"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "GkfH9rfm",
+            "title": "微積分",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "xT7HvfaN",
+      "sourceUrl": "https://www.geogebra.org/m/xT7HvfaN",
+      "titles": [
+        "判斷三角形"
+      ],
+      "normalizedTitles": [
+        "判斷三角形"
+      ],
+      "families": [
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "p2wBYq85",
+            "title": "三角",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "VB7g8zKS",
+      "sourceUrl": "https://www.geogebra.org/m/VB7g8zKS",
+      "titles": [
+        "圓內一點到根軸的距離"
+      ],
+      "normalizedTitles": [
+        "圓內一點到根軸的距離"
+      ],
+      "families": [
+        "circle",
+        "construction"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "gmT9YuPe",
+            "title": "問題集",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "vQKsUXJq",
+      "sourceUrl": "https://www.geogebra.org/m/vQKsUXJq",
+      "titles": [
+        "圓形的西洋棋盤"
+      ],
+      "normalizedTitles": [
+        "圓形的西洋棋盤"
+      ],
+      "families": [
+        "circle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "game",
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "PRJjDm2e",
+      "sourceUrl": "https://www.geogebra.org/m/PRJjDm2e",
+      "titles": [
+        "層層出現的圓"
+      ],
+      "normalizedTitles": [
+        "層層出現的圓"
+      ],
+      "families": [
+        "circle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "xqbydsfa",
+      "sourceUrl": "https://www.geogebra.org/m/xqbydsfa",
+      "titles": [
+        "廣義三角：sin, cos"
+      ],
+      "normalizedTitles": [
+        "廣義三角:sin, cos"
+      ],
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "domains": [
+        "math.functions",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "p2wBYq85",
+            "title": "三角",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "T4uYdHed",
+      "sourceUrl": "https://www.geogebra.org/m/T4uYdHed",
+      "titles": [
+        "廣義角"
+      ],
+      "normalizedTitles": [
+        "廣義角"
+      ],
+      "families": [
+        "angle-trigonometry"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "p2wBYq85",
+            "title": "三角",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "F9n3Swge",
+      "sourceUrl": "https://www.geogebra.org/m/F9n3Swge",
+      "titles": [
+        "線外一點"
+      ],
+      "normalizedTitles": [
+        "線外一點"
+      ],
+      "families": [
+        "construction"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "gTAnahWZ",
+      "sourceUrl": "https://www.geogebra.org/m/gTAnahWZ",
+      "titles": [
+        "線性組合"
+      ],
+      "normalizedTitles": [
+        "線性組合"
+      ],
+      "families": [
+        "vector"
+      ],
+      "domains": [
+        "math.geometry",
+        "math.linear_algebra"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "vector_matrix"
+      ],
+      "dependencies": [
+        "vector-matrix"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "W9hqtSmT",
+            "title": "平面向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "STEZaWHP",
+      "sourceUrl": "https://www.geogebra.org/m/STEZaWHP",
+      "titles": [
+        "線性組合面積"
+      ],
+      "normalizedTitles": [
+        "線性組合面積"
+      ],
+      "families": [
+        "area",
+        "vector"
+      ],
+      "domains": [
+        "math.geometry",
+        "math.linear_algebra"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "vector_matrix"
+      ],
+      "dependencies": [
+        "vector-matrix"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "W9hqtSmT",
+            "title": "平面向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "FVz4YS5Q",
+      "sourceUrl": "https://www.geogebra.org/m/FVz4YS5Q",
+      "titles": [
+        "複數相乘的幾何意義"
+      ],
+      "normalizedTitles": [
+        "複數相乘的幾何意義"
+      ],
+      "families": [
+        "general-geometry"
+      ],
+      "domains": [
+        "math.complex",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "m8rQuBHR",
+            "title": "複數",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "G8GDJb8n",
+      "sourceUrl": "https://www.geogebra.org/m/G8GDJb8n",
+      "titles": [
+        "謝爾賓斯基三角形 (Sierpinsky)"
+      ],
+      "normalizedTitles": [
+        "謝爾賓斯基三角形 (sierpinsky)"
+      ],
+      "families": [
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "sequence"
+      ],
+      "dependencies": [
+        "declarative-sequence"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "sdyvmgda",
+      "sourceUrl": "https://www.geogebra.org/m/sdyvmgda",
+      "titles": [
+        "銳角三角：sin, cos"
+      ],
+      "normalizedTitles": [
+        "銳角三角:sin, cos"
+      ],
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "domains": [
+        "math.functions",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "p2wBYq85",
+            "title": "三角",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "bKBw92w3",
+      "sourceUrl": "https://www.geogebra.org/m/bKBw92w3",
+      "titles": [
+        "雙曲線"
+      ],
+      "normalizedTitles": [
+        "雙曲線"
+      ],
+      "families": [
+        "conic",
+        "curve"
+      ],
+      "domains": [
+        "math.conics",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "q7eGEeWG",
+            "title": "圓錐曲線",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "MQPGxAkN",
+      "sourceUrl": "https://www.geogebra.org/m/MQPGxAkN",
+      "titles": [
+        "面積分點公式"
+      ],
+      "normalizedTitles": [
+        "面積分點公式"
+      ],
+      "families": [
+        "area"
+      ],
+      "domains": [
+        "math.calculus",
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "geometry"
+      ],
+      "dependencies": [
+        "calculus-kernel"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "xVXbxXbJ",
+            "title": "平面幾何新路",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "B",
+      "extractionState": "inspect-then-resolve-dependencies"
+    },
+    {
+      "materialId": "ycxuygdq",
+      "sourceUrl": "https://www.geogebra.org/m/ycxuygdq",
+      "titles": [
+        "Claude 解幾何題"
+      ],
+      "normalizedTitles": [
+        "claude 解幾何題"
+      ],
+      "families": [
+        "general-geometry"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "agent_generated",
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "tjm8yg4w",
+            "title": "AI 訓練教室",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "review-source-quality",
+      "extractionState": "ready-for-ggb-inspection"
+    },
+    {
+      "materialId": "v8XHPJ6M",
+      "sourceUrl": "https://www.geogebra.org/m/v8XHPJ6M",
+      "titles": [
+        "空間貝氏曲線"
+      ],
+      "normalizedTitles": [
+        "空間貝氏曲線"
+      ],
+      "families": [
+        "curve",
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "3d",
+        "curve",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "scene3d-renderer"
+      ],
+      "reuse": {
+        "bookCount": 5,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "meQEy6XU",
+      "sourceUrl": "https://www.geogebra.org/m/meQEy6XU",
+      "titles": [
+        "立體線圈"
+      ],
+      "normalizedTitles": [
+        "立體線圈"
+      ],
+      "families": [
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "dependencies": [
+        "scene3d-renderer"
+      ],
+      "reuse": {
+        "bookCount": 4,
+        "books": [
+          {
+            "bookId": "kpggXtmT",
+            "title": "曲線",
+            "ownership": "author"
+          },
+          {
+            "bookId": "m48HRtCJ",
+            "title": "曲線（共同作者版本）",
+            "ownership": "coauthor"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "eayzPmv9",
+      "sourceUrl": "https://www.geogebra.org/m/eayzPmv9",
+      "titles": [
+        "貝氏曲線 (Bezier Surface)"
+      ],
+      "normalizedTitles": [
+        "貝氏曲線 (bezier surface)"
+      ],
+      "families": [
+        "curve",
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "3d",
+        "curve",
+        "custom_tool",
+        "geometry"
+      ],
+      "dependencies": [
+        "curve-kernel",
+        "macro-package",
+        "scene3d-renderer"
+      ],
+      "reuse": {
+        "bookCount": 4,
+        "books": [
+          {
+            "bookId": "AX69cMR6",
+            "title": "曲面",
+            "ownership": "author"
+          },
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          },
+          {
+            "bookId": "sgCPSxMS",
+            "title": "範例",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "explicit",
+        "commands": [
+          "BinomialCoefficient",
+          "Dimension",
+          "Element",
+          "Sequence",
+          "Sum",
+          "Surface"
+        ],
+        "customTools": [
+          "BezierSurface",
+          "Net3D"
+        ],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "uPypkq6s",
+      "sourceUrl": "https://www.geogebra.org/m/uPypkq6s",
+      "titles": [
+        "分割三角柱"
+      ],
+      "normalizedTitles": [
+        "分割三角柱"
+      ],
+      "families": [
+        "solid-3d",
+        "triangle"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "Bbh42kgp",
+      "sourceUrl": "https://www.geogebra.org/m/Bbh42kgp",
+      "titles": [
+        "正四角錐兩側面夾角"
+      ],
+      "normalizedTitles": [
+        "正四角錐兩側面夾角"
+      ],
+      "families": [
+        "angle-trigonometry",
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "dependencies": [
+        "scene3d-renderer"
+      ],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "AX69cMR6",
+            "title": "曲面",
+            "ownership": "author"
+          },
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "aMys9VYd",
+      "sourceUrl": "https://www.geogebra.org/m/aMys9VYd",
+      "titles": [
+        "空間線性組合"
+      ],
+      "normalizedTitles": [
+        "空間線性組合"
+      ],
+      "families": [
+        "solid-3d",
+        "vector"
+      ],
+      "domains": [
+        "math.geometry",
+        "math.linear_algebra"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry",
+        "vector_matrix"
+      ],
+      "dependencies": [
+        "scene3d-renderer",
+        "vector-matrix"
+      ],
+      "reuse": {
+        "bookCount": 2,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          },
+          {
+            "bookId": "ZY9n6FBG",
+            "title": "立體圖",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "Q5tbgnqK",
+      "sourceUrl": "https://www.geogebra.org/m/Q5tbgnqK",
+      "titles": [
+        "正四角錐"
+      ],
+      "normalizedTitles": [
+        "正四角錐"
+      ],
+      "families": [
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "dependencies": [
+        "scene3d-renderer"
+      ],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    },
+    {
+      "materialId": "wFDXRVH5",
+      "sourceUrl": "https://www.geogebra.org/m/wFDXRVH5",
+      "titles": [
+        "直線與平面關係"
+      ],
+      "normalizedTitles": [
+        "直線與平面關係"
+      ],
+      "families": [
+        "solid-3d"
+      ],
+      "domains": [
+        "math.geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "dependencies": [],
+      "reuse": {
+        "bookCount": 1,
+        "books": [
+          {
+            "bookId": "PtPjer3c",
+            "title": "空間向量",
+            "ownership": "author"
+          }
+        ]
+      },
+      "evidence": {
+        "confidence": "index-only",
+        "commands": [],
+        "customTools": [],
+        "scriptKinds": []
+      },
+      "inspectionPriority": "deferred-specialized-renderer",
+      "extractionState": "needs-specialized-renderer-review"
+    }
+  ],
+  "unresolvedTitles": [
+    {
+      "title": "[問題] 以橢圓焦點為中心的正方形",
+      "normalizedTitle": "[問題] 以橢圓焦點為中心的正方形",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "問題集",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "[問題] 已知△PAB 的面積與周長，有幾個 P 點？",
+      "normalizedTitle": "[問題] 已知△pab 的面積與周長,有幾個 p 點?",
+      "families": [
+        "area"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "問題集",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "[問題] 橢圓兩焦點 (6,0), (0,8)",
+      "normalizedTitle": "[問題] 橢圓兩焦點 (6,0), (0,8)",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "問題集",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "[問題] 橢圓與雙曲線有共同焦點",
+      "normalizedTitle": "[問題] 橢圓與雙曲線有共同焦點",
+      "families": [
+        "circle",
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "問題集",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "[問題] 線在面上",
+      "normalizedTitle": "[問題] 線在面上",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "45 ° 的和角",
+      "normalizedTitle": "45 ° 的和角",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "4B-144：圓錐截痕",
+      "normalizedTitle": "4b-144:圓錐截痕",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "COS 特別角",
+      "normalizedTitle": "cos 特別角",
+      "families": [
+        "angle-trigonometry"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "一般線性變換",
+      "normalizedTitle": "一般線性變換",
+      "families": [
+        "transform"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "transform"
+      ],
+      "books": [
+        "幾何變換"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三垂線",
+      "normalizedTitle": "三垂線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三垂線定理",
+      "normalizedTitle": "三垂線定理",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三方圓三視圖",
+      "normalizedTitle": "三方圓三視圖",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角函數值 (特別角)",
+      "normalizedTitle": "三角函數值 (特別角)",
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角函數圖形",
+      "normalizedTitle": "三角函數圖形",
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角函數圖解",
+      "normalizedTitle": "三角函數圖解",
+      "families": [
+        "angle-trigonometry",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角形有向面積",
+      "normalizedTitle": "三角形有向面積",
+      "families": [
+        "area",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面向量",
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角形面積：算法二",
+      "normalizedTitle": "三角形面積:算法二",
+      "families": [
+        "area",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "三角形面積公式 1/2 bc sinA",
+      "normalizedTitle": "三角形面積公式 1/2 bc sina",
+      "families": [
+        "angle-trigonometry",
+        "area",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "上圓下方的盒子",
+      "normalizedTitle": "上圓下方的盒子",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "九點圓 (9-Point Circle)",
+      "normalizedTitle": "九點圓 (9-point circle)",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面幾何",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "內外角平分線",
+      "normalizedTitle": "內外角平分線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "兩函數間面積",
+      "normalizedTitle": "兩函數間面積",
+      "families": [
+        "area"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "兩圓動點的中點軌跡",
+      "normalizedTitle": "兩圓動點的中點軌跡",
+      "families": [
+        "circle",
+        "construction",
+        "locus"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "圓錐曲線",
+        "平面幾何"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "分線比值",
+      "normalizedTitle": "分線比值",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "分解角柱",
+      "normalizedTitle": "分解角柱",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "切割圓面積",
+      "normalizedTitle": "切割圓面積",
+      "families": [
+        "area",
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "微積分",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "切線斜率",
+      "normalizedTitle": "切線斜率",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "geometry"
+      ],
+      "books": [
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "包絡線：拋物線",
+      "normalizedTitle": "包絡線:拋物線",
+      "families": [
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "包絡線：橢圓",
+      "normalizedTitle": "包絡線:橢圓",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "包絡線：雙曲線",
+      "normalizedTitle": "包絡線:雙曲線",
+      "families": [
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "史坦納圓",
+      "normalizedTitle": "史坦納圓",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "史坦納圓 (Steiner Circle)",
+      "normalizedTitle": "史坦納圓 (steiner circle)",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "平面幾何"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "向量比換面積比",
+      "normalizedTitle": "向量比換面積比",
+      "families": [
+        "area",
+        "vector"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "vector_matrix"
+      ],
+      "books": [
+        "平面向量",
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "四次多項式的切線",
+      "normalizedTitle": "四次多項式的切線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "多項式",
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "四角錐的坡度",
+      "normalizedTitle": "四角錐的坡度",
+      "families": [
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "四邊形的「等角分點」",
+      "normalizedTitle": "四邊形的「等角分點」",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "問題集"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓內接四邊形 ABCD ...，求 sinθ=?",
+      "normalizedTitle": "圓內接四邊形 abcd ...,求 sinθ=?",
+      "families": [
+        "angle-trigonometry",
+        "circle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "問題集",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓冪：到兩點的內積",
+      "normalizedTitle": "圓冪:到兩點的內積",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面向量",
+        "平面幾何",
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓底三角形截面",
+      "normalizedTitle": "圓底三角形截面",
+      "families": [
+        "circle",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "研習講義",
+        "立體圖",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓形墊圈",
+      "normalizedTitle": "圓形墊圈",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓形墊圈 (Washer) 2",
+      "normalizedTitle": "圓形墊圈 (washer) 2",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓柱體斜切塊體積",
+      "normalizedTitle": "圓柱體斜切塊體積",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓環",
+      "normalizedTitle": "圓環",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓的外切圓",
+      "normalizedTitle": "圓的外切圓",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓錐曲線與平行四邊形定理",
+      "normalizedTitle": "圓錐曲線與平行四邊形定理",
+      "families": [
+        "circle",
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線",
+        "恆等式"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "圓錐曲線軌跡 (1)",
+      "normalizedTitle": "圓錐曲線軌跡 (1)",
+      "families": [
+        "circle",
+        "conic",
+        "curve",
+        "locus"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "垂心與垂線",
+      "normalizedTitle": "垂心與垂線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "垂足曲線 (Pedal Curve)",
+      "normalizedTitle": "垂足曲線 (pedal curve)",
+      "families": [
+        "construction",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "尤拉線",
+      "normalizedTitle": "尤拉線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面幾何",
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "展開圓面積 (講義版)",
+      "normalizedTitle": "展開圓面積 (講義版)",
+      "families": [
+        "area",
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "幾何原理",
+        "範例",
+        "複數"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "平面外積、有向面積、二階行列式",
+      "normalizedTitle": "平面外積、有向面積、二階行列式",
+      "families": [
+        "area",
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "平面外積（有向面積）",
+      "normalizedTitle": "平面外積(有向面積)",
+      "families": [
+        "area",
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "底圖為圓，截面為半圓",
+      "normalizedTitle": "底圖為圓,截面為半圓",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "底圖為圓，縱切面為正方形",
+      "normalizedTitle": "底圖為圓,縱切面為正方形",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分",
+        "立體圖",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "廣義三角：tan",
+      "normalizedTitle": "廣義三角:tan",
+      "families": [
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "弧度與角度",
+      "normalizedTitle": "弧度與角度",
+      "families": [
+        "angle-trigonometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "彩虹三角",
+      "normalizedTitle": "彩虹三角",
+      "families": [
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "範例",
+        "藝術"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "拋物線 (丹德林球)",
+      "normalizedTitle": "拋物線 (丹德林球)",
+      "families": [
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "拋物線：切線與弦中點",
+      "normalizedTitle": "拋物線:切線與弦中點",
+      "families": [
+        "conic",
+        "construction"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線",
+        "平面幾何"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "拋物線的兩切線",
+      "normalizedTitle": "拋物線的兩切線",
+      "families": [
+        "conic"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線",
+        "平面幾何",
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "拋物線與直線的交點",
+      "normalizedTitle": "拋物線與直線的交點",
+      "families": [
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "代數運算",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "時針與分針的夾角",
+      "normalizedTitle": "時針與分針的夾角",
+      "families": [
+        "angle-trigonometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "極式：切線方向",
+      "normalizedTitle": "極式:切線方向",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "calculus",
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "微積分",
+        "曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "橢圓",
+      "normalizedTitle": "橢圓",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "橢圓參數式",
+      "normalizedTitle": "橢圓參數式",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "橢圓與斜率",
+      "normalizedTitle": "橢圓與斜率",
+      "families": [
+        "circle",
+        "conic"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線",
+        "幾何變換"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "正三角形內一點到三頂點的距離",
+      "normalizedTitle": "正三角形內一點到三頂點的距離",
+      "families": [
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "問題集",
+        "平面幾何",
+        "幾何變換"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "正多邊形的對角線",
+      "normalizedTitle": "正多邊形的對角線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "排列組合",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "正立方形與兩面角",
+      "normalizedTitle": "正立方形與兩面角",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "歪斜線",
+      "normalizedTitle": "歪斜線",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "牟合方蓋：兩圓柱交集",
+      "normalizedTitle": "牟合方蓋:兩圓柱交集",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "region_boolean"
+      ],
+      "books": [
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "用兩圓編織美麗的曲面",
+      "normalizedTitle": "用兩圓編織美麗的曲面",
+      "families": [
+        "circle",
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "books": [
+        "動畫",
+        "曲面",
+        "立體圖",
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "用面積逼近圓周率",
+      "normalizedTitle": "用面積逼近圓周率",
+      "families": [
+        "area",
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "微積分"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "直線垂直平面的條件",
+      "normalizedTitle": "直線垂直平面的條件",
+      "families": [
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "直線的投影量",
+      "normalizedTitle": "直線的投影量",
+      "families": [
+        "transform"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "transform"
+      ],
+      "books": [
+        "平面向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "直角座標轉為極座標",
+      "normalizedTitle": "直角座標轉為極座標",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "函數",
+        "動畫",
+        "微積分",
+        "曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "矩形等距曲線",
+      "normalizedTitle": "矩形等距曲線",
+      "families": [
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "空間三角形面積",
+      "normalizedTitle": "空間三角形面積",
+      "families": [
+        "area",
+        "solid-3d",
+        "triangle"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "空間中兩向量夾角",
+      "normalizedTitle": "空間中兩向量夾角",
+      "families": [
+        "angle-trigonometry",
+        "solid-3d",
+        "vector"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry",
+        "vector_matrix"
+      ],
+      "books": [
+        "空間向量",
+        "立體圖"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "空間兩直線關係",
+      "normalizedTitle": "空間兩直線關係",
+      "families": [
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "立體測量：兩仰角",
+      "normalizedTitle": "立體測量:兩仰角",
+      "families": [
+        "solid-3d"
+      ],
+      "capabilityTags": [
+        "3d",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "等分格線上的向量",
+      "normalizedTitle": "等分格線上的向量",
+      "families": [
+        "vector"
+      ],
+      "capabilityTags": [
+        "geometry",
+        "vector_matrix"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "等腰三角形內嵌矩形",
+      "normalizedTitle": "等腰三角形內嵌矩形",
+      "families": [
+        "triangle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角",
+        "不等式",
+        "問題集"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "粒子的拋物線軌跡",
+      "normalizedTitle": "粒子的拋物線軌跡",
+      "families": [
+        "conic",
+        "locus"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "角平分線分點比例",
+      "normalizedTitle": "角平分線分點比例",
+      "families": [
+        "general-geometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "幾何原理"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "角度、弧度互換",
+      "normalizedTitle": "角度、弧度互換",
+      "families": [
+        "angle-trigonometry"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "過圓內一點與圓相切的圓",
+      "normalizedTitle": "過圓內一點與圓相切的圓",
+      "families": [
+        "circle"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "銳角三角：tan",
+      "normalizedTitle": "銳角三角:tan",
+      "families": [
+        "triangle"
+      ],
+      "capabilityTags": [
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "三角"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "限制函數或曲線顯示的範圍",
+      "normalizedTitle": "限制函數或曲線顯示的範圍",
+      "families": [
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "function_plot",
+        "geometry"
+      ],
+      "books": [
+        "範例"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "雙曲線 (範本)",
+      "normalizedTitle": "雙曲線 (範本)",
+      "families": [
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "雙曲線的固定平行四邊形面積",
+      "normalizedTitle": "雙曲線的固定平行四邊形面積",
+      "families": [
+        "area",
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "雙曲線與斜率",
+      "normalizedTitle": "雙曲線與斜率",
+      "families": [
+        "conic",
+        "curve"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "雙曲線軌跡 (1)",
+      "normalizedTitle": "雙曲線軌跡 (1)",
+      "families": [
+        "conic",
+        "curve",
+        "locus"
+      ],
+      "capabilityTags": [
+        "curve",
+        "geometry"
+      ],
+      "books": [
+        "圓錐曲線"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "面積換算公式",
+      "normalizedTitle": "面積換算公式",
+      "families": [
+        "area"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    },
+    {
+      "title": "高斯定理：對角線中點共線",
+      "normalizedTitle": "高斯定理:對角線中點共線",
+      "families": [
+        "construction"
+      ],
+      "capabilityTags": [
+        "geometry"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "material-id-unknown"
+    }
+  ],
+  "domainGeometryOnlyLeads": [
+    {
+      "title": "五邊形中點",
+      "normalizedTitle": "五邊形中點",
+      "capabilityTags": [],
+      "knownMaterialIds": [
+        "AKBx8zqG"
+      ],
+      "books": [
+        "問題集"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "動態畢氏定理",
+      "normalizedTitle": "動態畢氏定理",
+      "capabilityTags": [
+        "animation"
+      ],
+      "knownMaterialIds": [
+        "f4pyXvYs"
+      ],
+      "books": [
+        "幾何原理",
+        "範例"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "孟氏定理 (Menelaus' theorem)",
+      "normalizedTitle": "孟氏定理 (menelaus' theorem)",
+      "capabilityTags": [],
+      "knownMaterialIds": [
+        "fTbwhNT6"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "底圖為兩函數，截面為正方形",
+      "normalizedTitle": "底圖為兩函數,截面為正方形",
+      "capabilityTags": [
+        "function_plot"
+      ],
+      "knownMaterialIds": [],
+      "books": [
+        "微積分",
+        "立體圖"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "畢氏定理",
+      "normalizedTitle": "畢氏定理",
+      "capabilityTags": [],
+      "knownMaterialIds": [],
+      "books": [
+        "動畫",
+        "平面幾何",
+        "幾何原理"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "畢氏樹",
+      "normalizedTitle": "畢氏樹",
+      "capabilityTags": [
+        "sequence"
+      ],
+      "knownMaterialIds": [
+        "qfExFFcp"
+      ],
+      "books": [
+        "動畫",
+        "碎形",
+        "範例"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "矩形的極式",
+      "normalizedTitle": "矩形的極式",
+      "capabilityTags": [],
+      "knownMaterialIds": [],
+      "books": [
+        "函數",
+        "曲線"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "空間畢氏定理",
+      "normalizedTitle": "空間畢氏定理",
+      "capabilityTags": [
+        "3d"
+      ],
+      "knownMaterialIds": [],
+      "books": [
+        "空間向量"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "複數：正方形內的正方形",
+      "normalizedTitle": "複數:正方形內的正方形",
+      "capabilityTags": [],
+      "knownMaterialIds": [
+        "dK4gnqXv"
+      ],
+      "books": [
+        "動畫",
+        "藝術",
+        "複數"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "西瓦定理 (Ceva's Theorem)",
+      "normalizedTitle": "西瓦定理 (ceva's theorem)",
+      "capabilityTags": [],
+      "knownMaterialIds": [
+        "PCkYnpD4"
+      ],
+      "books": [
+        "平面幾何新路"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    },
+    {
+      "title": "黃金矩形與複數級數",
+      "normalizedTitle": "黃金矩形與複數級數",
+      "capabilityTags": [],
+      "knownMaterialIds": [
+        "hepqfwh8"
+      ],
+      "books": [
+        "藝術",
+        "複數"
+      ],
+      "discoveryState": "outside-geometry-capability-tag"
+    }
+  ]
+}

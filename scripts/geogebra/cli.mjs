@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { inspectGgb } from "./inspector.mjs";
 import { buildCapabilityPlan } from "./planner.mjs";
+import { buildGeometryCatalog } from "./geometry-catalog.mjs";
 
 function usage() {
   return `FamTutor GeoGebra research tools
@@ -11,6 +12,7 @@ function usage() {
 Usage:
   node scripts/geogebra/cli.mjs inspect <file.ggb> [more.ggb ...] [--output <file-or-directory>]
   node scripts/geogebra/cli.mjs plan <public-index.json> [--output <plan.json>] [--top <count>]
+  node scripts/geogebra/cli.mjs geometry-catalog <public-index.json> [--output <catalog.json>] [--first-wave <count>]
 
 Safety:
   - inspect is offline-only and never executes GGBScript or JavaScript.
@@ -26,6 +28,7 @@ function parseArgs(argv) {
     const value = argv[index];
     if (value === "--output") options.output = argv[++index];
     else if (value === "--top") options.top = Number(argv[++index]);
+    else if (value === "--first-wave") options.firstWave = Number(argv[++index]);
     else if (value === "--material-id") options.materialId = argv[++index];
     else if (value === "--source-url") options.sourceUrl = argv[++index];
     else if (value === "--help" || value === "-h") options.help = true;
@@ -76,6 +79,16 @@ async function planCommand(file, options) {
   else process.stdout.write(`${JSON.stringify(plan, null, 2)}\n`);
 }
 
+async function geometryCatalogCommand(file, options) {
+  if (!file) throw new Error("geometry-catalog requires a public-index JSON file.");
+  const index = JSON.parse(await fs.readFile(file, "utf8"));
+  const catalog = buildGeometryCatalog(index, {
+    firstWaveSize: Number.isInteger(options.firstWave) && options.firstWave > 0 ? options.firstWave : 12
+  });
+  if (options.output) await writeJson(options.output, catalog);
+  else process.stdout.write(`${JSON.stringify(catalog, null, 2)}\n`);
+}
+
 async function main() {
   const [command, ...rest] = process.argv.slice(2);
   const { positional, options } = parseArgs(rest);
@@ -85,6 +98,7 @@ async function main() {
   }
   if (command === "inspect") await inspectCommand(positional, options);
   else if (command === "plan") await planCommand(positional[0], options);
+  else if (command === "geometry-catalog") await geometryCatalogCommand(positional[0], options);
   else throw new Error(`Unknown command '${command}'.\n\n${usage()}`);
 }
 

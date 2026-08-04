@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.dev/schemas/famtutor.geogebra.geometry-catalog.v1.schema.json",
+  "title": "FamTutor GeoGebra Geometry Research Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source", "summary", "extractionPolicy", "firstWave", "materials", "unresolvedTitles", "domainGeometryOnlyLeads"],
+  "properties": {
+    "schema": { "const": "famtutor.geogebra.geometry-catalog.v1" },
+    "source": {
+      "type": "object",
+      "required": ["schema", "rawGgbIncluded"],
+      "properties": {
+        "schema": { "type": "string" },
+        "generatedAt": { "type": ["string", "null"] },
+        "profile": { "type": ["object", "null"] },
+        "rawGgbIncluded": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": ["geometryTitles", "titlesWithMaterialIds", "uniqueMaterialIds", "unresolvedTitles", "domainGeometryOnlyLeads", "familyCounts", "priorityCounts"],
+      "properties": {
+        "geometryTitles": { "type": "integer", "minimum": 0 },
+        "titlesWithMaterialIds": { "type": "integer", "minimum": 0 },
+        "uniqueMaterialIds": { "type": "integer", "minimum": 0 },
+        "unresolvedTitles": { "type": "integer", "minimum": 0 },
+        "domainGeometryOnlyLeads": { "type": "integer", "minimum": 0 },
+        "familyCounts": { "$ref": "#/$defs/countMap" },
+        "priorityCounts": { "$ref": "#/$defs/countMap" }
+      },
+      "additionalProperties": false
+    },
+    "extractionPolicy": { "type": "object" },
+    "firstWave": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "materials": { "type": "array", "items": { "$ref": "#/$defs/material" } },
+    "unresolvedTitles": { "type": "array", "items": { "$ref": "#/$defs/titleLead" } },
+    "domainGeometryOnlyLeads": { "type": "array", "items": { "type": "object" } }
+  },
+  "$defs": {
+    "stringArray": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "countMap": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["materialId", "sourceUrl", "titles", "normalizedTitles", "families", "domains", "capabilityTags", "dependencies", "reuse", "evidence", "inspectionPriority", "extractionState"],
+      "properties": {
+        "materialId": { "type": "string", "minLength": 1 },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "titles": { "$ref": "#/$defs/stringArray" },
+        "normalizedTitles": { "$ref": "#/$defs/stringArray" },
+        "families": { "$ref": "#/$defs/stringArray" },
+        "domains": { "$ref": "#/$defs/stringArray" },
+        "capabilityTags": { "$ref": "#/$defs/stringArray" },
+        "dependencies": { "$ref": "#/$defs/stringArray" },
+        "reuse": {
+          "type": "object",
+          "required": ["bookCount", "books"],
+          "properties": {
+            "bookCount": { "type": "integer", "minimum": 0 },
+            "books": { "type": "array", "items": { "type": "object" } }
+          },
+          "additionalProperties": false
+        },
+        "evidence": {
+          "type": "object",
+          "required": ["confidence", "commands", "customTools", "scriptKinds"],
+          "properties": {
+            "confidence": { "type": "string" },
+            "commands": { "$ref": "#/$defs/stringArray" },
+            "customTools": { "$ref": "#/$defs/stringArray" },
+            "scriptKinds": { "$ref": "#/$defs/stringArray" }
+          },
+          "additionalProperties": false
+        },
+        "inspectionPriority": { "enum": ["A", "B", "review-source-quality", "deferred-specialized-renderer"] },
+        "extractionState": { "enum": ["ready-for-ggb-inspection", "inspect-then-resolve-dependencies", "needs-specialized-renderer-review"] }
+      }
+    },
+    "titleLead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "families", "capabilityTags", "books", "discoveryState"],
+      "properties": {
+        "title": { "type": "string" },
+        "normalizedTitle": { "type": ["string", "null"] },
+        "families": { "$ref": "#/$defs/stringArray" },
+        "capabilityTags": { "$ref": "#/$defs/stringArray" },
+        "books": { "$ref": "#/$defs/stringArray" },
+        "discoveryState": { "const": "material-id-unknown" }
+      }
+    }
+  }
+}

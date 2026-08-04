@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { inspectGgb, readZipEntries } from "./inspector.mjs";
 import { buildCapabilityPlan } from "./planner.mjs";
+import { buildGeometryCatalog } from "./geometry-catalog.mjs";
 
 const crcTable = (() => {
   const table = new Uint32Array(256);
@@ -144,4 +145,29 @@ test("public index planner counts valuable mechanism candidates without download
   assert.equal(plan.topCandidates[0].title, "A");
   assert.deepEqual(plan.topCandidates[0].inferredResearchTracks, ["sequence"]);
   assert.equal(plan.legalGate.rawDownloadsCommitted, false);
+});
+
+test("geometry catalog deduplicates titles by material ID and separates unresolved discovery leads", () => {
+  const catalog = buildGeometryCatalog({
+    schema: "famtutor.geogebra.public-corpus-index.v0.2",
+    generated_at: "2026-08-04T00:00:00Z",
+    profile: { username: "example" },
+    command_script_evidence: [{ material_id: "m1", confidence: "explicit", commands: ["Polygon"], scripts: [], custom_tools: [] }],
+    unique_book_entries: [
+      { title: "三角形面積", normalized_title: "三角形面積", known_material_ids: ["m1"], domains: ["math.geometry"], capability_tags: ["geometry"], books: [{ book_id: "b1", book_title: "平面幾何", ownership: "author" }] },
+      { title: "最大三角形面積", normalized_title: "最大三角形面積", known_material_ids: ["m1"], domains: ["math.geometry"], capability_tags: ["geometry"], books: [{ book_id: "b2", book_title: "問題集", ownership: "author" }] },
+      { title: "空間曲線", normalized_title: "空間曲線", known_material_ids: ["m2"], domains: ["math.geometry"], capability_tags: ["geometry", "3d", "curve"], books: [{ book_id: "b1", book_title: "平面幾何", ownership: "author" }] },
+      { title: "未知圓作圖", normalized_title: "未知圓作圖", known_material_ids: [], domains: ["math.geometry"], capability_tags: ["geometry"], books: [{ book_id: "b1", book_title: "平面幾何", ownership: "author" }] }
+    ]
+  });
+  assert.equal(catalog.summary.geometryTitles, 4);
+  assert.equal(catalog.summary.titlesWithMaterialIds, 3);
+  assert.equal(catalog.summary.uniqueMaterialIds, 2);
+  assert.equal(catalog.summary.unresolvedTitles, 1);
+  assert.equal(catalog.summary.domainGeometryOnlyLeads, 0);
+  assert.deepEqual(catalog.materials[0].titles, ["三角形面積", "最大三角形面積"]);
+  assert.deepEqual(catalog.materials[0].families, ["area", "triangle"]);
+  assert.equal(catalog.materials[0].inspectionPriority, "A");
+  assert.equal(catalog.materials[1].inspectionPriority, "deferred-specialized-renderer");
+  assert.equal(catalog.extractionPolicy.rawGgbCommitted, false);
 });

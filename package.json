@@ -14,6 +14,7 @@
     "test:geogebra": "node --test ./scripts/geogebra/*.test.mjs",
     "geogebra:inspect": "node ./scripts/geogebra/cli.mjs inspect",
     "geogebra:plan": "node ./scripts/geogebra/cli.mjs plan",
+    "geogebra:geometry-catalog": "node ./scripts/geogebra/cli.mjs geometry-catalog",
     "verify": "npm run verify -w @famtutor/core && npm run verify -w @famtutor/math-runtime && npm run test:corpus"
   },
   "devDependencies": {

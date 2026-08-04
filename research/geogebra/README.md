@@ -33,3 +33,13 @@ npm run gallery
 3. 动画播放时手动拖动 `t`，时钟应转为 `paused`，证明手动控制优先。
 
 当前 Gallery 会展示 41 个教材 Case 加 1 个机制研究 Case；Case 17 是原教材 Case 的能力升级，不重复计数。
+
+## 几何素材目录
+
+几何素材不按标题直接计数，而是按 material ID 去重，并区分“已编目、已检查、已复现、已验证”。当前主口径为 145 个 geometry 标题、50 个带 ID 标题、47 个唯一 material ID、95 个待定位标题。
+
+- 目录：`geometry-material-catalog.v1.json`
+- 已检查 Manifest：`manifests/`
+- 设计与第一批队列：`../../docs/geogebra-geometry-material-library.md`
+
+原始 `.ggb` 不提交；Manifest 不含脚本正文，也不执行脚本。
