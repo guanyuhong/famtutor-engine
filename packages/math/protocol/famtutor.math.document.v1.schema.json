@@ -237,6 +237,7 @@
         "vector.between_points",
         "vector.components",
         "vector.polar",
+        "vector.scale",
         "circle.center_radius",
         "circle.through_points",
         "circle.through_three_points",

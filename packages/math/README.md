@@ -34,7 +34,7 @@ Events · Assertions · Simulation · Evidence
 | Domain apply | 确定性 `applyMathChangeSet`；Agent 必须委托 `domainRuntime.apply` |
 | Live renderer | **`mountMathRenderer`**：rebuild+staging、状态保留、交互 ChangeSet、诚实 snapshot |
 | Canonical protocol | `famtutor.math.document.v1`（不变）+ operations schema |
-| 数学命令 | **52** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
+| 数学命令 | **53** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |
@@ -132,6 +132,8 @@ const snapshot = handle.exportSvg();
 handle.destroy();
 ```
 
+挂载器会观察宿主容器尺寸，并通过 JSXGraph 官方 `updateContainerDims` 路径同步画布；因此响应式网格、折叠面板和阶段切换不需要业务层手工计算 SVG 宽高。
+
 ### 交互仿真
 
 ```ts
@@ -225,7 +227,7 @@ MCP server 将数学命令收敛在 9 个稳定工具里，避免把每个几何
 
 ## L0 命令目录与 L1 宏
 
-当前为 **52** 个 L0 命令与 **8** 个 L1 宏。完整列表以运行时为准：
+当前为 **53** 个 L0 命令与 **8** 个 L1 宏。完整列表以运行时为准：
 
 ```bash
 node ./bin/famtutor-math.mjs capabilities
@@ -275,7 +277,47 @@ measurement.angle
 measurement.slope
 ```
 
-v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
+v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。`vector.scale` 组合已有 `vector2` 与数值或安全表达式 `params.factor`，用于滑块驱动的向量缩放和平移，不需要重复计算向量的方向。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
+
+`scalar.slider` 可选的声明式动画使用 JSXGraph 原生 glider 动画，不创建 Case 专属计时器。滑块进入可见阶段时自动播放；用户按下滑块或运行时调用 `scalar.set` 后立即停止自动播放，保证手动控制优先：
+
+```json
+{
+  "id": "op-progress",
+  "command": "scalar.slider",
+  "outputs": ["progress"],
+  "params": {
+    "min": 0,
+    "max": 2,
+    "value": 0,
+    "step": 0.02,
+    "position": [-1, -1],
+    "length": 3,
+    "animation": {
+      "autoStart": true,
+      "direction": 1,
+      "stepCount": 100,
+      "delayMs": 30,
+      "maxRounds": 1,
+      "startDelayMs": 600
+    }
+  }
+}
+```
+
+`direction` 只接受 `1` 或 `-1`；`stepCount` 为每轮步数，`delayMs` 为帧间隔，`maxRounds=-1` 表示循环播放。教材演示通常使用 `maxRounds=1`，避免持续运动干扰阅读。
+
+`vector.scale` 的最小用法：
+
+```json
+{
+  "id": "op-motion-vector",
+  "command": "vector.scale",
+  "inputs": [{ "ref": "BCVector" }],
+  "params": { "factor": "max(t - 1, 0)" },
+  "outputs": ["motionVector"]
+}
+```
 
 `marker.right_angle` 的最小用法：
 

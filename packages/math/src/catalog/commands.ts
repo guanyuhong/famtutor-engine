@@ -59,7 +59,7 @@ const definitions: CommandDefinition[] = [
   {
     name: "scalar.slider",
     title: "Scalar slider",
-    description: "Create an interactive scalar slider with min, max, value and optional step/position.",
+    description: "Create an interactive scalar slider with min, max, value and optional step/position/length. params.animation may declaratively auto-start the native JSXGraph slider animation when the slider becomes visible: { autoStart, direction: 1|-1, stepCount, delayMs, maxRounds, startDelayMs }. User pointer input and scalar.set stop auto-play so manual control always wins.",
     inputTypes: [],
     outputTypes: ["scalar"],
     requiredParams: ["min", "max", "value"],
@@ -244,6 +244,17 @@ const definitions: CommandDefinition[] = [
     outputTypes: ["vector2"],
     requiredParams: ["magnitude", "angle"],
     expressionParams: ["magnitude", "angle"],
+    category: "line",
+    renderer: "computed"
+  },
+  {
+    name: "vector.scale",
+    title: "Scale vector",
+    description: "Multiply an existing vector by params.factor. The factor may be a number or a safe expression, enabling slider-driven translations without reconstructing the vector direction.",
+    inputTypes: ["vector2"],
+    outputTypes: ["vector2"],
+    requiredParams: ["factor"],
+    expressionParams: ["factor"],
     category: "line",
     renderer: "computed"
   },

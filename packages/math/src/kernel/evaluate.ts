@@ -65,6 +65,7 @@ import {
   rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  scaleVector,
   segmentTickMarker,
   sectorArea,
   sectorFromArc,
@@ -385,6 +386,11 @@ function executeNode(
       const angle = expressionNumber(params.angle, values);
       return [vector(magnitude * Math.cos(angle), magnitude * Math.sin(angle))];
     }
+    case "vector.scale":
+      return [scaleVector(
+        requireVectorValue(inputs[0]!, "vector.scale input"),
+        expressionNumber(params.factor, values)
+      )];
     case "circle.center_radius": {
       const center = requirePointValue(inputs[0]!, "circle center");
       const radius = inputs.length > 1

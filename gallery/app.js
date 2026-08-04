@@ -81,6 +81,8 @@ const STAGE_LABELS = {
   property: "性质",
   definition: "定义",
   construct: "辅助构造",
+  cut: "切割",
+  assemble: "拼角",
   base: "第一步",
   arcs: "作弧",
   intersection: "交点",

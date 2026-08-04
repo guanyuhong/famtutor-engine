@@ -28,6 +28,7 @@ export function coverageDocument() {
   add("v", "vector2", "derived", "vector.between_points", [{ ref: "A" }, { ref: "C" }]);
   add("vComp", "vector2", "derived", "vector.components", [], { components: [1, -0.5] });
   add("vPolar", "vector2", "derived", "vector.polar", [], { magnitude: "2", angle: "pi/6" });
+  add("vScaled", "vector2", "derived", "vector.scale", [{ ref: "v" }], { factor: "max(s - 1, 0)" });
   add("circleR", "circle2", "derived", "circle.center_radius", [{ ref: "A" }, { ref: "s" }]);
   add("circleP", "circle2", "derived", "circle.through_points", [{ ref: "A" }, { ref: "B" }]);
   add("circum", "circle2", "derived", "circle.through_three_points", [{ ref: "A" }, { ref: "B" }, { ref: "C" }]);

@@ -44,6 +44,7 @@ import {
   rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  scaleVector,
   segmentTickMarker,
   sectorArea,
   sectorFromArc,
@@ -84,6 +85,8 @@ interface JxgObject {
   setValue?: (value: number) => void;
   setPosition?: (mode: number, coords: [number, number]) => void;
   setAttribute?: (attributes: Record<string, unknown>) => void;
+  startAnimation?: (direction: number, stepCount: number, delay: number, maxRounds?: number) => void;
+  stopAnimation?: () => void;
   on?: (event: string, callback: () => void) => void;
   label?: JxgObject;
   borders?: JxgObject[];
@@ -100,7 +103,7 @@ interface JxgBoard {
   unsuspendUpdate?: () => void;
   fullUpdate?: () => void;
   update?: () => void;
-  resize?: () => void;
+  resizeContainer?: (width: number, height: number, dontSetStyle?: boolean, dontSetBoundingBox?: boolean) => unknown;
   stopResizeObserver?: () => void;
   updateContainerDims?: (...args: unknown[]) => unknown;
   getBoundingBox?: () => [number, number, number, number];
@@ -186,6 +189,49 @@ function sliderDigits(step: number): number {
     if (Math.abs(Math.round(step * scale) - step * scale) < 1e-9) return digits;
   }
   return 6;
+}
+
+interface SliderAnimation {
+  autoStart: boolean;
+  direction: 1 | -1;
+  stepCount: number;
+  delayMs: number;
+  maxRounds: number;
+  startDelayMs: number;
+}
+
+function sliderAnimation(node: ConstructionNode): SliderAnimation | undefined {
+  const raw = node.params?.animation;
+  if (raw === undefined) return undefined;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires params.animation to be an object.`);
+  }
+  const value = raw as Record<string, JsonValue>;
+  const finiteNumber = (key: string, fallback: number): number => {
+    const candidate = value[key];
+    if (candidate === undefined) return fallback;
+    if (typeof candidate === "number" && Number.isFinite(candidate)) return candidate;
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires numeric params.animation.${key}.`);
+  };
+  const direction = finiteNumber("direction", 1);
+  const stepCount = Math.round(finiteNumber("stepCount", 100));
+  const delayMs = Math.round(finiteNumber("delayMs", 30));
+  const maxRounds = Math.round(finiteNumber("maxRounds", 1));
+  const startDelayMs = Math.round(finiteNumber("startDelayMs", 0));
+  if (direction !== 1 && direction !== -1) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires params.animation.direction to be 1 or -1.`);
+  }
+  if (stepCount < 1 || delayMs < 1 || startDelayMs < 0 || maxRounds === 0 || maxRounds < -1) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' has an invalid params.animation range.`);
+  }
+  return {
+    autoStart: value.autoStart === true,
+    direction,
+    stepCount,
+    delayMs,
+    maxRounds,
+    startDelayMs
+  };
 }
 
 function pairParam(node: ConstructionNode, key: string, fallback: [number, number] = [0, 0]): [number, number] {
@@ -354,6 +400,8 @@ export function mountJsxGraph(
   const nodeById = graph.nodeById;
   const objects = new Map<string, JxgObject>();
   const valueResolvers = new Map<string, () => RuntimeValue | undefined>();
+  const sliderAnimations = new Map<string, SliderAnimation>();
+  const sliderAnimationTimers = new Map<string, number>();
   const skipped: Array<{ id: string; reason: string }> = [];
   const warnings: ValidationIssue[] = [];
   const createdIds: string[] = [];
@@ -475,6 +523,7 @@ export function mountJsxGraph(
         const max = numericParam(node, "max");
         const value = numericParam(node, "value");
         const step = numericParam(node, "step", -1);
+        const animation = sliderAnimation(node);
         const position = pairParam(node, "position", [view.boundingBox[0] + 1, view.boundingBox[3] + 1]);
         const length = numericParam(node, "length", Math.max(2, (view.boundingBox[2] - view.boundingBox[0]) / 4));
         native = board.create("slider", [position, [position[0] + length, position[1]], [min, value, max]], {
@@ -484,6 +533,15 @@ export function mountJsxGraph(
         });
         objects.set(output, native);
         valueResolvers.set(output, () => native?.Value?.());
+        if (animation) {
+          sliderAnimations.set(output, animation);
+          native.on?.("down", () => {
+            const timer = sliderAnimationTimers.get(output);
+            if (timer !== undefined) host.ownerDocument.defaultView?.clearTimeout(timer);
+            sliderAnimationTimers.delete(output);
+            native?.stopAnimation?.();
+          });
+        }
         break;
       }
       case "boolean.expression": {
@@ -683,6 +741,15 @@ export function mountJsxGraph(
         });
         return;
       }
+      case "vector.scale":
+        valueResolvers.set(output, () => {
+          const source = valueOf(refs[0]!);
+          if (!isVector(source)) {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[0]}' is not a vector2 at runtime.`);
+          }
+          return scaleVector(source, expressionValue(node.params?.factor as string | number));
+        });
+        return;
       case "circle.center_radius": {
         const center = pointNative(objects, refs[0]!);
         const radius = refs[1]
@@ -1357,16 +1424,97 @@ export function mountJsxGraph(
   updatePointLabels();
   board.fullUpdate?.();
 
+  const stopSliderAnimation = (entityId: string): void => {
+    const timer = sliderAnimationTimers.get(entityId);
+    if (timer !== undefined) host.ownerDocument.defaultView?.clearTimeout(timer);
+    sliderAnimationTimers.delete(entityId);
+    objects.get(entityId)?.stopAnimation?.();
+  };
+
+  const syncSliderAnimations = (visibleIds: Set<string>): void => {
+    for (const [entityId, animation] of sliderAnimations) {
+      stopSliderAnimation(entityId);
+      if (!animation.autoStart || !visibleIds.has(entityId)) continue;
+      const native = objects.get(entityId);
+      const producerId = graph.producerByEntity.get(entityId);
+      const node = producerId ? nodeById.get(producerId) : undefined;
+      if (!native?.startAnimation || !node) continue;
+      native.setValue?.(animation.direction > 0 ? numericParam(node, "min") : numericParam(node, "max"));
+      board.fullUpdate?.();
+      const start = (): void => {
+        sliderAnimationTimers.delete(entityId);
+        native.startAnimation?.(
+          animation.direction,
+          animation.stepCount,
+          animation.delayMs,
+          animation.maxRounds
+        );
+      };
+      const window = host.ownerDocument.defaultView;
+      if (window && animation.startDelayMs > 0) {
+        sliderAnimationTimers.set(entityId, window.setTimeout(start, animation.startDelayMs));
+      } else {
+        start();
+      }
+    }
+  };
+
   const applyStage = (nextStage?: string): void => {
     stageId = nextStage;
     const visibleIds = visibleIdsForStage(nextStage);
     for (const entity of document.entities) setVisibility(objects.get(entity.id), visibleIds.has(entity.id));
     updatePointLabels();
     board.fullUpdate?.();
+    syncSliderAnimations(visibleIds);
   };
   applyStage(stageId);
 
-  const ready = Promise.resolve();
+  let destroyed = false;
+  let resizeObserver: ResizeObserver | undefined;
+  let resizeFrame: number | undefined;
+  let syncedWidth = 0;
+  let syncedHeight = 0;
+  const window = host.ownerDocument.defaultView;
+  const syncBoardSize = (): void => {
+    if (destroyed) return;
+    const width = Math.round(host.clientWidth || container.clientWidth);
+    const height = Math.round(host.clientHeight || container.clientHeight);
+    if (width < 1 || height < 1 || (width === syncedWidth && height === syncedHeight)) return;
+    syncedWidth = width;
+    syncedHeight = height;
+    if (board.updateContainerDims) board.updateContainerDims(width, height);
+    else board.resizeContainer?.(width, height, true);
+    updatePointLabels();
+    board.fullUpdate?.();
+  };
+  const scheduleBoardSizeSync = (): void => {
+    if (destroyed) return;
+    if (!window?.requestAnimationFrame) {
+      syncBoardSize();
+      return;
+    }
+    if (resizeFrame !== undefined) window.cancelAnimationFrame(resizeFrame);
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = undefined;
+      syncBoardSize();
+    });
+  };
+  const ResizeObserverConstructor = window?.ResizeObserver;
+  if (ResizeObserverConstructor) {
+    resizeObserver = new ResizeObserverConstructor(scheduleBoardSizeSync);
+    resizeObserver.observe(host);
+  }
+  const ready = new Promise<void>(resolve => {
+    if (!window?.requestAnimationFrame) {
+      syncBoardSize();
+      resolve();
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      syncBoardSize();
+      resolve();
+    });
+  });
   const handle: JsxGraphRuntimeHandle = {
     board,
     document,
@@ -1384,6 +1532,7 @@ export function mountJsxGraph(
     setScalar(entityId, value) {
       const native = objects.get(entityId);
       if (!native?.setValue) throw new MathEngineError("SCALAR_NOT_INTERACTIVE", `Scalar '${entityId}' is not an interactive slider.`);
+      stopSliderAnimation(entityId);
       native.setValue(value);
       updatePointLabels();
       board.fullUpdate?.();
@@ -1417,6 +1566,10 @@ export function mountJsxGraph(
       };
     },
     destroy() {
+      destroyed = true;
+      resizeObserver?.disconnect();
+      if (resizeFrame !== undefined) window?.cancelAnimationFrame(resizeFrame);
+      for (const entityId of sliderAnimations.keys()) stopSliderAnimation(entityId);
       // JSXGraph throttles ResizeObserver work with setTimeout. An already queued
       // callback can otherwise run after freeBoard() has removed board.renderer.
       board.stopResizeObserver?.();

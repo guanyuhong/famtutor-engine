@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- expose the existing vector scaling kernel as the reusable `vector.scale(vector2, factor)` L0 command, with safe-expression factors and live JSXGraph dependency tracking;
+- add declarative, stage-aware native JSXGraph animation to `scalar.slider`, with manual interaction taking precedence, and synchronize mounted boards through the official container-resize path when responsive hosts change size;
+
 - Added the renderer-independent `marker.segment_tick` L0 annotation atom for standard segment equality marks, with document-unit sizing and composable fractional placement.
 - Added the renderer-independent `marker.parallel_chevron(anchor, lineLike, size)` L0 annotation atom. It returns two segment arms, canonicalizes endpoint direction, and composes into double-chevron conventions through repeated calls.
 
