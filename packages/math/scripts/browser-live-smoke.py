@@ -623,7 +623,7 @@ def main() -> int:
         summary["mountMathRenderBundleCases"] = bundle_api_checks
         bundle_page.close()
 
-        # User-facing 13-case Gallery acceptance: every CaseSpec is replayed in-browser,
+        # User-facing 41-case Gallery acceptance: every CaseSpec is replayed in-browser,
         # mounted at once, and exposes the honest accepted/unsupported split.
         gallery_page = browser.new_page(viewport={"width": 1440, "height": 1000})
         gallery_page.on("console", lambda message: console_messages.append(f"gallery {message.type}: {message.text}"))
@@ -635,7 +635,7 @@ def main() -> int:
               const cards = [...document.querySelectorAll('.case-card')];
               const accepted = cards.filter(card => card.dataset.status === 'accepted');
               const unsupported = cards.filter(card => card.dataset.status === 'expected-unsupported');
-              if (cards.length !== 13 || accepted.length !== 12 || unsupported.length !== 1) {
+              if (cards.length !== 41 || accepted.length !== 40 || unsupported.length !== 1) {
                 throw new Error(`Gallery totals mismatch: ${cards.length}/${accepted.length}/${unsupported.length}`);
               }
               if (!cards.every(card => card.dataset.mounted === 'true')) {
