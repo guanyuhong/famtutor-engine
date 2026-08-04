@@ -272,6 +272,20 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
       outputTypes: ["point2"],
       description: "incenter as angle-bisector intersection"
     });
+  } else if (name === "macro.polygon.medial_subdivision") {
+    const A = requireInput(bindings, "A", name);
+    const B = requireInput(bindings, "B", name);
+    const C = requireInput(bindings, "C", name);
+    const D = allocOutput("D");
+    const E = allocOutput("E");
+    const F = allocOutput("F");
+    const medial = allocOutput("medial");
+    steps.push(
+      { command: "point.midpoint", inputRefs: [B, C], outputKeys: [D], outputTypes: ["point2"], description: "midpoint of BC" },
+      { command: "point.midpoint", inputRefs: [C, A], outputKeys: [E], outputTypes: ["point2"], description: "midpoint of CA" },
+      { command: "point.midpoint", inputRefs: [A, B], outputKeys: [F], outputTypes: ["point2"], description: "midpoint of AB" },
+      { command: "polygon.vertices", inputRefs: [D, E, F], outputKeys: [medial], outputTypes: ["polygon2"], description: "medial triangle" }
+    );
   } else if (name === "macro.line.tangent_at_circle_point") {
     const P = requireInput(bindings, "P", name);
     const center = bindings.inputs.center

@@ -1,5 +1,7 @@
 # Circle / Triangle 批量解析 Wave 01
 
+> 后续状态：本报告记录第一轮发现时的覆盖率；`m8SXgrNh` 与 `wEkG5mAm` 的缺口已在 [Wave 02](sequence-macro-wave-02.md) 关闭并达到 12/12、25/25。
+
 本批从公开索引中选择 9 个 A 级 Circle / Triangle 候选。原始 `.ggb` 只在临时目录离线检查；仓库仅保存哈希、结构清单和研究结论，不执行或复制源脚本。
 
 ## 结果

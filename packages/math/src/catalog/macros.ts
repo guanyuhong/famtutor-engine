@@ -133,6 +133,20 @@ export const MACRO_DEFINITIONS: readonly MacroDefinition[] = Object.freeze([
     reasonKeptAsMacro: "Contact points are constructed; keep as recipe above L0."
   },
   {
+    name: "macro.polygon.medial_subdivision",
+    title: "Triangle medial subdivision",
+    description: "Construct the three side midpoints D∈BC, E∈CA, F∈AB and the medial triangle DEF.",
+    inputs: ["A", "B", "C"],
+    outputs: ["D", "E", "F", "medial"],
+    expandsTo: [
+      "point.midpoint(B,C) -> D",
+      "point.midpoint(C,A) -> E",
+      "point.midpoint(A,B) -> F",
+      "polygon.vertices(D,E,F) -> medial"
+    ],
+    reasonKeptAsMacro: "This is a named, reusable composition of midpoint and polygon atoms and matches GeoGebra Custom Tool Tri."
+  },
+  {
     name: "macro.line.common_tangents",
     title: "Four common tangents of disjoint circles",
     description: "Construct the two external and two internal common tangents of two strictly disjoint circles.",

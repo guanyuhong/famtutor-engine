@@ -2084,7 +2084,86 @@
         "f",
         "poly2"
       ],
-      "sourceFile": "geogebra_macro.xml"
+      "sourceFile": "geogebra_macro.xml",
+      "construction": {
+        "elementCount": 14,
+        "commandCount": 5,
+        "commands": [
+          {
+            "name": "Polygon",
+            "inputs": [
+              "A",
+              "B",
+              "C"
+            ],
+            "outputs": [
+              "poly1",
+              "c",
+              "a",
+              "b"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "a"
+            ],
+            "outputs": [
+              "D"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "b"
+            ],
+            "outputs": [
+              "E"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "c"
+            ],
+            "outputs": [
+              "F"
+            ]
+          },
+          {
+            "name": "Polygon",
+            "inputs": [
+              "D",
+              "E",
+              "F"
+            ],
+            "outputs": [
+              "poly2",
+              "f",
+              "d",
+              "e"
+            ]
+          }
+        ]
+      },
+      "engineMapping": {
+        "status": "exact",
+        "expandedCommandEstimate": 5,
+        "primitiveCommands": [
+          {
+            "command": "Polygon",
+            "count": 2,
+            "mapsTo": "polygon.vertices"
+          },
+          {
+            "command": "Midpoint",
+            "count": 3,
+            "mapsTo": "point.midpoint"
+          }
+        ],
+        "macroCalls": [],
+        "unresolvedCommands": []
+      }
     },
     {
       "commandName": "工具2",
@@ -2152,7 +2231,295 @@
         "c_2",
         "b_2"
       ],
-      "sourceFile": "geogebra_macro.xml"
+      "sourceFile": "geogebra_macro.xml",
+      "construction": {
+        "elementCount": 98,
+        "commandCount": 17,
+        "commands": [
+          {
+            "name": "Polygon",
+            "inputs": [
+              "A",
+              "B",
+              "C"
+            ],
+            "outputs": [
+              "poly1",
+              "c",
+              "a",
+              "b"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "a"
+            ],
+            "outputs": [
+              "D"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "b"
+            ],
+            "outputs": [
+              "E"
+            ]
+          },
+          {
+            "name": "Midpoint",
+            "inputs": [
+              "c"
+            ],
+            "outputs": [
+              "F"
+            ]
+          },
+          {
+            "name": "Polygon",
+            "inputs": [
+              "D",
+              "E",
+              "F"
+            ],
+            "outputs": [
+              "poly2",
+              "f",
+              "d",
+              "e"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "A",
+              "F",
+              "E"
+            ],
+            "outputs": [
+              "G",
+              "H",
+              "I",
+              "g",
+              "h",
+              "i",
+              "poly3"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "F",
+              "B",
+              "D"
+            ],
+            "outputs": [
+              "J",
+              "K",
+              "L",
+              "j",
+              "k",
+              "l",
+              "poly4"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "E",
+              "D",
+              "C"
+            ],
+            "outputs": [
+              "M",
+              "N",
+              "O",
+              "m",
+              "n",
+              "p",
+              "poly5"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "A",
+              "I",
+              "H"
+            ],
+            "outputs": [
+              "P",
+              "Q",
+              "R",
+              "q",
+              "r",
+              "s",
+              "poly6"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "I",
+              "F",
+              "G"
+            ],
+            "outputs": [
+              "S",
+              "T",
+              "U",
+              "t",
+              "a_1",
+              "b_1",
+              "poly7"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "H",
+              "G",
+              "E"
+            ],
+            "outputs": [
+              "V",
+              "W",
+              "Z",
+              "c_1",
+              "d_1",
+              "e_1",
+              "poly8"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "F",
+              "L",
+              "K"
+            ],
+            "outputs": [
+              "A_1",
+              "B_1",
+              "C_1",
+              "f_1",
+              "g_1",
+              "h_1",
+              "poly9"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "L",
+              "B",
+              "J"
+            ],
+            "outputs": [
+              "D_1",
+              "E_1",
+              "F_1",
+              "i_1",
+              "j_1",
+              "k_1",
+              "poly10"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "K",
+              "J",
+              "D"
+            ],
+            "outputs": [
+              "G_1",
+              "H_1",
+              "I_1",
+              "l_1",
+              "m_1",
+              "n_1",
+              "poly11"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "E",
+              "O",
+              "N"
+            ],
+            "outputs": [
+              "J_1",
+              "K_1",
+              "L_1",
+              "p_1",
+              "q_1",
+              "r_1",
+              "poly12"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "O",
+              "D",
+              "M"
+            ],
+            "outputs": [
+              "M_1",
+              "N_1",
+              "O_1",
+              "s_1",
+              "t_1",
+              "a_2",
+              "poly13"
+            ]
+          },
+          {
+            "name": "Tri",
+            "inputs": [
+              "N",
+              "M",
+              "C"
+            ],
+            "outputs": [
+              "P_1",
+              "Q_1",
+              "R_1",
+              "b_2",
+              "c_2",
+              "d_2",
+              "poly14"
+            ]
+          }
+        ]
+      },
+      "engineMapping": {
+        "status": "exact",
+        "expandedCommandEstimate": 65,
+        "primitiveCommands": [
+          {
+            "command": "Polygon",
+            "count": 2,
+            "mapsTo": "polygon.vertices"
+          },
+          {
+            "command": "Midpoint",
+            "count": 3,
+            "mapsTo": "point.midpoint"
+          }
+        ],
+        "macroCalls": [
+          {
+            "command": "Tri",
+            "count": 12
+          }
+        ],
+        "unresolvedCommands": []
+      }
     }
   ],
   "scripts": [
@@ -2190,22 +2557,21 @@
         "command": "Polygon",
         "count": 6,
         "mapsTo": "polygon.vertices"
-      }
-    ],
-    "gaps": [
+      },
       {
         "command": "Tri",
         "count": 12,
-        "requiredCapability": "imported_macro_semantic_review",
-        "condition": "custom tool invocation"
+        "mapsTo": "imported-macro:Tri",
+        "condition": "parsed macro DAG fully lowers to existing L0"
       },
       {
         "command": "工具2",
         "count": 4,
-        "requiredCapability": "imported_macro_semantic_review",
-        "condition": "custom tool invocation"
+        "mapsTo": "imported-macro:工具2",
+        "condition": "parsed macro DAG fully lowers to existing L0"
       }
     ],
+    "gaps": [],
     "unknown": []
   },
   "security": {

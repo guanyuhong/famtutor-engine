@@ -48,12 +48,12 @@ const EXACT_COMMANDS = new Map(Object.entries({
   dilate: "transform.dilate/transform.apply",
   vector: "vector.*",
   curve: "curve.parametric",
-  function: "function.explicit"
+  function: "function.explicit",
+  sequence: "collection.sequence",
+  zip: "collection.map"
 }));
 
 const GAP_COMMANDS = new Map(Object.entries({
-  sequence: "declarative_sequence",
-  zip: "declarative_sequence",
   iteration: "declarative_sequence",
   startanimation: "simulation_clock",
   setvalue: "control_action",
@@ -350,7 +350,65 @@ function parseMacros(xml, fileName) {
       if (name.toLowerCase() === "macro") current = undefined;
     }
   });
+  for (const match of xml.matchAll(/<macro\b([^>]*)>([\s\S]*?)<\/macro\s*>/gi)) {
+    const attrs = attributes(match[1]);
+    const commandName = attrs.cmdName ?? attrs.commandName ?? attrs.name;
+    const macro = macros.find(candidate => candidate.commandName === commandName);
+    if (!macro) continue;
+    const parsed = parseConstructionXml(`<geogebra>${match[2]}</geogebra>`, fileName);
+    macro.construction = {
+      elementCount: parsed.elements.total,
+      commandCount: parsed.commands.total,
+      commands: parsed.commands.signatures
+    };
+  }
   return macros;
+}
+
+function analyzeMacroDags(macros) {
+  const normalize = value => String(value ?? "").toLowerCase().replaceAll(/[^a-z0-9]/g, "");
+  const byName = new Map(macros.map(macro => [normalize(macro.commandName), macro]));
+  const visiting = new Set();
+  const memo = new Map();
+  const analyze = macro => {
+    const key = normalize(macro.commandName);
+    if (memo.has(key)) return memo.get(key);
+    if (visiting.has(key)) {
+      const cycle = { status: "cycle", expandedCommandEstimate: null, primitiveCommands: [], macroCalls: [], unresolvedCommands: [] };
+      memo.set(key, cycle);
+      return cycle;
+    }
+    visiting.add(key);
+    const primitiveCounts = new Map();
+    const callCounts = new Map();
+    const unresolvedCounts = new Map();
+    let expandedCommandEstimate = 0;
+    for (const signature of macro.construction?.commands ?? []) {
+      const normalized = normalize(signature.name);
+      const callee = byName.get(normalized);
+      if (callee) callCounts.set(callee.commandName, (callCounts.get(callee.commandName) ?? 0) + 1);
+      else if (EXACT_COMMANDS.has(normalized) || normalized === "mirror") primitiveCounts.set(signature.name, (primitiveCounts.get(signature.name) ?? 0) + 1);
+      else unresolvedCounts.set(signature.name, (unresolvedCounts.get(signature.name) ?? 0) + 1);
+    }
+    expandedCommandEstimate += [...primitiveCounts.values()].reduce((sum, count) => sum + count, 0);
+    let nestedExact = true;
+    for (const [calleeName, count] of callCounts) {
+      const nested = analyze(byName.get(normalize(calleeName)));
+      if (nested.status !== "exact" || nested.expandedCommandEstimate === null) nestedExact = false;
+      else expandedCommandEstimate += nested.expandedCommandEstimate * count;
+    }
+    visiting.delete(key);
+    const result = {
+      status: unresolvedCounts.size === 0 && nestedExact ? "exact" : "gap",
+      expandedCommandEstimate: unresolvedCounts.size === 0 && nestedExact ? expandedCommandEstimate : null,
+      primitiveCommands: [...primitiveCounts].map(([command, count]) => ({ command, count, mapsTo: EXACT_COMMANDS.get(normalize(command)) ?? "typed mirror mapping" })),
+      macroCalls: [...callCounts].map(([command, count]) => ({ command, count })),
+      unresolvedCommands: [...unresolvedCounts].map(([command, count]) => ({ command, count }))
+    };
+    memo.set(key, result);
+    return result;
+  };
+  return macros.map(macro => ({ ...macro, engineMapping: analyze(macro) }));
 }
 
 function analyzeCommands(commands, elements, macros) {
@@ -361,7 +419,7 @@ function analyzeCommands(commands, elements, macros) {
   const circleLabels = new Set(commands.signatures
     .filter(signature => signature.name.toLowerCase().replaceAll(/[^a-z0-9]/g, "") === "circle")
     .flatMap(signature => signature.outputs));
-  const importedMacroNames = new Set(macros.map(macro => macro.commandName.toLowerCase().replaceAll(/[^a-z0-9]/g, "")));
+  const importedMacros = new Map(macros.map(macro => [macro.commandName.toLowerCase().replaceAll(/[^a-z0-9]/g, ""), macro]));
   for (const [command, count] of Object.entries(commands.byName).sort(([a], [b]) => a.localeCompare(b))) {
     const normalized = command.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
     if (normalized === "mirror") {
@@ -376,7 +434,11 @@ function analyzeCommands(commands, elements, macros) {
       if (circleInversion) exact.push({ command, count: circleInversion, mapsTo: "circle.invert_in_circle", condition: "Circle-command source and inversion circle" });
       if (conic) gaps.push({ command, count: conic, requiredCapability: "generalized_conic_inversion", condition: "non-circle conic mirror" });
       if (unresolved) gaps.push({ command, count: unresolved, requiredCapability: "mirror_overload_type_resolution" });
-    } else if (importedMacroNames.has(normalized)) gaps.push({ command, count, requiredCapability: "imported_macro_semantic_review", condition: "custom tool invocation" });
+    } else if (importedMacros.has(normalized)) {
+      const macro = importedMacros.get(normalized);
+      if (macro.engineMapping?.status === "exact") exact.push({ command, count, mapsTo: `imported-macro:${macro.commandName}`, condition: "parsed macro DAG fully lowers to existing L0" });
+      else gaps.push({ command, count, requiredCapability: "imported_macro_semantic_review", condition: "custom tool contains unresolved or cyclic commands" });
+    }
     else if (EXACT_COMMANDS.has(normalized)) exact.push({ command, count, mapsTo: EXACT_COMMANDS.get(normalized) });
     else if (GAP_COMMANDS.has(normalized)) gaps.push({ command, count, requiredCapability: GAP_COMMANDS.get(normalized) });
     else unknown.push({ command, count });
@@ -444,14 +506,14 @@ export function inspectGgb(input, options = {}) {
   }
   const parsedParts = xmlEntries.map(([name, data]) => parseConstructionXml(data.toString("utf8"), name));
   const parsed = mergeParsed(parsedParts);
-  const macros = [...xmlEntries, ...macroEntries]
+  const macros = analyzeMacroDags([...xmlEntries, ...macroEntries]
     .flatMap(([name, data]) => parseMacros(data.toString("utf8"), name))
     .filter((macro, index, all) => index === all.findIndex(candidate =>
       candidate.commandName === macro.commandName
       && candidate.toolName === macro.toolName
       && candidate.inputLabels.join("\0") === macro.inputLabels.join("\0")
       && candidate.outputLabels.join("\0") === macro.outputLabels.join("\0")
-    ));
+    )));
   const globalScripts = [...entries.entries()]
     .filter(([name]) => /(^|\/)(geogebra(_javascript)?\.js|geogebra\.js)$/i.test(name))
     .map(([name, data]) => ({ scope: "global-file", language: "javascript", fileName: name, bytes: data.length, sha256: sha256(data), redacted: true }));

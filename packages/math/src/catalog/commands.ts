@@ -1,4 +1,4 @@
-import type { EntityType, JsonValue } from "../types.js";
+import { ENTITY_TYPES, type EntityType, type JsonValue } from "../types.js";
 
 export type TypeConstraint = EntityType | readonly EntityType[];
 
@@ -24,7 +24,8 @@ export interface CommandDefinition {
     | "function"
     | "annotation"
     | "measurement"
-    | "conic";
+    | "conic"
+    | "collection";
   renderer: "jsxgraph" | "computed" | "both";
 }
 
@@ -43,6 +44,8 @@ const TRANSFORMABLE = [
   "sector2",
   "polygon2"
 ] as const;
+
+const COLLECTION_DEPENDENCY = ENTITY_TYPES.filter(type => type !== "collection") as Exclude<EntityType, "collection">[];
 
 const definitions: CommandDefinition[] = [
   {
@@ -94,6 +97,32 @@ const definitions: CommandDefinition[] = [
     outputTypes: ["point2"],
     requiredParams: ["coords"],
     category: "point",
+    renderer: "both"
+  },
+  {
+    name: "collection.sequence",
+    title: "Bounded construction sequence",
+    description: "Generate a bounded homogeneous point2, segment2, circle2, or polygon2 collection by evaluating one existing single-output L0 command for an inclusive numeric index range. params requires itemType, variable, from, to, template and maxItems (1..256). Template inputs use {local:true} or {input:index}; nested collection commands are rejected.",
+    inputTypes: [],
+    variadicInputType: COLLECTION_DEPENDENCY,
+    minInputs: 0,
+    maxInputs: 32,
+    outputTypes: ["collection"],
+    requiredParams: ["itemType", "variable", "from", "to", "template", "maxItems"],
+    category: "collection",
+    renderer: "both"
+  },
+  {
+    name: "collection.map",
+    title: "Map a construction over a collection",
+    description: "Map one existing single-output L0 command over a bounded homogeneous point2, segment2, circle2, or polygon2 source collection. The source is input 1; additional explicit inputs are available to the template through {input:index}. params requires itemType, variable, template and maxItems (1..256).",
+    inputTypes: ["collection"],
+    variadicInputType: COLLECTION_DEPENDENCY,
+    minInputs: 1,
+    maxInputs: 32,
+    outputTypes: ["collection"],
+    requiredParams: ["itemType", "variable", "template", "maxItems"],
+    category: "collection",
     renderer: "both"
   },
   {

@@ -114,6 +114,7 @@
         "interval1",
         "function1",
         "curve2",
+        "collection",
         "text"
       ]
     },
@@ -229,6 +230,8 @@
         "boolean.expression",
         "interval.from_bounds",
         "point.free",
+        "collection.sequence",
+        "collection.map",
         "point.from_expressions",
         "point.on_path",
         "point.midpoint",

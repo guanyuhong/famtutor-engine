@@ -591,8 +591,8 @@
           "Tri": 12,
           "工具2": 4
         },
-        "exactCommandCount": 9,
-        "gapCommandCount": 16,
+        "exactCommandCount": 25,
+        "gapCommandCount": 0,
         "unknownCommandCount": 0,
         "controlCount": 0,
         "animationCount": 5,
@@ -601,20 +601,7 @@
           "Tri",
           "工具2"
         ],
-        "gapCapabilities": [
-          {
-            "command": "Tri",
-            "count": 12,
-            "requiredCapability": "imported_macro_semantic_review",
-            "condition": "custom tool invocation"
-          },
-          {
-            "command": "工具2",
-            "count": 4,
-            "requiredCapability": "imported_macro_semantic_review",
-            "condition": "custom tool invocation"
-          }
-        ],
+        "gapCapabilities": [],
         "scriptCount": 1,
         "scriptsExecuted": false
       }
@@ -1168,25 +1155,14 @@
           "Center": 1,
           "Radius": 1
         },
-        "exactCommandCount": 9,
-        "gapCommandCount": 3,
+        "exactCommandCount": 12,
+        "gapCommandCount": 0,
         "unknownCommandCount": 0,
         "controlCount": 1,
         "animationCount": 9,
         "macroCount": 0,
         "macroNames": [],
-        "gapCapabilities": [
-          {
-            "command": "Sequence",
-            "count": 1,
-            "requiredCapability": "declarative_sequence"
-          },
-          {
-            "command": "Zip",
-            "count": 2,
-            "requiredCapability": "declarative_sequence"
-          }
-        ],
+        "gapCapabilities": [],
         "scriptCount": 1,
         "scriptsExecuted": false
       }

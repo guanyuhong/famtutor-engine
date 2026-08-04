@@ -429,20 +429,19 @@
         "command": "Radius",
         "count": 1,
         "mapsTo": "measurement.circle_radius"
-      }
-    ],
-    "gaps": [
+      },
       {
         "command": "Sequence",
         "count": 1,
-        "requiredCapability": "declarative_sequence"
+        "mapsTo": "collection.sequence"
       },
       {
         "command": "Zip",
         "count": 2,
-        "requiredCapability": "declarative_sequence"
+        "mapsTo": "collection.map"
       }
     ],
+    "gaps": [],
     "unknown": []
   },
   "security": {

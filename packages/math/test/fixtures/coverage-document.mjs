@@ -38,6 +38,14 @@ export function coverageDocument() {
   add("farCenter", "point2", "free", "point.free", [], { coords: [7, 4] });
   add("farCircle", "circle2", "derived", "circle.center_radius", [{ ref: "farCenter" }, { ref: "k" }]);
   add("commonTangent", "line2", "derived", "line.common_tangent", [{ ref: "circleR" }, { ref: "farCircle" }], { side1: 1, side2: 1 });
+  add("sequencePoints", "collection", "derived", "collection.sequence", [], {
+    itemType: "point2", variable: "i", from: 0, to: 2, maxItems: 8,
+    template: { command: "point.from_expressions", params: { x: "i", y: "i*i/4" } }
+  });
+  add("mappedCircles", "collection", "derived", "collection.map", [{ ref: "sequencePoints" }, { ref: "k" }], {
+    itemType: "circle2", variable: "centerItem", maxItems: 8,
+    template: { command: "circle.center_radius", inputs: [{ local: true }, { input: 1 }] }
+  });
   add("circum", "circle2", "derived", "circle.through_three_points", [{ ref: "A" }, { ref: "B" }, { ref: "C" }]);
   add("lineCircle", ["point2", "point2"], "derived", "point.intersection_line_circle", [{ ref: "lineAB" }, { ref: "circleP" }], undefined, ["LC1", "LC2"]);
   add("circleCircle", ["point2", "point2"], "derived", "point.intersection_circle_circle", [{ ref: "circleP" }, { ref: "circum" }], undefined, ["CC1", "CC2"]);

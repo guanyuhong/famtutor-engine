@@ -59,6 +59,7 @@ import {
   vector
 } from "../kernel/geometry.js";
 import { buildConstructionGraph } from "../kernel/dag.js";
+import { evaluateMathDocument, runtimeValueMap } from "../kernel/evaluate.js";
 import type {
   ConstructionNode,
   DirectSvgResult,
@@ -412,6 +413,38 @@ export function mountJsxGraph(
   let updatePointLabels = (): void => {};
 
   const valueOf = (id: string): RuntimeValue | undefined => valueResolvers.get(id)?.();
+  let headlessSignature = "";
+  let headlessValues = new Map<string, RuntimeValue>();
+  const currentHeadlessValues = (): Map<string, RuntimeValue> => {
+    const points: Record<string, [number, number]> = {};
+    const scalars: Record<string, number> = {};
+    const signature: Array<string | number> = [];
+    for (const node of document.construction) {
+      const outputId = node.outputs[0];
+      if (!outputId) continue;
+      const object = objects.get(outputId);
+      if (node.command === "point.free" && object?.X && object.Y) {
+        const x = object.X();
+        const y = object.Y();
+        if (Number.isFinite(x) && Number.isFinite(y)) {
+          points[outputId] = [x, y];
+          signature.push(outputId, x, y);
+        }
+      } else if (node.command === "scalar.slider" && object?.Value) {
+        const value = object.Value();
+        if (Number.isFinite(value)) {
+          scalars[outputId] = value;
+          signature.push(outputId, value);
+        }
+      }
+    }
+    const nextSignature = JSON.stringify(signature);
+    if (nextSignature !== headlessSignature) {
+      headlessSignature = nextSignature;
+      headlessValues = runtimeValueMap(evaluateMathDocument(document, { points, scalars }));
+    }
+    return headlessValues;
+  };
   const expressionValue = (source: string | number, locals: Record<string, number> = {}): number =>
     evaluateNumericExpression(source, identifier => locals[identifier] ?? valueOf(identifier));
   const booleanValue = (source: string): boolean =>
@@ -545,6 +578,85 @@ export function mountJsxGraph(
             native?.stopAnimation?.();
           });
         }
+        break;
+      }
+      case "collection.sequence":
+      case "collection.map": {
+        const itemType = node.params?.itemType;
+        const maxItems = Number(node.params?.maxItems);
+        if (!["point2", "segment2", "circle2", "polygon2"].includes(String(itemType)) || !Number.isInteger(maxItems) || maxItems < 1 || maxItems > 256) {
+          throw new MathEngineError("INVALID_COLLECTION_RENDER_SPEC", "Mounted collection rendering requires itemType point2|segment2|circle2|polygon2 and maxItems 1..256.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!value || typeof value !== "object" || value.kind !== "collection") {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a defined collection at runtime.`);
+          }
+          return value;
+        };
+        const itemAt = (index: number) => current().items[index];
+        const exists = (index: number) => index < current().items.length;
+        native = board.create("point", [0, 0], { fixed: true, visible: false, name: "", withLabel: false });
+        native.fmeVisibility = () => false;
+        native.fmeChildren = [];
+        const childAttributes = { ...jxgAttributes(document, output, true), name: "", withLabel: false };
+        for (let index = 0; index < maxItems; index += 1) {
+          let child: JxgObject;
+          if (itemType === "point2") {
+            const pointCoordinate = (axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isPoint(item) ? item[axis] : Number.NaN;
+            };
+            child = board.create("point", [
+              () => pointCoordinate("x"),
+              () => pointCoordinate("y")
+            ], childAttributes);
+          } else if (itemType === "circle2") {
+            const circleCoordinate = (axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isCircle(item) ? item.center[axis] : 0;
+            };
+            const circleRadius = () => {
+              const item = itemAt(index);
+              return isCircle(item) ? item.radius : 0;
+            };
+            const center = board.create("point", [
+              () => circleCoordinate("x"),
+              () => circleCoordinate("y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            child = board.create("circle", [center, circleRadius], childAttributes);
+          } else if (itemType === "segment2") {
+            const segmentCoordinate = (endpoint: "from" | "to", axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isSegment(item) ? item[endpoint][axis] : Number.NaN;
+            };
+            const from = board.create("point", [
+              () => segmentCoordinate("from", "x"),
+              () => segmentCoordinate("from", "y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            const to = board.create("point", [
+              () => segmentCoordinate("to", "x"),
+              () => segmentCoordinate("to", "y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            child = board.create("segment", [from, to], childAttributes);
+          } else {
+            const vertices = Array.from({ length: 16 }, (_, vertexIndex) => board.create("point", [
+              () => {
+                const item = itemAt(index);
+                return isPolygon(item) && item.vertices.length > 0 ? item.vertices[Math.min(vertexIndex, item.vertices.length - 1)]!.x : Number.NaN;
+              },
+              () => {
+                const item = itemAt(index);
+                return isPolygon(item) && item.vertices.length > 0 ? item.vertices[Math.min(vertexIndex, item.vertices.length - 1)]!.y : Number.NaN;
+              }
+            ], { fixed: true, visible: false, name: "", withLabel: false }));
+            child = board.create("polygon", vertices, childAttributes);
+          }
+          child.fmeVisibility = () => exists(index);
+          native.fmeChildren.push(child);
+        }
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "boolean.expression": {

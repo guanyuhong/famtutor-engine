@@ -32,7 +32,7 @@ npm run gallery
 2. `CASE 17 · demonstration`：选择“拼角”阶段，再使用“播放 / 暂停 / 单步 / 复位”。状态栏应显示 `assemblyClock` 的 status、`t` 和逻辑 tick。
 3. 动画播放时手动拖动 `t`，时钟应转为 `paused`，证明手动控制优先。
 
-当前 Gallery 会展示 41 个教材 Case 加 1 个机制研究 Case；Case 17 是原教材 Case 的能力升级，不重复计数。
+当前 Gallery 会展示 41 个教材 Case 加 4 个机制研究 Case；Case 17 是原教材 Case 的能力升级，不重复计数。RESEARCH 03 验收 Sequence / Zip，RESEARCH 04 验收 Imported Macro DAG。
 
 ## 几何素材目录
 
@@ -42,6 +42,7 @@ npm run gallery
 - 已检查 Manifest：`manifests/`
 - 已归纳几何 Pattern：`patterns/`
 - Circle / Triangle Wave 01：`batches/circle-triangle-wave-01.md`
+- Sequence / Imported Macro Wave 02：`batches/sequence-macro-wave-02.md`
 - 设计与第一批队列：`../../docs/geogebra-geometry-material-library.md`
 
 原始 `.ggb` 不提交；Manifest 不含脚本正文，也不执行脚本。

@@ -1,0 +1,1561 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-04-sierpinski-imported-macro",
+  "title": "Sierpiński Triangle：Imported Macro DAG",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/m/wEkG5mAm"
+    ],
+    "note": "Mechanism study; original FamTutor rendering generated from the parsed Custom Tool semantics."
+  },
+  "requiredCapabilities": [
+    "macro.polygon.medial_subdivision",
+    "imported-macro-dag"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-sierpinski-imported-macro",
+      "revision": 1,
+      "seed": 4404,
+      "metadata": {
+        "title": "Sierpiński Triangle 的嵌套 Macro",
+        "description": "将 GeoGebra Tri Custom Tool 降级为中点与多边形原子，并以三层嵌套 Macro 构造分形。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "tags": [
+          "geogebra-study",
+          "custom-tool",
+          "macro-dag",
+          "sierpinski"
+        ]
+      },
+      "entities": [
+        {
+          "id": "A",
+          "type": "point2",
+          "label": "A",
+          "role": "free"
+        },
+        {
+          "id": "B",
+          "type": "point2",
+          "label": "B",
+          "role": "free"
+        },
+        {
+          "id": "C",
+          "type": "point2",
+          "label": "C",
+          "role": "free"
+        },
+        {
+          "id": "outer",
+          "type": "polygon2",
+          "role": "derived"
+        },
+        {
+          "id": "tri_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tri_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tri_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tri_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tria_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tria_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tria_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tria_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "triaa_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "triaa_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "triaa_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "triaa_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "triab_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "triab_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "triab_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "triab_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "triac_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "triac_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "triac_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "triac_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "trib_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "trib_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "trib_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "trib_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "triba_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "triba_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "triba_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "triba_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tribb_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tribb_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tribb_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tribb_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tribc_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tribc_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tribc_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tribc_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tric_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tric_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tric_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tric_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "trica_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "trica_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "trica_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "trica_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tricb_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tricb_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tricb_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tricb_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        },
+        {
+          "id": "tricc_D",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "D",
+          "visible": false
+        },
+        {
+          "id": "tricc_E",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "E",
+          "visible": false
+        },
+        {
+          "id": "tricc_F",
+          "type": "point2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision",
+          "label": "F",
+          "visible": false
+        },
+        {
+          "id": "tricc_hole",
+          "type": "polygon2",
+          "role": "derived",
+          "description": "Expanded from macro.polygon.medial_subdivision"
+        }
+      ],
+      "construction": [
+        {
+          "id": "make-A",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              0,
+              5.4
+            ]
+          },
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "id": "make-B",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -6.2,
+              -4.2
+            ]
+          },
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "id": "make-C",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              6.2,
+              -4.2
+            ]
+          },
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "id": "make-outer",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "A"
+            },
+            {
+              "ref": "B"
+            },
+            {
+              "ref": "C"
+            }
+          ],
+          "outputs": [
+            "outer"
+          ]
+        },
+        {
+          "id": "op-tri_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "B"
+            },
+            {
+              "ref": "C"
+            }
+          ],
+          "outputs": [
+            "tri_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tri_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "C"
+            },
+            {
+              "ref": "A"
+            }
+          ],
+          "outputs": [
+            "tri_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tri_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "A"
+            },
+            {
+              "ref": "B"
+            }
+          ],
+          "outputs": [
+            "tri_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tri_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tri_D"
+            },
+            {
+              "ref": "tri_E"
+            },
+            {
+              "ref": "tri_F"
+            }
+          ],
+          "outputs": [
+            "tri_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tria_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_F"
+            },
+            {
+              "ref": "tri_E"
+            }
+          ],
+          "outputs": [
+            "tria_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tria_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_E"
+            },
+            {
+              "ref": "A"
+            }
+          ],
+          "outputs": [
+            "tria_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tria_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "A"
+            },
+            {
+              "ref": "tri_F"
+            }
+          ],
+          "outputs": [
+            "tria_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tria_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tria_D"
+            },
+            {
+              "ref": "tria_E"
+            },
+            {
+              "ref": "tria_F"
+            }
+          ],
+          "outputs": [
+            "tria_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-triaa_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_F"
+            },
+            {
+              "ref": "tria_E"
+            }
+          ],
+          "outputs": [
+            "triaa_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-triaa_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_E"
+            },
+            {
+              "ref": "A"
+            }
+          ],
+          "outputs": [
+            "triaa_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-triaa_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "A"
+            },
+            {
+              "ref": "tria_F"
+            }
+          ],
+          "outputs": [
+            "triaa_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-triaa_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "triaa_D"
+            },
+            {
+              "ref": "triaa_E"
+            },
+            {
+              "ref": "triaa_F"
+            }
+          ],
+          "outputs": [
+            "triaa_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-triab_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_F"
+            },
+            {
+              "ref": "tria_D"
+            }
+          ],
+          "outputs": [
+            "triab_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-triab_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_D"
+            },
+            {
+              "ref": "tria_F"
+            }
+          ],
+          "outputs": [
+            "triab_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-triab_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_F"
+            },
+            {
+              "ref": "tri_F"
+            }
+          ],
+          "outputs": [
+            "triab_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-triab_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "triab_D"
+            },
+            {
+              "ref": "triab_E"
+            },
+            {
+              "ref": "triab_F"
+            }
+          ],
+          "outputs": [
+            "triab_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-triac_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_D"
+            },
+            {
+              "ref": "tri_E"
+            }
+          ],
+          "outputs": [
+            "triac_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-triac_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_E"
+            },
+            {
+              "ref": "tria_E"
+            }
+          ],
+          "outputs": [
+            "triac_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-triac_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tria_E"
+            },
+            {
+              "ref": "tria_D"
+            }
+          ],
+          "outputs": [
+            "triac_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-triac_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "triac_D"
+            },
+            {
+              "ref": "triac_E"
+            },
+            {
+              "ref": "triac_F"
+            }
+          ],
+          "outputs": [
+            "triac_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-trib_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "B"
+            },
+            {
+              "ref": "tri_D"
+            }
+          ],
+          "outputs": [
+            "trib_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-trib_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_D"
+            },
+            {
+              "ref": "tri_F"
+            }
+          ],
+          "outputs": [
+            "trib_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-trib_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_F"
+            },
+            {
+              "ref": "B"
+            }
+          ],
+          "outputs": [
+            "trib_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-trib_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "trib_D"
+            },
+            {
+              "ref": "trib_E"
+            },
+            {
+              "ref": "trib_F"
+            }
+          ],
+          "outputs": [
+            "trib_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-triba_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_F"
+            },
+            {
+              "ref": "trib_E"
+            }
+          ],
+          "outputs": [
+            "triba_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-triba_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_E"
+            },
+            {
+              "ref": "tri_F"
+            }
+          ],
+          "outputs": [
+            "triba_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-triba_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_F"
+            },
+            {
+              "ref": "trib_F"
+            }
+          ],
+          "outputs": [
+            "triba_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-triba_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "triba_D"
+            },
+            {
+              "ref": "triba_E"
+            },
+            {
+              "ref": "triba_F"
+            }
+          ],
+          "outputs": [
+            "triba_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tribb_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "B"
+            },
+            {
+              "ref": "trib_D"
+            }
+          ],
+          "outputs": [
+            "tribb_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tribb_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_D"
+            },
+            {
+              "ref": "trib_F"
+            }
+          ],
+          "outputs": [
+            "tribb_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tribb_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_F"
+            },
+            {
+              "ref": "B"
+            }
+          ],
+          "outputs": [
+            "tribb_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tribb_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tribb_D"
+            },
+            {
+              "ref": "tribb_E"
+            },
+            {
+              "ref": "tribb_F"
+            }
+          ],
+          "outputs": [
+            "tribb_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tribc_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_D"
+            },
+            {
+              "ref": "tri_D"
+            }
+          ],
+          "outputs": [
+            "tribc_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tribc_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_D"
+            },
+            {
+              "ref": "trib_E"
+            }
+          ],
+          "outputs": [
+            "tribc_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tribc_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "trib_E"
+            },
+            {
+              "ref": "trib_D"
+            }
+          ],
+          "outputs": [
+            "tribc_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tribc_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tribc_D"
+            },
+            {
+              "ref": "tribc_E"
+            },
+            {
+              "ref": "tribc_F"
+            }
+          ],
+          "outputs": [
+            "tribc_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tric_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_D"
+            },
+            {
+              "ref": "C"
+            }
+          ],
+          "outputs": [
+            "tric_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tric_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "C"
+            },
+            {
+              "ref": "tri_E"
+            }
+          ],
+          "outputs": [
+            "tric_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tric_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_E"
+            },
+            {
+              "ref": "tri_D"
+            }
+          ],
+          "outputs": [
+            "tric_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tric_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tric_D"
+            },
+            {
+              "ref": "tric_E"
+            },
+            {
+              "ref": "tric_F"
+            }
+          ],
+          "outputs": [
+            "tric_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-trica_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_F"
+            },
+            {
+              "ref": "tric_E"
+            }
+          ],
+          "outputs": [
+            "trica_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-trica_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_E"
+            },
+            {
+              "ref": "tri_E"
+            }
+          ],
+          "outputs": [
+            "trica_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-trica_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_E"
+            },
+            {
+              "ref": "tric_F"
+            }
+          ],
+          "outputs": [
+            "trica_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-trica_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "trica_D"
+            },
+            {
+              "ref": "trica_E"
+            },
+            {
+              "ref": "trica_F"
+            }
+          ],
+          "outputs": [
+            "trica_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tricb_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tri_D"
+            },
+            {
+              "ref": "tric_D"
+            }
+          ],
+          "outputs": [
+            "tricb_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tricb_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_D"
+            },
+            {
+              "ref": "tric_F"
+            }
+          ],
+          "outputs": [
+            "tricb_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tricb_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_F"
+            },
+            {
+              "ref": "tri_D"
+            }
+          ],
+          "outputs": [
+            "tricb_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tricb_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tricb_D"
+            },
+            {
+              "ref": "tricb_E"
+            },
+            {
+              "ref": "tricb_F"
+            }
+          ],
+          "outputs": [
+            "tricb_hole"
+          ],
+          "description": "medial triangle"
+        },
+        {
+          "id": "op-tricc_D",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_D"
+            },
+            {
+              "ref": "C"
+            }
+          ],
+          "outputs": [
+            "tricc_D"
+          ],
+          "description": "midpoint of BC"
+        },
+        {
+          "id": "op-tricc_E",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "C"
+            },
+            {
+              "ref": "tric_E"
+            }
+          ],
+          "outputs": [
+            "tricc_E"
+          ],
+          "description": "midpoint of CA"
+        },
+        {
+          "id": "op-tricc_F",
+          "command": "point.midpoint",
+          "inputs": [
+            {
+              "ref": "tric_E"
+            },
+            {
+              "ref": "tric_D"
+            }
+          ],
+          "outputs": [
+            "tricc_F"
+          ],
+          "description": "midpoint of AB"
+        },
+        {
+          "id": "op-tricc_hole",
+          "command": "polygon.vertices",
+          "inputs": [
+            {
+              "ref": "tricc_D"
+            },
+            {
+              "ref": "tricc_E"
+            },
+            {
+              "ref": "tricc_F"
+            }
+          ],
+          "outputs": [
+            "tricc_hole"
+          ],
+          "description": "medial triangle"
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -7.4,
+            6.4,
+            7.4,
+            -5.2
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "outer"
+          ],
+          "style": {
+            "stroke": "#553B8B",
+            "strokeWidth": 2.2,
+            "fill": "#8B71C5",
+            "fillOpacity": 0.82,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "tri_hole",
+            "tria_hole",
+            "trib_hole",
+            "tric_hole",
+            "triaa_hole",
+            "triab_hole",
+            "triac_hole",
+            "triba_hole",
+            "tribb_hole",
+            "tribc_hole",
+            "trica_hole",
+            "tricb_hole",
+            "tricc_hole"
+          ],
+          "style": {
+            "stroke": "#FAF8F2",
+            "strokeWidth": 1.2,
+            "fill": "#FAF8F2",
+            "fillOpacity": 1,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "A",
+            "B",
+            "C"
+          ],
+          "style": {
+            "stroke": "#15365F",
+            "fill": "#15365F",
+            "pointSize": 4.5,
+            "fontSize": 12,
+            "labelPlacement": "auto"
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "A",
+          "permissions": [
+            "drag"
+          ]
+        },
+        {
+          "target": "B",
+          "permissions": [
+            "drag"
+          ]
+        },
+        {
+          "target": "C",
+          "permissions": [
+            "drag"
+          ]
+        }
+      ],
+      "provenance": {
+        "createdAt": "2026-08-04T00:00:00.000Z",
+        "generator": "agent",
+        "sourceRefs": [
+          "geogebra:wEkG5mAm",
+          "macro:macro.polygon.medial_subdivision"
+        ],
+        "notes": "GeoGebra Tri uses Polygon + three Midpoint + Polygon. The imported 工具2 DAG contains 12 Tri calls and lowers exactly to existing L0 commands."
+      },
+      "activities": [
+        {
+          "id": "macro-depth",
+          "title": "观察 Macro 的逐层展开",
+          "stages": [
+            {
+              "id": "level-1",
+              "narration": "Tri(A,B,C) 只由三个中点和一个中点三角形组成；白色中点三角形是第一层孔洞。",
+              "hide": [
+                "tria_hole",
+                "trib_hole",
+                "tric_hole",
+                "triaa_hole",
+                "triab_hole",
+                "triac_hole",
+                "triba_hole",
+                "tribb_hole",
+                "tribc_hole",
+                "trica_hole",
+                "tricb_hole",
+                "tricc_hole"
+              ]
+            },
+            {
+              "id": "level-2",
+              "narration": "把同一个 Tri Macro 应用于三个角三角形，得到第二层的 3 个孔洞。",
+              "hide": [
+                "triaa_hole",
+                "triab_hole",
+                "triac_hole",
+                "triba_hole",
+                "tribb_hole",
+                "tribc_hole",
+                "trica_hole",
+                "tricb_hole",
+                "tricc_hole"
+              ]
+            },
+            {
+              "id": "level-3",
+              "narration": "第三层共有 9 个新孔洞；整个图形是 13 次相同 Macro 的确定性组合。"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "mounted-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "A",
+        "permission": "drag"
+      },
+      {
+        "target": "B",
+        "permission": "drag"
+      },
+      {
+        "target": "C",
+        "permission": "drag"
+      }
+    ]
+  }
+}

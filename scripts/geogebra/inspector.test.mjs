@@ -110,7 +110,7 @@ test("offline inspector extracts construction, controls, animation, macros and r
   assert.deepEqual(manifest.capabilityTags, ["animation", "custom_tool", "geometry", "script", "sequence", "simulation", "spreadsheet", "transform"]);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Rotate"), true);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Mirror" && item.condition === "line-like mirror"), true);
-  assert.equal(manifest.engineMapping.gaps.some(item => item.requiredCapability === "declarative_sequence"), true);
+  assert.equal(manifest.engineMapping.exact.some(item => item.command === "Sequence" && item.mapsTo === "collection.sequence"), true);
   assert.equal(manifest.engineMapping.gaps.some(item => item.requiredCapability === "control_action"), true);
   assert.deepEqual(manifest.engineMapping.unknown, [{ command: "MysteryCommand", count: 1 }]);
 });
@@ -118,6 +118,40 @@ test("offline inspector extracts construction, controls, animation, macros and r
 test("ZIP reader rejects traversal before extracting archive content", () => {
   const unsafe = storedZip({ "../escape.txt": "nope", "geogebra.xml": "<geogebra/>" });
   assert.throws(() => readZipEntries(unsafe), error => error.code === "GGB_UNSAFE_ENTRY_PATH");
+});
+
+test("imported Custom Tools expose a bounded nested macro DAG and exact L0 lowering", () => {
+  const ggb = storedZip({
+    "geogebra.xml": `<geogebra><construction>
+      <element type="point" label="A"/><element type="point" label="B"/><element type="point" label="C"/>
+      <command name="Tool2"><input a0="A" a1="B" a2="C"/><output a0="out"/></command>
+    </construction></geogebra>`,
+    "geogebra_macro.xml": `<geogebra>
+      <macro cmdName="Tri" toolName="Triangle midpoint">
+        <macroInput a0="A" a1="B" a2="C"/><macroOutput a0="D"/>
+        <construction><command name="Midpoint"><input a0="B" a1="C"/><output a0="D"/></command></construction>
+      </macro>
+      <macro cmdName="Tool2" toolName="Nested tool">
+        <macroInput a0="A" a1="B" a2="C"/><macroOutput a0="out"/>
+        <construction>
+          <command name="Polygon"><input a0="A" a1="B" a2="C"/><output a0="poly"/></command>
+          <command name="Tri"><input a0="A" a1="B" a2="C"/><output a0="D"/></command>
+          <command name="Tri"><input a0="B" a1="C" a2="A"/><output a0="E"/></command>
+        </construction>
+      </macro>
+    </geogebra>`
+  });
+  const manifest = inspectGgb(ggb, { fileName: "nested-macro.ggb" });
+  const tri = manifest.macros.find(macro => macro.commandName === "Tri");
+  const tool = manifest.macros.find(macro => macro.commandName === "Tool2");
+  assert.equal(tri.construction.commandCount, 1);
+  assert.equal(tri.engineMapping.status, "exact");
+  assert.equal(tri.engineMapping.expandedCommandEstimate, 1);
+  assert.deepEqual(tool.engineMapping.macroCalls, [{ command: "Tri", count: 2 }]);
+  assert.equal(tool.engineMapping.status, "exact");
+  assert.equal(tool.engineMapping.expandedCommandEstimate, 3);
+  assert.equal(manifest.engineMapping.exact.some(item => item.command === "Tool2" && item.mapsTo === "imported-macro:Tool2"), true);
+  assert.deepEqual(manifest.engineMapping.gaps, []);
 });
 
 test("public index planner counts valuable mechanism candidates without downloading resources", () => {

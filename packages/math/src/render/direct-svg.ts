@@ -418,6 +418,18 @@ function renderEntity(
 ): string {
   const style = styleForEntity(document, entity, options.theme);
   const id = escapeXml(entity.id);
+  if (value && typeof value === "object" && value.kind === "collection") {
+    return value.items.map((item, index) => {
+      const child: MathEntity = {
+        ...entity,
+        id: `${entity.id}[${index}]`,
+        type: value.itemType,
+        label: undefined
+      };
+      if (value.itemType === "point2") return renderPointAndLabel(child, item, document, transform, options.theme);
+      return renderEntity(child, item, document, view, transform, options, values, height);
+    }).join("");
+  }
   if (isLine(value)) {
     const clipped = clipLineToBoundingBox(value, view.boundingBox);
     if (!clipped) return "";
@@ -516,6 +528,7 @@ export function renderDirectSvg(document: MathDocument, options: DirectSvgOption
   const layerOrder: Record<string, number> = {
     function1: 10,
     curve2: 10,
+    collection: 25,
     conic2: 15,
     line2: 20,
     ray2: 20,

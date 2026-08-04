@@ -19,6 +19,7 @@ export const ENTITY_TYPES = [
   "interval1",
   "function1",
   "curve2",
+  "collection",
   "text"
 ] as const;
 
@@ -400,6 +401,13 @@ export interface Curve2Value {
   domain: [number, number];
 }
 
+/** A bounded, homogeneous set of renderer-neutral runtime values. */
+export interface CollectionValue {
+  kind: "collection";
+  itemType: Exclude<EntityType, "collection">;
+  items: RuntimeValue[];
+}
+
 export interface TextValue {
   kind: "text";
   text: string;
@@ -424,6 +432,7 @@ export type RuntimeValue =
   | Interval1Value
   | Function1Value
   | Curve2Value
+  | CollectionValue
   | TextValue;
 
 export interface RuntimeEntity {

@@ -34,7 +34,7 @@ Events · Assertions · Simulation · Evidence
 | Domain apply | 确定性 `applyMathChangeSet`；Agent 必须委托 `domainRuntime.apply` |
 | Live renderer | **`mountMathRenderer`**：rebuild+staging、状态保留、交互 ChangeSet、诚实 snapshot |
 | Canonical protocol | `famtutor.math.document.v1`（不变）+ operations schema |
-| 数学命令 | **56** 个 L0 命令 + **9** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
+| 数学命令 | **58** 个二维/通用 L0 命令 + **10** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |

@@ -1,0 +1,136 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-03-steiner-chain-sequence-zip",
+  "title": "Steiner Chain：Sequence / Zip",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": ["https://www.geogebra.org/m/m8SXgrNh"],
+    "note": "Mechanism study; original FamTutor construction using bounded collection.sequence and collection.map."
+  },
+  "requiredCapabilities": ["collection.sequence", "collection.map", "circle.invert_in_circle"],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-steiner-chain-sequence-zip",
+      "revision": 1,
+      "seed": 4303,
+      "metadata": {
+        "title": "Steiner Chain 的批量构造与反演",
+        "description": "Sequence 生成圆心点列，Zip/Map 生成圆链并逐圆反演。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "tags": ["geogebra-study", "sequence", "zip", "steiner-chain", "circle-inversion"]
+      },
+      "entities": [
+        { "id": "O", "type": "point2", "label": "O", "role": "free" },
+        { "id": "inner", "type": "circle2", "role": "derived" },
+        { "id": "outer", "type": "circle2", "role": "derived" },
+        { "id": "n", "type": "scalar", "label": "圆的数量 n", "role": "free" },
+        { "id": "theta", "type": "scalar", "label": "旋转 θ", "role": "free" },
+        { "id": "smallRadius", "type": "scalar", "role": "derived", "visible": false },
+        { "id": "centers", "type": "collection", "role": "derived", "visible": false },
+        { "id": "chain", "type": "collection", "role": "derived" },
+        { "id": "I", "type": "point2", "label": "I", "role": "free" },
+        { "id": "inversion", "type": "circle2", "label": "反演圆", "role": "derived" },
+        { "id": "invertedChain", "type": "collection", "role": "derived" }
+      ],
+      "construction": [
+        { "id": "make-o", "command": "point.free", "params": { "coords": [0, 0] }, "outputs": ["O"] },
+        { "id": "make-inner", "command": "circle.center_radius", "inputs": [{ "ref": "O" }], "params": { "radius": 2.2 }, "outputs": ["inner"] },
+        { "id": "make-outer", "command": "circle.center_radius", "inputs": [{ "ref": "O" }], "params": { "radius": 4.6 }, "outputs": ["outer"] },
+        { "id": "make-n", "command": "scalar.slider", "params": { "min": 3, "max": 40, "value": 12, "step": 1, "position": [-7, -6.2], "length": 4.5 }, "outputs": ["n"] },
+        { "id": "make-theta", "command": "scalar.slider", "params": { "min": 0, "max": 6.283185307179586, "value": 0.12, "step": 0.02, "position": [1, -6.2], "length": 4.5 }, "outputs": ["theta"] },
+        { "id": "make-small-radius", "command": "scalar.constant", "params": { "value": 1.2 }, "outputs": ["smallRadius"] },
+        {
+          "id": "sequence-centers",
+          "command": "collection.sequence",
+          "inputs": [{ "ref": "n" }, { "ref": "theta" }],
+          "params": {
+            "itemType": "point2",
+            "variable": "i",
+            "from": 0,
+            "to": "n-1",
+            "maxItems": 40,
+            "template": {
+              "command": "point.from_expressions",
+              "params": {
+                "x": "3.4*cos(theta + 2*pi*i/n)",
+                "y": "3.4*sin(theta + 2*pi*i/n)"
+              }
+            }
+          },
+          "outputs": ["centers"]
+        },
+        {
+          "id": "zip-circles",
+          "command": "collection.map",
+          "inputs": [{ "ref": "centers" }, { "ref": "smallRadius" }],
+          "params": {
+            "itemType": "circle2",
+            "variable": "centerItem",
+            "maxItems": 40,
+            "template": {
+              "command": "circle.center_radius",
+              "inputs": [{ "local": true }, { "input": 1 }]
+            }
+          },
+          "outputs": ["chain"]
+        },
+        { "id": "make-i", "command": "point.free", "params": { "coords": [-5.5, 0] }, "outputs": ["I"] },
+        { "id": "make-inversion", "command": "circle.center_radius", "inputs": [{ "ref": "I" }], "params": { "radius": 3.2 }, "outputs": ["inversion"] },
+        {
+          "id": "zip-inversion",
+          "command": "collection.map",
+          "inputs": [{ "ref": "chain" }, { "ref": "inversion" }],
+          "params": {
+            "itemType": "circle2",
+            "variable": "circleItem",
+            "maxItems": 40,
+            "template": {
+              "command": "circle.invert_in_circle",
+              "inputs": [{ "local": true }, { "input": 1 }]
+            }
+          },
+          "outputs": ["invertedChain"]
+        }
+      ],
+      "views": [{
+        "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg",
+        "boundingBox": [-8, 7, 8, -7], "axes": false, "grid": false, "keepAspectRatio": true,
+        "background": "#FAF8F2", "cameraPolicy": "document"
+      }],
+      "styles": [
+        { "targets": ["inner", "outer"], "style": { "stroke": "#15365F", "strokeWidth": 2.2, "fillOpacity": 0, "labelVisible": false } },
+        { "targets": ["chain"], "style": { "stroke": "#D06A3A", "strokeWidth": 1.8, "fill": "#F5C3A8", "fillOpacity": 0.08, "labelVisible": false } },
+        { "targets": ["inversion"], "style": { "stroke": "#315CF4", "strokeWidth": 2.1, "dash": 2, "fillOpacity": 0, "fontSize": 13 } },
+        { "targets": ["invertedChain"], "style": { "stroke": "#0E8378", "strokeWidth": 1.7, "fill": "#A7DED8", "fillOpacity": 0.06, "labelVisible": false } },
+        { "targets": ["O", "I"], "style": { "stroke": "#15365F", "fill": "#15365F", "pointSize": 4.5, "fontSize": 12, "labelPlacement": "top" } }
+      ],
+      "interactions": [
+        { "target": "n", "permissions": ["set_value"] },
+        { "target": "theta", "permissions": ["set_value"] },
+        { "target": "I", "permissions": ["drag"] }
+      ],
+      "activities": [{
+        "id": "explore",
+        "title": "从点列到圆链",
+        "stages": [
+          { "id": "sequence", "narration": "Sequence 按 i=0…n−1 生成等角分布的圆心。调整 n，集合数量确定性变化。", "hide": ["inversion", "I", "invertedChain"] },
+          { "id": "zip", "narration": "Zip/Map 把同一个圆构造应用到每个圆心，得到完整圆链。", "hide": ["inversion", "I", "invertedChain"] },
+          { "id": "invert", "narration": "第二次 Zip/Map 将圆反演逐项应用到整条圆链。拖动 I 或改变 θ，像圆同步更新。" }
+        ]
+      }],
+      "provenance": { "generator": "agent", "sourceRefs": ["geogebra:m8SXgrNh"] }
+    }
+  },
+  "trace": { "changeSets": [] },
+  "expected": {
+    "assertions": [{ "kind": "static-render" }, { "kind": "mounted-render" }, { "kind": "render-bundle" }],
+    "interactions": [{ "target": "n", "permission": "set_value" }, { "target": "theta", "permission": "set_value" }]
+  }
+}

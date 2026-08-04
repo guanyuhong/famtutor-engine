@@ -78,7 +78,29 @@
           "toolName": { "type": "string" },
           "inputLabels": { "type": "array", "items": { "type": "string" } },
           "outputLabels": { "type": "array", "items": { "type": "string" } },
-          "sourceFile": { "type": "string" }
+          "sourceFile": { "type": "string" },
+          "construction": {
+            "type": "object",
+            "required": ["elementCount", "commandCount", "commands"],
+            "properties": {
+              "elementCount": { "type": "integer", "minimum": 0 },
+              "commandCount": { "type": "integer", "minimum": 0 },
+              "commands": { "type": "array", "items": { "type": "object" } }
+            },
+            "additionalProperties": false
+          },
+          "engineMapping": {
+            "type": "object",
+            "required": ["status", "expandedCommandEstimate", "primitiveCommands", "macroCalls", "unresolvedCommands"],
+            "properties": {
+              "status": { "enum": ["exact", "gap", "cycle"] },
+              "expandedCommandEstimate": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] },
+              "primitiveCommands": { "type": "array", "items": { "type": "object" } },
+              "macroCalls": { "type": "array", "items": { "type": "object" } },
+              "unresolvedCommands": { "type": "array", "items": { "type": "object" } }
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }

@@ -1,6 +1,8 @@
 import { MathEngineError, asMathEngineError } from "../errors.js";
 import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
+import { getCommandDefinition, typeConstraintMatches } from "../catalog/commands.js";
 import type {
+  CollectionValue,
   CommandInput,
   ConstructionNode,
   EntityType,
@@ -224,6 +226,7 @@ function runtimeTypeMatches(type: EntityType, value: RuntimeValue): boolean {
   if (type === "interval1") return isInterval(value);
   if (type === "function1") return typeof value === "object" && value.kind === "function1";
   if (type === "curve2") return typeof value === "object" && value.kind === "curve2";
+  if (type === "collection") return isCollectionValue(value);
   if (type === "text") return typeof value === "object" && value.kind === "text";
   return false;
 }
@@ -272,6 +275,109 @@ function requireConicValue(value: RuntimeValue | JsonValue, context: string) {
   return value;
 }
 
+function isCollectionValue(value: RuntimeValue | JsonValue): value is CollectionValue {
+  return typeof value === "object" && value !== null && !Array.isArray(value) && value.kind === "collection";
+}
+
+function requireCollectionValue(value: RuntimeValue | JsonValue, context: string): CollectionValue {
+  if (!isCollectionValue(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires collection.`);
+  return value;
+}
+
+function collectionItemType(node: ConstructionNode): Exclude<EntityType, "collection"> {
+  const value = paramsObject(node).itemType;
+  if (typeof value !== "string" || value === "collection") {
+    throw new MathEngineError("INVALID_COLLECTION_ITEM_TYPE", `Command '${node.command}' requires params.itemType to name a non-collection entity type.`, { actual: value ?? null });
+  }
+  const known = ["point2", "segment2", "circle2", "polygon2"] as const;
+  if (!(known as readonly string[]).includes(value)) {
+    throw new MathEngineError("INVALID_COLLECTION_ITEM_TYPE", `Unknown collection item type '${value}'.`, { actual: value });
+  }
+  return value as Exclude<EntityType, "collection">;
+}
+
+function collectionLimit(node: ConstructionNode): number {
+  const value = numberParam(node, "maxItems");
+  if (!Number.isInteger(value) || value < 1 || value > 256) {
+    throw new MathEngineError("INVALID_COLLECTION_LIMIT", "params.maxItems must be an integer from 1 to 256.", { actual: value, expected: "1..256" });
+  }
+  return value;
+}
+
+function collectionVariable(node: ConstructionNode): string {
+  const variable = stringParam(node, "variable");
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(variable) || variable === "pi" || variable === "e") {
+    throw new MathEngineError("INVALID_COLLECTION_VARIABLE", "params.variable must be a plain, non-reserved identifier.", { actual: variable });
+  }
+  return variable;
+}
+
+function templateObject(node: ConstructionNode): Record<string, JsonValue> {
+  const value = paramsObject(node).template;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "params.template must be an object.", { actual: value ?? null });
+  }
+  return value;
+}
+
+function evaluateCollectionTemplate(
+  owner: ConstructionNode,
+  outerInputs: CommandInput[],
+  values: Map<string, RuntimeValue>,
+  overrides: EvaluationOverrides,
+  variable: string,
+  localValue: RuntimeValue,
+  expectedType: Exclude<EntityType, "collection">
+): RuntimeValue {
+  if (values.has(variable)) {
+    throw new MathEngineError("COLLECTION_LOCAL_COLLISION", `Collection variable '${variable}' collides with an entity id.`, { actual: variable });
+  }
+  const template = templateObject(owner);
+  const command = template.command;
+  if (typeof command !== "string" || command.startsWith("collection.")) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_COMMAND", "Collection templates require a non-collection L0 command.", { actual: command ?? null });
+  }
+  const definition = getCommandDefinition(command);
+  if (!definition || definition.outputTypes.length !== 1 || !typeConstraintMatches(definition.outputTypes[0]!, expectedType)) {
+    throw new MathEngineError("COLLECTION_TEMPLATE_TYPE_MISMATCH", `Template command '${command}' must have one '${expectedType}' output.`, {
+      actual: definition ? definition.outputTypes.map(constraint => Array.isArray(constraint) ? [...constraint] : constraint) as JsonValue : null,
+      expected: expectedType
+    });
+  }
+  const rawInputs = template.inputs ?? [];
+  if (!Array.isArray(rawInputs)) throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "template.inputs must be an array.");
+  const inputs: CommandInput[] = rawInputs.map((raw, index) => {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+      throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_INPUT", `template.inputs[${index}] must be an object.`);
+    }
+    if (raw.local === true) return { ref: variable };
+    if (typeof raw.input === "number" && Number.isInteger(raw.input) && raw.input >= 0 && raw.input < outerInputs.length) {
+      return outerInputs[raw.input]!;
+    }
+    if (Object.prototype.hasOwnProperty.call(raw, "value")) return { value: raw.value as JsonValue };
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_INPUT", `template.inputs[${index}] requires {local:true}, {input:index}, or {value:...}.`, { actual: raw });
+  });
+  const rawParams = template.params;
+  if (rawParams !== undefined && (!rawParams || typeof rawParams !== "object" || Array.isArray(rawParams))) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "template.params must be an object when present.");
+  }
+  const scopedValues = new Map(values);
+  scopedValues.set(variable, localValue);
+  const virtual: ConstructionNode = {
+    id: `${owner.id}::template`,
+    command,
+    inputs,
+    params: (rawParams ?? {}) as Record<string, JsonValue>,
+    outputs: [`${owner.id}::item`]
+  };
+  const result = executeNode(virtual, scopedValues, overrides);
+  const value = result[0];
+  if (value === undefined || !runtimeTypeMatches(expectedType, value)) {
+    throw new MathEngineError("COLLECTION_TEMPLATE_RUNTIME_TYPE_MISMATCH", `Template command '${command}' did not produce '${expectedType}'.`);
+  }
+  return value;
+}
+
 function executeNode(
   node: ConstructionNode,
   values: Map<string, RuntimeValue>,
@@ -297,6 +403,36 @@ function executeNode(
         });
       }
       return [value];
+    }
+    case "collection.sequence": {
+      const itemType = collectionItemType(node);
+      const variable = collectionVariable(node);
+      const maxItems = collectionLimit(node);
+      const from = expressionNumber(params.from, values);
+      const to = expressionNumber(params.to, values);
+      const step = params.step === undefined ? (to >= from ? 1 : -1) : expressionNumber(params.step, values);
+      if (step === 0 || Math.sign(to - from || step) !== Math.sign(step)) {
+        throw new MathEngineError("INVALID_SEQUENCE_RANGE", "Sequence step must be non-zero and move from start toward end.", { actual: { from, to, step } });
+      }
+      const items: RuntimeValue[] = [];
+      const epsilon = Math.abs(step) * 1e-10;
+      for (let index = from; step > 0 ? index <= to + epsilon : index >= to - epsilon; index += step) {
+        if (items.length >= maxItems) throw new MathEngineError("COLLECTION_LIMIT_EXCEEDED", `Sequence exceeds maxItems=${maxItems}.`, { actual: items.length + 1, expected: maxItems });
+        items.push(evaluateCollectionTemplate(node, node.inputs ?? [], values, overrides, variable, index, itemType));
+      }
+      return [{ kind: "collection", itemType, items }];
+    }
+    case "collection.map": {
+      const source = requireCollectionValue(inputs[0]!, "collection.map input 1");
+      const itemType = collectionItemType(node);
+      const variable = collectionVariable(node);
+      const maxItems = collectionLimit(node);
+      if (source.items.length > maxItems) throw new MathEngineError("COLLECTION_LIMIT_EXCEEDED", `Map source exceeds maxItems=${maxItems}.`, { actual: source.items.length, expected: maxItems });
+      return [{
+        kind: "collection",
+        itemType,
+        items: source.items.map(item => evaluateCollectionTemplate(node, node.inputs ?? [], values, overrides, variable, item, itemType))
+      }];
     }
     case "boolean.expression":
       return [expressionBoolean(params.expression, values)];

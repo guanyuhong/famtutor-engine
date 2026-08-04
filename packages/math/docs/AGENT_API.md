@@ -148,6 +148,31 @@ undo
 }
 ```
 
+### 有界 Sequence / Zip 集合
+
+重复几何使用 `collection.sequence` 和 `collection.map`，不要让 Agent 手工复制几十个同构节点。集合必须是同质的 `point2`、`segment2`、`circle2` 或 `polygon2`，并声明 `maxItems`（1–256）。模板只能调用已有单输出 L0 命令，不能嵌套集合命令；外部依赖必须继续显式放在节点 `inputs` 中。
+
+```json
+{
+  "command": "collection.sequence",
+  "inputs": [{ "ref": "n" }],
+  "params": {
+    "itemType": "point2",
+    "variable": "i",
+    "from": 0,
+    "to": "n-1",
+    "maxItems": 40,
+    "template": {
+      "command": "point.from_expressions",
+      "params": { "x": "3*cos(2*pi*i/n)", "y": "3*sin(2*pi*i/n)" }
+    }
+  },
+  "outputs": [{ "id": "centers", "type": "collection" }]
+}
+```
+
+`collection.map` 的第一个 input 是源集合；模板中的 `{ "local": true }` 表示当前项，`{ "input": 1 }` 表示外层第二个 input。数量越界、局部变量与实体 ID 冲突、模板输出类型不符都会产生结构化诊断，而不是部分渲染。
+
 圆的组成量使用两个只读原子命令，不要让模型重新猜测圆心或用圆周长反推半径：
 
 ```json

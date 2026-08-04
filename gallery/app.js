@@ -1,4 +1,4 @@
-import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=controls-clock-1";
+import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=collection-sequence-1";
 
 const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/01-triangle-elements/case.json",
@@ -43,7 +43,9 @@ const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/40-number-line-open-closed-intervals/case.json?v=ch3-2",
   "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2",
   "/research/geogebra/cases/01-chinese-remainder-controls/case.json?v=controls-clock-1",
-  "/research/geogebra/cases/02-circle-inversion-common-tangents/case.json?v=circle-inversion-1"
+  "/research/geogebra/cases/02-circle-inversion-common-tangents/case.json?v=circle-inversion-1",
+  "/research/geogebra/cases/03-steiner-chain-sequence-zip/case.json?v=collection-sequence-1",
+  "/research/geogebra/cases/04-sierpinski-imported-macro/case.json?v=imported-macro-1"
 ];
 
 const runtime = new MathDomainRuntime();
