@@ -1,0 +1,760 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-3-1-39-speed-limit-inequality",
+  "title": "把限速要求写成不等式",
+  "description": "按教材图 3-1、3-4 实现的来源可追溯不等式案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "3 一元一次不等式",
+    "section": "3.1 认识不等式",
+    "printedPages": [
+      90,
+      91
+    ],
+    "pdfPages": [
+      93,
+      94
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "inequality-meaning",
+    "inequality-number-line",
+    "closed-endpoint"
+  ],
+  "learningObjective": "理解“速度不得超过 40 km/h”应表示为 v≤40，并用数轴与动态取值验证不等式是否成立。",
+  "caseType": "exploration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "interval.from_bounds",
+    "scalar.slider",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "assertion.value_in_range",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch3-source-faithful-v1",
+    "seed": 439,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch3-01-speed-limit-inequality",
+      "revision": 1,
+      "seed": 439,
+      "metadata": {
+        "title": "把限速要求写成不等式",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "3.1",
+          "inequality-meaning",
+          "inequality-number-line",
+          "closed-endpoint"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -3,
+            3.5,
+            63,
+            -3.5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": false,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-39",
+          "title": "把限速要求写成不等式",
+          "stages": [
+            {
+              "id": "meaning",
+              "narration": "图 3-1：限速 40 表示速度可以小于 40，也可以正好等于 40，所以应写成 v≤40。",
+              "reveal": [
+                "speedAxis",
+                "speedTick0",
+                "speedLabel0",
+                "speedTick20",
+                "speedLabel20",
+                "speedTick40",
+                "speedLabel40",
+                "speedTick60",
+                "speedLabel60",
+                "allowedSpeed"
+              ]
+            },
+            {
+              "id": "test-value",
+              "narration": "调整速度 v。蓝点表示当前速度；它落在橙色闭区间内时满足限速要求。",
+              "reveal": [
+                "speedAxis",
+                "speedTick0",
+                "speedLabel0",
+                "speedTick20",
+                "speedLabel20",
+                "speedTick40",
+                "speedLabel40",
+                "speedTick60",
+                "speedLabel60",
+                "allowedSpeed",
+                "v",
+                "currentSpeed",
+                "withinLimit",
+                "feedbackOk",
+                "feedbackNo"
+              ],
+              "focus": [
+                "currentSpeed",
+                "feedbackOk",
+                "feedbackNo"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-90-91:figure-3-1",
+          "zjedu-math-8a-2013:printed-90-91:figure-3-4"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-39-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch3-01-speed-limit-inequality",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedStart",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedThrough",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                60,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "speedAxis"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "speedStart"
+              },
+              {
+                "ref": "speedThrough"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick0Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick0High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "speedTick0"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "speedTick0Low"
+              },
+              {
+                "ref": "speedTick0High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "speedLabel0"
+              }
+            ],
+            "params": {
+              "text": "0",
+              "at": [
+                -0.22,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick20Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                20,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick20High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                20,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "speedTick20"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "speedTick20Low"
+              },
+              {
+                "ref": "speedTick20High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "speedLabel20"
+              }
+            ],
+            "params": {
+              "text": "20",
+              "at": [
+                19.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick40Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                40,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick40High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                40,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "speedTick40"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "speedTick40Low"
+              },
+              {
+                "ref": "speedTick40High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "speedLabel40"
+              }
+            ],
+            "params": {
+              "text": "40",
+              "at": [
+                39.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick60Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                60,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "speedTick60High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                60,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "speedTick60"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "speedTick60Low"
+              },
+              {
+                "ref": "speedTick60High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "speedLabel60"
+              }
+            ],
+            "params": {
+              "text": "60",
+              "at": [
+                59.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "speedAxis",
+              "speedTick0",
+              "speedLabel0",
+              "speedTick20",
+              "speedLabel20",
+              "speedTick40",
+              "speedLabel40",
+              "speedTick60",
+              "speedLabel60"
+            ],
+            "style": {
+              "stroke": "#6F7F8C",
+              "fill": "#6F7F8C",
+              "strokeWidth": 1.5,
+              "fontSize": 13,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "construct",
+            "command": "interval.from_bounds",
+            "outputs": [
+              {
+                "id": "allowedSpeed"
+              }
+            ],
+            "params": {
+              "lower": 0,
+              "upper": 40,
+              "lowerClosed": true,
+              "upperClosed": true,
+              "y": 0.2
+            }
+          },
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [
+              {
+                "id": "v",
+                "label": "v（km/h）"
+              }
+            ],
+            "params": {
+              "min": 0,
+              "max": 60,
+              "value": 35,
+              "position": [
+                7,
+                -2.25
+              ],
+              "length": 42,
+              "step": 1
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.from_expressions",
+            "outputs": [
+              {
+                "id": "currentSpeed",
+                "label": "v"
+              }
+            ],
+            "params": {
+              "x": "v",
+              "y": 0.2
+            }
+          },
+          {
+            "op": "construct",
+            "command": "boolean.expression",
+            "outputs": [
+              {
+                "id": "withinLimit"
+              }
+            ],
+            "params": {
+              "expression": "v <= 40"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "feedbackAnchor",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2,
+                2.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.conditional",
+            "outputs": [
+              {
+                "id": "feedbackOk"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "withinLimit"
+              },
+              {
+                "ref": "feedbackAnchor"
+              }
+            ],
+            "params": {
+              "trueText": "满足限速：v ≤ 40",
+              "falseText": "​"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.conditional",
+            "outputs": [
+              {
+                "id": "feedbackNo"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "withinLimit"
+              },
+              {
+                "ref": "feedbackAnchor"
+              }
+            ],
+            "params": {
+              "trueText": "​",
+              "falseText": "超过限速：v > 40"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "initial-speed-in-range",
+              "predicate": "value_in_range",
+              "arguments": [
+                {
+                  "ref": "v"
+                },
+                {
+                  "value": 0
+                },
+                {
+                  "value": 40
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "初始速度 35 km/h 满足限速要求。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_interaction",
+            "policy": {
+              "target": "v",
+              "permissions": [
+                "set_value"
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "allowedSpeed"
+            ],
+            "style": {
+              "stroke": "#D06A3A",
+              "fill": "#D06A3A",
+              "strokeWidth": 3,
+              "pointSize": 5.2,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "currentSpeed"
+            ],
+            "style": {
+              "stroke": "#155A73",
+              "fill": "#155A73",
+              "pointSize": 6,
+              "fontSize": 14,
+              "labelPlacement": "top"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "feedbackOk"
+            ],
+            "style": {
+              "token": "success",
+              "fontSize": 15
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "feedbackNo"
+            ],
+            "style": {
+              "token": "danger",
+              "fontSize": 15
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "speedStart",
+              "speedThrough",
+              "speedTick0Low",
+              "speedTick0High",
+              "speedTick20Low",
+              "speedTick20High",
+              "speedTick40Low",
+              "speedTick40High",
+              "speedTick60Low",
+              "speedTick60High",
+              "currentSpeed",
+              "feedbackAnchor"
+            ],
+            "style": {
+              "pointSize": 4.8,
+              "fontSize": 14,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "62b2b456c0d099752cd83fb7a4670f11fc8f95be3a756e06beaa35d45382c75e",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "speedStart",
+          "speedThrough",
+          "speedAxis",
+          "speedTick0Low",
+          "speedTick0High",
+          "speedTick0",
+          "speedLabel0",
+          "speedTick20Low",
+          "speedTick20High",
+          "speedTick20"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 2
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "v",
+        "permission": "set_value"
+      }
+    ]
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

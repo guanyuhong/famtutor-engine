@@ -1,0 +1,32 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-10-midpoint-area",
+  "title": "三边中点与面积探索",
+  "description": "连接三边中点形成中点三角形，并验证其面积是原三角形的四分之一。",
+  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [9], "pdfPages": [12], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "knowledgePoints": ["midpoint-area", "median"],
+  "learningObjective": "通过拖动保持中点构造，探索中点三角形与原三角形的面积关系。",
+  "caseType": "exploration",
+  "difficulty": "advanced",
+  "requiredCapabilities": ["point.midpoint", "polygon.vertices", "measurement.area", "interaction.drag", "assertion.expression_equal"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 110, "attempts": 1 },
+  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "midpoint-area-10", "revision": 1, "seed": 110, "metadata": { "title": "三边中点与面积探索", "locale": "zh-CN", "purpose": "exploration", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 8, 6, -3], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "explore-area", "title": "探索面积关系", "stages": [{ "id": "outer", "narration": "观察原三角形 ABC。", "reveal": ["outerTriangle"] }, { "id": "midpoints", "narration": "依次作三边中点。", "reveal": ["Mab", "Mbc", "Mca"] }, { "id": "compare-area", "narration": "连接中点并比较面积。", "reveal": ["midpointTriangle"] }] }], "provenance": { "generator": "agent", "sourceRefs": ["zjedu-math-8a-2013:printed-9"] } } },
+  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-10-build", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "midpoint-area-10", "revision": 1 }, "operations": [
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [-4, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [4, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [0, 6] } },
+    { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "outerTriangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "construct", "command": "point.midpoint", "outputs": [{ "id": "Mab", "label": "M₁" }], "inputs": [{ "ref": "A" }, { "ref": "B" }] },
+    { "op": "construct", "command": "point.midpoint", "outputs": [{ "id": "Mbc", "label": "M₂" }], "inputs": [{ "ref": "B" }, { "ref": "C" }] },
+    { "op": "construct", "command": "point.midpoint", "outputs": [{ "id": "Mca", "label": "M₃" }], "inputs": [{ "ref": "C" }, { "ref": "A" }] },
+    { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "midpointTriangle", "label": "中点三角形" }], "inputs": [{ "ref": "Mab" }, { "ref": "Mbc" }, { "ref": "Mca" }] },
+    { "op": "construct", "command": "measurement.area", "outputs": [{ "id": "outerArea", "label": "S" }], "inputs": [{ "ref": "outerTriangle" }] },
+    { "op": "construct", "command": "measurement.area", "outputs": [{ "id": "midpointArea", "label": "Sₘ" }], "inputs": [{ "ref": "midpointTriangle" }] },
+    { "op": "set_interaction", "policy": { "target": "A", "permissions": ["select", "drag"], "dragMode": "free" } },
+    { "op": "set_interaction", "policy": { "target": "B", "permissions": ["select", "drag"], "dragMode": "free" } },
+    { "op": "set_interaction", "policy": { "target": "C", "permissions": ["select", "drag"], "dragMode": "free" } },
+    { "op": "add_assertion", "assertion": { "id": "quarter-area", "predicate": "expression_equal", "arguments": [{ "expr": "area(midpointTriangle)" }, { "expr": "area(outerTriangle)/4" }], "tolerance": 1e-9, "message": "中点三角形面积是原三角形的四分之一。" } }
+  ], "metadata": { "origin": "textbook-case-seed" } }] },
+  "expected": { "documentFingerprint": "2d5212705c0ad90497dac7143e48841ef7de3efccccb8c706dfc6508ad4fe551", "assertions": [{ "kind": "entity-exists", "entityIds": ["outerTriangle", "Mab", "Mbc", "Mca", "midpointTriangle", "outerArea", "midpointArea"] }, { "kind": "runtime-assertions-pass" }, { "kind": "activity-stages", "minimum": 3 }, { "kind": "static-render" }, { "kind": "render-bundle" }], "interactions": [{ "target": "A", "permission": "drag" }, { "target": "B", "permission": "drag" }, { "target": "C", "permission": "drag" }] },
+  "artifacts": {}, "status": "accepted", "diagnostics": []
+}

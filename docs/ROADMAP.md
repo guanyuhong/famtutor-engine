@@ -23,6 +23,7 @@ FamTutor Engine 暂不公开发布。近期只围绕一本真实教材建立案�
 | **PR3** live MountedRenderer | Done | 实时 apply、交互、snapshot |
 | **PR4** Render Bundle v1 | Done | 宿主无关 bundle 与 SHA-256 integrity |
 | **PR5** 教材方案与源材料 | Done | 方案文档、教材 PDF、`tmp/pdfs` 页图（不进 npm） |
+| **PR6** 教材案例闭环 | In progress | 10 个种子案例已构建：9 accepted / 1 expected-unsupported |
 
 仓库内 `0.3.0` 是内部实现基线，不是公开发布状态。教材闭环稳定前不以版本升级或发布为迭代目标。
 
@@ -46,6 +47,17 @@ FamTutor Engine 暂不公开发布。近期只围绕一本真实教材建立案�
 ## 4. PR6：教材案例基础设施与 10 个种子案例
 
 目标：证明一段教材内容可以由 Agent 变成可追溯、可回放、可静态渲染、可 live 交互和可断言的案例。
+
+当前分支进度：
+
+- 已建立 `famtutor.case.v1`、book registry、source index、knowledge points 和离线 corpus verifier；
+- 10 个 CaseSpec 均保存来源、生成记录、初始文档、ChangeSet trace、预期与结构化状态；
+- 9 个案例通过双重确定性回放、数学断言、direct SVG、Render Bundle create/validate；
+- demonstration、exploration、guided-construction 各有代表案例通过真实 Chromium `mountMathRenderBundle`；
+- 04 已用安全布尔表达式、表达式驱动点和条件文本补齐条件反馈，并覆盖真实 Chromium 滑块状态切换；
+- 09 明确缺少 assessment submit/scoring/evidence，保留为 `expected-unsupported`；
+- 10-case Gallery 已可在浏览器内重放、挂载、聚焦状态并重置全部案例，且进入真实 Chromium 验收；
+- 尚待处理 Case 09 的 assessment evidence 边界，因此 PR6 仍标记为进行中。
 
 范围：
 

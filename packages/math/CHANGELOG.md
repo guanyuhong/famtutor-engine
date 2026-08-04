@@ -1,6 +1,27 @@
 # Changelog
 
+## Unreleased
+
+- Added the renderer-independent `marker.segment_tick` L0 annotation atom for standard segment equality marks, with document-unit sizing and composable fractional placement.
+- Added the renderer-independent `marker.parallel_chevron(anchor, lineLike, size)` L0 annotation atom. It returns two segment arms, canonicalizes endpoint direction, and composes into double-chevron conventions through repeated calls.
+
 Math domain package (`@famtutor/math-runtime`) within FamTutor Engine.
+
+## Unreleased
+
+- add the atomic `marker.right_angle(angle)` annotation command across headless evaluation, Direct SVG, JSXGraph, protocol registration, and command coverage;
+- render labels for angle entities in Direct SVG for parity with JSXGraph.
+- keep lowercase `e` and `pi` as expression constants without shadowing conventional uppercase geometry point names such as `E`.
+- align JSXGraph stage `reveal` semantics with Direct SVG: when present, it is the visible-entity whitelist, while `hide` removes from that set.
+- add renderer-parity geometry styling primitives: `graphics2d.background`, pixel-based `labelOffset`, and independent `angle.three_points` `radius` / `labelRadius` controls;
+- render angle sectors and text-aware angle labels consistently in Direct SVG and JSXGraph.
+- add deterministic point-label collision avoidance with eight semantic `labelPlacement` anchors and optional pixel `labelOffset` fine-tuning, shared by Direct SVG and JSXGraph.
+- keep polygon-vertex labels outside filled geometry, and apply the shared layout through JSXGraph's native point `Label` pixel offsets so mounted and Direct SVG placement stay aligned.
+- map line/segment/ray labels to JSXGraph 1.12.2 native fractional path positioning (`position`, `distance`, centered anchors), mirror it in Direct SVG, and center polygon labels through JSXGraph `getTextAnchor()` / SVG polygon centroids.
+
+- add safe `boolean.expression`, `point.from_expressions`, and `text.conditional` L0 commands;
+- cover slider-driven conditional feedback in headless evaluation, Direct SVG, JSXGraph, simulation, and real Chromium Render Bundle mounting;
+- promote textbook Case 04 from `expected-unsupported` to `accepted`.
 
 ## 0.3.0 — 2026-08-03
 

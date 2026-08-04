@@ -116,6 +116,97 @@ export function normalized(value: Vector2Value, tolerance = DEFAULT_TOLERANCE): 
   return vector(value.x / length, value.y / length);
 }
 
+export function rightAngleMarkerPolygon(
+  angle: AngleValue,
+  size: number,
+  tolerance = 1e-6
+): Polygon2Value {
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Right-angle marker size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const residual = Math.abs(angle.radians - Math.PI / 2);
+  if (residual > tolerance) {
+    throw new MathEngineError("NOT_RIGHT_ANGLE", "marker.right_angle requires an angle equal to 90 degrees.", {
+      expected: Math.PI / 2,
+      actual: angle.radians
+    });
+  }
+  const firstDirection = normalized(subtractPoints(angle.from, angle.vertex));
+  const secondDirection = normalized(subtractPoints(angle.to, angle.vertex));
+  const firstCorner = addPointVector(angle.vertex, scaleVector(firstDirection, size));
+  const secondCorner = addPointVector(angle.vertex, scaleVector(secondDirection, size));
+  const outerCorner = addPointVector(firstCorner, scaleVector(secondDirection, size));
+  return { kind: "polygon2", vertices: [angle.vertex, firstCorner, outerCorner, secondCorner] };
+}
+
+/**
+ * Create one standard equality tick centered on a segment.
+ *
+ * `position` is the fractional distance from `source.from` to `source.to` and
+ * `size` is the full tick length, both independent of renderer pixels.
+ * Multiple-tick conventions are composed by calling this atom more than once
+ * with different positions.
+ */
+export function segmentTickMarker(
+  source: Segment2Value,
+  position: number,
+  size: number
+): Segment2Value {
+  if (!Number.isFinite(position) || position < 0 || position > 1) {
+    throw new MathEngineError("INVALID_MARKER_POSITION", "Segment tick position must be between 0 and 1.", {
+      actual: position
+    });
+  }
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Segment tick size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const direction = normalized(subtractPoints(source.to, source.from));
+  const normal = vector(-direction.y, direction.x);
+  const center = point(
+    source.from.x + (source.to.x - source.from.x) * position,
+    source.from.y + (source.to.y - source.from.y) * position
+  );
+  const half = scaleVector(normal, size / 2);
+  return segment(addPointVector(center, scaleVector(half, -1)), addPointVector(center, half));
+}
+
+/**
+ * Create one renderer-independent parallel-line chevron.
+ *
+ * The anchor selects the marker location and the line-like input supplies only
+ * orientation. Direction is canonicalized so reversing a segment's endpoints
+ * does not flip the visual convention. A double chevron is two calls with two
+ * nearby anchor points, keeping this L0 primitive atomic.
+ */
+export function parallelChevronMarker(
+  anchor: Point2Value,
+  source: Line2Value | Segment2Value | Ray2Value,
+  size: number
+): [Segment2Value, Segment2Value] {
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Parallel chevron size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const line = lineLikeToLine(source);
+  let tangent = normalized(line.direction);
+  if (tangent.x < -DEFAULT_TOLERANCE || (Math.abs(tangent.x) <= DEFAULT_TOLERANCE && tangent.y < 0)) {
+    tangent = scaleVector(tangent, -1);
+  }
+  const normal = vector(-tangent.y, tangent.x);
+  const tip = addPointVector(anchor, scaleVector(tangent, size / 2));
+  const back = addPointVector(anchor, scaleVector(tangent, -size / 2));
+  const halfHeight = scaleVector(normal, size / 2);
+  return [
+    segment(addPointVector(back, halfHeight), tip),
+    segment(addPointVector(back, scaleVector(halfHeight, -1)), tip)
+  ];
+}
+
 export function distance(left: Point2Value, right: Point2Value): number {
   return Math.hypot(left.x - right.x, left.y - right.y);
 }

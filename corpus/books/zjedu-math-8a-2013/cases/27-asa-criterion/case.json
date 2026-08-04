@@ -1,0 +1,654 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-27-asa-criterion",
+  "title": "两角及其夹边判定全等",
+  "description": "按教材图 1-34实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      31,
+      32
+    ],
+    "pdfPages": [
+      34,
+      35
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "asa",
+    "triangle-uniqueness"
+  ],
+  "learningObjective": "固定两个角及其夹边，识别 ASA 判定的三项对应条件。",
+  "caseType": "demonstration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "angle.three_points",
+    "marker.segment_tick",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 227,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-27-asa-criterion",
+      "revision": 1,
+      "seed": 227,
+      "metadata": {
+        "title": "两角及其夹边判定全等",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "asa",
+          "triangle-uniqueness"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            4,
+            11,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-27",
+          "title": "两角及其夹边判定全等",
+          "stages": [
+            {
+              "id": "angles",
+              "narration": "两组三角形各有两个对应角相等。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "AC",
+                "BC",
+                "A2C2",
+                "B2C2",
+                "angleA",
+                "angleB",
+                "angleA2",
+                "angleB2"
+              ]
+            },
+            {
+              "id": "included-side",
+              "narration": "两个已知角的夹边 AB 与 A′B′ 也相等。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "AB",
+                "AC",
+                "BC",
+                "A2B2",
+                "A2C2",
+                "B2C2",
+                "tickAB",
+                "tickA2B2",
+                "angleA",
+                "angleB",
+                "angleA2",
+                "angleB2"
+              ]
+            },
+            {
+              "id": "asa",
+              "narration": "两个角及其夹边对应相等的两个三角形全等，简称 ASA。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "AB",
+                "AC",
+                "BC",
+                "A2B2",
+                "A2C2",
+                "B2C2",
+                "tickAB",
+                "tickA2B2",
+                "angleA",
+                "angleB",
+                "angleA2",
+                "angleB2"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-31-32:figure-1-34"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-27-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-27-asa-criterion",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                1.5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A2",
+                "label": "A′"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B2",
+                "label": "B′"
+              }
+            ],
+            "params": {
+              "coords": [
+                10,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C2",
+                "label": "C′"
+              }
+            ],
+            "params": {
+              "coords": [
+                7.5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2B2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2C2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "B2C2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.45
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleB",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              }
+            ],
+            "params": {
+              "radius": 0.45
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleA2",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "C2"
+              }
+            ],
+            "params": {
+              "radius": 0.45
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleB2",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C2"
+              },
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "A2"
+              }
+            ],
+            "params": {
+              "radius": 0.45
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickA2B2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2B2"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "included-side",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "A2B2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "夹边相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "angle-a",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleA"
+                },
+                {
+                  "ref": "angleA2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "第一组角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "angle-b",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleB"
+                },
+                {
+                  "ref": "angleB2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "第二组角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AC",
+              "BC",
+              "A2B2",
+              "A2C2",
+              "B2C2"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "angleA",
+              "angleB",
+              "angleA2",
+              "angleB2",
+              "tickAB",
+              "tickA2B2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "A2",
+              "B2",
+              "C2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "7d3d7d701f2afe6bda59a3b29fcbceb72930b6f7d198f1c164d01385a342d4d7",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C",
+          "A2",
+          "B2",
+          "C2",
+          "AB",
+          "AC"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

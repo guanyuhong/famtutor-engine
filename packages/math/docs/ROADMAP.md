@@ -5,7 +5,7 @@
 ## v0.1 — Agent-native 2D P0（已交付）
 
 - MathDocument v1；
-- **47** 个 L0 命令；
+- **52** 个 L0 命令；
 - **8** 个 L1 宏（`expand_macro`，不进 L0 enum）；
 - safe expression；
 - DAG、numeric kernel、assertion、simulation；

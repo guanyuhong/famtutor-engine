@@ -29,6 +29,13 @@ test("safe expression parser evaluates arithmetic, functions, booleans and @-ide
   assert.equal(parseExpression("1+2").type, "binary");
 });
 
+test("uppercase geometry point names do not collide with lowercase constants", () => {
+  const pointE = { kind: "point2", x: 3, y: 4 };
+  assert.equal(evaluateNumericExpression("xcoord(E)", name => name === "E" ? pointE : undefined), 3);
+  assert.equal(evaluateNumericExpression("e", () => undefined), Math.E);
+  assert.equal(evaluateNumericExpression("pi", () => undefined), Math.PI);
+});
+
 test("safe expression language rejects JavaScript syntax and unknown functions", () => {
   for (const source of ["window.alert(1)", "x;process.exit()", "[1,2]", "(()=>1)()", "new Function()"] ) {
     assert.throws(() => parseExpression(source), MathEngineError, source);

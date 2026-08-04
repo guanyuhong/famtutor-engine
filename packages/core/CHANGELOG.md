@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — internal
+
+- Add the optional, domain-neutral `TextbookCase` type and published `famtutor.case.v1` JSON Schema for offline corpus tooling.
+
 ## 0.3.0 — 2026-08-03
 
 Render Bundle delivery contract:

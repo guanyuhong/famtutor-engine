@@ -1,0 +1,424 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-2-11-condition-conclusion",
+  "title": "命题的条件与结论",
+  "description": "按教材印刷页 10–11实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.2 定义与命题",
+    "printedPages": [
+      10,
+      11
+    ],
+    "pdfPages": [
+      13,
+      14
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "definition",
+    "statement-condition-conclusion"
+  ],
+  "learningObjective": "把几何命题改写成‘如果……那么……’，并区分条件与结论。",
+  "caseType": "demonstration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "angle.three_points",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 211,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-11-condition-conclusion",
+      "revision": 1,
+      "seed": 211,
+      "metadata": {
+        "title": "命题的条件与结论",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.2",
+          "definition",
+          "statement-condition-conclusion"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            5,
+            7,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-11",
+          "title": "命题的条件与结论",
+          "stages": [
+            {
+              "id": "statement",
+              "narration": "命题是对事情作出判断的句子。观察两条相交直线形成的对顶角。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "O",
+                "AC",
+                "BD"
+              ]
+            },
+            {
+              "id": "condition",
+              "narration": "条件：两个角是对顶角。改写时放在‘如果’之后。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "O",
+                "AC",
+                "BD",
+                "angleAOB",
+                "angleCOD"
+              ]
+            },
+            {
+              "id": "conclusion",
+              "narration": "结论：这两个角相等。完整命题是：如果两个角是对顶角，那么这两个角相等。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "O",
+                "AC",
+                "BD",
+                "angleAOB",
+                "angleCOD"
+              ],
+              "focus": [
+                "angleAOB",
+                "angleCOD"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-10",
+          "zjedu-math-8a-2013:printed-11"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-11-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-11-condition-conclusion",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "O",
+                "label": "O"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleAOB",
+                "label": "∠1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "B"
+              }
+            ],
+            "params": {
+              "radius": 0.58,
+              "labelRadius": 0.95
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleCOD",
+                "label": "∠2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "D"
+              }
+            ],
+            "params": {
+              "radius": 0.58,
+              "labelRadius": 0.95
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "vertical-angles",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleAOB"
+                },
+                {
+                  "ref": "angleCOD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "对顶角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AC",
+              "BD"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "angleAOB",
+              "angleCOD"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "O"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "229e1e2ee95b56feb4ac9e3915c629dc0b71e8c279f9a5d5c9b97d2a20d4a4e6",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "O",
+          "AC",
+          "BD",
+          "angleAOB"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

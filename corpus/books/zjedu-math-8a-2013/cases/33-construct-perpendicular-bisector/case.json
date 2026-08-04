@@ -1,0 +1,522 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-6-33-construct-perpendicular-bisector",
+  "title": "用尺规作线段的垂直平分线",
+  "description": "按教材图 1-43实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.6 尺规作图",
+    "printedPages": [
+      37,
+      38
+    ],
+    "pdfPages": [
+      40,
+      41
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "ruler-compass-construction",
+    "perpendicular-bisector"
+  ],
+  "learningObjective": "以线段两端为圆心作等半径弧，通过两个交点确定垂直平分线。",
+  "caseType": "guided-construction",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "circle.center_radius",
+    "point.intersection_circle_circle",
+    "line.through_points",
+    "marker.segment_tick",
+    "assertion.perpendicular",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 233,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-33-construct-perpendicular-bisector",
+      "revision": 1,
+      "seed": 233,
+      "metadata": {
+        "title": "用尺规作线段的垂直平分线",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.6",
+          "ruler-compass-construction",
+          "perpendicular-bisector"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -7.5,
+            4.5,
+            7.5,
+            -4.5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-33",
+          "title": "用尺规作线段的垂直平分线",
+          "stages": [
+            {
+              "id": "segment",
+              "narration": "已知线段 AB。选取大于 AB 一半的同一半径。",
+              "reveal": [
+                "A",
+                "B",
+                "AB"
+              ]
+            },
+            {
+              "id": "equal-arcs",
+              "narration": "分别以 A、B 为圆心作等半径弧，两弧交于 C、D。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "AB",
+                "circleA",
+                "circleB"
+              ]
+            },
+            {
+              "id": "join",
+              "narration": "过 C、D 作直线。C、D 都到 A、B 等距，因此直线 CD 是 AB 的垂直平分线。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "O",
+                "AB",
+                "CD",
+                "AO",
+                "OB",
+                "tickAO",
+                "tickOB"
+              ],
+              "focus": [
+                "CD"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-37-38:figure-1-43"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-33-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-33-construct-perpendicular-bisector",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "circleA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              }
+            ],
+            "params": {
+              "radius": 4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "circleB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              }
+            ],
+            "params": {
+              "radius": 4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_circle_circle",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C",
+                "visible": true
+              },
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "circleA"
+              },
+              {
+                "ref": "circleB"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "CD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "O",
+                "label": "O",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AO"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "O"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "OB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAO"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AO"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickOB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "OB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "perpendicular",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "CD"
+                },
+                {
+                  "ref": "AB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "CD⊥AB。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "midpoint",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AO"
+                },
+                {
+                  "ref": "OB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AO=OB。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "c-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "A"
+                },
+                {
+                  "ref": "C"
+                },
+                {
+                  "ref": "B"
+                },
+                {
+                  "ref": "C"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "CA=CB。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "circleA",
+              "circleB",
+              "CD"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickAO",
+              "tickOB"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "O"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "c5a93df1ee8db47028f21588c93167c3e23b33d61384aa34570e55c0e418614a",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "AB",
+          "circleA",
+          "circleB",
+          "C",
+          "D",
+          "CD"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

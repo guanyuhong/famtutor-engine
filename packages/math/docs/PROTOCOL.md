@@ -50,7 +50,7 @@ distance(@point-A, @point-B)
 v0.1：
 
 ```text
-scalar angle boolean vector2 point2 line2 segment2 ray2
+scalar angle boolean vector2 point2 line2 segment2 ray2 interval1
 circle2 polygon2 function1 curve2 text
 ```
 
@@ -78,6 +78,33 @@ Role 用于交互默认、样式 token 和作者语义，不替代 command 类�
 
 输入可以是 entity ref 或 JSON literal；v0.1 command catalog 主要使用 ref，数值配置优先放 params。
 
+渲染标记也遵循实体组合。例如直角标记不重复接收三个点，而是消费已经定义的 `angle`：
+
+```json
+{
+  "id": "op-right-angle",
+  "command": "marker.right_angle",
+  "inputs": [{ "ref": "angleADC" }],
+  "params": { "size": 0.36 },
+  "outputs": ["rightAngleD"]
+}
+```
+
+`size` 是正数，单位与当前文档坐标一致；输入角不是 90° 时以 `NOT_RIGHT_ANGLE` 失败，不生成误导性的标记。
+
+平行标记同样消费已有实体，不重复定义直线：
+
+```json
+{
+  "command": "marker.parallel_chevron",
+  "inputs": [{ "ref": "markerAnchor" }, { "ref": "lineAB" }],
+  "params": { "size": 0.45 },
+  "outputs": ["parallelArm1", "parallelArm2"]
+}
+```
+
+锚点只决定记号位置，线性对象提供方向；返回的两个 `segment2` 是一个开放箭形的两条短臂。接口会规范化线段端点方向，反转端点不会翻转记号。双箭形必须由两个不同锚点的调用组合。
+
 ## 5. Views
 
 v0.1 协议定义：
@@ -95,6 +122,7 @@ v0.1 协议定义：
   "visible": true,
   "renderer": "jsxgraph-svg",
   "boundingBox": [-6, 5, 6, -5],
+  "background": "#FFFEE8",
   "axes": false,
   "grid": false,
   "keepAspectRatio": true,
@@ -112,12 +140,36 @@ v0.1 协议定义：
   "style": {
     "token": "primary",
     "strokeWidth": 3,
-    "labelVisible": true
+    "labelVisible": true,
+    "labelPlacement": "top-right",
+    "labelOffset": [2, -1],
+    "lineLabelPosition": 0.5,
+    "lineLabelSide": "left",
+    "lineLabelDistance": 1.6
   }
 }
 ```
 
 Token：`primary`、`accent`、`auxiliary`、`danger`、`muted`、`success`。
+
+`graphics2d.background` 定义静态与挂载渲染器共用的画布底色。
+`labelPlacement` 可为 `auto` 或八个语义方位。`auto` 在点、关系标记、角文本、线段、其他标签和画布边界之间进行确定性避让。`labelOffset` 为 `[dx, dy]` CSS 像素，从选定锚点继续微调，不改变实体坐标。
+
+线段、直线和射线标签使用 JSXGraph 原生路径标签语义：`lineLabelPosition` 是从第一点到第二点的路径比例（`0..1`），`lineLabelSide` 是有向路径的 `left`/`right`，`lineLabelDistance` 是相对文本框高度的法向间距。默认值分别为 `0.5`、`left`、`1.6`，对应 JSXGraph `position: "0.5fr left"`。Direct SVG 使用相同布局语义。
+
+角的弧线与文字位置由 `angle.three_points` 的可选参数分别控制：
+
+```json
+{
+  "id": "op-angle",
+  "command": "angle.three_points",
+  "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }],
+  "params": { "radius": 0.72, "labelRadius": 1.18 },
+  "outputs": ["angleBAC"]
+}
+```
+
+两者单位均为文档坐标；`radius` 控制角弧，`labelRadius` 控制标签中心沿角平分线的位置。未提供 `labelRadius` 时，渲染器根据字体和角度自动估算安全位置。
 
 ## 7. Interactions
 

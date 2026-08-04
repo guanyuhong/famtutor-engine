@@ -13,7 +13,8 @@
       "default": "./dist/index.js"
     },
     "./protocol/runtime-schema": "./protocol/famtutor.engine.runtime.v1.schema.json",
-    "./protocol/render-bundle-schema": "./protocol/famtutor.render.bundle.v1.schema.json"
+    "./protocol/render-bundle-schema": "./protocol/famtutor.render.bundle.v1.schema.json",
+    "./protocol/case-schema": "./protocol/famtutor.case.v1.schema.json"
   },
   "files": [
     "dist",

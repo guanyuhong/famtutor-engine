@@ -12,6 +12,7 @@ Cross-domain **runtime contracts** and **Render Bundle** for FamTutor Engine.
 | `RenderBundle` (`famtutor.render.bundle.v1`) | Host-neutral delivery JSON: document + requirements + fallback + integrity |
 | `canonicalizeJson` / `sha256Utf8` / `sha256Bytes` | Deterministic JSON + real Web Crypto digests |
 | `DomainRuntime` / `RuntimeRegistry` | Stateless executors |
+| `TextbookCase` (`famtutor.case.v1`) | Optional domain-neutral corpus envelope; separate from runtime execution contracts |
 
 ## RenderArtifact vs RenderBundle
 
@@ -30,6 +31,7 @@ Schema exports:
 
 - `@famtutor/core/protocol/runtime-schema`
 - `@famtutor/core/protocol/render-bundle-schema`
+- `@famtutor/core/protocol/case-schema`
 
 ## License
 

@@ -1,0 +1,615 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-26-perpendicular-bisector-property",
+  "title": "线段垂直平分线的性质",
+  "description": "按教材图 1-32、1-33实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      29,
+      30
+    ],
+    "pdfPages": [
+      32,
+      33
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "perpendicular-bisector",
+    "sas"
+  ],
+  "learningObjective": "拖动垂直平分线上的点，验证它到线段两端的距离始终相等。",
+  "caseType": "exploration",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "point.on_path",
+    "line.perpendicular_through",
+    "marker.segment_tick",
+    "interaction.drag",
+    "assertion.equal_length"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 226,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-26-perpendicular-bisector-property",
+      "revision": 1,
+      "seed": 226,
+      "metadata": {
+        "title": "线段垂直平分线的性质",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "perpendicular-bisector",
+          "sas"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -4,
+            4,
+            4,
+            -4
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-26",
+          "title": "线段垂直平分线的性质",
+          "stages": [
+            {
+              "id": "definition",
+              "narration": "O 是 AB 的中点，过 O 作 AB 的垂线；这条直线就是线段 AB 的垂直平分线。",
+              "reveal": [
+                "A",
+                "B",
+                "O",
+                "AO",
+                "OB",
+                "bisector",
+                "tickAO",
+                "tickOB",
+                "rightO"
+              ]
+            },
+            {
+              "id": "point",
+              "narration": "在垂直平分线上任取一点 C，连接 CA、CB。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "O",
+                "AO",
+                "OB",
+                "bisector",
+                "CA",
+                "CB",
+                "rightO"
+              ]
+            },
+            {
+              "id": "property",
+              "narration": "拖动 C；由 SAS 可证 CA=CB，数值关系在整条垂直平分线上保持。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "O",
+                "AO",
+                "OB",
+                "bisector",
+                "CA",
+                "CB",
+                "rightO",
+                "tickCA",
+                "tickCB"
+              ],
+              "focus": [
+                "CA",
+                "CB"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-29-30:figure-1-32",
+          "zjedu-math-8a-2013:printed-29-30:figure-1-33"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-26-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-26-perpendicular-bisector-property",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "O",
+                "label": "O",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AO"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "O"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "OB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "line.perpendicular_through",
+            "outputs": [
+              {
+                "id": "bisector"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "AB"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.on_path",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C",
+                "role": "free"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "bisector"
+              }
+            ],
+            "params": {
+              "initial": [
+                0,
+                2.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "rightAtO",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "O"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.38
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.right_angle",
+            "outputs": [
+              {
+                "id": "rightO"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "rightAtO"
+              }
+            ],
+            "params": {
+              "size": 0.28
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "bisector-perpendicular",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "bisector"
+                },
+                {
+                  "ref": "AB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "垂直平分线垂直于 AB。",
+              "requiredMethod": "construction"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "equal-distance",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "CA"
+                },
+                {
+                  "ref": "CB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "C 在线段 AB 的垂直平分线上，所以 CA=CB。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_interaction",
+            "policy": {
+              "target": "C",
+              "permissions": [
+                "drag"
+              ],
+              "dragMode": "along_path",
+              "dragTarget": "bisector"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAO"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AO"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickOB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "OB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickCA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CA"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.48
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickCB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CB"
+              }
+            ],
+            "params": {
+              "size": 0.32,
+              "position": 0.48
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AO",
+              "OB",
+              "CA",
+              "CB"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "bisector"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickAO",
+              "tickOB",
+              "tickCA",
+              "tickCB",
+              "rightO"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "rightAtO"
+            ],
+            "style": {
+              "opacity": 0,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "O",
+              "C"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "284da613dc42325789bbbc4dbbd510735e9d34f5f9560dfbf49e9cc6d1ea2a10",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "AB",
+          "O",
+          "AO",
+          "OB",
+          "bisector",
+          "C"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "C",
+        "permission": "drag"
+      }
+    ]
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

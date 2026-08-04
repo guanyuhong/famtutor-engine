@@ -9,10 +9,14 @@ export function coverageDocument() {
   };
   add("k", "scalar", "derived", "scalar.constant", [], { value: 2 });
   add("s", "scalar", "free", "scalar.slider", [], { min: 0.5, max: 4, value: 2.5, position: [-5, -5] });
+  add("condition", "boolean", "derived", "boolean.expression", [], { expression: "s > k" });
+  add("interval", "interval1", "derived", "interval.from_bounds", [], { lower: "-s", upper: "k", lowerClosed: false, upperClosed: true, y: -4 });
   add("A", "point2", "free", "point.free", [], { coords: [-2, 0] });
   add("B", "point2", "free", "point.free", [], { coords: [2, 0] });
   add("C", "point2", "free", "point.free", [], { coords: [0.8, 3] });
   add("D", "point2", "free", "point.free", [], { coords: [-1, 2] });
+  add("R", "point2", "free", "point.free", [], { coords: [0, 2] });
+  add("expressionPoint", "point2", "derived", "point.from_expressions", [], { x: "s", y: "k" });
   add("AB", "segment2", "derived", "segment.through_points", [{ ref: "A" }, { ref: "B" }]);
   add("lineAB", "line2", "derived", "line.through_points", [{ ref: "A" }, { ref: "B" }]);
   add("rayAB", "ray2", "derived", "ray.from_points", [{ ref: "A" }, { ref: "B" }]);
@@ -33,7 +37,10 @@ export function coverageDocument() {
   add("poly", "polygon2", "derived", "polygon.vertices", [{ ref: "A" }, { ref: "B" }, { ref: "C" }, { ref: "D" }]);
   add("polyGlider", "point2", "free", "point.on_path", [{ ref: "poly" }], { initial: [0, 1] });
   add("circleProjection", "point2", "derived", "point.projection", [{ ref: "D" }, { ref: "circleP" }]);
-  add("ang", "angle", "derived", "angle.three_points", [{ ref: "A" }, { ref: "M" }, { ref: "C" }]);
+  add("ang", "angle", "derived", "angle.three_points", [{ ref: "A" }, { ref: "M" }, { ref: "R" }]);
+  add("rightMarker", "polygon2", "annotation", "marker.right_angle", [{ ref: "ang" }], { size: 0.35 });
+  add("segmentTick", "segment2", "annotation", "marker.segment_tick", [{ ref: "AB" }], { size: 0.35 });
+  add("parallelChevron", ["segment2", "segment2"], "annotation", "marker.parallel_chevron", [{ ref: "M" }, { ref: "AB" }], { size: 0.45 }, ["parallelArm1", "parallelArm2"]);
   add("arc", "arc2", "derived", "arc.center_points", [{ ref: "M" }, { ref: "A" }, { ref: "B" }]);
   add("arc3", "arc2", "derived", "arc.three_points", [{ ref: "B" }, { ref: "C" }, { ref: "D" }]);
   add("sector", "sector2", "derived", "sector.from_arc", [{ ref: "arc" }]);
@@ -54,6 +61,7 @@ export function coverageDocument() {
   add("f", "function1", "derived", "function.explicit", [], { expression: "s*sin(x)", domain: [-5, 5] });
   add("curve", "curve2", "derived", "curve.parametric", [], { xExpression: "3*cos(t)", yExpression: "2*sin(t)", parameter: "t", domain: [0, 6.283185307179586] });
   add("text", "text", "annotation", "text.at", [{ ref: "C" }], { text: "C" });
+  add("conditionalText", "text", "annotation", "text.conditional", [{ ref: "condition" }, { ref: "expressionPoint" }], { trueText: "s > k", falseText: "s ≤ k" });
   add("dist", "scalar", "measurement", "measurement.distance", [{ ref: "A" }, { ref: "C" }]);
   add("length", "scalar", "measurement", "measurement.segment_length", [{ ref: "AB" }]);
   add("angleMeasure", "scalar", "measurement", "measurement.angle", [{ ref: "A" }, { ref: "M" }, { ref: "C" }]);

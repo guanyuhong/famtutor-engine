@@ -17,8 +17,10 @@ PR1–PR4 已完成基础契约、数学运行时、live renderer 和 Render Bun
 | **PR2** `@famtutor/core` | 完成 | 无状态 `DomainRuntime`、`ChangeSet`、`RenderArtifact`、`RuntimeRegistry` |
 | **PR3** Live renderer | 完成 | `MountedRenderer`、ChangeSet 画布更新和交互回传；首版使用 `rebuild` |
 | **PR4** Render Bundle | 完成 | `famtutor.render.bundle.v1`、SHA-256 integrity、math bundle create/validate/mount |
+| **PR5** 教材来源 | 完成 | 教材方案、PDF、页图与页码映射 |
+| **PR6** 案例闭环 | 进行中 | `famtutor.case.v1`、来源 registry、10 个种子 trace；当前 9 accepted / 1 expected-unsupported |
 
-下一阶段不扩学科，也不优先做公开发布加固，而是用指定教材持续生成、回放和验证案例，让真实失败决定引擎能力的建设顺序。**PR5** 已完成：方案文档、教材 PDF 与 `tmp/pdfs/` 视觉核对材料均已进入 `dev`（仍不进 npm pack）；案例协议与流水线从 **PR6** 开始。
+下一阶段不扩学科，也不优先做公开发布加固，而是用指定教材持续生成、回放和验证案例，让真实失败决定引擎能力的建设顺序。**PR6 的首批 10-case 构建与 Gallery 已落地**：9 个完整通过，Case 04 的条件反馈已补齐，Case 09 仍停在 assessment evidence 的确定能力边界；下一步集中处理该边界。
 
 ## 2. 系统分层
 

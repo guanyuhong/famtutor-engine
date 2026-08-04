@@ -1,0 +1,27 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-05-angle-bisector",
+  "title": "构造并验证三角形角平分线",
+  "description": "在直角等腰三角形中构造从顶点 B 出发的角平分线，并验证两侧角相等。",
+  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [7], "pdfPages": [10], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "knowledgePoints": ["angle-bisector"],
+  "learningObjective": "理解角平分线把一个内角分成两个相等的角。",
+  "caseType": "guided-construction",
+  "difficulty": "intermediate",
+  "requiredCapabilities": ["ray.from_points", "angle.three_points", "assertion.equal_angle", "activity.stages"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 105, "attempts": 1 },
+  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "angle-bisector-05", "revision": 1, "seed": 105, "metadata": { "title": "三角形角平分线", "locale": "zh-CN", "purpose": "demonstration", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-1, 5, 5, -1], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "construct-bisector", "title": "构造角平分线", "stages": [{ "id": "triangle", "narration": "先构造三角形 ABC。", "reveal": ["A", "B", "C", "triangle"] }, { "id": "bisector", "narration": "连接 B 与角内的点 D。", "reveal": ["D", "bisector"] }, { "id": "verify", "narration": "比较 ∠ABD 与 ∠DBC。", "reveal": ["angleABD", "angleDBC"] }] }], "provenance": { "generator": "agent", "sourceRefs": ["zjedu-math-8a-2013:printed-7"] } } },
+  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-05-build", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "angle-bisector-05", "revision": 1 }, "operations": [
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [4, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [0, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [0, 4] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "D", "label": "D" }], "params": { "coords": [1.5, 1.5] } },
+    { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "triangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "construct", "command": "ray.from_points", "outputs": [{ "id": "bisector", "label": "BD" }], "inputs": [{ "ref": "B" }, { "ref": "D" }] },
+    { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleABD", "label": "∠ABD" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "D" }] },
+    { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleDBC", "label": "∠DBC" }], "inputs": [{ "ref": "D" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "add_assertion", "assertion": { "id": "bisected-angle", "predicate": "equal_angle", "arguments": [{ "ref": "angleABD" }, { "ref": "angleDBC" }], "tolerance": 1e-9, "message": "BD 平分 ∠ABC。" } }
+  ], "metadata": { "origin": "textbook-case-seed" } }] },
+  "expected": { "documentFingerprint": "f313d4ffb790e646e2f56fc5ec67a5adf06b399fd4a0c2226e9ae87e8e11ad5c", "assertions": [{ "kind": "entity-exists", "entityIds": ["A", "B", "C", "D", "bisector", "angleABD", "angleDBC"] }, { "kind": "entity-types", "types": { "bisector": "ray2", "angleABD": "angle", "angleDBC": "angle" } }, { "kind": "runtime-assertions-pass" }, { "kind": "activity-stages", "minimum": 3 }, { "kind": "static-render" }, { "kind": "render-bundle" }], "interactions": [] },
+  "artifacts": {}, "status": "accepted", "diagnostics": []
+}

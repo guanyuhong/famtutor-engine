@@ -1,0 +1,703 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-3-18-auxiliary-line-parallel-proof",
+  "title": "添加辅助线证明平行",
+  "description": "按教材图 1-16实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.3 证明",
+    "printedPages": [
+      19
+    ],
+    "pdfPages": [
+      22
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "proof",
+    "triangle-exterior-angle",
+    "parallel-line-criterion"
+  ],
+  "learningObjective": "延长 BC 交 DE 于 F，用三角形外角关系把已知角条件转化为内错角相等。",
+  "caseType": "guided-construction",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "ray.from_points",
+    "angle.three_points",
+    "marker.parallel_chevron",
+    "assertion.parallel",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 218,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-18-auxiliary-line-parallel-proof",
+      "revision": 1,
+      "seed": 218,
+      "metadata": {
+        "title": "添加辅助线证明平行",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.3",
+          "proof",
+          "triangle-exterior-angle",
+          "parallel-line-criterion"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            4,
+            7,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-18",
+          "title": "添加辅助线证明平行",
+          "stages": [
+            {
+              "id": "given",
+              "narration": "已知 ∠B+∠D=∠BCD，求证 AB∥DE。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "AB",
+                "DE",
+                "BC",
+                "CD",
+                "angleB",
+                "angleD",
+                "angleBCD"
+              ]
+            },
+            {
+              "id": "construct",
+              "narration": "延长 BC 与 DE 交于 F；辅助线必须写入证明过程。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "DE",
+                "BC",
+                "CD",
+                "CF"
+              ]
+            },
+            {
+              "id": "derive",
+              "narration": "由三角形外角定理，∠BCD=∠D+∠CFD；结合已知可得 ∠B=∠CFD。",
+              "reveal": [
+                "B",
+                "C",
+                "D",
+                "F",
+                "AB",
+                "DE",
+                "BC",
+                "CD",
+                "CF",
+                "angleB",
+                "angleD",
+                "angleBCD",
+                "angleCFD"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "∠B 与 ∠CFD 是内错角且相等，所以 AB∥DE。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "DE",
+                "BC",
+                "CD",
+                "CF",
+                "angleB",
+                "angleCFD",
+                "markAB1",
+                "markAB2",
+                "markDE1",
+                "markDE2"
+              ],
+              "focus": [
+                "markAB1",
+                "markAB2",
+                "markDE1",
+                "markDE2"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-19:figure-1-16"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-18-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-18-auxiliary-line-parallel-proof",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "E",
+                "label": "E"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                1.5,
+                1.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "F",
+                "label": "F"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "DE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleB",
+                "label": "∠B"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.48,
+              "labelRadius": 0.86
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleD",
+                "label": "∠D"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              }
+            ],
+            "params": {
+              "radius": 0.48,
+              "labelRadius": 0.86
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleBCD",
+                "label": "∠BCD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ],
+            "params": {
+              "radius": 0.55,
+              "labelRadius": 1
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleCFD",
+                "label": "∠CFD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              },
+              {
+                "ref": "D"
+              }
+            ],
+            "params": {
+              "radius": 0.48,
+              "labelRadius": 0.86
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "MAB",
+                "label": "MAB",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "MDE",
+                "label": "MDE",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "markAB1"
+              },
+              {
+                "id": "markAB2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "MAB"
+              },
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "markDE1"
+              },
+              {
+                "id": "markDE2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "MDE"
+              },
+              {
+                "ref": "DE"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "b-cfd",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleB"
+                },
+                {
+                  "ref": "angleCFD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "∠B=∠CFD。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "ab-de",
+              "predicate": "parallel",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "DE"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AB∥DE。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "DE",
+              "BC",
+              "CD"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "CF"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "angleB",
+              "angleD",
+              "angleBCD",
+              "angleCFD",
+              "markAB1",
+              "markAB2",
+              "markDE1",
+              "markDE2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "B",
+              "A",
+              "D",
+              "E",
+              "C",
+              "F",
+              "MAB",
+              "MDE"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "a5da545db5a94c164d2e341abdb65894b7c043a59e04e32630c89c0e9b0faf3f",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "B",
+          "A",
+          "D",
+          "E",
+          "C",
+          "F",
+          "AB",
+          "DE"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

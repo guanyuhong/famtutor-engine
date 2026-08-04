@@ -1,0 +1,74 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-01-triangle-elements",
+  "title": "认识三角形的基本元素",
+  "description": "构造三角形 ABC，标出三个顶点、三条边和三个内角。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.1 认识三角形",
+    "printedPages": [4],
+    "pdfPages": [7],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": ["triangle-elements", "triangle-angle-sum"],
+  "learningObjective": "能识别三角形的顶点、边、内角，并观察内角和。",
+  "caseType": "demonstration",
+  "difficulty": "introductory",
+  "requiredCapabilities": ["point.free", "segment.through_points", "angle.three_points", "polygon.vertices"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 101, "attempts": 1 },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "triangle-elements-01",
+      "revision": 1,
+      "seed": 101,
+      "metadata": { "title": "认识三角形的基本元素", "locale": "zh-CN", "purpose": "demonstration", "subject": "mathematics", "grade": "grade-8" },
+      "entities": [],
+      "construction": [],
+      "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 6, 6, -4], "axes": false, "grid": false, "keepAspectRatio": true }],
+      "activities": [{ "id": "observe-elements", "title": "观察三角形", "stages": [{ "id": "shape", "narration": "先观察三个顶点和三条边。", "reveal": ["A", "B", "C", "AB", "BC", "CA"] }, { "id": "angles", "narration": "再观察三个内角。", "reveal": ["angleA", "angleB", "angleC"] }] }],
+      "provenance": { "generator": "agent", "sourceRefs": ["zjedu-math-8a-2013:printed-4"] }
+    }
+  },
+  "trace": {
+    "changeSets": [{
+      "schema": "famtutor.engine.change-set.v1",
+      "changeSetId": "zj8a-01-build",
+      "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "triangle-elements-01", "revision": 1 },
+      "operations": [
+        { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [-3, -1] } },
+        { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [3, -1] } },
+        { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [0, 4] } },
+        { "op": "construct", "command": "segment.through_points", "outputs": [{ "id": "AB", "label": "AB" }], "inputs": [{ "ref": "A" }, { "ref": "B" }] },
+        { "op": "construct", "command": "segment.through_points", "outputs": [{ "id": "BC", "label": "BC" }], "inputs": [{ "ref": "B" }, { "ref": "C" }] },
+        { "op": "construct", "command": "segment.through_points", "outputs": [{ "id": "CA", "label": "CA" }], "inputs": [{ "ref": "C" }, { "ref": "A" }] },
+        { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "triangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+        { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleA", "label": "∠A" }], "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }] },
+        { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleB", "label": "∠B" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+        { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleC", "label": "∠C" }], "inputs": [{ "ref": "A" }, { "ref": "C" }, { "ref": "B" }] },
+        { "op": "add_assertion", "assertion": { "id": "interior-angle-sum", "predicate": "expression_equal", "arguments": [{ "expr": "angle(B,A,C)+angle(A,B,C)+angle(A,C,B)" }, { "value": 3.141592653589793 }], "tolerance": 1e-9, "message": "三角形内角和为 180°。" } }
+      ],
+      "metadata": { "origin": "textbook-case-seed" }
+    }]
+  },
+  "expected": {
+    "documentFingerprint": "46ed0f28f0ca7af2ef7ce9d10b4982c0f8da85999727988a538de1723b78bc0d",
+    "assertions": [
+      { "kind": "entity-exists", "entityIds": ["A", "B", "C", "AB", "BC", "CA", "angleA", "angleB", "angleC"] },
+      { "kind": "entity-types", "types": { "triangle": "polygon2", "angleA": "angle", "angleB": "angle", "angleC": "angle" } },
+      { "kind": "runtime-assertions-pass" },
+      { "kind": "activity-stages", "minimum": 2 },
+      { "kind": "static-render" },
+      { "kind": "render-bundle" }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

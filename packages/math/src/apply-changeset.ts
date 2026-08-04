@@ -90,7 +90,7 @@ function objectArg(value: unknown, path = "arguments"): Record<string, unknown> 
 function roleForCommand(command: string): EntityRole {
   if (command === "point.free" || command === "point.on_path" || command === "scalar.slider") return "free";
   if (command.startsWith("measurement.")) return "measurement";
-  if (command === "text.at") return "annotation";
+  if (command.startsWith("text.")) return "annotation";
   return "derived";
 }
 
@@ -164,14 +164,15 @@ function normalizeConstructOutputs(
     }
     const role = descriptor.role === undefined ? roleForCommand(command) : String(descriptor.role) as EntityRole;
     ids.push(id);
-    entities.push({
+    const entity: MathEntity = {
       id,
       type: resolvedType,
-      role,
-      label: typeof descriptor.label === "string" ? descriptor.label : undefined,
-      visible: typeof descriptor.visible === "boolean" ? descriptor.visible : undefined,
-      description: typeof descriptor.description === "string" ? descriptor.description : undefined
-    });
+      role
+    };
+    if (typeof descriptor.label === "string") entity.label = descriptor.label;
+    if (typeof descriptor.visible === "boolean") entity.visible = descriptor.visible;
+    if (typeof descriptor.description === "string") entity.description = descriptor.description;
+    entities.push(entity);
   });
   return { ids, entities };
 }
@@ -227,14 +228,15 @@ function operationConstruct(document: MathDocument, operation: Record<string, un
     ? undefined
     : Object.fromEntries(Object.entries(objectArg(operation.params, "construct.params")).map(([key, value]) => [key, toJsonValue(value)]));
   document.entities.push(...outputs.entities);
-  document.construction.push({
+  const node: ConstructionNode = {
     id: nodeId,
     command,
     inputs: normalizeInputs(operation.inputs),
-    params,
-    outputs: outputs.ids,
-    description: typeof operation.description === "string" ? operation.description : undefined
-  });
+    outputs: outputs.ids
+  };
+  if (params !== undefined) node.params = params;
+  if (typeof operation.description === "string") node.description = operation.description;
+  document.construction.push(node);
 }
 
 function operationSetParams(document: MathDocument, operation: Record<string, unknown>): void {

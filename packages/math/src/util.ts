@@ -148,12 +148,17 @@ export function toJsonValue(value: unknown): JsonValue {
   if (value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     return value;
   }
+  if (value === undefined) throw new TypeError("toJsonValue rejects undefined outside object properties.");
   if (Array.isArray(value)) return value.map(toJsonValue);
   if (value instanceof Map) {
     return Object.fromEntries([...value.entries()].map(([key, item]) => [String(key), toJsonValue(item)]));
   }
   if (isPlainObject(value)) {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, toJsonValue(item)]));
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, item]) => item !== undefined)
+        .map(([key, item]) => [key, toJsonValue(item)])
+    );
   }
   return String(value);
 }
