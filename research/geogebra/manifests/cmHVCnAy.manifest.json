@@ -1,0 +1,1231 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-cmHVCnAy.ggb",
+    "materialId": "cmHVCnAy",
+    "sourceUrl": "https://www.geogebra.org/m/cmHVCnAy",
+    "bytes": 133663,
+    "sha256": "b252c1f3fc50f425a2f02e4855ef84d5aba620ef7a1f6cf2fac3978e4e717947"
+  },
+  "archive": {
+    "entryCount": 8,
+    "entries": [
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 121536,
+        "sha256": "205406720bc3b8aa2417a7b0a10e3a12186171c94500e11a4424433452d4a07a"
+      },
+      {
+        "fileName": "7bfb9989591607b85a8c91ecc64f03c1/Grids32.png",
+        "bytes": 981,
+        "sha256": "caf077d2045689fbf38cd86294b74b18ab6d72bd08a0fd37f5448f49e062412f"
+      },
+      {
+        "fileName": "60b5454cb5a61a6bb2df3424ce67b1d6/TextPin.png",
+        "bytes": 670,
+        "sha256": "15773b3f4a8431c77284c52a91af3599016ecb765f79b38e55e82ea59d964393"
+      },
+      {
+        "fileName": "geogebra_macro.xml",
+        "bytes": 10680,
+        "sha256": "a1f585c2ce1a6486fa8e7fbfb660d66165bc3fc156f6c1f92166c768d4857a91"
+      },
+      {
+        "fileName": "geogebra_defaults2d.xml",
+        "bytes": 9448,
+        "sha256": "bef660200ce1093a598d6bbfeb320b6215739e4e09682b3b98c864a880df7555"
+      },
+      {
+        "fileName": "geogebra_defaults3d.xml",
+        "bytes": 3399,
+        "sha256": "29c2a7cdd77dc1454b968037f7e6e2ede8c2dd3e904ca054d86b4f89cb01ea4b"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 24,
+        "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 39055,
+        "sha256": "5173b546ace0da365625b79d9ec9587a8d10fb36f8b53f3b7ccc5f271e784ef2"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.357.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 76,
+      "byType": {
+        "point3d": 18,
+        "point": 2,
+        "line3d": 8,
+        "plane3d": 4,
+        "numeric": 2,
+        "conic3d": 5,
+        "quadric": 3,
+        "vector3d": 2,
+        "segment3d": 8,
+        "boolean": 10,
+        "angle": 2,
+        "text": 4,
+        "polygon3d": 2,
+        "angle3d": 5,
+        "button": 1
+      },
+      "inventory": [
+        {
+          "label": "O",
+          "type": "point3d"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "lineOA",
+          "type": "line3d"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "lineOB",
+          "type": "line3d"
+        },
+        {
+          "label": "xy",
+          "type": "plane3d"
+        },
+        {
+          "label": "C",
+          "type": "point3d"
+        },
+        {
+          "label": "D",
+          "type": "point3d"
+        },
+        {
+          "label": "lineCD",
+          "type": "line3d"
+        },
+        {
+          "label": "f",
+          "type": "line3d"
+        },
+        {
+          "label": "g",
+          "type": "line3d"
+        },
+        {
+          "label": "E",
+          "type": "point3d"
+        },
+        {
+          "label": "F",
+          "type": "point3d"
+        },
+        {
+          "label": "r1",
+          "type": "numeric"
+        },
+        {
+          "label": "r2",
+          "type": "numeric"
+        },
+        {
+          "label": "c1",
+          "type": "conic3d"
+        },
+        {
+          "label": "c2",
+          "type": "conic3d"
+        },
+        {
+          "label": "G",
+          "type": "point3d"
+        },
+        {
+          "label": "H",
+          "type": "point3d"
+        },
+        {
+          "label": "I",
+          "type": "point3d"
+        },
+        {
+          "label": "J",
+          "type": "point3d"
+        },
+        {
+          "label": "aCone",
+          "type": "quadric"
+        },
+        {
+          "label": "s1",
+          "type": "quadric"
+        },
+        {
+          "label": "s2",
+          "type": "quadric"
+        },
+        {
+          "label": "u",
+          "type": "vector3d"
+        },
+        {
+          "label": "nv",
+          "type": "vector3d"
+        },
+        {
+          "label": "aPlane",
+          "type": "plane3d"
+        },
+        {
+          "label": "conic",
+          "type": "conic3d"
+        },
+        {
+          "label": "F_2",
+          "type": "point3d"
+        },
+        {
+          "label": "F_1",
+          "type": "point3d"
+        },
+        {
+          "label": "p1",
+          "type": "plane3d"
+        },
+        {
+          "label": "p2",
+          "type": "plane3d"
+        },
+        {
+          "label": "c3",
+          "type": "conic3d"
+        },
+        {
+          "label": "c4",
+          "type": "conic3d"
+        },
+        {
+          "label": "line1",
+          "type": "line3d"
+        },
+        {
+          "label": "line2",
+          "type": "line3d"
+        },
+        {
+          "label": "P",
+          "type": "point3d"
+        },
+        {
+          "label": "h",
+          "type": "line3d"
+        },
+        {
+          "label": "K",
+          "type": "point3d"
+        },
+        {
+          "label": "L",
+          "type": "point3d"
+        },
+        {
+          "label": "seg1",
+          "type": "segment3d"
+        },
+        {
+          "label": "seg2",
+          "type": "segment3d"
+        },
+        {
+          "label": "seg3",
+          "type": "segment3d"
+        },
+        {
+          "label": "seg4",
+          "type": "segment3d"
+        },
+        {
+          "label": "showPlanes",
+          "type": "boolean"
+        },
+        {
+          "label": "showDirectrix",
+          "type": "boolean"
+        },
+        {
+          "label": "showSpheres",
+          "type": "boolean"
+        },
+        {
+          "label": "b",
+          "type": "boolean"
+        },
+        {
+          "label": "showPF12",
+          "type": "boolean"
+        },
+        {
+          "label": "α",
+          "type": "angle"
+        },
+        {
+          "label": "c",
+          "type": "boolean"
+        },
+        {
+          "label": "d",
+          "type": "boolean"
+        },
+        {
+          "label": "txtP",
+          "type": "text"
+        },
+        {
+          "label": "text1",
+          "type": "text"
+        },
+        {
+          "label": "text2",
+          "type": "text"
+        },
+        {
+          "label": "M",
+          "type": "point3d"
+        },
+        {
+          "label": "N",
+          "type": "point3d"
+        },
+        {
+          "label": "tri1",
+          "type": "polygon3d"
+        },
+        {
+          "label": "tri2",
+          "type": "polygon3d"
+        },
+        {
+          "label": "ang1",
+          "type": "angle3d"
+        },
+        {
+          "label": "ang2",
+          "type": "angle3d"
+        },
+        {
+          "label": "segPN",
+          "type": "segment3d"
+        },
+        {
+          "label": "MP",
+          "type": "segment3d"
+        },
+        {
+          "label": "ang3",
+          "type": "angle3d"
+        },
+        {
+          "label": "ang4",
+          "type": "angle3d"
+        },
+        {
+          "label": "MN",
+          "type": "segment3d"
+        },
+        {
+          "label": "MK",
+          "type": "segment3d"
+        },
+        {
+          "label": "ang5",
+          "type": "angle3d"
+        },
+        {
+          "label": "a",
+          "type": "boolean"
+        },
+        {
+          "label": "showPF22",
+          "type": "boolean"
+        },
+        {
+          "label": "text3",
+          "type": "text"
+        },
+        {
+          "label": "Q",
+          "type": "point3d"
+        },
+        {
+          "label": "R",
+          "type": "point3d"
+        },
+        {
+          "label": "goHomeP",
+          "type": "button"
+        },
+        {
+          "label": "β",
+          "type": "angle"
+        },
+        {
+          "label": "inRange",
+          "type": "boolean"
+        }
+      ]
+    },
+    "commands": {
+      "total": 51,
+      "byName": {
+        "Point": 2,
+        "Line": 4,
+        "PointIn": 2,
+        "AngularBisector": 1,
+        "Intersect": 14,
+        "Distance": 2,
+        "Circle": 2,
+        "InfiniteCone": 1,
+        "Sphere": 2,
+        "Vector": 1,
+        "IntersectPath": 5,
+        "Segment": 8,
+        "Polygon": 2,
+        "Angle": 5
+      },
+      "signatures": [
+        {
+          "name": "Point",
+          "inputs": [
+            "y = 4"
+          ],
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "name": "Line",
+          "inputs": [
+            "O",
+            "A"
+          ],
+          "outputs": [
+            "lineOA"
+          ]
+        },
+        {
+          "name": "Line",
+          "inputs": [
+            "O",
+            "B"
+          ],
+          "outputs": [
+            "lineOB"
+          ]
+        },
+        {
+          "name": "PointIn",
+          "inputs": [
+            "z = 0"
+          ],
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "name": "PointIn",
+          "inputs": [
+            "z = 0"
+          ],
+          "outputs": [
+            "D"
+          ]
+        },
+        {
+          "name": "Line",
+          "inputs": [
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "lineCD"
+          ]
+        },
+        {
+          "name": "AngularBisector",
+          "inputs": [
+            "lineCD",
+            "lineOB"
+          ],
+          "outputs": [
+            "f",
+            "g"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "g",
+            "yAxis"
+          ],
+          "outputs": [
+            "E"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "f",
+            "yAxis"
+          ],
+          "outputs": [
+            "F"
+          ]
+        },
+        {
+          "name": "Distance",
+          "inputs": [
+            "E",
+            "lineOB"
+          ],
+          "outputs": [
+            "r1"
+          ]
+        },
+        {
+          "name": "Distance",
+          "inputs": [
+            "F",
+            "lineOB"
+          ],
+          "outputs": [
+            "r2"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "E",
+            "r1",
+            "xOyPlane"
+          ],
+          "outputs": [
+            "c1"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "F",
+            "r2",
+            "xOyPlane"
+          ],
+          "outputs": [
+            "c2"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineOB",
+            "OrthogonalLine[E, lineOB, xOyPlane]"
+          ],
+          "outputs": [
+            "G"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineOA",
+            "OrthogonalLine[E, lineOA, xOyPlane]"
+          ],
+          "outputs": [
+            "H"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineOA",
+            "OrthogonalLine[F, lineOA, xOyPlane]"
+          ],
+          "outputs": [
+            "I"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineOB",
+            "OrthogonalLine[F, lineOB, xOyPlane]"
+          ],
+          "outputs": [
+            "J"
+          ]
+        },
+        {
+          "name": "InfiniteCone",
+          "inputs": [
+            "O",
+            "(0, 4, 0)",
+            "Angle[(0, 1, 0), O, A]"
+          ],
+          "outputs": [
+            "aCone"
+          ]
+        },
+        {
+          "name": "Sphere",
+          "inputs": [
+            "E",
+            "r1"
+          ],
+          "outputs": [
+            "s1"
+          ]
+        },
+        {
+          "name": "Sphere",
+          "inputs": [
+            "F",
+            "r2"
+          ],
+          "outputs": [
+            "s2"
+          ]
+        },
+        {
+          "name": "Vector",
+          "inputs": [
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "u"
+          ]
+        },
+        {
+          "name": "IntersectPath",
+          "inputs": [
+            "aPlane",
+            "aCone"
+          ],
+          "outputs": [
+            "conic"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineCD",
+            "OrthogonalLine[F, lineCD, space]"
+          ],
+          "outputs": [
+            "F_2"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "lineCD",
+            "OrthogonalLine[E, lineCD, space]"
+          ],
+          "outputs": [
+            "F_1"
+          ]
+        },
+        {
+          "name": "IntersectPath",
+          "inputs": [
+            "p1",
+            "aCone"
+          ],
+          "outputs": [
+            "c3"
+          ]
+        },
+        {
+          "name": "IntersectPath",
+          "inputs": [
+            "p2",
+            "aCone"
+          ],
+          "outputs": [
+            "c4"
+          ]
+        },
+        {
+          "name": "IntersectPath",
+          "inputs": [
+            "aPlane",
+            "p1"
+          ],
+          "outputs": [
+            "line1"
+          ]
+        },
+        {
+          "name": "IntersectPath",
+          "inputs": [
+            "aPlane",
+            "p2"
+          ],
+          "outputs": [
+            "line2"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "conic"
+          ],
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "name": "Line",
+          "inputs": [
+            "O",
+            "P"
+          ],
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "h",
+            "c3"
+          ],
+          "outputs": [
+            "K"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "h",
+            "c4"
+          ],
+          "outputs": [
+            "L"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "K"
+          ],
+          "outputs": [
+            "seg1"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "F_1"
+          ],
+          "outputs": [
+            "seg2"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "F_2"
+          ],
+          "outputs": [
+            "seg3"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "L"
+          ],
+          "outputs": [
+            "seg4"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "p1",
+            "OrthogonalLine[P, p1]"
+          ],
+          "outputs": [
+            "M"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "p1",
+            "OrthogonalLine[P, line1, space]"
+          ],
+          "outputs": [
+            "N"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{P, M, N}"
+          ],
+          "outputs": [
+            "tri1"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{P, M, K}"
+          ],
+          "outputs": [
+            "tri2"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "P",
+            "M",
+            "N"
+          ],
+          "outputs": [
+            "ang1"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "P",
+            "M",
+            "K"
+          ],
+          "outputs": [
+            "ang2"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "N"
+          ],
+          "outputs": [
+            "segPN"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "P",
+            "M"
+          ],
+          "outputs": [
+            "MP"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "M",
+            "P",
+            "N"
+          ],
+          "outputs": [
+            "ang3"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "M",
+            "P",
+            "K"
+          ],
+          "outputs": [
+            "ang4"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "M",
+            "N"
+          ],
+          "outputs": [
+            "MN"
+          ]
+        },
+        {
+          "name": "Segment",
+          "inputs": [
+            "M",
+            "K"
+          ],
+          "outputs": [
+            "MK"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "P",
+            "N",
+            "N + nv ⊗ (N - P)"
+          ],
+          "outputs": [
+            "ang5"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "p1",
+            "OrthogonalLine[F_1, line1, space]"
+          ],
+          "outputs": [
+            "Q"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "Segment[F_1, Q]",
+            "conic"
+          ],
+          "outputs": [
+            "R"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "α",
+          "min": "30°",
+          "max": "150°",
+          "width": "180",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [
+        {
+          "label": "showPlanes",
+          "type": "boolean"
+        },
+        {
+          "label": "showDirectrix",
+          "type": "boolean"
+        },
+        {
+          "label": "showSpheres",
+          "type": "boolean"
+        },
+        {
+          "label": "b",
+          "type": "boolean"
+        },
+        {
+          "label": "showPF12",
+          "type": "boolean"
+        },
+        {
+          "label": "c",
+          "type": "boolean"
+        },
+        {
+          "label": "d",
+          "type": "boolean"
+        },
+        {
+          "label": "a",
+          "type": "boolean"
+        },
+        {
+          "label": "showPF22",
+          "type": "boolean"
+        },
+        {
+          "label": "inRange",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "goHomeP",
+          "type": "button"
+        }
+      ],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "O",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "A",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "C",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "D",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "P",
+        "step": "0.1",
+        "speed": "1",
+        "type": "0",
+        "playing": true
+      },
+      {
+        "label": "α",
+        "step": "0.08726646259971647",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 3,
+      "euclidian3d": 1,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [
+    {
+      "commandName": "Grids",
+      "toolName": "Grids",
+      "inputLabels": [
+        "A",
+        "u",
+        "v",
+        "x1",
+        "x2",
+        "y1",
+        "y2"
+      ],
+      "outputLabels": [
+        "segsX",
+        "segsY"
+      ],
+      "sourceFile": "geogebra_macro.xml"
+    },
+    {
+      "commandName": "TextPinNormal",
+      "toolName": "TextPinNormal",
+      "inputLabels": [
+        "A",
+        "r",
+        "ang",
+        "w",
+        "h"
+      ],
+      "outputLabels": [
+        "P"
+      ],
+      "sourceFile": "geogebra_macro.xml"
+    },
+    {
+      "commandName": "TextPin",
+      "toolName": "TextPin",
+      "inputLabels": [
+        "A",
+        "v",
+        "tH",
+        "txtPad",
+        "tWr",
+        "tHr"
+      ],
+      "outputLabels": [
+        "TextPin"
+      ],
+      "sourceFile": "geogebra_macro.xml"
+    }
+  ],
+  "scripts": [
+    {
+      "scope": "object",
+      "label": "goHomeP",
+      "language": "ggbscript",
+      "bytes": 14,
+      "sha256": "9237db7a9ca95462636be0d6d69ca2a1fdf452c7cc3bc2d75a6ab436cad92170",
+      "redacted": true
+    },
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 24,
+      "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 121536,
+      "sha256": "205406720bc3b8aa2417a7b0a10e3a12186171c94500e11a4424433452d4a07a"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "7bfb9989591607b85a8c91ecc64f03c1/Grids32.png",
+      "bytes": 981,
+      "sha256": "caf077d2045689fbf38cd86294b74b18ab6d72bd08a0fd37f5448f49e062412f"
+    },
+    {
+      "fileName": "60b5454cb5a61a6bb2df3424ce67b1d6/TextPin.png",
+      "bytes": 670,
+      "sha256": "15773b3f4a8431c77284c52a91af3599016ecb765f79b38e55e82ea59d964393"
+    },
+    {
+      "fileName": "geogebra_defaults2d.xml",
+      "bytes": 9448,
+      "sha256": "bef660200ce1093a598d6bbfeb320b6215739e4e09682b3b98c864a880df7555"
+    },
+    {
+      "fileName": "geogebra_defaults3d.xml",
+      "bytes": 3399,
+      "sha256": "29c2a7cdd77dc1454b968037f7e6e2ede8c2dd3e904ca054d86b4f89cb01ea4b"
+    }
+  ],
+  "capabilityTags": [
+    "3d",
+    "animation",
+    "curve",
+    "custom_tool",
+    "geometry",
+    "script",
+    "simulation",
+    "vector_matrix"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 5,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "AngularBisector",
+        "count": 1,
+        "mapsTo": "macro.ray.angle_bisector"
+      },
+      {
+        "command": "Circle",
+        "count": 2,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Distance",
+        "count": 2,
+        "mapsTo": "measurement.distance"
+      },
+      {
+        "command": "Intersect",
+        "count": 14,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "Line",
+        "count": 4,
+        "mapsTo": "line.through_points"
+      },
+      {
+        "command": "Point",
+        "count": 2,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Polygon",
+        "count": 2,
+        "mapsTo": "polygon.vertices"
+      },
+      {
+        "command": "Segment",
+        "count": 8,
+        "mapsTo": "segment.through_points"
+      },
+      {
+        "command": "Vector",
+        "count": 1,
+        "mapsTo": "vector.*"
+      }
+    ],
+    "gaps": [
+      {
+        "command": "InfiniteCone",
+        "count": 1,
+        "requiredCapability": "scene3d"
+      },
+      {
+        "command": "IntersectPath",
+        "count": 5,
+        "requiredCapability": "generalized_path_intersection"
+      },
+      {
+        "command": "PointIn",
+        "count": 2,
+        "requiredCapability": "point_in_region"
+      },
+      {
+        "command": "Sphere",
+        "count": 2,
+        "requiredCapability": "scene3d"
+      }
+    ],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

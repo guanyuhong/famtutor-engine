@@ -1,0 +1,50 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "example-jsxgraph-3d-foundation",
+  "revision": 1,
+  "seed": 20260804,
+  "metadata": {
+    "title": "JSXGraph 3D 基础能力",
+    "locale": "zh-CN",
+    "purpose": "exploration",
+    "description": "验证空间点、线段、平面、多边形、球、参数曲线与参数曲面的统一协议和双渲染路径。"
+  },
+  "entities": [
+    { "id": "O", "type": "point3", "label": "O", "role": "free" },
+    { "id": "A", "type": "point3", "label": "A", "role": "free" },
+    { "id": "B", "type": "point3", "label": "B", "role": "free" },
+    { "id": "C", "type": "point3", "label": "C", "role": "free" },
+    { "id": "OA", "type": "segment3", "role": "derived" },
+    { "id": "base", "type": "polygon3", "role": "derived" },
+    { "id": "plane", "type": "plane3", "role": "auxiliary" },
+    { "id": "sphere", "type": "sphere3", "role": "derived" },
+    { "id": "helix", "type": "curve3", "role": "derived" },
+    { "id": "surface", "type": "surface3", "role": "auxiliary" }
+  ],
+  "construction": [
+    { "id": "make-O", "command": "point3.free", "params": { "coords": [0, 0, 0] }, "outputs": ["O"] },
+    { "id": "make-A", "command": "point3.free", "params": { "coords": [3, 0, 0] }, "outputs": ["A"] },
+    { "id": "make-B", "command": "point3.free", "params": { "coords": [0, 3, 0] }, "outputs": ["B"] },
+    { "id": "make-C", "command": "point3.free", "params": { "coords": [0, 0, 3] }, "outputs": ["C"] },
+    { "id": "make-OA", "command": "segment3.through_points", "inputs": [{ "ref": "O" }, { "ref": "A" }], "outputs": ["OA"] },
+    { "id": "make-base", "command": "polygon3.vertices", "inputs": [{ "ref": "O" }, { "ref": "A" }, { "ref": "B" }], "outputs": ["base"] },
+    { "id": "make-plane", "command": "plane3.through_points", "inputs": [{ "ref": "O" }, { "ref": "A" }, { "ref": "B" }], "outputs": ["plane"] },
+    { "id": "make-sphere", "command": "sphere3.center_radius", "inputs": [{ "ref": "C" }], "params": { "radius": 1.2 }, "outputs": ["sphere"] },
+    { "id": "make-helix", "command": "curve3.parametric", "params": { "xExpression": "2*cos(t)", "yExpression": "2*sin(t)", "zExpression": "t/3", "parameter": "t", "domain": [0, 12.566370614359172] }, "outputs": ["helix"] },
+    { "id": "make-surface", "command": "surface3.parametric", "params": { "xExpression": "u", "yExpression": "v", "zExpression": "0.18*(u*u-v*v)", "parameters": ["u", "v"], "uDomain": [-2.5, 2.5], "vDomain": [-2.5, 2.5] }, "outputs": ["surface"] }
+  ],
+  "views": [{
+    "id": "main3d", "kind": "graphics3d", "visible": true, "renderer": "jsxgraph-svg",
+    "boundingBox3D": [[-4, 4], [-4, 4], [-2, 5]],
+    "camera": { "azimuth": 0.78, "elevation": 0.48, "distance": 24 },
+    "projection": "parallel", "axes": true, "background": "#fbfcfe"
+  }],
+  "styles": [
+    { "targets": ["O", "A", "B", "C"], "style": { "token": "primary", "pointSize": 4, "fontSize": 14 } },
+    { "targets": ["base"], "style": { "token": "accent", "fillOpacity": 0.14 } },
+    { "targets": ["plane"], "style": { "token": "auxiliary", "fillOpacity": 0.08, "opacity": 0.35 } },
+    { "targets": ["sphere"], "style": { "token": "success", "fillOpacity": 0.12 } },
+    { "targets": ["helix"], "style": { "token": "danger", "strokeWidth": 2.8 } },
+    { "targets": ["surface"], "style": { "token": "auxiliary", "opacity": 0.45, "strokeWidth": 1 } }
+  ]
+}

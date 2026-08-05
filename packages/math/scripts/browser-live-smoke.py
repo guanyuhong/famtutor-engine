@@ -678,6 +678,44 @@ def main() -> int:
                 || !stageSnapshot.artifact.content.includes('10°')) {
                 throw new Error('Gallery Case 08 staged derivation failed');
               }
+              const case17Id = 'zj8a-1-3-17-triangle-angle-sum-proof';
+              const case17 = window.__famtutorGallery.rendererByCase.get(case17Id);
+              const case17Card = document.querySelector(`[data-case-id="${case17Id}"]`);
+              const case17Revision = case17.getDocument().revision;
+              const case17Staged = await window.__famtutorGallery.setCaseStage(case17Id, 5);
+              await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              const case17Board = case17Card.querySelector('.case-board');
+              const case17LiveSvg = case17Board.querySelector('svg');
+              const boardWidth = case17Board.getBoundingClientRect().width;
+              const svgWidth = case17LiveSvg.getBoundingClientRect().width;
+              const rotated = await case17.dispatch({ type: 'scalar.set', target: 't', payload: { value: 1 } });
+              const assembled = await case17.dispatch({ type: 'scalar.set', target: 't', payload: { value: 2 } });
+              const case17Snapshot = await case17.snapshot({ renderer: 'direct-svg' });
+              const case17Document = case17.getDocument();
+              const tValue = case17Document.construction.find(node => node.outputs.includes('t'))?.params?.value;
+              const svgDocument = new DOMParser().parseFromString(case17Snapshot.artifact.content, 'image/svg+xml');
+              const polygonPoints = entityId => (svgDocument.querySelector(`[data-entity-id="${entityId}"]`)?.getAttribute('points') ?? '')
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .map(pair => pair.split(',').map(Number));
+              const bluePoints = polygonPoints('bluePiece');
+              const redPoints = polygonPoints('redPiece');
+              const greenPoints = polygonPoints('greenPiece');
+              const samePoint = (left, right) => left && right && Math.hypot(left[0] - right[0], left[1] - right[1]) < 0.1;
+              if (!case17Staged
+                || case17.getState().stageId !== 'assemble'
+                || case17Revision === case17.getDocument().revision
+                || Math.abs(boardWidth - svgWidth) > 1
+                || !rotated.ok
+                || !assembled.ok
+                || tValue !== 2
+                || !case17Snapshot.ok
+                || !samePoint(bluePoints[0], redPoints[0])
+                || !samePoint(bluePoints[0], greenPoints[2])
+                || !case17Card.textContent.includes('最终三个角在 C 点拼成平角')) {
+                throw new Error('Gallery Case 17 dynamic angle assembly failed');
+              }
               const case19Id = 'zj8a-1-4-19-congruent-figures';
               const case19 = window.__famtutorGallery.rendererByCase.get(case19Id);
               const case19Card = document.querySelector(`[data-case-id="${case19Id}"]`);

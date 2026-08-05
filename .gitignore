@@ -9,6 +9,10 @@ artifacts/
 *.tgz
 .npmrc
 
+# Licensed research inputs stay local; commit only manifests and permitted derived work.
+.research-cache/geogebra/
+artifacts/geogebra/raw/
+
 # Scratch under tmp/ — keep tracked visual checks in tmp/pdfs/
 tmp/*
 !tmp/pdfs/

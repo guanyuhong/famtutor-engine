@@ -1,0 +1,53 @@
+{
+  "schema": "famtutor.geometry.pattern.v1",
+  "patternId": "triangle.orthic",
+  "title": "三角形的垂足三角形",
+  "status": "semantic-pattern-reviewed",
+  "kind": "construction-pattern",
+  "sourceResearch": {
+    "materialId": "uEsyxQdV",
+    "sourceUrl": "https://www.geogebra.org/m/uEsyxQdV",
+    "manifest": "../manifests/uEsyxQdV.manifest.json"
+  },
+  "intent": "从非退化三角形的三条高取得三个垂足，并连接成垂足三角形；附加镜像与角关系属于教学扩展，不是核心模式输入。",
+  "inputs": [
+    { "id": "A", "type": "point2" },
+    { "id": "B", "type": "point2" },
+    { "id": "C", "type": "point2", "constraint": "A、B、C 不共线" }
+  ],
+  "construction": [
+    { "id": "sides", "semantic": "构造 AB、BC、CA 三边或其承载直线", "mapsTo": ["segment.through_points", "line.through_points"] },
+    { "id": "altitudes", "semantic": "分别过 A、B、C 作对边的垂线", "mapsTo": ["line.perpendicular_through"] },
+    { "id": "feet", "semantic": "垂线与对应边相交得到三个垂足 K、J、I", "mapsTo": ["point.intersection_line_line"] },
+    { "id": "orthic", "semantic": "按边界顺序连接 J、I、K", "mapsTo": ["polygon.vertices"] }
+  ],
+  "invariants": [
+    "I 在 AB 上且 CI ⟂ AB",
+    "J 在 AC 上且 BJ ⟂ AC",
+    "K 在 BC 上且 AK ⟂ BC",
+    "输入为锐角三角形时 I、J、K 均位于三条边的内部"
+  ],
+  "famTutorMapping": {
+    "existingCommands": ["line.perpendicular_through", "line.through_points", "point.intersection_line_line", "polygon.vertices", "segment.through_points"],
+    "gaps": [],
+    "decision": "不新增 L0。先作为 Construction Pattern；出现第二个独立教材或资源需求后，再评估是否发布 macro.polygon.triangle_orthic。"
+  },
+  "visualRecipe": {
+    "primary": "原三角形使用主轮廓层级，垂足三角形使用第二强调色",
+    "auxiliary": "三条高使用辅助线层级；只在当前教学阶段显示",
+    "markers": "三个垂足使用 marker.right_angle；不得用文字‘垂直’替代",
+    "labels": "A、B、C 使用外侧自动标签，I、J、K 与直角标记保持像素间距"
+  },
+  "interactionRecipe": {
+    "draggable": ["A", "B", "C"],
+    "stages": ["原三角形", "显示三条高", "形成垂足三角形", "观察角关系"],
+    "clock": null
+  },
+  "evidence": {
+    "sourceSha256": "d5e3e622d2d984b6f3b18bac208915c8e0ad9a342915708d25b975217dbedb26",
+    "commands": 34,
+    "exactMapped": 34,
+    "gaps": 0,
+    "scriptsExecuted": false
+  }
+}

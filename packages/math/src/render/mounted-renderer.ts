@@ -21,7 +21,9 @@ import {
   type MathOperation,
   type MathSetParamsOperation
 } from "../operations.js";
-import type { MathDocument } from "../types.js";
+import { advanceClock, initialClockState, resetClockState, type LogicalClockState } from "../kernel/clock.js";
+import { evaluateMathDocument } from "../kernel/evaluate.js";
+import type { MathControlAction, MathDocument } from "../types.js";
 import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
 
@@ -32,6 +34,13 @@ const MAX_OPERATIONS = 128;
 export type MathInteractionAction =
   | { type: "point.set"; target: string; payload: { coords: [number, number] } }
   | { type: "scalar.set"; target: string; payload: { value: number } }
+  | { type: "boolean.set"; target: string; payload: { value: boolean } }
+  | { type: "boolean.toggle"; target: string; payload: Record<string, never> }
+  | { type: "control.invoke"; target: string; payload: Record<string, never> }
+  | { type: "clock.play"; target: string; payload: Record<string, never> }
+  | { type: "clock.pause"; target: string; payload: Record<string, never> }
+  | { type: "clock.reset"; target: string; payload: Record<string, never> }
+  | { type: "clock.step"; target: string; payload: Record<string, never> }
   | { type: "stage.set"; payload: { stageId?: string } }
   | { type: "selection.set"; payload: { entityId?: string } };
 
@@ -39,6 +48,7 @@ export type MathInteractionAction =
 export type LegacyMathInteractionAction =
   | { type: "point.set"; target: string; coords: [number, number] }
   | { type: "scalar.set"; target: string; value: number }
+  | { type: "boolean.set"; target: string; value: boolean }
   | { type: "stage.set"; stageId?: string }
   | { type: "selection.set"; entityId?: string };
 
@@ -92,7 +102,7 @@ function interactionAllows(document: MathDocument, target: string, permission: "
   if (!entity) return false;
   if (permission === "select") return true;
   if (permission === "drag") return entity.role === "free" && entity.type === "point2";
-  return entity.type === "scalar" && entity.role === "free";
+  return (entity.type === "scalar" || entity.type === "boolean") && entity.role === "free";
 }
 
 export function normalizeMathInteractionAction(action: MathInteractionActionInput): MathInteractionAction {
@@ -105,6 +115,9 @@ export function normalizeMathInteractionAction(action: MathInteractionActionInpu
   }
   if (legacy.type === "scalar.set") {
     return { type: "scalar.set", target: legacy.target, payload: { value: legacy.value } };
+  }
+  if (legacy.type === "boolean.set") {
+    return { type: "boolean.set", target: legacy.target, payload: { value: legacy.value } };
   }
   if (legacy.type === "stage.set") {
     return { type: "stage.set", payload: { stageId: legacy.stageId } };
@@ -154,6 +167,9 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   private queue: Promise<unknown> = Promise.resolve();
   private readonly idempotency = new Map<string, IdempotencyEntry>();
   private readonly idempotencyOrder: string[] = [];
+  private readonly clockStates = new Map<string, LogicalClockState>();
+  private readonly clockTimers = new Map<string, ReturnType<typeof setTimeout>>();
+  private clockMutation = false;
 
   constructor(host: HTMLElement, document: MathDocument, options: MathMountedRendererOptions = {}) {
     this.host = host;
@@ -163,6 +179,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     this.stageId = options.stageId;
     const { domainRuntime: _ignored, ...rest } = options;
     this.mountOptions = rest;
+    this.synchronizeClocks();
   }
 
   async initialize(): Promise<void> {
@@ -176,6 +193,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       this.activeContainer = container;
       this.active = mountJsxGraph(container, this.document, this.bindMountOptions());
       await this.active.ready;
+      for (const state of this.clockStates.values()) if (state.status === "running") this.scheduleClock(state.clockId);
     } catch (error) {
       try { this.active?.destroy(); } catch { /* ignore */ }
       this.active = undefined;
@@ -342,6 +360,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       this.activeContainer = undefined;
       this.host.replaceChildren();
       this.listeners.clear();
+      this.clearAllClockTimers();
       this.clearIdempotency();
     });
   }
@@ -432,6 +451,9 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       selectedEntityId: this.selectedEntityId,
       rendererMode: "jsxgraph-svg",
       camera: camera ? { boundingBox: camera } : undefined,
+      metadata: {
+        clocks: [...this.clockStates.values()].map(state => ({ ...state }))
+      },
       destroyed: this.destroyed
     };
   }
@@ -613,6 +635,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
 
       // Commit only after staging is healthy.
       this.document = nextDocument;
+      this.synchronizeClocks();
       this.stageId = nextStageId;
       this.selectedEntityId = nextSelectedEntityId;
       this.active = stagingHandle;
@@ -723,6 +746,176 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     };
   }
 
+  private scalarNodeValue(target: string): number | undefined {
+    const nodeId = producerNodeId(this.document, target);
+    const node = this.document.construction.find(candidate => candidate.id === nodeId);
+    const value = node?.params?.value;
+    return finiteNumber(value) ? value : undefined;
+  }
+
+  private synchronizeClocks(): void {
+    const declared = new Set((this.document.clocks ?? []).map(clock => clock.id));
+    for (const [clockId] of this.clockStates) {
+      if (!declared.has(clockId)) {
+        this.clearClockTimer(clockId);
+        this.clockStates.delete(clockId);
+      }
+    }
+    for (const clock of this.document.clocks ?? []) {
+      const previous = this.clockStates.get(clock.id);
+      if (previous) {
+        this.clockStates.set(clock.id, {
+          ...previous,
+          value: this.scalarNodeValue(clock.target) ?? previous.value
+        });
+      } else {
+        this.clockStates.set(clock.id, initialClockState(clock, this.scalarNodeValue(clock.target)));
+      }
+    }
+  }
+
+  private clearClockTimer(clockId: string): void {
+    const timer = this.clockTimers.get(clockId);
+    if (timer !== undefined) clearTimeout(timer);
+    this.clockTimers.delete(clockId);
+  }
+
+  private clearAllClockTimers(): void {
+    for (const clockId of [...this.clockTimers.keys()]) this.clearClockTimer(clockId);
+  }
+
+  private pauseClocksForTarget(target: string): void {
+    for (const clock of this.document.clocks ?? []) {
+      if (clock.target !== target) continue;
+      const state = this.clockStates.get(clock.id);
+      if (!state) continue;
+      this.clearClockTimer(clock.id);
+      this.clockStates.set(clock.id, { ...state, value: this.scalarNodeValue(target) ?? state.value, status: "paused" });
+      this.emit({ type: "clock.paused", target: clock.id, payload: { value: state.value, reason: "manual_input" } });
+    }
+  }
+
+  private scheduleClock(clockId: string): void {
+    this.clearClockTimer(clockId);
+    const clock = this.document.clocks?.find(candidate => candidate.id === clockId);
+    const state = this.clockStates.get(clockId);
+    if (!clock || !state || state.status !== "running" || this.destroyed || this.destroyRequested) return;
+    const timer = setTimeout(() => {
+      this.clockTimers.delete(clockId);
+      void this.enqueue(async () => {
+        if (this.destroyed || this.destroyRequested || this.clockStates.get(clockId)?.status !== "running") return;
+        const result = await this.stepClockLocked(clockId, true);
+        if (result.ok && this.clockStates.get(clockId)?.status === "running") this.scheduleClock(clockId);
+      });
+    }, clock.intervalMs);
+    this.clockTimers.set(clockId, timer);
+  }
+
+  private stateOnlyResult(ok = true): InteractionResult<MathDocument, MathOperation> {
+    return {
+      ok,
+      revisionChanged: false,
+      document: deepClone(this.document),
+      state: this.captureState(),
+      diagnostics: []
+    };
+  }
+
+  private controlAction(action: MathControlAction): MathInteractionAction {
+    if (action.type === "scalar.set") return { type: "scalar.set", target: action.target, payload: { value: action.value } };
+    if (action.type === "boolean.set") return { type: "boolean.set", target: action.target, payload: { value: action.value } };
+    if (action.type === "boolean.toggle") return { type: "boolean.toggle", target: action.target, payload: {} };
+    if (action.type === "stage.set") return { type: "stage.set", payload: { stageId: action.stageId } };
+    return { type: action.type, target: action.target, payload: {} };
+  }
+
+  private async stepClockLocked(
+    clockId: string,
+    scheduled: boolean
+  ): Promise<InteractionResult<MathDocument, MathOperation>> {
+    const clock = this.document.clocks?.find(candidate => candidate.id === clockId);
+    const current = this.clockStates.get(clockId);
+    if (!clock || !current) return this.interactionDenied(`Clock '${clockId}' does not exist.`, clockId);
+    const base = scheduled ? current : { ...current, status: "paused" as const };
+    const advanced = advanceClock(clock, base);
+    this.clockStates.set(clockId, advanced.state);
+    this.clockMutation = true;
+    let result: InteractionResult<MathDocument, MathOperation>;
+    try {
+      result = await this.dispatchLocked({ type: "scalar.set", target: clock.target, payload: { value: advanced.state.value } });
+    } finally {
+      this.clockMutation = false;
+    }
+    if (!result.ok) {
+      this.clockStates.set(clockId, { ...current, status: "paused" });
+      return result;
+    }
+    this.emit({
+      type: "clock.tick",
+      target: clockId,
+      payload: {
+        value: advanced.state.value,
+        tick: advanced.state.tick,
+        direction: advanced.state.direction,
+        completed: advanced.state.status === "completed"
+      }
+    });
+    return { ...result, state: this.captureState() };
+  }
+
+  private async dispatchClockLocked(action: Extract<MathInteractionAction, { type: `clock.${string}` }>): Promise<InteractionResult<MathDocument, MathOperation>> {
+    const clock = this.document.clocks?.find(candidate => candidate.id === action.target);
+    const state = this.clockStates.get(action.target);
+    if (!clock || !state) return this.interactionDenied(`Clock '${action.target}' does not exist.`, action.target);
+
+    if (action.type === "clock.pause") {
+      this.clearClockTimer(clock.id);
+      this.clockStates.set(clock.id, { ...state, status: "paused" });
+      this.emit({ type: "clock.paused", target: clock.id, payload: { value: state.value, reason: "control" } });
+      return this.stateOnlyResult();
+    }
+    if (action.type === "clock.step") {
+      this.clearClockTimer(clock.id);
+      return this.stepClockLocked(clock.id, false);
+    }
+    if (action.type === "clock.reset") {
+      this.clearClockTimer(clock.id);
+      const reset = resetClockState(clock);
+      this.clockStates.set(clock.id, reset);
+      this.clockMutation = true;
+      let result: InteractionResult<MathDocument, MathOperation>;
+      try {
+        result = await this.dispatchLocked({ type: "scalar.set", target: clock.target, payload: { value: reset.value } });
+      } finally {
+        this.clockMutation = false;
+      }
+      if (!result.ok) this.clockStates.set(clock.id, { ...state, status: "paused" });
+      if (result.ok) this.emit({ type: "clock.reset", target: clock.id, payload: { value: reset.value } });
+      return { ...result, state: this.captureState() };
+    }
+
+    let playState = state;
+    let resetResult: InteractionResult<MathDocument, MathOperation> | undefined;
+    if (state.status === "completed") {
+      playState = resetClockState(clock);
+      this.clockStates.set(clock.id, playState);
+      this.clockMutation = true;
+      try {
+        resetResult = await this.dispatchLocked({ type: "scalar.set", target: clock.target, payload: { value: playState.value } });
+      } finally {
+        this.clockMutation = false;
+      }
+      if (!resetResult.ok) {
+        this.clockStates.set(clock.id, { ...state, status: "paused" });
+        return resetResult;
+      }
+    }
+    this.clockStates.set(clock.id, { ...playState, status: "running" });
+    this.scheduleClock(clock.id);
+    this.emit({ type: "clock.playing", target: clock.id, payload: { value: playState.value } });
+    return resetResult ? { ...resetResult, state: this.captureState() } : this.stateOnlyResult();
+  }
+
   private async dispatchLocked(
     action: MathInteractionAction
   ): Promise<InteractionResult<MathDocument, MathOperation>> {
@@ -762,6 +955,18 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       };
     }
 
+    if (action.type === "control.invoke") {
+      const control = this.document.controls?.find(candidate => candidate.id === action.target);
+      if (!control) return this.interactionDenied(`Control '${action.target}' does not exist.`, action.target);
+      const result = await this.dispatchLocked(this.controlAction(control.action));
+      if (result.ok) this.emit({ type: "control.invoked", target: control.id, payload: { actionType: control.action.type } });
+      return { ...result, state: this.captureState() };
+    }
+
+    if (action.type === "clock.play" || action.type === "clock.pause" || action.type === "clock.reset" || action.type === "clock.step") {
+      return this.dispatchClockLocked(action);
+    }
+
     if (action.type === "stage.set") {
       const stageId = action.payload.stageId;
       if (stageId !== undefined && !stageExists(this.document, stageId)) {
@@ -777,6 +982,14 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         state: this.captureState(),
         diagnostics: []
       };
+    }
+
+    if (action.type === "boolean.toggle") {
+      const runtime = evaluateMathDocument(this.document).entities.get(action.target);
+      if (!runtime?.defined || typeof runtime.value !== "boolean") {
+        return this.interactionDenied(`boolean.toggle target '${action.target}' must evaluate to a boolean.`, action.target);
+      }
+      return this.dispatchLocked({ type: "boolean.set", target: action.target, payload: { value: !runtime.value } });
     }
 
     const target = action.target;
@@ -819,7 +1032,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       patch = node.command === "point.on_path"
         ? { initial: coords }
         : { coords };
-    } else {
+    } else if (action.type === "scalar.set") {
       const value = action.payload.value;
       if (!finiteNumber(value)) {
         return this.interactionDenied("scalar.set requires a finite numeric value.", value);
@@ -829,6 +1042,22 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       }
       if (node?.command !== "scalar.slider") {
         return this.interactionDenied(`scalar.set only allows scalar.slider (got '${node?.command}').`, node?.command);
+      }
+      if (!interactionAllows(this.document, target, "set_value")) {
+        return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
+      }
+      if (!this.clockMutation) this.pauseClocksForTarget(target);
+      patch = { value };
+    } else {
+      const value = action.payload.value;
+      if (typeof value !== "boolean") {
+        return this.interactionDenied("boolean.set requires a boolean value.", value);
+      }
+      if (!entity || entity.type !== "boolean") {
+        return this.interactionDenied(`boolean.set target '${target}' must be a boolean.`, target);
+      }
+      if (node?.command !== "boolean.constant") {
+        return this.interactionDenied(`boolean.set only allows boolean.constant (got '${node?.command}').`, node?.command);
       }
       if (!interactionAllows(this.document, target, "set_value")) {
         return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
@@ -870,6 +1099,14 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         diagnostics: update.diagnostics,
         apply: update.apply ? deepClone(update.apply) : undefined
       };
+    }
+
+    if (action.type === "scalar.set") {
+      for (const clock of this.document.clocks ?? []) {
+        if (clock.target !== target) continue;
+        const state = this.clockStates.get(clock.id);
+        if (state) this.clockStates.set(clock.id, { ...state, value: action.payload.value });
+      }
     }
 
     this.emit({

@@ -1,6 +1,8 @@
 import { MathEngineError, asMathEngineError } from "../errors.js";
 import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
+import { getCommandDefinition, typeConstraintMatches } from "../catalog/commands.js";
 import type {
+  CollectionValue,
   CommandInput,
   ConstructionNode,
   EntityType,
@@ -9,6 +11,8 @@ import type {
   Line2Value,
   MathDocument,
   Point2Value,
+  Point3Value,
+  Polygon2Value,
   Ray2Value,
   RuntimeEntity,
   RuntimeValue,
@@ -19,6 +23,7 @@ import { finiteNumber } from "../util.js";
 import { buildConstructionGraph } from "./dag.js";
 import {
   addPointVector,
+  angleBisectorRay,
   angleValue,
   applyTransform,
   arcFromCenterPoints,
@@ -27,6 +32,7 @@ import {
   circle,
   circleArea,
   circlePerimeter,
+  commonTangentLine,
   circumcircle,
   dilatePoint,
   dilateTransform,
@@ -37,6 +43,8 @@ import {
   intersectLineCircle,
   intersectLineConic,
   intersectLines,
+  invertCircleInCircle,
+  invertPointInCircle,
   isAngle,
   isArc,
   isCircle,
@@ -57,14 +65,17 @@ import {
   parabolaFromFocusDirectrix,
   point,
   polygonArea,
+  polygonDiagonals,
   polygonPerimeter,
   projectPointToPath,
+  regularPolygon,
   ray,
   reflectPointAcrossLine,
   reflectTransform,
   rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  scaleVector,
   segmentTickMarker,
   sectorArea,
   sectorFromArc,
@@ -76,6 +87,19 @@ import {
   vector
 } from "./geometry.js";
 import { intervalFromBounds, isInterval } from "./interval.js";
+import {
+  isLine3,
+  isPlane3,
+  isPoint3,
+  isSegment3,
+  isVector3,
+  line3FromPoints,
+  plane3ThroughPoints,
+  point3,
+  segment3,
+  sphere3,
+  subtractPoints3
+} from "./geometry3d.js";
 
 export interface EvaluationOverrides {
   points?: Record<string, [number, number]>;
@@ -98,6 +122,11 @@ function requirePointValue(value: RuntimeValue | JsonValue, context: string): Po
   return value;
 }
 
+function requirePoint3Value(value: RuntimeValue | JsonValue, context: string): Point3Value {
+  if (!isPoint3(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires point3.`);
+  return value;
+}
+
 function requireLineLikeValue(value: RuntimeValue | JsonValue, context: string): Line2Value | Segment2Value | Ray2Value {
   if (!isLine(value) && !isSegment(value) && !isRay(value)) {
     throw new MathEngineError("TYPE_MISMATCH", `${context} requires line2, segment2, or ray2.`);
@@ -112,6 +141,11 @@ function requireSegmentValue(value: RuntimeValue | JsonValue, context: string) {
 
 function requireCircleValue(value: RuntimeValue | JsonValue, context: string) {
   if (!isCircle(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires circle2.`);
+  return value;
+}
+
+function requirePolygonValue(value: RuntimeValue | JsonValue, context: string): Polygon2Value {
+  if (!isPolygon(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires polygon2.`);
   return value;
 }
 
@@ -149,6 +183,28 @@ function pairParam(node: ConstructionNode, name: string): [number, number] {
   const value = paramsObject(node)[name];
   if (!Array.isArray(value) || value.length !== 2 || !finiteNumber(value[0]) || !finiteNumber(value[1])) {
     throw new MathEngineError("INVALID_PARAMETER", `Command '${node.command}' requires params.${name} = [x,y].`, {
+      path: `$.construction.${node.id}.params.${name}`,
+      actual: value ?? null
+    });
+  }
+  return [value[0], value[1]];
+}
+
+function tripleParam(node: ConstructionNode, name: string): [number, number, number] {
+  const value = paramsObject(node)[name];
+  if (!Array.isArray(value) || value.length !== 3 || value.some(item => !finiteNumber(item))) {
+    throw new MathEngineError("INVALID_PARAMETER", `Command '${node.command}' requires params.${name} = [x,y,z].`, {
+      path: `$.construction.${node.id}.params.${name}`,
+      actual: value ?? null
+    });
+  }
+  return [value[0] as number, value[1] as number, value[2] as number];
+}
+
+function namedDomainParam(node: ConstructionNode, name: string): [number, number] {
+  const value = paramsObject(node)[name];
+  if (!Array.isArray(value) || value.length !== 2 || !finiteNumber(value[0]) || !finiteNumber(value[1]) || value[0] >= value[1]) {
+    throw new MathEngineError("INVALID_DOMAIN", `Command '${node.command}' requires params.${name} = [min,max] with min < max.`, {
       path: `$.construction.${node.id}.params.${name}`,
       actual: value ?? null
     });
@@ -220,6 +276,16 @@ function runtimeTypeMatches(type: EntityType, value: RuntimeValue): boolean {
   if (type === "interval1") return isInterval(value);
   if (type === "function1") return typeof value === "object" && value.kind === "function1";
   if (type === "curve2") return typeof value === "object" && value.kind === "curve2";
+  if (type === "collection") return isCollectionValue(value);
+  if (type === "point3") return isPoint3(value);
+  if (type === "vector3") return isVector3(value);
+  if (type === "line3") return isLine3(value);
+  if (type === "segment3") return isSegment3(value);
+  if (type === "plane3") return isPlane3(value);
+  if (type === "polygon3") return typeof value === "object" && value.kind === "polygon3";
+  if (type === "sphere3") return typeof value === "object" && value.kind === "sphere3";
+  if (type === "curve3") return typeof value === "object" && value.kind === "curve3";
+  if (type === "surface3") return typeof value === "object" && value.kind === "surface3";
   if (type === "text") return typeof value === "object" && value.kind === "text";
   return false;
 }
@@ -248,13 +314,6 @@ function requirePathValue(value: RuntimeValue | JsonValue, context: string): Run
   return value;
 }
 
-function requireProjectableValue(value: RuntimeValue | JsonValue, context: string): RuntimeValue {
-  if (!isLine(value) && !isSegment(value) && !isRay(value) && !isCircle(value)) {
-    throw new MathEngineError("TYPE_MISMATCH", `${context} requires line2, segment2, ray2, or circle2.`);
-  }
-  return value;
-}
-
 function requireTransformValue(value: RuntimeValue | JsonValue, context: string) {
   if (!isTransform(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires transform2.`);
   return value;
@@ -272,6 +331,109 @@ function requireAngleValue(value: RuntimeValue | JsonValue, context: string) {
 
 function requireConicValue(value: RuntimeValue | JsonValue, context: string) {
   if (!isConic(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires conic2.`);
+  return value;
+}
+
+function isCollectionValue(value: RuntimeValue | JsonValue): value is CollectionValue {
+  return typeof value === "object" && value !== null && !Array.isArray(value) && value.kind === "collection";
+}
+
+function requireCollectionValue(value: RuntimeValue | JsonValue, context: string): CollectionValue {
+  if (!isCollectionValue(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires collection.`);
+  return value;
+}
+
+function collectionItemType(node: ConstructionNode): Exclude<EntityType, "collection"> {
+  const value = paramsObject(node).itemType;
+  if (typeof value !== "string" || value === "collection") {
+    throw new MathEngineError("INVALID_COLLECTION_ITEM_TYPE", `Command '${node.command}' requires params.itemType to name a non-collection entity type.`, { actual: value ?? null });
+  }
+  const known = ["point2", "segment2", "circle2", "polygon2"] as const;
+  if (!(known as readonly string[]).includes(value)) {
+    throw new MathEngineError("INVALID_COLLECTION_ITEM_TYPE", `Unknown collection item type '${value}'.`, { actual: value });
+  }
+  return value as Exclude<EntityType, "collection">;
+}
+
+function collectionLimit(node: ConstructionNode): number {
+  const value = numberParam(node, "maxItems");
+  if (!Number.isInteger(value) || value < 1 || value > 256) {
+    throw new MathEngineError("INVALID_COLLECTION_LIMIT", "params.maxItems must be an integer from 1 to 256.", { actual: value, expected: "1..256" });
+  }
+  return value;
+}
+
+function collectionVariable(node: ConstructionNode): string {
+  const variable = stringParam(node, "variable");
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(variable) || variable === "pi" || variable === "e") {
+    throw new MathEngineError("INVALID_COLLECTION_VARIABLE", "params.variable must be a plain, non-reserved identifier.", { actual: variable });
+  }
+  return variable;
+}
+
+function templateObject(node: ConstructionNode): Record<string, JsonValue> {
+  const value = paramsObject(node).template;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "params.template must be an object.", { actual: value ?? null });
+  }
+  return value;
+}
+
+function evaluateCollectionTemplate(
+  owner: ConstructionNode,
+  outerInputs: CommandInput[],
+  values: Map<string, RuntimeValue>,
+  overrides: EvaluationOverrides,
+  variable: string,
+  localValue: RuntimeValue,
+  expectedType: Exclude<EntityType, "collection">
+): RuntimeValue {
+  if (values.has(variable)) {
+    throw new MathEngineError("COLLECTION_LOCAL_COLLISION", `Collection variable '${variable}' collides with an entity id.`, { actual: variable });
+  }
+  const template = templateObject(owner);
+  const command = template.command;
+  if (typeof command !== "string" || command.startsWith("collection.")) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_COMMAND", "Collection templates require a non-collection L0 command.", { actual: command ?? null });
+  }
+  const definition = getCommandDefinition(command);
+  if (!definition || definition.outputTypes.length !== 1 || !typeConstraintMatches(definition.outputTypes[0]!, expectedType)) {
+    throw new MathEngineError("COLLECTION_TEMPLATE_TYPE_MISMATCH", `Template command '${command}' must have one '${expectedType}' output.`, {
+      actual: definition ? definition.outputTypes.map(constraint => Array.isArray(constraint) ? [...constraint] : constraint) as JsonValue : null,
+      expected: expectedType
+    });
+  }
+  const rawInputs = template.inputs ?? [];
+  if (!Array.isArray(rawInputs)) throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "template.inputs must be an array.");
+  const inputs: CommandInput[] = rawInputs.map((raw, index) => {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+      throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_INPUT", `template.inputs[${index}] must be an object.`);
+    }
+    if (raw.local === true) return { ref: variable };
+    if (typeof raw.input === "number" && Number.isInteger(raw.input) && raw.input >= 0 && raw.input < outerInputs.length) {
+      return outerInputs[raw.input]!;
+    }
+    if (Object.prototype.hasOwnProperty.call(raw, "value")) return { value: raw.value as JsonValue };
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE_INPUT", `template.inputs[${index}] requires {local:true}, {input:index}, or {value:...}.`, { actual: raw });
+  });
+  const rawParams = template.params;
+  if (rawParams !== undefined && (!rawParams || typeof rawParams !== "object" || Array.isArray(rawParams))) {
+    throw new MathEngineError("INVALID_COLLECTION_TEMPLATE", "template.params must be an object when present.");
+  }
+  const scopedValues = new Map(values);
+  scopedValues.set(variable, localValue);
+  const virtual: ConstructionNode = {
+    id: `${owner.id}::template`,
+    command,
+    inputs,
+    params: (rawParams ?? {}) as Record<string, JsonValue>,
+    outputs: [`${owner.id}::item`]
+  };
+  const result = executeNode(virtual, scopedValues, overrides);
+  const value = result[0];
+  if (value === undefined || !runtimeTypeMatches(expectedType, value)) {
+    throw new MathEngineError("COLLECTION_TEMPLATE_RUNTIME_TYPE_MISMATCH", `Template command '${command}' did not produce '${expectedType}'.`);
+  }
   return value;
 }
 
@@ -301,6 +463,44 @@ function executeNode(
       }
       return [value];
     }
+    case "boolean.constant": {
+      const value = params.value;
+      if (typeof value !== "boolean") throw new MathEngineError("INVALID_PARAMETER", "boolean.constant requires boolean params.value.", {
+        path: `$.construction.${node.id}.params.value`,
+        actual: value ?? null
+      });
+      return [value];
+    }
+    case "collection.sequence": {
+      const itemType = collectionItemType(node);
+      const variable = collectionVariable(node);
+      const maxItems = collectionLimit(node);
+      const from = expressionNumber(params.from, values);
+      const to = expressionNumber(params.to, values);
+      const step = params.step === undefined ? (to >= from ? 1 : -1) : expressionNumber(params.step, values);
+      if (step === 0 || Math.sign(to - from || step) !== Math.sign(step)) {
+        throw new MathEngineError("INVALID_SEQUENCE_RANGE", "Sequence step must be non-zero and move from start toward end.", { actual: { from, to, step } });
+      }
+      const items: RuntimeValue[] = [];
+      const epsilon = Math.abs(step) * 1e-10;
+      for (let index = from; step > 0 ? index <= to + epsilon : index >= to - epsilon; index += step) {
+        if (items.length >= maxItems) throw new MathEngineError("COLLECTION_LIMIT_EXCEEDED", `Sequence exceeds maxItems=${maxItems}.`, { actual: items.length + 1, expected: maxItems });
+        items.push(evaluateCollectionTemplate(node, node.inputs ?? [], values, overrides, variable, index, itemType));
+      }
+      return [{ kind: "collection", itemType, items }];
+    }
+    case "collection.map": {
+      const source = requireCollectionValue(inputs[0]!, "collection.map input 1");
+      const itemType = collectionItemType(node);
+      const variable = collectionVariable(node);
+      const maxItems = collectionLimit(node);
+      if (source.items.length > maxItems) throw new MathEngineError("COLLECTION_LIMIT_EXCEEDED", `Map source exceeds maxItems=${maxItems}.`, { actual: source.items.length, expected: maxItems });
+      return [{
+        kind: "collection",
+        itemType,
+        items: source.items.map(item => evaluateCollectionTemplate(node, node.inputs ?? [], values, overrides, variable, item, itemType))
+      }];
+    }
     case "boolean.expression":
       return [expressionBoolean(params.expression, values)];
     case "interval.from_bounds": {
@@ -320,6 +520,72 @@ function executeNode(
       const [x, y] = coords ?? pairParam(node, "coords");
       return [point(x, y)];
     }
+    case "point3.free": {
+      const [x, y, z] = tripleParam(node, "coords");
+      return [point3(x, y, z)];
+    }
+    case "point3.from_expressions":
+      return [point3(
+        expressionNumber(params.x, values),
+        expressionNumber(params.y, values),
+        expressionNumber(params.z, values)
+      )];
+    case "vector3.between_points":
+      return [subtractPoints3(
+        requirePoint3Value(inputs[1]!, "vector3.between_points input 2"),
+        requirePoint3Value(inputs[0]!, "vector3.between_points input 1")
+      )];
+    case "line3.through_points":
+      return [line3FromPoints(
+        requirePoint3Value(inputs[0]!, "line3.through_points input 1"),
+        requirePoint3Value(inputs[1]!, "line3.through_points input 2")
+      )];
+    case "segment3.through_points":
+      return [segment3(
+        requirePoint3Value(inputs[0]!, "segment3.through_points input 1"),
+        requirePoint3Value(inputs[1]!, "segment3.through_points input 2")
+      )];
+    case "plane3.through_points":
+      return [plane3ThroughPoints(
+        requirePoint3Value(inputs[0]!, "plane3.through_points input 1"),
+        requirePoint3Value(inputs[1]!, "plane3.through_points input 2"),
+        requirePoint3Value(inputs[2]!, "plane3.through_points input 3")
+      )];
+    case "polygon3.vertices":
+      return [{ kind: "polygon3", vertices: inputs.map((input, index) => requirePoint3Value(input, `polygon3.vertices input ${index + 1}`)) }];
+    case "sphere3.center_radius": {
+      const center = requirePoint3Value(inputs[0]!, "sphere3.center_radius input 1");
+      const radius = inputs.length > 1
+        ? requireScalarValue(inputs[1]!, "sphere3.center_radius input 2")
+        : expressionNumber(params.radius, values);
+      return [sphere3(center, radius)];
+    }
+    case "curve3.parametric":
+      return [{
+        kind: "curve3",
+        xExpression: stringParam(node, "xExpression"),
+        yExpression: stringParam(node, "yExpression"),
+        zExpression: stringParam(node, "zExpression"),
+        parameter: typeof params.parameter === "string" ? params.parameter : "t",
+        domain: domainParam(node)
+      }];
+    case "surface3.parametric": {
+      const parameters = Array.isArray(params.parameters)
+        && params.parameters.length === 2
+        && params.parameters.every(item => typeof item === "string" && item.length > 0)
+        ? params.parameters as [string, string]
+        : ["u", "v"] as [string, string];
+      if (parameters[0] === parameters[1]) throw new MathEngineError("INVALID_PARAMETER", "surface3.parametric parameters must be distinct.");
+      return [{
+        kind: "surface3",
+        xExpression: stringParam(node, "xExpression"),
+        yExpression: stringParam(node, "yExpression"),
+        zExpression: stringParam(node, "zExpression"),
+        parameters,
+        uDomain: namedDomainParam(node, "uDomain"),
+        vDomain: namedDomainParam(node, "vDomain")
+      }];
+    }
     case "point.from_expressions":
       return [point(expressionNumber(params.x, values), expressionNumber(params.y, values))];
     case "point.on_path": {
@@ -330,11 +596,20 @@ function executeNode(
     }
     case "point.midpoint":
       return [midpoint(requirePointValue(inputs[0]!, "point.midpoint input 1"), requirePointValue(inputs[1]!, "point.midpoint input 2"))];
+    case "point.circle_center": {
+      const source = requireCircleValue(inputs[0]!, "point.circle_center input");
+      return [point(source.center.x, source.center.y)];
+    }
     case "point.projection": {
       const source = requirePointValue(inputs[0]!, "point.projection input 1");
-      const path = requireProjectableValue(inputs[1]!, "point.projection input 2");
+      const path = requirePathValue(inputs[1]!, "point.projection input 2");
       return [projectPointToPath(source, path)];
     }
+    case "point.invert_in_circle":
+      return [invertPointInCircle(
+        requirePointValue(inputs[0]!, "point.invert_in_circle input 1"),
+        requireCircleValue(inputs[1]!, "point.invert_in_circle input 2")
+      )];
     case "point.intersection_line_line": {
       const left = lineLikeToLine(requireLineLikeValue(inputs[0]!, "intersection input 1"));
       const right = lineLikeToLine(requireLineLikeValue(inputs[1]!, "intersection input 2"));
@@ -361,6 +636,18 @@ function executeNode(
       return [lineFromPoints(requirePointValue(inputs[0]!, "line input 1"), requirePointValue(inputs[1]!, "line input 2"))];
     case "ray.from_points":
       return [ray(requirePointValue(inputs[0]!, "ray input 1"), requirePointValue(inputs[1]!, "ray input 2"))];
+    case "ray.angle_bisector": {
+      const branch = params.branch;
+      if (branch !== "internal" && branch !== "external") {
+        throw new MathEngineError("INVALID_PARAMETER", "ray.angle_bisector params.branch must be 'internal' or 'external'.", { actual: branch });
+      }
+      return [angleBisectorRay(
+        requirePointValue(inputs[0]!, "angle-bisector left arm"),
+        requirePointValue(inputs[1]!, "angle-bisector vertex"),
+        requirePointValue(inputs[2]!, "angle-bisector right arm"),
+        branch
+      )];
+    }
     case "line.parallel_through": {
       const through = requirePointValue(inputs[0]!, "parallel input 1");
       const target = lineLikeToLine(requireLineLikeValue(inputs[1]!, "parallel input 2"));
@@ -371,6 +658,13 @@ function executeNode(
       const target = lineLikeToLine(requireLineLikeValue(inputs[1]!, "perpendicular input 2"));
       return [lineFromPointDirection(through, vector(-target.direction.y, target.direction.x))];
     }
+    case "line.common_tangent":
+      return [commonTangentLine(
+        requireCircleValue(inputs[0]!, "line.common_tangent input 1"),
+        requireCircleValue(inputs[1]!, "line.common_tangent input 2"),
+        numberParam(node, "side1"),
+        numberParam(node, "side2")
+      )];
     case "vector.between_points": {
       const from = requirePointValue(inputs[0]!, "vector input 1");
       const to = requirePointValue(inputs[1]!, "vector input 2");
@@ -385,6 +679,11 @@ function executeNode(
       const angle = expressionNumber(params.angle, values);
       return [vector(magnitude * Math.cos(angle), magnitude * Math.sin(angle))];
     }
+    case "vector.scale":
+      return [scaleVector(
+        requireVectorValue(inputs[0]!, "vector.scale input"),
+        expressionNumber(params.factor, values)
+      )];
     case "circle.center_radius": {
       const center = requirePointValue(inputs[0]!, "circle center");
       const radius = inputs.length > 1
@@ -403,6 +702,11 @@ function executeNode(
         requirePointValue(inputs[1]!, "circumcircle input 2"),
         requirePointValue(inputs[2]!, "circumcircle input 3")
       )];
+    case "circle.invert_in_circle":
+      return [invertCircleInCircle(
+        requireCircleValue(inputs[0]!, "circle.invert_in_circle input 1"),
+        requireCircleValue(inputs[1]!, "circle.invert_in_circle input 2")
+      )];
     case "arc.center_points":
       return [arcFromCenterPoints(
         requirePointValue(inputs[0]!, "arc center"),
@@ -420,6 +724,34 @@ function executeNode(
     case "polygon.vertices": {
       const vertices = inputs.map((input, index) => requirePointValue(input, `polygon input ${index + 1}`));
       return [{ kind: "polygon2", vertices }];
+    }
+    case "polygon.regular": {
+      const maxVertices = numberParam(node, "maxVertices");
+      const vertexCount = requireScalarValue(inputs[2]!, "polygon.regular vertexCount");
+      if (!Number.isInteger(maxVertices) || maxVertices < 3 || maxVertices > 64) {
+        throw new MathEngineError("INVALID_REGULAR_POLYGON_BOUND", "params.maxVertices must be an integer from 3 to 64.", { actual: maxVertices, expected: "3..64" });
+      }
+      if (vertexCount > maxVertices) {
+        throw new MathEngineError("REGULAR_POLYGON_BOUND_EXCEEDED", "vertexCount exceeds params.maxVertices.", { actual: vertexCount, expected: maxVertices });
+      }
+      return [regularPolygon(
+        requirePointValue(inputs[0]!, "polygon.regular center"),
+        requireScalarValue(inputs[1]!, "polygon.regular radius"),
+        vertexCount,
+        params.rotation === undefined ? Math.PI / 2 : expressionNumber(params.rotation, values)
+      )];
+    }
+    case "polygon.diagonals": {
+      const maxItems = numberParam(node, "maxItems");
+      if (!Number.isInteger(maxItems) || maxItems < 1 || maxItems > 256) {
+        throw new MathEngineError("INVALID_COLLECTION_LIMIT", "params.maxItems must be an integer from 1 to 256.", { actual: maxItems, expected: "1..256" });
+      }
+      const fromVertex = params.fromVertex === undefined ? undefined : numberParam(node, "fromVertex");
+      const items = polygonDiagonals(requirePolygonValue(inputs[0]!, "polygon.diagonals input"), fromVertex);
+      if (items.length > maxItems) {
+        throw new MathEngineError("COLLECTION_LIMIT_EXCEEDED", `Polygon diagonals exceed maxItems=${maxItems}.`, { actual: items.length, expected: maxItems });
+      }
+      return [{ kind: "collection", itemType: "segment2", items }];
     }
     case "angle.three_points":
       return [angleValue(
@@ -549,6 +881,8 @@ function executeNode(
       }
       return [valueLength(value as RuntimeValue)];
     }
+    case "measurement.circle_radius":
+      return [requireCircleValue(inputs[0]!, "measurement.circle_radius input").radius];
     case "measurement.angle":
       return [angleValue(
         requirePointValue(inputs[0]!, "angle measure input 1"),

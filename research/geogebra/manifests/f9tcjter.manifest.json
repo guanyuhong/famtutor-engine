@@ -1,0 +1,930 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-f9tcjter.ggb",
+    "materialId": "f9tcjter",
+    "sourceUrl": "https://www.geogebra.org/m/f9tcjter",
+    "bytes": 52177,
+    "sha256": "eb0fe8e433a0204eadb3b69014791fd75879c6d4e7fca85b64ccbf9cd177cef8"
+  },
+  "archive": {
+    "entryCount": 6,
+    "entries": [
+      {
+        "fileName": "geogebra_defaults2d.xml",
+        "bytes": 9744,
+        "sha256": "1a459fdb8dc589df1ba354e10814604a0d732055c4dbd9c8fd98acdf0332f92a"
+      },
+      {
+        "fileName": "geogebra_defaults3d.xml",
+        "bytes": 3266,
+        "sha256": "fbc64f865af692c4917ec8f6d8cf2691b7e33bdf117e2fd7f7e3403e8c84ca4b"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 24,
+        "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 32774,
+        "sha256": "ebf4f721add6172a954603e4a10d8087222718a7f52372c9b46c7201a2af37c8"
+      },
+      {
+        "fileName": "geogebra/main/nav_play.png",
+        "bytes": 473,
+        "sha256": "169aa872776de8e9c11ef0f8ff534cf6af02396639f84ca03d89aff04873539b"
+      },
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 44628,
+        "sha256": "b82861bd4b000f5b03b28e3d4200305270a9076af3124be299334946ac21deec"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.478.0",
+    "app": "classic"
+  },
+  "construction": {
+    "elements": {
+      "total": 69,
+      "byType": {
+        "point": 18,
+        "ray": 1,
+        "conic": 5,
+        "numeric": 8,
+        "polygon": 6,
+        "boolean": 1,
+        "text": 23,
+        "button": 1,
+        "conicpart": 2,
+        "angle": 4
+      },
+      "inventory": [
+        {
+          "label": "P",
+          "type": "point"
+        },
+        {
+          "label": "xRay",
+          "type": "ray"
+        },
+        {
+          "label": "ConA",
+          "type": "point"
+        },
+        {
+          "label": "cA",
+          "type": "conic"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "ConB",
+          "type": "point"
+        },
+        {
+          "label": "cB",
+          "type": "conic"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "b",
+          "type": "numeric"
+        },
+        {
+          "label": "Q",
+          "type": "point"
+        },
+        {
+          "label": "tri",
+          "type": "polygon"
+        },
+        {
+          "label": "ConC",
+          "type": "point"
+        },
+        {
+          "label": "cC",
+          "type": "conic"
+        },
+        {
+          "label": "c1_2",
+          "type": "conic"
+        },
+        {
+          "label": "K",
+          "type": "point"
+        },
+        {
+          "label": "K'",
+          "type": "point"
+        },
+        {
+          "label": "tri1",
+          "type": "polygon"
+        },
+        {
+          "label": "a",
+          "type": "numeric"
+        },
+        {
+          "label": "c",
+          "type": "numeric"
+        },
+        {
+          "label": "L",
+          "type": "point"
+        },
+        {
+          "label": "L'",
+          "type": "point"
+        },
+        {
+          "label": "tri2",
+          "type": "polygon"
+        },
+        {
+          "label": "poly2",
+          "type": "polygon"
+        },
+        {
+          "label": "showControls",
+          "type": "boolean"
+        },
+        {
+          "label": "text1",
+          "type": "text"
+        },
+        {
+          "label": "text2",
+          "type": "text"
+        },
+        {
+          "label": "text3",
+          "type": "text"
+        },
+        {
+          "label": "t",
+          "type": "numeric"
+        },
+        {
+          "label": "P2",
+          "type": "point"
+        },
+        {
+          "label": "run",
+          "type": "button"
+        },
+        {
+          "label": "c1_3",
+          "type": "conic"
+        },
+        {
+          "label": "arc",
+          "type": "conicpart"
+        },
+        {
+          "label": "triHint1",
+          "type": "polygon"
+        },
+        {
+          "label": "θ",
+          "type": "angle"
+        },
+        {
+          "label": "sixtyMinus",
+          "type": "angle"
+        },
+        {
+          "label": "text4",
+          "type": "text"
+        },
+        {
+          "label": "text5",
+          "type": "text"
+        },
+        {
+          "label": "text6",
+          "type": "text"
+        },
+        {
+          "label": "d1",
+          "type": "numeric"
+        },
+        {
+          "label": "d",
+          "type": "numeric"
+        },
+        {
+          "label": "r",
+          "type": "numeric"
+        },
+        {
+          "label": "PinTheta",
+          "type": "point"
+        },
+        {
+          "label": "Pin60Minus",
+          "type": "point"
+        },
+        {
+          "label": "text7",
+          "type": "text"
+        },
+        {
+          "label": "text8",
+          "type": "text"
+        },
+        {
+          "label": "text9",
+          "type": "text"
+        },
+        {
+          "label": "text10",
+          "type": "text"
+        },
+        {
+          "label": "text11",
+          "type": "text"
+        },
+        {
+          "label": "text12",
+          "type": "text"
+        },
+        {
+          "label": "text13",
+          "type": "text"
+        },
+        {
+          "label": "text14",
+          "type": "text"
+        },
+        {
+          "label": "d2",
+          "type": "numeric"
+        },
+        {
+          "label": "triHint2",
+          "type": "polygon"
+        },
+        {
+          "label": "PinTheta2",
+          "type": "point"
+        },
+        {
+          "label": "text15",
+          "type": "text"
+        },
+        {
+          "label": "text16",
+          "type": "text"
+        },
+        {
+          "label": "text17",
+          "type": "text"
+        },
+        {
+          "label": "θ2",
+          "type": "angle"
+        },
+        {
+          "label": "sixty",
+          "type": "angle"
+        },
+        {
+          "label": "Pin60",
+          "type": "point"
+        },
+        {
+          "label": "text18",
+          "type": "text"
+        },
+        {
+          "label": "tx1",
+          "type": "text"
+        },
+        {
+          "label": "tx2",
+          "type": "text"
+        },
+        {
+          "label": "tx3",
+          "type": "text"
+        },
+        {
+          "label": "text19",
+          "type": "text"
+        },
+        {
+          "label": "text20",
+          "type": "text"
+        },
+        {
+          "label": "B2",
+          "type": "point"
+        },
+        {
+          "label": "arc2",
+          "type": "conicpart"
+        }
+      ]
+    },
+    "commands": {
+      "total": 36,
+      "byName": {
+        "Ray": 1,
+        "Point": 5,
+        "Circle": 5,
+        "Rotate": 6,
+        "Radius": 3,
+        "Polygon": 6,
+        "Intersect": 2,
+        "CircleArc": 2,
+        "Angle": 4,
+        "Distance": 2
+      },
+      "signatures": [
+        {
+          "name": "Ray",
+          "inputs": [
+            "(0, 0)",
+            "(1, 0)"
+          ],
+          "outputs": [
+            "xRay"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "xRay"
+          ],
+          "outputs": [
+            "ConA"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "P",
+            "ConA"
+          ],
+          "outputs": [
+            "cA"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "cA"
+          ],
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "xRay"
+          ],
+          "outputs": [
+            "ConB"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "P",
+            "ConB"
+          ],
+          "outputs": [
+            "cB"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "cB"
+          ],
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "B",
+            "60°",
+            "A"
+          ],
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "cB"
+          ],
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "P",
+            "60°",
+            "A"
+          ],
+          "outputs": [
+            "Q"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{A, B, C}"
+          ],
+          "outputs": [
+            "tri"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "xRay"
+          ],
+          "outputs": [
+            "ConC"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "P",
+            "ConC"
+          ],
+          "outputs": [
+            "cC"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "Q",
+            "b"
+          ],
+          "outputs": [
+            "c1_2"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "c1_2",
+            "cC",
+            "1"
+          ],
+          "outputs": [
+            "K"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "K",
+            "-60°",
+            "A"
+          ],
+          "outputs": [
+            "K'"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{A, K', K}"
+          ],
+          "outputs": [
+            "tri1"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "cA"
+          ],
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "name": "Radius",
+          "inputs": [
+            "cC"
+          ],
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "name": "Intersect",
+          "inputs": [
+            "c1_2",
+            "cC",
+            "2"
+          ],
+          "outputs": [
+            "L"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "L",
+            "(-(60°))",
+            "A"
+          ],
+          "outputs": [
+            "L'"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{A, L', L}"
+          ],
+          "outputs": [
+            "tri2"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{A, P, Q}"
+          ],
+          "outputs": [
+            "poly2"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "P",
+            "(60° * t)",
+            "A"
+          ],
+          "outputs": [
+            "P2"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "P2",
+            "b"
+          ],
+          "outputs": [
+            "c1_3"
+          ]
+        },
+        {
+          "name": "CircleArc",
+          "inputs": [
+            "A",
+            "P",
+            "Q"
+          ],
+          "outputs": [
+            "arc"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{K, P, Q}"
+          ],
+          "outputs": [
+            "triHint1"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "K",
+            "Q",
+            "P"
+          ],
+          "outputs": [
+            "θ"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "A",
+            "Q",
+            "K"
+          ],
+          "outputs": [
+            "sixtyMinus"
+          ]
+        },
+        {
+          "name": "Distance",
+          "inputs": [
+            "B",
+            "K'"
+          ],
+          "outputs": [
+            "d1"
+          ]
+        },
+        {
+          "name": "Distance",
+          "inputs": [
+            "B",
+            "L'"
+          ],
+          "outputs": [
+            "d2"
+          ]
+        },
+        {
+          "name": "Polygon",
+          "inputs": [
+            "{L, P, Q}"
+          ],
+          "outputs": [
+            "triHint2"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "P",
+            "Q",
+            "L"
+          ],
+          "outputs": [
+            "θ2"
+          ]
+        },
+        {
+          "name": "Angle",
+          "inputs": [
+            "A",
+            "Q",
+            "P"
+          ],
+          "outputs": [
+            "sixty"
+          ]
+        },
+        {
+          "name": "Rotate",
+          "inputs": [
+            "B",
+            "(60° * t)",
+            "A"
+          ],
+          "outputs": [
+            "B2"
+          ]
+        },
+        {
+          "name": "CircleArc",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "arc2"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "t",
+          "min": "0",
+          "max": "1",
+          "width": "200",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [
+        {
+          "label": "showControls",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "run",
+          "type": "button"
+        }
+      ],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "ConA",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "A",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "ConB",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "B",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "ConC",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "t",
+        "step": "0.02",
+        "speed": "5",
+        "type": "3",
+        "playing": false
+      },
+      {
+        "label": "d",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "r",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "object",
+      "label": "run",
+      "language": "ggbscript",
+      "bytes": 42,
+      "sha256": "64b931e6144db1300940cbf19c6cebe4bf9cc300f4239bffbab1dec931abe623",
+      "redacted": true
+    },
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 24,
+      "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 44628,
+      "sha256": "b82861bd4b000f5b03b28e3d4200305270a9076af3124be299334946ac21deec"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "geogebra_defaults2d.xml",
+      "bytes": 9744,
+      "sha256": "1a459fdb8dc589df1ba354e10814604a0d732055c4dbd9c8fd98acdf0332f92a"
+    },
+    {
+      "fileName": "geogebra_defaults3d.xml",
+      "bytes": 3266,
+      "sha256": "fbc64f865af692c4917ec8f6d8cf2691b7e33bdf117e2fd7f7e3403e8c84ca4b"
+    },
+    {
+      "fileName": "geogebra/main/nav_play.png",
+      "bytes": 473,
+      "sha256": "169aa872776de8e9c11ef0f8ff534cf6af02396639f84ca03d89aff04873539b"
+    }
+  ],
+  "capabilityTags": [
+    "animation",
+    "curve",
+    "geometry",
+    "script",
+    "simulation",
+    "transform"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 4,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "Circle",
+        "count": 5,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "CircleArc",
+        "count": 2,
+        "mapsTo": "arc.center_points"
+      },
+      {
+        "command": "Distance",
+        "count": 2,
+        "mapsTo": "measurement.distance"
+      },
+      {
+        "command": "Intersect",
+        "count": 2,
+        "mapsTo": "point.intersection_*"
+      },
+      {
+        "command": "Point",
+        "count": 5,
+        "mapsTo": "point.free/point.on_path"
+      },
+      {
+        "command": "Polygon",
+        "count": 6,
+        "mapsTo": "polygon.vertices"
+      },
+      {
+        "command": "Radius",
+        "count": 3,
+        "mapsTo": "measurement.circle_radius"
+      },
+      {
+        "command": "Ray",
+        "count": 1,
+        "mapsTo": "ray.from_points"
+      },
+      {
+        "command": "Rotate",
+        "count": 6,
+        "mapsTo": "transform.rotate/transform.apply"
+      }
+    ],
+    "gaps": [],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

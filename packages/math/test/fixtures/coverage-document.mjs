@@ -8,10 +8,23 @@ export function coverageDocument() {
     construction.push({ id: `op-${id}`, command, inputs, params, outputs });
   };
   add("k", "scalar", "derived", "scalar.constant", [], { value: 2 });
+  add("vertexCount", "scalar", "derived", "scalar.constant", [], { value: 5 });
   add("s", "scalar", "free", "scalar.slider", [], { min: 0.5, max: 4, value: 2.5, position: [-5, -5] });
+  add("showDetails", "boolean", "free", "boolean.constant", [], { value: true });
   add("condition", "boolean", "derived", "boolean.expression", [], { expression: "s > k" });
   add("interval", "interval1", "derived", "interval.from_bounds", [], { lower: "-s", upper: "k", lowerClosed: false, upperClosed: true, y: -4 });
   add("A", "point2", "free", "point.free", [], { coords: [-2, 0] });
+  add("P3", "point3", "free", "point3.free", [], { coords: [0, 0, 0] });
+  add("Q3", "point3", "free", "point3.free", [], { coords: [2, 0, 0] });
+  add("R3", "point3", "free", "point3.from_expressions", [], { x: "0", y: "2", z: "1" });
+  add("V3", "vector3", "derived", "vector3.between_points", [{ ref: "P3" }, { ref: "Q3" }]);
+  add("L3", "line3", "derived", "line3.through_points", [{ ref: "P3" }, { ref: "Q3" }]);
+  add("S3", "segment3", "derived", "segment3.through_points", [{ ref: "P3" }, { ref: "R3" }]);
+  add("PL3", "plane3", "derived", "plane3.through_points", [{ ref: "P3" }, { ref: "Q3" }, { ref: "R3" }]);
+  add("PG3", "polygon3", "derived", "polygon3.vertices", [{ ref: "P3" }, { ref: "Q3" }, { ref: "R3" }]);
+  add("SP3", "sphere3", "derived", "sphere3.center_radius", [{ ref: "R3" }], { radius: "1.5" });
+  add("CV3", "curve3", "derived", "curve3.parametric", [], { xExpression: "cos(t)", yExpression: "sin(t)", zExpression: "t", parameter: "t", domain: [0, 1] });
+  add("SF3", "surface3", "derived", "surface3.parametric", [], { xExpression: "u", yExpression: "v", zExpression: "u*v", parameters: ["u", "v"], uDomain: [-1, 1], vDomain: [-1, 1] });
   add("B", "point2", "free", "point.free", [], { coords: [2, 0] });
   add("C", "point2", "free", "point.free", [], { coords: [0.8, 3] });
   add("D", "point2", "free", "point.free", [], { coords: [-1, 2] });
@@ -20,6 +33,7 @@ export function coverageDocument() {
   add("AB", "segment2", "derived", "segment.through_points", [{ ref: "A" }, { ref: "B" }]);
   add("lineAB", "line2", "derived", "line.through_points", [{ ref: "A" }, { ref: "B" }]);
   add("rayAB", "ray2", "derived", "ray.from_points", [{ ref: "A" }, { ref: "B" }]);
+  add("angleBisector", "ray2", "derived", "ray.angle_bisector", [{ ref: "A" }, { ref: "M" }, { ref: "C" }], { branch: "internal" });
   add("M", "point2", "derived", "point.midpoint", [{ ref: "A" }, { ref: "B" }]);
   add("parallel", "line2", "derived", "line.parallel_through", [{ ref: "C" }, { ref: "lineAB" }]);
   add("perpendicular", "line2", "derived", "line.perpendicular_through", [{ ref: "C" }, { ref: "lineAB" }]);
@@ -28,13 +42,31 @@ export function coverageDocument() {
   add("v", "vector2", "derived", "vector.between_points", [{ ref: "A" }, { ref: "C" }]);
   add("vComp", "vector2", "derived", "vector.components", [], { components: [1, -0.5] });
   add("vPolar", "vector2", "derived", "vector.polar", [], { magnitude: "2", angle: "pi/6" });
+  add("vScaled", "vector2", "derived", "vector.scale", [{ ref: "v" }], { factor: "max(s - 1, 0)" });
   add("circleR", "circle2", "derived", "circle.center_radius", [{ ref: "A" }, { ref: "s" }]);
   add("circleP", "circle2", "derived", "circle.through_points", [{ ref: "A" }, { ref: "B" }]);
+  add("circleCenter", "point2", "derived", "point.circle_center", [{ ref: "circleP" }]);
+  add("circleRadius", "scalar", "measurement", "measurement.circle_radius", [{ ref: "circleP" }]);
+  add("invertedPoint", "point2", "derived", "point.invert_in_circle", [{ ref: "D" }, { ref: "circleR" }]);
+  add("invertedCircle", "circle2", "derived", "circle.invert_in_circle", [{ ref: "circleP" }, { ref: "circleR" }]);
+  add("farCenter", "point2", "free", "point.free", [], { coords: [7, 4] });
+  add("farCircle", "circle2", "derived", "circle.center_radius", [{ ref: "farCenter" }, { ref: "k" }]);
+  add("commonTangent", "line2", "derived", "line.common_tangent", [{ ref: "circleR" }, { ref: "farCircle" }], { side1: 1, side2: 1 });
+  add("sequencePoints", "collection", "derived", "collection.sequence", [], {
+    itemType: "point2", variable: "i", from: 0, to: 2, maxItems: 8,
+    template: { command: "point.from_expressions", params: { x: "i", y: "i*i/4" } }
+  });
+  add("mappedCircles", "collection", "derived", "collection.map", [{ ref: "sequencePoints" }, { ref: "k" }], {
+    itemType: "circle2", variable: "centerItem", maxItems: 8,
+    template: { command: "circle.center_radius", inputs: [{ local: true }, { input: 1 }] }
+  });
   add("circum", "circle2", "derived", "circle.through_three_points", [{ ref: "A" }, { ref: "B" }, { ref: "C" }]);
   add("lineCircle", ["point2", "point2"], "derived", "point.intersection_line_circle", [{ ref: "lineAB" }, { ref: "circleP" }], undefined, ["LC1", "LC2"]);
   add("circleCircle", ["point2", "point2"], "derived", "point.intersection_circle_circle", [{ ref: "circleP" }, { ref: "circum" }], undefined, ["CC1", "CC2"]);
   add("glider", "point2", "free", "point.on_path", [{ ref: "circleP" }], { initial: [0, 2] });
   add("poly", "polygon2", "derived", "polygon.vertices", [{ ref: "A" }, { ref: "B" }, { ref: "C" }, { ref: "D" }]);
+  add("regularPoly", "polygon2", "derived", "polygon.regular", [{ ref: "M" }, { ref: "k" }, { ref: "vertexCount" }], { maxVertices: 10, rotation: "pi/2" });
+  add("regularDiagonals", "collection", "derived", "polygon.diagonals", [{ ref: "regularPoly" }], { maxItems: 40 });
   add("polyGlider", "point2", "free", "point.on_path", [{ ref: "poly" }], { initial: [0, 1] });
   add("circleProjection", "point2", "derived", "point.projection", [{ ref: "D" }, { ref: "circleP" }]);
   add("ang", "angle", "derived", "angle.three_points", [{ ref: "A" }, { ref: "M" }, { ref: "R" }]);

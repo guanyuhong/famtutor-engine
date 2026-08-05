@@ -34,7 +34,7 @@ Events · Assertions · Simulation · Evidence
 | Domain apply | 确定性 `applyMathChangeSet`；Agent 必须委托 `domainRuntime.apply` |
 | Live renderer | **`mountMathRenderer`**：rebuild+staging、状态保留、交互 ChangeSet、诚实 snapshot |
 | Canonical protocol | `famtutor.math.document.v1`（不变）+ operations schema |
-| 数学命令 | **52** 个 L0 命令 + **8** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
+| 数学命令 | **58** 个二维/通用 L0 命令 + **10** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |
@@ -132,6 +132,8 @@ const snapshot = handle.exportSvg();
 handle.destroy();
 ```
 
+挂载器会观察宿主容器尺寸，并通过 JSXGraph 官方 `updateContainerDims` 路径同步画布；因此响应式网格、折叠面板和阶段切换不需要业务层手工计算 SVG 宽高。
+
 ### 交互仿真
 
 ```ts
@@ -225,7 +227,7 @@ MCP server 将数学命令收敛在 9 个稳定工具里，避免把每个几何
 
 ## L0 命令目录与 L1 宏
 
-当前为 **52** 个 L0 命令与 **8** 个 L1 宏。完整列表以运行时为准：
+当前为 **58** 个 L0 命令与 **9** 个 L1 宏。完整列表以运行时为准：
 
 ```bash
 node ./bin/famtutor-math.mjs capabilities
@@ -238,6 +240,8 @@ v0.1 起步时的历史基线（31 个核心命令）仍可用于对照：
 ```text
 scalar.constant
 scalar.slider
+boolean.constant
+boolean.expression
 
 point.free
 point.on_path
@@ -250,6 +254,7 @@ point.intersection_circle_circle
 segment.through_points
 line.through_points
 ray.from_points
+ray.angle_bisector
 line.parallel_through
 line.perpendicular_through
 vector.between_points
@@ -258,6 +263,8 @@ circle.center_radius
 circle.through_points
 circle.through_three_points
 polygon.vertices
+polygon.regular
+polygon.diagonals
 angle.three_points
 
 transform.translate_point
@@ -275,7 +282,51 @@ measurement.angle
 measurement.slope
 ```
 
-v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
+v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。`point.circle_center(circle2) -> point2` 与 `measurement.circle_radius(circle2) -> scalar` 是圆状态的纯计算投影。`point.invert_in_circle` 和 `circle.invert_in_circle` 提供类型稳定的圆反演；后者在源圆经过反演中心、结果应为直线时明确失败。`line.common_tangent` 以两个 `side` 参数选择单个有向分支，`macro.line.common_tangents` 再将四个分支组合成常规公切线工具。`point.projection` 的公开输入已与内核对齐，统一表示 line / segment / ray / circle / arc / polygon boundary 的最近点。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。`vector.scale` 组合已有 `vector2` 与数值或安全表达式 `params.factor`，用于滑块驱动的向量缩放和平移，不需要重复计算向量的方向。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
+
+`ray.angle_bisector(left, vertex, right, branch)` 用显式 `internal/external` 分支构造角平分射线；原 `macro.ray.angle_bisector` 保留为兼容入口并直接降解到该原子，避免依赖交点顺序误选内外分支。
+
+`scalar.slider.params.animation` 保留为 JSXGraph 原生 glider 动画，适合无控制面板的轻量视觉演示。需要播放、暂停、复位、单步、确定性重放或跨宿主一致状态时，应使用文档级 `clocks[]` 与 `controls[]`；不要创建 Case 专属计时器。用户手动修改目标滑块时，确定性时钟自动暂停。
+
+```json
+{
+  "id": "op-progress",
+  "command": "scalar.slider",
+  "outputs": ["progress"],
+  "params": {
+    "min": 0,
+    "max": 2,
+    "value": 0,
+    "step": 0.02,
+    "position": [-1, -1],
+    "length": 3,
+    "animation": {
+      "autoStart": true,
+      "direction": 1,
+      "stepCount": 100,
+      "delayMs": 30,
+      "maxRounds": 1,
+      "startDelayMs": 600
+    }
+  }
+}
+```
+
+`direction` 只接受 `1` 或 `-1`；`stepCount` 为每轮步数，`delayMs` 为帧间隔，`maxRounds=-1` 表示循环播放。教材演示通常使用 `maxRounds=1`，避免持续运动干扰阅读。
+
+确定性时钟的状态转移只依赖 `{start,end,step,loop}` 与当前逻辑状态；`intervalMs` 不进入数学计算。MountedRenderer 支持 `control.invoke` 与 `clock.play/pause/reset/step`，状态通过 `MountedRendererState.metadata.clocks` 暴露给宿主。
+
+`vector.scale` 的最小用法：
+
+```json
+{
+  "id": "op-motion-vector",
+  "command": "vector.scale",
+  "inputs": [{ "ref": "BCVector" }],
+  "params": { "factor": "max(t - 1, 0)" },
+  "outputs": ["motionVector"]
+}
+```
 
 `marker.right_angle` 的最小用法：
 
@@ -298,6 +349,19 @@ v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform �
 ```
 
 输入角必须在 `1e-6` 弧度容差内等于 90°；否则求值返回 `NOT_RIGHT_ANGLE`。输出复用 `polygon2`，建议实体 role 使用 `annotation`、填充透明，并通过正常 style binding 设置线色和线宽。
+
+## JSXGraph 3D 基础能力
+
+`graphics3d` 使用同一份 MathDocument 与 Construction DAG，不把 JSXGraph 对象当作数学真值。当前公开的最小原子命令为：
+
+- `point3.free`、`point3.from_expressions`、`vector3.between_points`；
+- `line3.through_points`、`segment3.through_points`、`plane3.through_points`；
+- `polygon3.vertices`、`sphere3.center_radius`；
+- `curve3.parametric`、`surface3.parametric`。
+
+MountedRenderer 使用 JSXGraph `View3D`、`point3d`、`line3d`、`plane3d`、`polygon3d`、`sphere3d`、`curve3d` 与 `parametricsurface3d`。Direct SVG 使用文档相机进行确定性投影，作为 Bundle、服务端预览和证据链的静态兜底。可运行示例见 `examples/jsxgraph-3d-foundation.json`，浏览器 Demo 中选择“JSXGraph 3D 基础能力”。
+
+第一版刻意不重载二维 `point.set`；3D 拖点提交将使用独立 `point3.set` 交互协议，避免 `[x,y]` 与 `[x,y,z]` 含混。
 
 ## 安全边界
 
@@ -342,7 +406,7 @@ v0.1.2 有意不包含：
 - 通用 CAS、精确代数证明和方程求解；
 - 隐函数、不等式区域、轨迹和高级统计；
 - 通用非线性约束求解；
-- 完整 3D；
+- 完整 3D（当前仅提供 JSXGraph 教学型基础图元、参数曲线/曲面与确定性静态投影，尚不包含 CSG、B-Rep、复杂网格和精确曲面求交）；
 - `.ggb` 导入导出；
 - 持久化数据库、多人协作和权限系统；
 - 自动标签避让在 JSXGraph runtime 中的完整接入。

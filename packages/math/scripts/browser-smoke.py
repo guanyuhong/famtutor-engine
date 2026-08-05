@@ -74,6 +74,7 @@ HTML = """<!doctype html>
     <div class="card"><div id="board1" class="board"></div></div>
     <div class="card"><div id="board2" class="board"></div></div>
     <div class="card full"><div id="board3" class="board"></div></div>
+    <div class="card full"><div id="board4" class="board"></div></div>
   </div>
   <pre id="result">running…</pre>
 </body>
@@ -89,6 +90,7 @@ def main() -> int:
     geometry = json.loads((ROOT / "examples" / "perpendicular-bisector.json").read_text())
     functions = json.loads((ROOT / "examples" / "function-slider.json").read_text())
     coverage = json.loads((ROOT / "examples" / "command-catalog-coverage.json").read_text())
+    geometry3d = json.loads((ROOT / "examples" / "jsxgraph-3d-foundation.json").read_text())
     amd_source = AMD_BUNDLE.read_text()
     console_messages: list[str] = []
     page_errors: list[str] = []
@@ -116,7 +118,7 @@ def main() -> int:
         page.add_script_tag(content=AMD_LOADER + "\n" + amd_source + "\nwindow.FamTutorMath = __famtutorAmdRequire('browser-entry');")
 
         summary = page.evaluate(
-            """async ({ geometry, functions, coverage }) => {
+            """async ({ geometry, functions, coverage, geometry3d }) => {
               const runtime = globalThis.FamTutorMath;
               const result = document.querySelector('#result');
               try {
@@ -125,13 +127,15 @@ def main() -> int:
                 const validation1 = runtime.validateMathDocument(geometry);
                 const validation2 = runtime.validateMathDocument(functions);
                 const validation3 = runtime.validateMathDocument(coverage);
-                if (validation1.status !== 'valid' || validation2.status !== 'valid' || validation3.status !== 'valid') {
-                  throw new Error(`Example validation failed: ${JSON.stringify([validation1, validation2, validation3])}`);
+                const validation4 = runtime.validateMathDocument(geometry3d);
+                if (validation1.status !== 'valid' || validation2.status !== 'valid' || validation3.status !== 'valid' || validation4.status !== 'valid') {
+                  throw new Error(`Example validation failed: ${JSON.stringify([validation1, validation2, validation3, validation4])}`);
                 }
                 const first = runtime.mountJsxGraph(document.querySelector('#board1'), geometry);
                 const second = runtime.mountJsxGraph(document.querySelector('#board2'), functions);
                 const third = runtime.mountJsxGraph(document.querySelector('#board3'), coverage);
-                await Promise.all([first.ready, second.ready, third.ready]);
+                const fourth = runtime.mountJsxGraph(document.querySelector('#board4'), geometry3d);
+                await Promise.all([first.ready, second.ready, third.ready, fourth.ready]);
                 first.setPoint('P', [0, 3.25]);
                 second.setScalar('a', 2.3);
                 const p = first.getValue('P');
@@ -139,21 +143,26 @@ def main() -> int:
                 const svg1 = first.exportSvg();
                 const svg2 = second.exportSvg();
                 const svg3 = third.exportSvg();
+                const svg4 = fourth.exportSvg();
                 if (!p || p.kind !== 'point2' || Math.abs(p.x) > 1e-5 || Math.abs(p.y - 3.25) > 1e-3) {
                   throw new Error(`Unexpected P: ${JSON.stringify(p)}`);
                 }
                 if (typeof a !== 'number' || Math.abs(a - 2.3) > 1e-6) throw new Error(`Unexpected slider a: ${a}`);
-                if (!svg1.includes('<svg') || !svg2.includes('<svg') || !svg3.includes('<svg')) throw new Error('SVG export missing');
+                if (!svg1.includes('<svg') || !svg2.includes('<svg') || !svg3.includes('<svg') || !svg4.includes('<svg')) throw new Error('SVG export missing');
                 const thirdReport = third.report();
                 if (thirdReport.skippedEntities.length !== 0) throw new Error(`Command catalog renderer skipped: ${JSON.stringify(thirdReport.skippedEntities)}`);
                 if (thirdReport.renderedEntities.length < 25) throw new Error(`Command catalog rendered too few entities: ${thirdReport.renderedEntities.length}`);
+                const fourthReport = fourth.report();
+                if (fourthReport.skippedEntities.length !== 0) throw new Error(`3D renderer skipped: ${JSON.stringify(fourthReport.skippedEntities)}`);
+                if (fourthReport.renderedEntities.length < 9) throw new Error(`3D renderer rendered too few entities: ${fourthReport.renderedEntities.length}`);
                 const summary = {
                   p,
                   a,
                   first: first.report(),
                   second: second.report(),
                   third: thirdReport,
-                  svgLengths: [svg1.length, svg2.length, svg3.length],
+                  fourth: fourthReport,
+                  svgLengths: [svg1.length, svg2.length, svg3.length, svg4.length],
                   svgRoots: document.querySelectorAll('svg').length
                 };
                 result.textContent = JSON.stringify(summary, null, 2);
@@ -167,14 +176,14 @@ def main() -> int:
                 throw error;
               }
             }""",
-            {"geometry": geometry, "functions": functions, "coverage": coverage},
+            {"geometry": geometry, "functions": functions, "coverage": coverage, "geometry3d": geometry3d},
         )
 
         status = page.locator("body").get_attribute("data-status")
         title = page.title()
         if status != "passed" or title != "BROWSER_SMOKE_PASSED":
             raise RuntimeError(f"Browser status={status}, title={title}")
-        if summary["first"]["skippedEntities"] or summary["second"]["skippedEntities"] or summary["third"]["skippedEntities"]:
+        if summary["first"]["skippedEntities"] or summary["second"]["skippedEntities"] or summary["third"]["skippedEntities"] or summary["fourth"]["skippedEntities"]:
             raise RuntimeError(f"Browser renderer skipped entities: {summary}")
 
         (ARTIFACTS / "browser-smoke-dom.html").write_text(page.content())
@@ -184,7 +193,7 @@ def main() -> int:
 
     if page_errors:
         raise RuntimeError("Browser page errors:\n" + "\n".join(page_errors))
-    print("Browser smoke passed: real JSXGraph SVG renderer mounted three documents, including all catalog commands.")
+    print("Browser smoke passed: real JSXGraph SVG renderer mounted 2D and 3D documents, including the parametric surface.")
     print(f"Summary: {ARTIFACTS / 'browser-smoke-summary.json'}")
     print(f"Screenshot: {ARTIFACTS / 'browser-smoke.png'}")
     if console_messages:

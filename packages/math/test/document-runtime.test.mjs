@@ -349,6 +349,57 @@ test("conditional feedback follows slider-driven expressions", () => {
   assert.match(invalidSvg, /不能组成三角形/);
 });
 
+test("vector.scale drives a reusable translation from a slider expression", () => {
+  const document = {
+    schema: "famtutor.math.document.v1",
+    documentId: "slider-vector-scale",
+    revision: 1,
+    seed: 217,
+    metadata: { title: "Slider vector scale", locale: "en", purpose: "exploration" },
+    entities: [
+      { id: "t", type: "scalar", role: "free" },
+      { id: "B", type: "point2", role: "free" },
+      { id: "C", type: "point2", role: "free" },
+      { id: "P", type: "point2", role: "free" },
+      { id: "BCVector", type: "vector2", role: "derived" },
+      { id: "motionVector", type: "vector2", role: "derived" },
+      { id: "moveTransform", type: "transform2", role: "derived" },
+      { id: "movedP", type: "point2", role: "derived" }
+    ],
+    construction: [
+      { id: "op-t", command: "scalar.slider", params: { min: 0, max: 2, value: 0 }, outputs: ["t"] },
+      { id: "op-B", command: "point.free", params: { coords: [0, 0] }, outputs: ["B"] },
+      { id: "op-C", command: "point.free", params: { coords: [6, 0] }, outputs: ["C"] },
+      { id: "op-P", command: "point.free", params: { coords: [1, 2] }, outputs: ["P"] },
+      { id: "op-BC", command: "vector.between_points", inputs: [{ ref: "B" }, { ref: "C" }], outputs: ["BCVector"] },
+      { id: "op-scale", command: "vector.scale", inputs: [{ ref: "BCVector" }], params: { factor: "max(t - 1, 0)" }, outputs: ["motionVector"] },
+      { id: "op-translate", command: "transform.translate", inputs: [{ ref: "motionVector" }], outputs: ["moveTransform"] },
+      { id: "op-apply", command: "transform.apply", inputs: [{ ref: "P" }, { ref: "moveTransform" }], outputs: ["movedP"] }
+    ],
+    views: [{ id: "main", kind: "graphics2d", visible: true, renderer: "direct-svg", boundingBox: [-1, 3, 8, -1] }],
+    interactions: [{ target: "t", permissions: ["set_value"] }]
+  };
+
+  const report = validateMathDocument(document);
+  assert.equal(report.status, "valid", JSON.stringify(report.issues));
+  const initial = evaluateMathDocument(document);
+  assert.deepEqual(initial.entities.get("motionVector")?.value, { kind: "vector2", x: 0, y: 0 });
+  assert.deepEqual(initial.entities.get("movedP")?.value, { kind: "point2", x: 1, y: 2 });
+
+  const simulation = simulateMathDocument(document, {
+    type: "set_value",
+    target: "t",
+    value: 2,
+    samples: 3
+  }, {
+    observe: ["entity:motionVector", "entity:movedP"],
+    timestampBase: 2000
+  });
+  const final = Object.fromEntries(simulation.frames.at(-1).observations.map(item => [item.key, item.value]));
+  assert.deepEqual(final["entity:motionVector"], { kind: "vector2", x: 6, y: 0 });
+  assert.deepEqual(final["entity:movedP"], { kind: "point2", x: 7, y: 2 });
+});
+
 test("invalid cycles and degenerate constructions are reported, not silently rendered", () => {
   const cyclic = {
     schema: "famtutor.math.document.v1",

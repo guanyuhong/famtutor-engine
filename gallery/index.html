@@ -20,6 +20,7 @@
       <p class="eyebrow">FAMTUTOR ENGINE · TEXTBOOK CORPUS</p>
       <h1>教材案例验收 Gallery</h1>
       <p class="hero-copy">浏览器内重放 CaseSpec，并以真实 MountedRenderer 挂载全部种子案例。</p>
+      <p><a class="research-link" href="/research/geogebra/geometry-materials.html">查看几何素材研究库 →</a></p>
     </div>
     <div class="summary" aria-label="案例验收统计">
       <div><strong id="total-count">—</strong><span>全部案例</span></div>
@@ -64,6 +65,10 @@
         </div>
         <p class="stage-narration" aria-live="polite"></p>
       </section>
+      <section class="runtime-control-panel" aria-label="声明式控制与时钟" hidden>
+        <div class="runtime-control-buttons"></div>
+        <p class="runtime-control-status" aria-live="polite"></p>
+      </section>
       <div class="interaction-hint"></div>
       <div class="diagnostic" hidden></div>
       <footer class="case-footer">
@@ -74,6 +79,6 @@
   </template>
 
   <script src="/packages/math/vendor/jsxgraph/jsxgraphcore.js"></script>
-  <script type="module" src="./app.js?v=ch3-3"></script>
+  <script type="module" src="./app.js?v=controls-clock-1"></script>
 </body>
 </html>

@@ -45,12 +45,9 @@ export const MACRO_DEFINITIONS: readonly MacroDefinition[] = Object.freeze([
     inputs: ["A", "B", "C"],
     outputs: ["bisector"],
     expandsTo: [
-      "circle.through_points(B,A) -> c1",
-      "point.intersection_line_circle(ray BC / line BC, c1) -> P (choose arm point)",
-      "circle.through_points(B, unit on BA) / equal-radius intersections -> Q",
-      "ray.from_points(B, angle-equal construction point) -> bisector"
+      "ray.angle_bisector(A,B,C, branch=internal) -> bisector"
     ],
-    reasonKeptAsMacro: "Multiple equivalent L0 constructions; do not freeze one as a primitive."
+    reasonKeptAsMacro: "Compatibility authoring alias; lowers to the branch-explicit L0 atom after the former circle-intersection recipe proved unable to select the internal branch deterministically."
   },
   {
     name: "macro.point.triangle_centroid",
@@ -131,6 +128,34 @@ export const MACRO_DEFINITIONS: readonly MacroDefinition[] = Object.freeze([
       "line.through_points(P,T2) -> tangent2"
     ],
     reasonKeptAsMacro: "Contact points are constructed; keep as recipe above L0."
+  },
+  {
+    name: "macro.polygon.medial_subdivision",
+    title: "Triangle medial subdivision",
+    description: "Construct the three side midpoints D∈BC, E∈CA, F∈AB and the medial triangle DEF.",
+    inputs: ["A", "B", "C"],
+    outputs: ["D", "E", "F", "medial"],
+    expandsTo: [
+      "point.midpoint(B,C) -> D",
+      "point.midpoint(C,A) -> E",
+      "point.midpoint(A,B) -> F",
+      "polygon.vertices(D,E,F) -> medial"
+    ],
+    reasonKeptAsMacro: "This is a named, reusable composition of midpoint and polygon atoms and matches GeoGebra Custom Tool Tri."
+  },
+  {
+    name: "macro.line.common_tangents",
+    title: "Four common tangents of disjoint circles",
+    description: "Construct the two external and two internal common tangents of two strictly disjoint circles.",
+    inputs: ["circle1", "circle2"],
+    outputs: ["external1", "external2", "internal1", "internal2"],
+    expandsTo: [
+      "line.common_tangent(circle1,circle2, side1=1, side2=1) -> external1",
+      "line.common_tangent(circle1,circle2, side1=-1, side2=-1) -> external2",
+      "line.common_tangent(circle1,circle2, side1=1, side2=-1) -> internal1",
+      "line.common_tangent(circle1,circle2, side1=-1, side2=1) -> internal2"
+    ],
+    reasonKeptAsMacro: "One oriented tangent is the atomic relation; the conventional four-line package is reusable L1 composition."
   }
 ]);
 

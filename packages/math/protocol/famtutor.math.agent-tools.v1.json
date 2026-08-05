@@ -22,7 +22,8 @@
               "function",
               "annotation",
               "measurement",
-              "conic"
+              "conic",
+              "geometry3d"
             ]
           },
           "commandPrefix": {
@@ -81,7 +82,7 @@
     {
       "name": "math_apply",
       "title": "Apply a transactional patch",
-      "description": "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, delete, or undo operations atomically with revision checks.",
+      "description": "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, control, deterministic clock, delete, or undo operations atomically with revision checks.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -126,6 +127,8 @@
                     "remove_assertion",
                     "set_style",
                     "set_interaction",
+                    "set_control",
+                    "set_clock",
                     "set_view",
                     "undo"
                   ]

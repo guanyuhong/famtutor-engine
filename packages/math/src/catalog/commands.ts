@@ -1,4 +1,4 @@
-import type { EntityType, JsonValue } from "../types.js";
+import { ENTITY_TYPES, type EntityType, type JsonValue } from "../types.js";
 
 export type TypeConstraint = EntityType | readonly EntityType[];
 
@@ -24,13 +24,14 @@ export interface CommandDefinition {
     | "function"
     | "annotation"
     | "measurement"
-    | "conic";
+    | "conic"
+    | "collection"
+    | "geometry3d";
   renderer: "jsxgraph" | "computed" | "both";
 }
 
 const LINE_LIKE = ["line2", "segment2", "ray2"] as const;
 const PATH_LIKE = ["line2", "segment2", "ray2", "circle2", "arc2", "polygon2"] as const;
-const PROJECTABLE = ["line2", "segment2", "ray2", "circle2"] as const;
 const MEASURE_AREA = ["polygon2", "circle2", "sector2"] as const;
 const MEASURE_PERIMETER = ["polygon2", "circle2", "arc2", "segment2"] as const;
 const TRANSFORMABLE = [
@@ -44,6 +45,10 @@ const TRANSFORMABLE = [
   "sector2",
   "polygon2"
 ] as const;
+
+const COLLECTION_DEPENDENCY = ENTITY_TYPES.filter(type => type !== "collection") as Exclude<EntityType, "collection">[];
+
+const POINT3_INPUTS = ["point3"] as const;
 
 const definitions: CommandDefinition[] = [
   {
@@ -59,12 +64,22 @@ const definitions: CommandDefinition[] = [
   {
     name: "scalar.slider",
     title: "Scalar slider",
-    description: "Create an interactive scalar slider with min, max, value and optional step/position.",
+    description: "Create an interactive scalar slider with min, max, value and optional step/position/length. params.animation may declaratively auto-start the native JSXGraph slider animation when the slider becomes visible: { autoStart, direction: 1|-1, stepCount, delayMs, maxRounds, startDelayMs }. User pointer input and scalar.set stop auto-play so manual control always wins.",
     inputTypes: [],
     outputTypes: ["scalar"],
     requiredParams: ["min", "max", "value"],
     category: "scalar",
     renderer: "jsxgraph"
+  },
+  {
+    name: "boolean.constant",
+    title: "Mutable boolean",
+    description: "Create a free boolean from params.value. Hosts may change it only through audited boolean.set or boolean.toggle actions.",
+    inputTypes: [],
+    outputTypes: ["boolean"],
+    requiredParams: ["value"],
+    category: "scalar",
+    renderer: "computed"
   },
   {
     name: "boolean.expression",
@@ -98,6 +113,92 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
+    name: "collection.sequence",
+    title: "Bounded construction sequence",
+    description: "Generate a bounded homogeneous point2, segment2, circle2, or polygon2 collection by evaluating one existing single-output L0 command for an inclusive numeric index range. params requires itemType, variable, from, to, template and maxItems (1..256). Template inputs use {local:true} or {input:index}; nested collection commands are rejected.",
+    inputTypes: [],
+    variadicInputType: COLLECTION_DEPENDENCY,
+    minInputs: 0,
+    maxInputs: 32,
+    outputTypes: ["collection"],
+    requiredParams: ["itemType", "variable", "from", "to", "template", "maxItems"],
+    category: "collection",
+    renderer: "both"
+  },
+  {
+    name: "collection.map",
+    title: "Map a construction over a collection",
+    description: "Map one existing single-output L0 command over a bounded homogeneous point2, segment2, circle2, or polygon2 source collection. The source is input 1; additional explicit inputs are available to the template through {input:index}. params requires itemType, variable, template and maxItems (1..256).",
+    inputTypes: ["collection"],
+    variadicInputType: COLLECTION_DEPENDENCY,
+    minInputs: 1,
+    maxInputs: 32,
+    outputTypes: ["collection"],
+    requiredParams: ["itemType", "variable", "template", "maxItems"],
+    category: "collection",
+    renderer: "both"
+  },
+  {
+    name: "point3.free",
+    title: "Free 3D point",
+    description: "Create a free 3D point from params.coords = [x,y,z]. The point is renderer-neutral and may be mounted by a graphics3d backend.",
+    inputTypes: [], outputTypes: ["point3"], requiredParams: ["coords"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "point3.from_expressions",
+    title: "3D point from expressions",
+    description: "Create a derived 3D point from safe x, y and z expressions.",
+    inputTypes: [], outputTypes: ["point3"], requiredParams: ["x", "y", "z"], expressionParams: ["x", "y", "z"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "vector3.between_points",
+    title: "3D vector between points",
+    description: "Create the vector from the first 3D point to the second.",
+    inputTypes: ["point3", "point3"], outputTypes: ["vector3"], category: "geometry3d", renderer: "computed"
+  },
+  {
+    name: "line3.through_points",
+    title: "3D line through points",
+    description: "Create an infinite 3D line through two distinct points.",
+    inputTypes: ["point3", "point3"], outputTypes: ["line3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "segment3.through_points",
+    title: "3D segment through points",
+    description: "Create a finite 3D segment between two distinct points.",
+    inputTypes: ["point3", "point3"], outputTypes: ["segment3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "plane3.through_points",
+    title: "Plane through three points",
+    description: "Create a plane from three non-collinear 3D points. Optional params.uRange and params.vRange bound its visual patch.",
+    inputTypes: ["point3", "point3", "point3"], outputTypes: ["plane3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "polygon3.vertices",
+    title: "3D polygon from vertices",
+    description: "Create a planar teaching polygon from at least three ordered 3D points.",
+    inputTypes: POINT3_INPUTS, variadicInputType: "point3", minInputs: 3, maxInputs: 64, outputTypes: ["polygon3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "sphere3.center_radius",
+    title: "Sphere from center and radius",
+    description: "Create a sphere from a 3D center and either scalar input or numeric/expression params.radius.",
+    inputTypes: ["point3"], variadicInputType: "scalar", minInputs: 1, maxInputs: 2, outputTypes: ["sphere3"], expressionParams: ["radius"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "curve3.parametric",
+    title: "Parametric space curve",
+    description: "Create a 3D parametric curve from x/y/z expressions, a parameter name and params.domain=[min,max].",
+    inputTypes: [], outputTypes: ["curve3"], requiredParams: ["xExpression", "yExpression", "zExpression", "domain"], expressionParams: ["xExpression", "yExpression", "zExpression"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "surface3.parametric",
+    title: "Parametric surface",
+    description: "Create a 3D parametric surface from x/y/z expressions, two parameter names, and finite uDomain/vDomain intervals.",
+    inputTypes: [], outputTypes: ["surface3"], requiredParams: ["xExpression", "yExpression", "zExpression", "uDomain", "vDomain"], expressionParams: ["xExpression", "yExpression", "zExpression"], category: "geometry3d", renderer: "both"
+  },
+  {
     name: "point.from_expressions",
     title: "Point from expressions",
     description: "Create a derived point from safe params.x and params.y expressions.",
@@ -128,12 +229,30 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
-    name: "point.projection",
-    title: "Orthogonal projection",
-    description: "Project a point orthogonally onto a line-like object or circle.",
-    inputTypes: ["point2", PROJECTABLE],
+    name: "point.circle_center",
+    title: "Circle center",
+    description: "Extract the center point from a circle. This is a pure computed projection of circle2 state.",
+    inputTypes: ["circle2"],
     outputTypes: ["point2"],
     category: "point",
+    renderer: "computed"
+  },
+  {
+    name: "point.projection",
+    title: "Closest point on path",
+    description: "Return the nearest point on a line, segment, ray, circle, arc, or polygon boundary. For unbounded linear paths this is the orthogonal projection.",
+    inputTypes: ["point2", PATH_LIKE],
+    outputTypes: ["point2"],
+    category: "point",
+    renderer: "computed"
+  },
+  {
+    name: "point.invert_in_circle",
+    title: "Point inversion in circle",
+    description: "Invert a point in a circle using OP × OP' = R². The inversion center itself is undefined.",
+    inputTypes: ["point2", "circle2"],
+    outputTypes: ["point2"],
+    category: "transform",
     renderer: "computed"
   },
   {
@@ -200,6 +319,16 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
+    name: "ray.angle_bisector",
+    title: "Internal or external angle bisector",
+    description: "Create the internal or external angle-bisector ray of angle left-vertex-right. params.branch must be 'internal' or 'external'. The external direction is normalized(vertex→left) minus normalized(vertex→right), so swapping the arm inputs reverses that ray.",
+    inputTypes: ["point2", "point2", "point2"],
+    outputTypes: ["ray2"],
+    requiredParams: ["branch"],
+    category: "line",
+    renderer: "both"
+  },
+  {
     name: "line.parallel_through",
     title: "Parallel through point",
     description: "Create a line through a point parallel to a line-like object.",
@@ -214,6 +343,16 @@ const definitions: CommandDefinition[] = [
     description: "Create a line through a point perpendicular to a line-like object.",
     inputTypes: ["point2", LINE_LIKE],
     outputTypes: ["line2"],
+    category: "line",
+    renderer: "both"
+  },
+  {
+    name: "line.common_tangent",
+    title: "Oriented common tangent",
+    description: "Construct one common tangent of two circles selected by params.side1 and params.side2, each -1 or 1. Impossible branches are undefined.",
+    inputTypes: ["circle2", "circle2"],
+    outputTypes: ["line2"],
+    requiredParams: ["side1", "side2"],
     category: "line",
     renderer: "both"
   },
@@ -248,6 +387,17 @@ const definitions: CommandDefinition[] = [
     renderer: "computed"
   },
   {
+    name: "vector.scale",
+    title: "Scale vector",
+    description: "Multiply an existing vector by params.factor. The factor may be a number or a safe expression, enabling slider-driven translations without reconstructing the vector direction.",
+    inputTypes: ["vector2"],
+    outputTypes: ["vector2"],
+    requiredParams: ["factor"],
+    expressionParams: ["factor"],
+    category: "line",
+    renderer: "computed"
+  },
+  {
     name: "circle.center_radius",
     title: "Circle by center and radius",
     description: "Create a circle from a center point and radius expression or scalar input.",
@@ -277,6 +427,15 @@ const definitions: CommandDefinition[] = [
     outputTypes: ["circle2"],
     category: "circle",
     renderer: "both"
+  },
+  {
+    name: "circle.invert_in_circle",
+    title: "Circle inversion in circle",
+    description: "Invert a circle in another circle. The source must not pass through the inversion center because that image is a line rather than circle2.",
+    inputTypes: ["circle2", "circle2"],
+    outputTypes: ["circle2"],
+    category: "transform",
+    renderer: "computed"
   },
   {
     name: "arc.center_points",
@@ -314,6 +473,27 @@ const definitions: CommandDefinition[] = [
     minInputs: 3,
     maxInputs: 64,
     outputTypes: ["polygon2"],
+    category: "polygon",
+    renderer: "both"
+  },
+  {
+    name: "polygon.regular",
+    title: "Regular polygon",
+    description: "Create a regular polygon centered at a point. Inputs are center point, circumradius scalar, and integer vertex-count scalar. params.maxVertices is a required renderer bound from 3 to 64; optional params.rotation is the first-vertex angle in radians (default pi/2). Fails when radius is non-positive, vertexCount is non-integral/outside 3..maxVertices, or maxVertices is invalid.",
+    inputTypes: ["point2", "scalar", "scalar"],
+    outputTypes: ["polygon2"],
+    requiredParams: ["maxVertices"],
+    expressionParams: ["rotation"],
+    category: "polygon",
+    renderer: "both"
+  },
+  {
+    name: "polygon.diagonals",
+    title: "Polygon diagonals",
+    description: "Create a bounded segment collection containing every diagonal of a polygon, or only diagonals incident to optional zero-based params.fromVertex. params.maxItems is required (1..256); evaluation fails instead of truncating when the result exceeds it.",
+    inputTypes: ["polygon2"],
+    outputTypes: ["collection"],
+    requiredParams: ["maxItems"],
     category: "polygon",
     renderer: "both"
   },
@@ -538,6 +718,15 @@ const definitions: CommandDefinition[] = [
     title: "Segment length",
     description: "Measure the length of a segment or vector.",
     inputTypes: [["segment2", "vector2"]],
+    outputTypes: ["scalar"],
+    category: "measurement",
+    renderer: "computed"
+  },
+  {
+    name: "measurement.circle_radius",
+    title: "Circle radius",
+    description: "Extract the positive radius from a circle as a scalar measurement.",
+    inputTypes: ["circle2"],
     outputTypes: ["scalar"],
     category: "measurement",
     renderer: "computed"

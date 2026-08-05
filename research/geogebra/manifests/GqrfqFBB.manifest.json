@@ -1,0 +1,209 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-GqrfqFBB.ggb",
+    "materialId": "GqrfqFBB",
+    "sourceUrl": "https://www.geogebra.org/m/GqrfqFBB",
+    "bytes": 8242,
+    "sha256": "d18b61cacfc31bbc43b8bb027dc7818487ad89b90fae8088f05a991d9335547b"
+  },
+  "archive": {
+    "entryCount": 5,
+    "entries": [
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 2966,
+        "sha256": "2662bc36db8ac7c9f9482f830d6e96b3ba89841fa8f883c29a0cdc3a1cec4f17"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 24,
+        "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98"
+      },
+      {
+        "fileName": "geogebra_defaults2d.xml",
+        "bytes": 8409,
+        "sha256": "349bc32dfb6cd4d37caed414de46ceffb25a48a105877d79feb7a313e9957745"
+      },
+      {
+        "fileName": "geogebra_defaults3d.xml",
+        "bytes": 2873,
+        "sha256": "d54ff4d2917af11d183d853c650b9beafc30917b10ba81a1749397200546632b"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 15647,
+        "sha256": "01c48b1590b02f310679a4e2e82317986546cd8d7c3ccaacf20d35df00dd5fd5"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.170.0"
+  },
+  "construction": {
+    "elements": {
+      "total": 31,
+      "byType": {
+        "point": 9,
+        "polygon": 4,
+        "segment": 10,
+        "numeric": 3,
+        "angle": 3,
+        "text": 1,
+        "boolean": 1
+      }
+    },
+    "commands": {
+      "total": 15,
+      "byName": {
+        "Polygon": 3,
+        "Midpoint": 3,
+        "If": 2,
+        "Translate": 4,
+        "Angle": 3
+      }
+    },
+    "controls": {
+      "sliders": [
+        {
+          "label": "t",
+          "min": "0",
+          "max": "2",
+          "width": "200.0",
+          "horizontal": true
+        }
+      ],
+      "checkboxes": [
+        {
+          "label": "g",
+          "type": "boolean"
+        }
+      ],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "A",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "B",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "C",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "t",
+        "step": "0.01",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 0
+    }
+  },
+  "macros": [],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 24,
+      "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 2966,
+      "sha256": "2662bc36db8ac7c9f9482f830d6e96b3ba89841fa8f883c29a0cdc3a1cec4f17"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "geogebra_defaults2d.xml",
+      "bytes": 8409,
+      "sha256": "349bc32dfb6cd4d37caed414de46ceffb25a48a105877d79feb7a313e9957745"
+    },
+    {
+      "fileName": "geogebra_defaults3d.xml",
+      "bytes": 2873,
+      "sha256": "d54ff4d2917af11d183d853c650b9beafc30917b10ba81a1749397200546632b"
+    }
+  ],
+  "capabilityTags": [
+    "animation",
+    "geometry",
+    "script",
+    "transform"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Angle",
+        "count": 3,
+        "mapsTo": "angle.three_points/measurement.angle"
+      },
+      {
+        "command": "Midpoint",
+        "count": 3,
+        "mapsTo": "point.midpoint"
+      },
+      {
+        "command": "Polygon",
+        "count": 3,
+        "mapsTo": "polygon.vertices"
+      },
+      {
+        "command": "Translate",
+        "count": 4,
+        "mapsTo": "transform.translate/transform.apply"
+      }
+    ],
+    "gaps": [],
+    "unknown": [
+      {
+        "command": "If",
+        "count": 2
+      }
+    ]
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      },
+      {
+        "code": "GGB_COMMANDS_UNMAPPED",
+        "count": 2
+      }
+    ]
+  }
+}

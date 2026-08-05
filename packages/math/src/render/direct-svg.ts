@@ -31,6 +31,8 @@ import { escapeXml, stableHash } from "../util.js";
 import { angleLabelPoint, angleLayout } from "./angle-layout.js";
 import { estimateLabelSize, layoutPointLabels, type PointLabelPosition } from "./point-label-layout.js";
 import { styleForEntity, type ResolvedStyle } from "./style.js";
+import { renderDirectSvg3D } from "./direct-svg3d.js";
+import { isEntityVisible } from "./visibility.js";
 import { isInterval } from "../kernel/interval.js";
 
 export interface DirectSvgOptions {
@@ -418,6 +420,18 @@ function renderEntity(
 ): string {
   const style = styleForEntity(document, entity, options.theme);
   const id = escapeXml(entity.id);
+  if (value && typeof value === "object" && value.kind === "collection") {
+    return value.items.map((item, index) => {
+      const child: MathEntity = {
+        ...entity,
+        id: `${entity.id}[${index}]`,
+        type: value.itemType,
+        label: undefined
+      };
+      if (value.itemType === "point2") return renderPointAndLabel(child, item, document, transform, options.theme);
+      return renderEntity(child, item, document, view, transform, options, values, height);
+    }).join("");
+  }
   if (isLine(value)) {
     const clipped = clipLineToBoundingBox(value, view.boundingBox);
     if (!clipped) return "";
@@ -487,7 +501,7 @@ function renderPointAndLabel(
   return `<circle data-entity-id="${escapeXml(entity.id)}" cx="${x}" cy="${y}" r="${style.pointSize}" fill="${escapeXml(style.fill)}" stroke="${escapeXml(style.stroke)}" stroke-width="1.5" opacity="${style.opacity}"/>${label}`;
 }
 
-export function renderDirectSvg(document: MathDocument, options: DirectSvgOptions = {}): DirectSvgResult {
+function renderDirectSvg2D(document: MathDocument, options: DirectSvgOptions = {}): DirectSvgResult {
   const width = Math.max(64, Math.floor(options.width ?? 960));
   const height = Math.max(64, Math.floor(options.height ?? 640));
   const theme = options.theme ?? "light";
@@ -498,7 +512,7 @@ export function renderDirectSvg(document: MathDocument, options: DirectSvgOption
   const stageVisible = stageVisibleEntities(document, options.stageId);
   const selectedIds = new Set(view.entityIds ?? document.entities.map(entity => entity.id));
   const visibleIds = new Set(document.entities
-    .filter(entity => selectedIds.has(entity.id) && entity.visible !== false && (!stageVisible || stageVisible.has(entity.id)))
+    .filter(entity => selectedIds.has(entity.id) && isEntityVisible(entity, id => values.get(id)) && (!stageVisible || stageVisible.has(entity.id)))
     .map(entity => entity.id));
   const pointLabels = layoutPointLabels(document, values, visibleIds, {
     width,
@@ -516,6 +530,7 @@ export function renderDirectSvg(document: MathDocument, options: DirectSvgOption
   const layerOrder: Record<string, number> = {
     function1: 10,
     curve2: 10,
+    collection: 25,
     conic2: 15,
     line2: 20,
     ray2: 20,
@@ -536,7 +551,7 @@ export function renderDirectSvg(document: MathDocument, options: DirectSvgOption
   const entities = [...document.entities].sort((left, right) => (layerOrder[left.type] ?? 50) - (layerOrder[right.type] ?? 50));
 
   for (const entity of entities) {
-    if (!selectedIds.has(entity.id) || entity.visible === false || (stageVisible && !stageVisible.has(entity.id))) continue;
+    if (!selectedIds.has(entity.id) || !isEntityVisible(entity, id => values.get(id)) || (stageVisible && !stageVisible.has(entity.id))) continue;
     const runtime = evaluation.entities.get(entity.id);
     if (!runtime?.defined || runtime.value === undefined) {
       skippedEntities.push({ id: entity.id, reason: runtime?.issue?.message ?? "undefined" });
@@ -582,4 +597,11 @@ export function renderDirectSvg(document: MathDocument, options: DirectSvgOption
     renderHash
   };
   return { svg, report };
+}
+
+export function renderDirectSvg(document: MathDocument, options: DirectSvgOptions = {}): DirectSvgResult {
+  const requested = options.viewId ? document.views.find(view => view.id === options.viewId) : undefined;
+  const default3D = !requested && !document.views.some(view => view.kind === "graphics2d") && document.views.some(view => view.kind === "graphics3d");
+  if (requested?.kind === "graphics3d" || default3D) return renderDirectSvg3D(document, options);
+  return renderDirectSvg2D(document, options);
 }

@@ -1,0 +1,96 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-05-ssa-ambiguity",
+  "title": "边边角为什么不能判定全等",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": ["https://www.geogebra.org/m/ttsejkbj"],
+    "note": "题意与机制研究；FamTutor 原创构造，不复制源工作表、脚本或视觉样式。"
+  },
+  "requiredCapabilities": ["boolean.constant", "control.action", "entity.visibleWhen", "point.intersection_line_circle", "assertion.equal_angle"],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "qiu-feng-ssa-ambiguity",
+      "revision": 1,
+      "seed": 1406,
+      "metadata": {
+        "title": "SSA 不唯一反例",
+        "description": "固定一边、一角和该角的对边，仍可能得到两个不同三角形。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": ["geogebra-study", "triangle", "congruence", "ssa", "counterexample", "conditional-visibility"]
+      },
+      "entities": [
+        { "id": "showSecond", "type": "boolean", "role": "free", "visible": false },
+        { "id": "A", "type": "point2", "label": "A", "role": "free" },
+        { "id": "B", "type": "point2", "label": "B", "role": "free" },
+        { "id": "D", "type": "point2", "role": "auxiliary", "visible": false },
+        { "id": "r", "type": "scalar", "role": "measurement", "visible": false },
+        { "id": "AB", "type": "segment2", "role": "derived" },
+        { "id": "rayCarrier", "type": "line2", "role": "auxiliary", "visible": false },
+        { "id": "radiusCircle", "type": "circle2", "label": "AC = AD", "role": "auxiliary" },
+        { "id": "C", "type": "point2", "label": "C", "role": "derived" },
+        { "id": "E", "type": "point2", "label": "D", "role": "derived", "visibleWhen": "showSecond" },
+        { "id": "triangle1", "type": "polygon2", "role": "derived" },
+        { "id": "triangle2", "type": "polygon2", "role": "derived", "visibleWhen": "showSecond" },
+        { "id": "AC", "type": "segment2", "role": "derived" },
+        { "id": "BC", "type": "segment2", "role": "derived" },
+        { "id": "AE", "type": "segment2", "role": "derived", "visibleWhen": "showSecond" },
+        { "id": "BE", "type": "segment2", "role": "derived", "visibleWhen": "showSecond" },
+        { "id": "angleC", "type": "angle", "label": "∠B", "role": "measurement" },
+        { "id": "angleE", "type": "angle", "label": "∠B", "role": "measurement", "visibleWhen": "showSecond" }
+      ],
+      "construction": [
+        { "id": "op-showSecond", "command": "boolean.constant", "params": { "value": false }, "outputs": ["showSecond"] },
+        { "id": "op-A", "command": "point.free", "params": { "coords": [-3, 0] }, "outputs": ["A"] },
+        { "id": "op-B", "command": "point.free", "params": { "coords": [3, 0] }, "outputs": ["B"] },
+        { "id": "op-D", "command": "point.free", "params": { "coords": [0, 2.4] }, "outputs": ["D"] },
+        { "id": "op-r", "command": "scalar.constant", "params": { "value": 5 }, "outputs": ["r"] },
+        { "id": "op-AB", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "B" }], "outputs": ["AB"] },
+        { "id": "op-rayCarrier", "command": "line.through_points", "inputs": [{ "ref": "B" }, { "ref": "D" }], "outputs": ["rayCarrier"] },
+        { "id": "op-circle", "command": "circle.center_radius", "inputs": [{ "ref": "A" }, { "ref": "r" }], "outputs": ["radiusCircle"] },
+        { "id": "op-intersections", "command": "point.intersection_line_circle", "inputs": [{ "ref": "rayCarrier" }, { "ref": "radiusCircle" }], "outputs": ["C", "E"] },
+        { "id": "op-triangle1", "command": "polygon.vertices", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["triangle1"] },
+        { "id": "op-triangle2", "command": "polygon.vertices", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "E" }], "outputs": ["triangle2"] },
+        { "id": "op-AC", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "C" }], "outputs": ["AC"] },
+        { "id": "op-BC", "command": "segment.through_points", "inputs": [{ "ref": "B" }, { "ref": "C" }], "outputs": ["BC"] },
+        { "id": "op-AE", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "E" }], "outputs": ["AE"] },
+        { "id": "op-BE", "command": "segment.through_points", "inputs": [{ "ref": "B" }, { "ref": "E" }], "outputs": ["BE"] },
+        { "id": "op-angleC", "command": "angle.three_points", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "params": { "radius": 0.55, "labelRadius": 0.92 }, "outputs": ["angleC"] },
+        { "id": "op-angleE", "command": "angle.three_points", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "E" }], "params": { "radius": 0.82, "labelRadius": 1.2 }, "outputs": ["angleE"] }
+      ],
+      "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-8.5, 7, 7.2, -3], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FBFCFE", "cameraPolicy": "document" }],
+      "styles": [
+        { "targets": ["triangle1"], "style": { "stroke": "#23758A", "fill": "#BEE4E8", "strokeWidth": 2.2, "fillOpacity": 0.36, "labelVisible": false } },
+        { "targets": ["triangle2"], "style": { "stroke": "#D6763A", "fill": "#F4C7A8", "strokeWidth": 2.2, "fillOpacity": 0.3, "labelVisible": false } },
+        { "targets": ["AB", "AC", "BC"], "style": { "stroke": "#23758A", "strokeWidth": 2.4, "labelVisible": false } },
+        { "targets": ["AE", "BE"], "style": { "stroke": "#D6763A", "strokeWidth": 2.4, "labelVisible": false } },
+        { "targets": ["radiusCircle"], "style": { "stroke": "#9DA9B5", "strokeWidth": 1.4, "dash": "dashed", "labelVisible": true, "fontSize": 12 } },
+        { "targets": ["A", "B", "C", "E"], "style": { "stroke": "#155B73", "fill": "#155B73", "pointSize": 4.5, "fontSize": 14, "labelVisible": true, "labelPlacement": "auto" } },
+        { "targets": ["angleC"], "style": { "stroke": "#23758A", "fill": "#75C7D1", "fillOpacity": 0.4, "fontSize": 12, "labelVisible": false } },
+        { "targets": ["angleE"], "style": { "stroke": "#D6763A", "fill": "#E7A578", "fillOpacity": 0.35, "fontSize": 12, "labelVisible": false } }
+      ],
+      "interactions": [{ "target": "showSecond", "permissions": ["set_value"] }],
+      "controls": [{ "id": "toggleSecond", "kind": "checkbox", "label": "显示第二个三角形", "description": "显示满足同一组 SSA 数据的另一个三角形。", "action": { "type": "boolean.toggle", "target": "showSecond" } }],
+      "assertions": [
+        { "id": "equal-opposite-side", "predicate": "equal_length", "arguments": [{ "ref": "AC" }, { "ref": "AE" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "两个三角形的已知对边相等。" },
+        { "id": "equal-given-angle", "predicate": "equal_angle", "arguments": [{ "ref": "angleC" }, { "ref": "angleE" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "两个三角形在 B 点的已知角相等。" },
+        { "id": "different-third-side", "predicate": "expression_equal", "arguments": [{ "expr": "distance(B,C)" }, { "expr": "distance(B,E)" }], "expected": false, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "第三边不同，因此两个三角形不全等。" }
+      ],
+      "activities": [{ "id": "ssa", "title": "寻找 SSA 的两个解", "stages": [{ "id": "given", "narration": "固定 AB、∠B 和对边长度 AC；圆与角的边先给出一个交点。" }, { "id": "counterexamples", "narration": "显示圆与同一射线的另一个交点：两组数据相同，但第三边不同。" }], "tasks": [{ "id": "compare", "prompt": "比较两个三角形相同与不同的量，解释为什么 SSA 不能判定全等。", "allowedTools": ["control.invoke"], "evidence": [{ "kind": "assertion", "ref": "equal-opposite-side" }, { "kind": "assertion", "ref": "different-third-side" }], "hints": ["两个交点都在以 A 为圆心、同一半径的圆上。", "比较 BC 与 BD。"] }] }],
+      "provenance": { "generator": "agent", "sourceRefs": ["geogebra:ttsejkbj", "mechanism:ssa-ambiguity", "mechanism:conditional-visibility"] }
+    }
+  },
+  "trace": { "changeSets": [] },
+  "expected": {
+    "assertions": [{ "kind": "runtime-assertions-pass" }, { "kind": "static-render" }, { "kind": "render-bundle" }],
+    "interactions": [{ "target": "showSecond", "permission": "set_value" }]
+  }
+}

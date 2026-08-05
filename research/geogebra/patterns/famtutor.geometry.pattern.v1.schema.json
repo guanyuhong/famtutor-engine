@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.dev/schemas/famtutor.geometry.pattern.v1.schema.json",
+  "title": "FamTutor reusable geometry pattern v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "patternId", "title", "status", "kind", "sourceResearch", "intent", "inputs", "construction", "invariants", "famTutorMapping", "visualRecipe", "interactionRecipe", "evidence"],
+  "properties": {
+    "schema": { "const": "famtutor.geometry.pattern.v1" },
+    "patternId": { "type": "string", "pattern": "^[a-z][a-z0-9.-]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["semantic-pattern-reviewed", "semantic-review-partial"] },
+    "kind": { "enum": ["construction-pattern", "mechanism-pattern"] },
+    "sourceResearch": {
+      "type": "object",
+      "required": ["materialId", "sourceUrl", "manifest"],
+      "properties": {
+        "materialId": { "type": "string" },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "manifest": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "intent": { "type": "string" },
+    "inputs": { "type": "array", "items": { "type": "object" } },
+    "construction": { "type": "array", "items": { "type": "object" }, "minItems": 1 },
+    "invariants": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "famTutorMapping": {
+      "type": "object",
+      "required": ["existingCommands", "gaps", "decision"],
+      "properties": {
+        "existingCommands": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "gaps": { "type": "array", "items": { "type": "object" } },
+        "decision": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "visualRecipe": { "type": "object" },
+    "interactionRecipe": { "type": "object" },
+    "evidence": { "type": "object" }
+  }
+}

@@ -1,4 +1,4 @@
-import { MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=interval-2";
+import { evaluateMathDocument, MathDomainRuntime, mountMathRenderer } from "/packages/math/dist/index.js?v=qiu-feng-wave-1";
 
 const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/01-triangle-elements/case.json",
@@ -41,7 +41,34 @@ const CASE_PATHS = [
   "/corpus/books/zjedu-math-8a-2013/cases/38-reflection-shortest-path/case.json?v=ch2-3",
   "/corpus/books/zjedu-math-8a-2013/cases/39-speed-limit-inequality/case.json?v=ch3-2",
   "/corpus/books/zjedu-math-8a-2013/cases/40-number-line-open-closed-intervals/case.json?v=ch3-2",
-  "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2"
+  "/corpus/books/zjedu-math-8a-2013/cases/41-reservoir-level-interval-test/case.json?v=ch3-2",
+  "/research/geogebra/cases/01-chinese-remainder-controls/case.json?v=controls-clock-1",
+  "/research/geogebra/cases/02-circle-inversion-common-tangents/case.json?v=circle-inversion-1",
+  "/research/geogebra/cases/03-steiner-chain-sequence-zip/case.json?v=collection-sequence-1",
+  "/research/geogebra/cases/04-sierpinski-imported-macro/case.json?v=imported-macro-1",
+  "/research/geogebra/cases/05-ssa-ambiguity/case.json?v=qiu-feng-wave-1",
+  "/research/geogebra/cases/06-apollonius-ratio-circle/case.json?v=qiu-feng-wave-1",
+  "/research/geogebra/cases/07-triangle-exterior-angle/case.json?v=qiu-feng-wave-2",
+  "/research/geogebra/cases/08-one-line-three-equal-angles/case.json?v=qiu-feng-wave-2",
+  "/research/geogebra/cases/09-equilateral-hand-in-hand/case.json?v=qiu-feng-wave-2",
+  "/research/geogebra/cases/10-square-hand-in-hand-rotation/case.json?v=qiu-feng-wave-3",
+  "/research/geogebra/cases/11-isosceles-hand-in-hand-rotation/case.json?v=qiu-feng-wave-3",
+  "/research/geogebra/cases/12-internal-angle-bisector-theorem/case.json?v=qiu-feng-wave-4",
+  "/research/geogebra/cases/13-external-angle-bisector-theorem/case.json?v=qiu-feng-wave-4",
+  "/research/geogebra/cases/14-bisector-altitude-angle-relation/case.json?v=qiu-feng-wave-5",
+  "/research/geogebra/cases/15-sss-rigid-congruence/case.json?v=qiu-feng-wave-6",
+  "/research/geogebra/cases/16-sas-rigid-congruence/case.json?v=qiu-feng-wave-6",
+  "/research/geogebra/cases/17-asa-rigid-congruence/case.json?v=qiu-feng-wave-6",
+  "/research/geogebra/cases/18-aas-rigid-congruence/case.json?v=qiu-feng-wave-7",
+  "/research/geogebra/cases/19-perpendicular-bisector-locus/case.json?v=qiu-feng-wave-7",
+  "/research/geogebra/cases/20-isosceles-triangle-properties/case.json?v=qiu-feng-wave-7",
+  "/research/geogebra/cases/21-linear-function-properties/case.json?v=qiu-feng-wave-8",
+  "/research/geogebra/cases/22-quadratic-ax2-properties/case.json?v=qiu-feng-wave-8",
+  "/research/geogebra/cases/23-reflection-shortest-path/case.json?v=qiu-feng-wave-9",
+  "/research/geogebra/cases/24-pythagorean-area-proof/case.json?v=qiu-feng-wave-9",
+  "/research/geogebra/cases/25-n-gon-diagonals/case.json?v=qiu-feng-wave-9",
+  "/research/geogebra/cases/26-rigid-transform-properties/case.json?v=qiu-feng-wave-9",
+  "/research/geogebra/cases/27-triangle-definition-boundary/case.json?v=qiu-feng-wave-10"
 ];
 
 const runtime = new MathDomainRuntime();
@@ -56,6 +83,32 @@ const STAGE_LABELS = {
   triangle: "已知",
   bisector: "角平分线",
   altitude: "高",
+  move: "旋转验证",
+  "included-angle": "夹角",
+  "included-side": "夹边",
+  "opposite-side": "一角对边",
+  equidistant: "等距",
+  "base-angles": "底角",
+  "three-lines": "三线合一",
+  slope: "斜率",
+  intercept: "截距",
+  sample: "取样点",
+  opening: "开口",
+  symmetry: "对称性",
+  monotonicity: "增减性",
+  try: "尝试路径",
+  squares: "三边正方形",
+  area: "面积关系",
+  polygon: "改变边数",
+  fan: "单顶点",
+  all: "全部对角线",
+  translation: "平移",
+  reflection: "翻折",
+  rotation: "旋转",
+  invariant: "共同不变量",
+  segments: "三条线段",
+  "non-collinear": "非共线",
+  boundary: "退化边界",
   derive: "推导",
   conclude: "结论",
   pair: "成对",
@@ -71,6 +124,9 @@ const STAGE_LABELS = {
   statement: "命题",
   condition: "条件",
   conclusion: "结论",
+  exterior: "外角",
+  relation: "数量关系",
+  ratio: "比例",
   claim: "待判断",
   conditions: "核对条件",
   counterexample: "反例",
@@ -81,6 +137,8 @@ const STAGE_LABELS = {
   property: "性质",
   definition: "定义",
   construct: "辅助构造",
+  cut: "切割",
+  assemble: "拼角",
   base: "第一步",
   arcs: "作弧",
   intersection: "交点",
@@ -117,7 +175,9 @@ const STAGE_LABELS = {
   inclusive: "含等号",
   bounded: "有限区间",
   range: "工作范围",
-  check: "动态检验"
+  check: "动态检验",
+  counterexamples: "两个反例",
+  locus: "比值轨迹"
 };
 
 function caseNumber(caseId) {
@@ -125,6 +185,9 @@ function caseNumber(caseId) {
 }
 
 function sourceLabel(caseSpec) {
+  if ((caseSpec.source.printedPages ?? []).length === 0 && (caseSpec.source.pdfPages ?? []).length === 0) {
+    return "GeoGebra 机制研究 · FamTutor 原创复现";
+  }
   const printed = caseSpec.source.printedPages.join("–");
   const pdf = caseSpec.source.pdfPages.join("–");
   return `印刷页 ${printed} · PDF ${pdf}`;
@@ -133,12 +196,72 @@ function sourceLabel(caseSpec) {
 function interactionLabel(caseSpec) {
   const interactions = caseSpec.expected.interactions ?? [];
   if (interactions.length === 0) return "观察案例 · 无需操作";
+  const entityTypeById = new Map((caseSpec.inputs.initialDocument.entities ?? []).map(entity => [entity.id, entity.type]));
   const dragCount = interactions.filter(item => item.permission === "drag").length;
-  const scalarCount = interactions.filter(item => item.permission === "set_value").length;
+  const scalarCount = interactions.filter(item => item.permission === "set_value" && entityTypeById.get(item.target) === "scalar").length;
   const parts = [];
   if (dragCount) parts.push(`可拖动 ${dragCount} 个对象`);
   if (scalarCount) parts.push(`可调整 ${scalarCount} 个滑块`);
+  const documentValue = caseSpec.inputs.initialDocument;
+  const tracedOperations = caseSpec.trace.changeSets.flatMap(changeSet => changeSet.operations ?? []);
+  const controlCount = (documentValue.controls ?? []).length + tracedOperations.filter(operation => operation.op === "set_control").length;
+  const clockCount = (documentValue.clocks ?? []).length + tracedOperations.filter(operation => operation.op === "set_clock").length;
+  if (controlCount) parts.push(`${controlCount} 个声明式控制`);
+  if (clockCount) parts.push(`${clockCount} 个确定性时钟`);
   return parts.join(" · ") || `${interactions.length} 个可交互对象`;
+}
+
+function clockSummary(renderer) {
+  const clocks = renderer.getState().metadata?.clocks;
+  if (!Array.isArray(clocks) || clocks.length === 0) return "";
+  return clocks.map(clock => `${clock.clockId}: ${clock.status} · t=${clock.value} · tick ${clock.tick}`).join(" ｜ ");
+}
+
+function setupRuntimeControls(card, renderer) {
+  const panel = card.querySelector(".runtime-control-panel");
+  const buttons = card.querySelector(".runtime-control-buttons");
+  const status = card.querySelector(".runtime-control-status");
+  const runtimeDocument = renderer.getDocument();
+  const controls = runtimeDocument.controls ?? [];
+  const clocks = runtimeDocument.clocks ?? [];
+  buttons.replaceChildren();
+  panel.hidden = controls.length === 0 && clocks.length === 0;
+  if (panel.hidden) return;
+
+  for (const control of controls) {
+    const interactive = control.kind === "checkbox" ? document.createElement("input") : document.createElement("button");
+    const wrapper = control.kind === "checkbox" ? document.createElement("label") : interactive;
+    if (control.kind === "checkbox") {
+      interactive.className = "runtime-checkbox-input";
+      interactive.type = "checkbox";
+      interactive.checked = evaluateMathDocument(runtimeDocument).entities.get(control.action.target)?.value === true;
+      wrapper.className = "runtime-control runtime-checkbox";
+      wrapper.append(interactive, document.createTextNode(control.label));
+    } else {
+      interactive.className = "runtime-control";
+      interactive.type = "button";
+      interactive.textContent = control.label;
+    }
+    if (control.description) wrapper.title = control.description;
+    interactive.addEventListener(control.kind === "checkbox" ? "change" : "click", async () => {
+      interactive.disabled = true;
+      try {
+        const result = await renderer.dispatch({ type: "control.invoke", target: control.id, payload: {} });
+        if (!result.ok) throw new Error(result.diagnostics.map(item => `${item.code}: ${item.message}`).join("\n"));
+        if (control.kind === "checkbox") {
+          interactive.checked = evaluateMathDocument(result.document).entities.get(control.action.target)?.value === true;
+        }
+        status.textContent = clockSummary(renderer) || `已执行：${control.label}`;
+      } finally {
+        interactive.disabled = false;
+      }
+    });
+    buttons.append(wrapper);
+  }
+  status.textContent = clockSummary(renderer) || "所有按钮动作均来自 MathDocument.controls。";
+  renderer.subscribe(event => {
+    if (event.type.startsWith("clock.")) status.textContent = clockSummary(renderer);
+  });
 }
 
 async function fetchCase(path) {
@@ -228,6 +351,7 @@ async function mountCase(caseSpec, card, documentValue) {
     stageId: stages[stageIndex]?.id
   });
   rendererByCase.set(caseSpec.caseId, renderer);
+  setupRuntimeControls(card, renderer);
   if (stages.length > 0) updateStagePanel(caseSpec, card, stageIndex);
   card.querySelector(".loading-mask").hidden = true;
   card.dataset.mounted = "true";
@@ -239,7 +363,7 @@ function createCard(caseSpec) {
   card.dataset.caseId = caseSpec.caseId;
   card.dataset.status = caseSpec.status;
   card.dataset.caseType = caseSpec.caseType;
-  card.querySelector(".case-id").textContent = `CASE ${number} · ${caseSpec.caseType}`;
+  card.querySelector(".case-id").textContent = `${caseSpec.caseId.startsWith("research-") ? "RESEARCH" : "CASE"} ${number} · ${caseSpec.caseType}`;
   card.querySelector(".case-title").textContent = caseSpec.title;
 
   const chip = card.querySelector(".status-chip");

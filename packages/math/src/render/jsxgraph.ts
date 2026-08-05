@@ -1,6 +1,7 @@
 import { MathEngineError } from "../errors.js";
 import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
 import {
+  angleBisectorRay,
   angleValue,
   applyTransform,
   arcFromCenterPoints,
@@ -9,6 +10,7 @@ import {
   circle,
   circleArea,
   circlePerimeter,
+  commonTangentLine,
   conicSamplePoints,
   dilatePoint,
   dilateTransform,
@@ -16,6 +18,8 @@ import {
   ellipseFromFoci,
   hyperbolaFromFoci,
   intersectLineConic,
+  invertCircleInCircle,
+  invertPointInCircle,
   isAngle,
   isArc,
   isCircle,
@@ -44,6 +48,7 @@ import {
   rightAngleMarkerPolygon,
   rotatePoint,
   rotateTransform,
+  scaleVector,
   segmentTickMarker,
   sectorArea,
   sectorFromArc,
@@ -55,11 +60,13 @@ import {
   vector
 } from "../kernel/geometry.js";
 import { buildConstructionGraph } from "../kernel/dag.js";
+import { evaluateMathDocument, runtimeValueMap } from "../kernel/evaluate.js";
 import type {
   ConstructionNode,
   DirectSvgResult,
   EntityStyle,
   Graphics2DView,
+  Graphics3DView,
   JsonValue,
   MathDocument,
   NormalizedMathEvent,
@@ -73,10 +80,13 @@ import { renderDirectSvg } from "./direct-svg.js";
 import { layoutPointLabels, type LabelViewport } from "./point-label-layout.js";
 import { styleForEntity } from "./style.js";
 import { intervalFromBounds } from "../kernel/interval.js";
+import { mountJsxGraph3D } from "./jsxgraph3d.js";
+import { isEntityVisible } from "./visibility.js";
 
-interface JxgObject {
+export interface JxgObject {
   X?: () => number;
   Y?: () => number;
+  Z?: () => number;
   Value?: () => number;
   L?: () => number;
   Radius?: () => number;
@@ -84,6 +94,8 @@ interface JxgObject {
   setValue?: (value: number) => void;
   setPosition?: (mode: number, coords: [number, number]) => void;
   setAttribute?: (attributes: Record<string, unknown>) => void;
+  startAnimation?: (direction: number, stepCount: number, delay: number, maxRounds?: number) => void;
+  stopAnimation?: () => void;
   on?: (event: string, callback: () => void) => void;
   label?: JxgObject;
   borders?: JxgObject[];
@@ -94,13 +106,13 @@ interface JxgObject {
   [key: string]: unknown;
 }
 
-interface JxgBoard {
+export interface JxgBoard {
   create: (kind: string, parents: unknown[], attributes?: Record<string, unknown>) => JxgObject;
   suspendUpdate?: () => void;
   unsuspendUpdate?: () => void;
   fullUpdate?: () => void;
   update?: () => void;
-  resize?: () => void;
+  resizeContainer?: (width: number, height: number, dontSetStyle?: boolean, dontSetBoundingBox?: boolean) => unknown;
   stopResizeObserver?: () => void;
   updateContainerDims?: (...args: unknown[]) => unknown;
   getBoundingBox?: () => [number, number, number, number];
@@ -109,12 +121,13 @@ interface JxgBoard {
   [key: string]: unknown;
 }
 
-interface JxgNamespace {
+export interface JxgNamespace {
   JSXGraph: {
     initBoard: (containerId: string, options: Record<string, unknown>) => JxgBoard;
     freeBoard: (board: JxgBoard) => void;
   };
   COORDS_BY_USER?: number;
+  Options?: { axes3d?: Record<string, Record<string, unknown>> };
 }
 
 export interface JsxGraphRuntimeOptions {
@@ -129,7 +142,7 @@ export interface JsxGraphRuntimeOptions {
 export interface JsxGraphRuntimeHandle {
   readonly board: JxgBoard;
   readonly document: MathDocument;
-  readonly view: Graphics2DView;
+  readonly view: Graphics2DView | Graphics3DView;
   readonly ready: Promise<void>;
   getNative(entityId: string): JxgObject | undefined;
   getValue(entityId: string): RuntimeValue | undefined;
@@ -186,6 +199,49 @@ function sliderDigits(step: number): number {
     if (Math.abs(Math.round(step * scale) - step * scale) < 1e-9) return digits;
   }
   return 6;
+}
+
+interface SliderAnimation {
+  autoStart: boolean;
+  direction: 1 | -1;
+  stepCount: number;
+  delayMs: number;
+  maxRounds: number;
+  startDelayMs: number;
+}
+
+function sliderAnimation(node: ConstructionNode): SliderAnimation | undefined {
+  const raw = node.params?.animation;
+  if (raw === undefined) return undefined;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires params.animation to be an object.`);
+  }
+  const value = raw as Record<string, JsonValue>;
+  const finiteNumber = (key: string, fallback: number): number => {
+    const candidate = value[key];
+    if (candidate === undefined) return fallback;
+    if (typeof candidate === "number" && Number.isFinite(candidate)) return candidate;
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires numeric params.animation.${key}.`);
+  };
+  const direction = finiteNumber("direction", 1);
+  const stepCount = Math.round(finiteNumber("stepCount", 100));
+  const delayMs = Math.round(finiteNumber("delayMs", 30));
+  const maxRounds = Math.round(finiteNumber("maxRounds", 1));
+  const startDelayMs = Math.round(finiteNumber("startDelayMs", 0));
+  if (direction !== 1 && direction !== -1) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' requires params.animation.direction to be 1 or -1.`);
+  }
+  if (stepCount < 1 || delayMs < 1 || startDelayMs < 0 || maxRounds === 0 || maxRounds < -1) {
+    throw new MathEngineError("JSXGRAPH_INVALID_PARAMETER", `Command '${node.command}' has an invalid params.animation range.`);
+  }
+  return {
+    autoStart: value.autoStart === true,
+    direction,
+    stepCount,
+    delayMs,
+    maxRounds,
+    startDelayMs
+  };
 }
 
 function pairParam(node: ConstructionNode, key: string, fallback: [number, number] = [0, 0]): [number, number] {
@@ -311,7 +367,7 @@ function normalizeSvg(svg: string): string {
   return svg;
 }
 
-export function mountJsxGraph(
+function mountJsxGraph2D(
   host: HTMLElement,
   document: MathDocument,
   options: JsxGraphRuntimeOptions = {}
@@ -354,6 +410,8 @@ export function mountJsxGraph(
   const nodeById = graph.nodeById;
   const objects = new Map<string, JxgObject>();
   const valueResolvers = new Map<string, () => RuntimeValue | undefined>();
+  const sliderAnimations = new Map<string, SliderAnimation>();
+  const sliderAnimationTimers = new Map<string, number>();
   const skipped: Array<{ id: string; reason: string }> = [];
   const warnings: ValidationIssue[] = [];
   const createdIds: string[] = [];
@@ -361,6 +419,38 @@ export function mountJsxGraph(
   let updatePointLabels = (): void => {};
 
   const valueOf = (id: string): RuntimeValue | undefined => valueResolvers.get(id)?.();
+  let headlessSignature = "";
+  let headlessValues = new Map<string, RuntimeValue>();
+  const currentHeadlessValues = (): Map<string, RuntimeValue> => {
+    const points: Record<string, [number, number]> = {};
+    const scalars: Record<string, number> = {};
+    const signature: Array<string | number> = [];
+    for (const node of document.construction) {
+      const outputId = node.outputs[0];
+      if (!outputId) continue;
+      const object = objects.get(outputId);
+      if (node.command === "point.free" && object?.X && object.Y) {
+        const x = object.X();
+        const y = object.Y();
+        if (Number.isFinite(x) && Number.isFinite(y)) {
+          points[outputId] = [x, y];
+          signature.push(outputId, x, y);
+        }
+      } else if (node.command === "scalar.slider" && object?.Value) {
+        const value = object.Value();
+        if (Number.isFinite(value)) {
+          scalars[outputId] = value;
+          signature.push(outputId, value);
+        }
+      }
+    }
+    const nextSignature = JSON.stringify(signature);
+    if (nextSignature !== headlessSignature) {
+      headlessSignature = nextSignature;
+      headlessValues = runtimeValueMap(evaluateMathDocument(document, { points, scalars }));
+    }
+    return headlessValues;
+  };
   const expressionValue = (source: string | number, locals: Record<string, number> = {}): number =>
     evaluateNumericExpression(source, identifier => locals[identifier] ?? valueOf(identifier));
   const booleanValue = (source: string): boolean =>
@@ -373,7 +463,7 @@ export function mountJsxGraph(
 
   const visibleIdsForStage = (nextStage?: string): Set<string> => {
     const stage = document.activities?.flatMap(activity => activity.stages ?? []).find(candidate => candidate.id === nextStage);
-    const authoredVisibleIds = new Set(document.entities.filter(entity => entity.visible !== false).map(entity => entity.id));
+    const authoredVisibleIds = new Set(document.entities.filter(entity => isEntityVisible(entity, valueOf)).map(entity => entity.id));
     const visibleIds = stage?.reveal
       ? new Set(stage.reveal.filter(id => authoredVisibleIds.has(id)))
       : new Set(authoredVisibleIds);
@@ -470,11 +560,20 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => value);
         return;
       }
+      case "boolean.constant": {
+        if (typeof node.params?.value !== "boolean") {
+          throw new MathEngineError("INVALID_PARAMETER", "boolean.constant params.value must be boolean.");
+        }
+        const value = node.params.value;
+        valueResolvers.set(output, () => value);
+        return;
+      }
       case "scalar.slider": {
         const min = numericParam(node, "min");
         const max = numericParam(node, "max");
         const value = numericParam(node, "value");
         const step = numericParam(node, "step", -1);
+        const animation = sliderAnimation(node);
         const position = pairParam(node, "position", [view.boundingBox[0] + 1, view.boundingBox[3] + 1]);
         const length = numericParam(node, "length", Math.max(2, (view.boundingBox[2] - view.boundingBox[0]) / 4));
         native = board.create("slider", [position, [position[0] + length, position[1]], [min, value, max]], {
@@ -484,6 +583,94 @@ export function mountJsxGraph(
         });
         objects.set(output, native);
         valueResolvers.set(output, () => native?.Value?.());
+        if (animation) {
+          sliderAnimations.set(output, animation);
+          native.on?.("down", () => {
+            const timer = sliderAnimationTimers.get(output);
+            if (timer !== undefined) host.ownerDocument.defaultView?.clearTimeout(timer);
+            sliderAnimationTimers.delete(output);
+            native?.stopAnimation?.();
+          });
+        }
+        break;
+      }
+      case "collection.sequence":
+      case "collection.map": {
+        const itemType = node.params?.itemType;
+        const maxItems = Number(node.params?.maxItems);
+        if (!["point2", "segment2", "circle2", "polygon2"].includes(String(itemType)) || !Number.isInteger(maxItems) || maxItems < 1 || maxItems > 256) {
+          throw new MathEngineError("INVALID_COLLECTION_RENDER_SPEC", "Mounted collection rendering requires itemType point2|segment2|circle2|polygon2 and maxItems 1..256.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!value || typeof value !== "object" || value.kind !== "collection") {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a defined collection at runtime.`);
+          }
+          return value;
+        };
+        const itemAt = (index: number) => current().items[index];
+        const exists = (index: number) => index < current().items.length;
+        native = board.create("point", [0, 0], { fixed: true, visible: false, name: "", withLabel: false });
+        native.fmeVisibility = () => false;
+        native.fmeChildren = [];
+        const childAttributes = { ...jxgAttributes(document, output, true), name: "", withLabel: false };
+        for (let index = 0; index < maxItems; index += 1) {
+          let child: JxgObject;
+          if (itemType === "point2") {
+            const pointCoordinate = (axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isPoint(item) ? item[axis] : Number.NaN;
+            };
+            child = board.create("point", [
+              () => pointCoordinate("x"),
+              () => pointCoordinate("y")
+            ], childAttributes);
+          } else if (itemType === "circle2") {
+            const circleCoordinate = (axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isCircle(item) ? item.center[axis] : 0;
+            };
+            const circleRadius = () => {
+              const item = itemAt(index);
+              return isCircle(item) ? item.radius : 0;
+            };
+            const center = board.create("point", [
+              () => circleCoordinate("x"),
+              () => circleCoordinate("y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            child = board.create("circle", [center, circleRadius], childAttributes);
+          } else if (itemType === "segment2") {
+            const segmentCoordinate = (endpoint: "from" | "to", axis: "x" | "y") => {
+              const item = itemAt(index);
+              return isSegment(item) ? item[endpoint][axis] : Number.NaN;
+            };
+            const from = board.create("point", [
+              () => segmentCoordinate("from", "x"),
+              () => segmentCoordinate("from", "y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            const to = board.create("point", [
+              () => segmentCoordinate("to", "x"),
+              () => segmentCoordinate("to", "y")
+            ], { fixed: true, visible: false, name: "", withLabel: false });
+            child = board.create("segment", [from, to], childAttributes);
+          } else {
+            const vertices = Array.from({ length: 16 }, (_, vertexIndex) => board.create("point", [
+              () => {
+                const item = itemAt(index);
+                return isPolygon(item) && item.vertices.length > 0 ? item.vertices[Math.min(vertexIndex, item.vertices.length - 1)]!.x : Number.NaN;
+              },
+              () => {
+                const item = itemAt(index);
+                return isPolygon(item) && item.vertices.length > 0 ? item.vertices[Math.min(vertexIndex, item.vertices.length - 1)]!.y : Number.NaN;
+              }
+            ], { fixed: true, visible: false, name: "", withLabel: false }));
+            child = board.create("polygon", vertices, childAttributes);
+          }
+          child.fmeVisibility = () => exists(index);
+          native.fmeChildren.push(child);
+        }
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "boolean.expression": {
@@ -593,6 +780,17 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => safeRuntimePoint(native!));
         break;
       }
+      case "point.invert_in_circle": {
+        const current = () => {
+          const inversion = valueOf(refs[1]!);
+          if (!isCircle(inversion)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[1]}' is not circle2 at runtime.`);
+          return invertPointInCircle(pointOf(refs[0]!), inversion);
+        };
+        native = board.create("point", [() => current().x, () => current().y], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "point.intersection_line_line": {
         native = board.create("intersection", [lineLikeNative(objects, refs[0]!), lineLikeNative(objects, refs[1]!), 0], jxgAttributes(document, output, true));
         objects.set(output, native);
@@ -649,6 +847,20 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => ray(pointOf(refs[0]!), pointOf(refs[1]!)));
         break;
       }
+      case "ray.angle_bisector": {
+        const branch = node.params?.branch;
+        if (branch !== "internal" && branch !== "external") {
+          throw new MathEngineError("INVALID_PARAMETER", "ray.angle_bisector params.branch must be 'internal' or 'external'.", { actual: branch });
+        }
+        const current = () => angleBisectorRay(pointOf(refs[0]!), pointOf(refs[1]!), pointOf(refs[2]!), branch);
+        const through = board.create("point", [() => current().through.x, () => current().through.y], { visible: false, fixed: true, name: "" });
+        native = board.create("line", [pointNative(objects, refs[1]!), through], {
+          ...jxgAttributes(document, output, true), straightFirst: false, straightLast: true, lastArrow: true
+        });
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "line.parallel_through": {
         native = board.create("parallel", [pointNative(objects, refs[0]!), lineLikeNative(objects, refs[1]!)], jxgAttributes(document, output, true));
         objects.set(output, native);
@@ -662,6 +874,23 @@ export function mountJsxGraph(
           const source = lineLikeToLine(lineLikeOf(refs[1]!));
           return lineFromPointDirection(pointOf(refs[0]!), vector(-source.direction.y, source.direction.x));
         });
+        break;
+      }
+      case "line.common_tangent": {
+        const current = () => {
+          const first = valueOf(refs[0]!);
+          const second = valueOf(refs[1]!);
+          if (!isCircle(first) || !isCircle(second)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "line.common_tangent inputs must be circle2 at runtime.");
+          return commonTangentLine(first, second, Number(node.params?.side1), Number(node.params?.side2));
+        };
+        const anchor = board.create("point", [() => current().point.x, () => current().point.y], { visible: false, fixed: true, withLabel: false });
+        const directionPoint = board.create("point", [
+          () => current().point.x + current().direction.x,
+          () => current().point.y + current().direction.y
+        ], { visible: false, fixed: true, withLabel: false });
+        native = board.create("line", [anchor, directionPoint], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "vector.between_points": {
@@ -683,6 +912,15 @@ export function mountJsxGraph(
         });
         return;
       }
+      case "vector.scale":
+        valueResolvers.set(output, () => {
+          const source = valueOf(refs[0]!);
+          if (!isVector(source)) {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${refs[0]}' is not a vector2 at runtime.`);
+          }
+          return scaleVector(source, expressionValue(node.params?.factor as string | number));
+        });
+        return;
       case "circle.center_radius": {
         const center = pointNative(objects, refs[0]!);
         const radius = refs[1]
@@ -711,6 +949,19 @@ export function mountJsxGraph(
           if (!isPoint(center)) return undefined;
           return circle(center, distance(center, pointOf(refs[0]!)));
         });
+        break;
+      }
+      case "circle.invert_in_circle": {
+        const current = () => {
+          const source = valueOf(refs[0]!);
+          const inversion = valueOf(refs[1]!);
+          if (!isCircle(source) || !isCircle(inversion)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "circle.invert_in_circle inputs must be circle2 at runtime.");
+          return invertCircleInCircle(source, inversion);
+        };
+        const center = board.create("point", [() => current().center.x, () => current().center.y], { visible: false, fixed: true, withLabel: false });
+        native = board.create("circle", [center, () => current().radius], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "arc.center_points": {
@@ -804,6 +1055,55 @@ export function mountJsxGraph(
         }
         objects.set(output, native);
         valueResolvers.set(output, () => ({ kind: "polygon2", vertices: refs.map(pointOf) }));
+        break;
+      }
+      case "polygon.regular": {
+        const maxVertices = Number(node.params?.maxVertices);
+        if (!Number.isInteger(maxVertices) || maxVertices < 3 || maxVertices > 64) {
+          throw new MathEngineError("INVALID_REGULAR_POLYGON_BOUND", "Mounted regular polygon requires maxVertices from 3 to 64.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!isPolygon(value)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a polygon2 at runtime.`);
+          return value;
+        };
+        const vertices = Array.from({ length: maxVertices }, (_, index) => board.create("point", [
+          () => current().vertices[Math.min(index, current().vertices.length - 1)]!.x,
+          () => current().vertices[Math.min(index, current().vertices.length - 1)]!.y
+        ], { fixed: true, visible: false, name: "", withLabel: false }));
+        native = board.create("polygon", vertices, jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
+      case "polygon.diagonals": {
+        const maxItems = Number(node.params?.maxItems);
+        if (!Number.isInteger(maxItems) || maxItems < 1 || maxItems > 256) {
+          throw new MathEngineError("INVALID_COLLECTION_LIMIT", "Mounted polygon diagonals require maxItems from 1 to 256.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!value || typeof value !== "object" || value.kind !== "collection" || value.itemType !== "segment2") {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a segment2 collection at runtime.`);
+          }
+          return value;
+        };
+        native = board.create("point", [0, 0], { fixed: true, visible: false, name: "", withLabel: false });
+        native.fmeVisibility = () => false;
+        native.fmeChildren = [];
+        for (let index = 0; index < maxItems; index += 1) {
+          const coordinate = (endpoint: "from" | "to", axis: "x" | "y") => {
+            const item = current().items[index];
+            return isSegment(item) ? item[endpoint][axis] : Number.NaN;
+          };
+          const from = board.create("point", [() => coordinate("from", "x"), () => coordinate("from", "y")], { fixed: true, visible: false, name: "", withLabel: false });
+          const to = board.create("point", [() => coordinate("to", "x"), () => coordinate("to", "y")], { fixed: true, visible: false, name: "", withLabel: false });
+          const child = board.create("segment", [from, to], { ...jxgAttributes(document, output, true), name: "", withLabel: false });
+          child.fmeVisibility = () => index < current().items.length;
+          native.fmeChildren.push(child);
+        }
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "angle.three_points": {
@@ -1357,16 +1657,97 @@ export function mountJsxGraph(
   updatePointLabels();
   board.fullUpdate?.();
 
+  const stopSliderAnimation = (entityId: string): void => {
+    const timer = sliderAnimationTimers.get(entityId);
+    if (timer !== undefined) host.ownerDocument.defaultView?.clearTimeout(timer);
+    sliderAnimationTimers.delete(entityId);
+    objects.get(entityId)?.stopAnimation?.();
+  };
+
+  const syncSliderAnimations = (visibleIds: Set<string>): void => {
+    for (const [entityId, animation] of sliderAnimations) {
+      stopSliderAnimation(entityId);
+      if (!animation.autoStart || !visibleIds.has(entityId)) continue;
+      const native = objects.get(entityId);
+      const producerId = graph.producerByEntity.get(entityId);
+      const node = producerId ? nodeById.get(producerId) : undefined;
+      if (!native?.startAnimation || !node) continue;
+      native.setValue?.(animation.direction > 0 ? numericParam(node, "min") : numericParam(node, "max"));
+      board.fullUpdate?.();
+      const start = (): void => {
+        sliderAnimationTimers.delete(entityId);
+        native.startAnimation?.(
+          animation.direction,
+          animation.stepCount,
+          animation.delayMs,
+          animation.maxRounds
+        );
+      };
+      const window = host.ownerDocument.defaultView;
+      if (window && animation.startDelayMs > 0) {
+        sliderAnimationTimers.set(entityId, window.setTimeout(start, animation.startDelayMs));
+      } else {
+        start();
+      }
+    }
+  };
+
   const applyStage = (nextStage?: string): void => {
     stageId = nextStage;
     const visibleIds = visibleIdsForStage(nextStage);
     for (const entity of document.entities) setVisibility(objects.get(entity.id), visibleIds.has(entity.id));
     updatePointLabels();
     board.fullUpdate?.();
+    syncSliderAnimations(visibleIds);
   };
   applyStage(stageId);
 
-  const ready = Promise.resolve();
+  let destroyed = false;
+  let resizeObserver: ResizeObserver | undefined;
+  let resizeFrame: number | undefined;
+  let syncedWidth = 0;
+  let syncedHeight = 0;
+  const window = host.ownerDocument.defaultView;
+  const syncBoardSize = (): void => {
+    if (destroyed) return;
+    const width = Math.round(host.clientWidth || container.clientWidth);
+    const height = Math.round(host.clientHeight || container.clientHeight);
+    if (width < 1 || height < 1 || (width === syncedWidth && height === syncedHeight)) return;
+    syncedWidth = width;
+    syncedHeight = height;
+    if (board.updateContainerDims) board.updateContainerDims(width, height);
+    else board.resizeContainer?.(width, height, true);
+    updatePointLabels();
+    board.fullUpdate?.();
+  };
+  const scheduleBoardSizeSync = (): void => {
+    if (destroyed) return;
+    if (!window?.requestAnimationFrame) {
+      syncBoardSize();
+      return;
+    }
+    if (resizeFrame !== undefined) window.cancelAnimationFrame(resizeFrame);
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = undefined;
+      syncBoardSize();
+    });
+  };
+  const ResizeObserverConstructor = window?.ResizeObserver;
+  if (ResizeObserverConstructor) {
+    resizeObserver = new ResizeObserverConstructor(scheduleBoardSizeSync);
+    resizeObserver.observe(host);
+  }
+  const ready = new Promise<void>(resolve => {
+    if (!window?.requestAnimationFrame) {
+      syncBoardSize();
+      resolve();
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      syncBoardSize();
+      resolve();
+    });
+  });
   const handle: JsxGraphRuntimeHandle = {
     board,
     document,
@@ -1384,6 +1765,7 @@ export function mountJsxGraph(
     setScalar(entityId, value) {
       const native = objects.get(entityId);
       if (!native?.setValue) throw new MathEngineError("SCALAR_NOT_INTERACTIVE", `Scalar '${entityId}' is not an interactive slider.`);
+      stopSliderAnimation(entityId);
       native.setValue(value);
       updatePointLabels();
       board.fullUpdate?.();
@@ -1417,6 +1799,10 @@ export function mountJsxGraph(
       };
     },
     destroy() {
+      destroyed = true;
+      resizeObserver?.disconnect();
+      if (resizeFrame !== undefined) window?.cancelAnimationFrame(resizeFrame);
+      for (const entityId of sliderAnimations.keys()) stopSliderAnimation(entityId);
       // JSXGraph throttles ResizeObserver work with setTimeout. An already queued
       // callback can otherwise run after freeBoard() has removed board.renderer.
       board.stopResizeObserver?.();
@@ -1429,4 +1815,15 @@ export function mountJsxGraph(
   };
 
   return handle;
+}
+
+export function mountJsxGraph(
+  host: HTMLElement,
+  document: MathDocument,
+  options: JsxGraphRuntimeOptions = {}
+): JsxGraphRuntimeHandle {
+  const requested = options.viewId ? document.views.find(view => view.id === options.viewId) : undefined;
+  const default3D = !requested && !document.views.some(view => view.kind === "graphics2d") && document.views.some(view => view.kind === "graphics3d");
+  if (requested?.kind === "graphics3d" || default3D) return mountJsxGraph3D(host, document, options);
+  return mountJsxGraph2D(host, document, options);
 }

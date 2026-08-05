@@ -2,7 +2,7 @@
   "schema": "famtutor.case.v1",
   "caseId": "zj8a-1-3-17-triangle-angle-sum-proof",
   "title": "三角形内角和的证明",
-  "description": "按教材图 1-14、1-15实现的来源可追溯几何案例。",
+  "description": "先按教材图 1-14、1-15完成平行线证明，再通过中点切割和刚体运动把三个内角拼成平角。",
   "source": {
     "bookId": "zjedu-math-8a-2013",
     "pdfName": "义务教育教科书·数学八年级上册.pdf",
@@ -22,23 +22,36 @@
   "knowledgePoints": [
     "proof",
     "triangle-angle-sum",
-    "exterior-angle"
+    "exterior-angle",
+    "midpoint",
+    "rigid-motion"
   ],
-  "learningObjective": "经过顶点 A 作 MN∥BC，把三个内角转移到平角上完成证明。",
+  "learningObjective": "既能经过顶点 A 作 MN∥BC 完成演绎证明，也能通过切割、旋转和平移直观看到三个内角拼成平角。",
   "caseType": "guided-construction",
   "difficulty": "intermediate",
   "requiredCapabilities": [
     "line.parallel_through",
     "marker.parallel_chevron",
     "angle.three_points",
+    "point.midpoint",
+    "polygon.vertices",
+    "scalar.slider",
+    "vector.between_points",
+    "vector.scale",
+    "transform.rotate",
+    "transform.translate",
+    "transform.apply",
+    "interaction.set_value",
+    "control.action",
+    "clock.deterministic",
     "activity.stages"
   ],
   "generation": {
     "provider": "openai-codex",
     "model": "gpt-5",
-    "promptVersion": "ch1-source-faithful-v2",
+    "promptVersion": "ch1-angle-sum-motion-v1",
     "seed": 217,
-    "attempts": 1
+    "attempts": 2
   },
   "inputs": {
     "initialDocument": {
@@ -69,9 +82,9 @@
           "renderer": "jsxgraph-svg",
           "boundingBox": [
             -2,
-            5,
-            8,
-            -1
+            5.2,
+            10,
+            -1.5
           ],
           "axes": false,
           "grid": false,
@@ -162,13 +175,68 @@
               ]
             }
           ]
+        },
+        {
+          "id": "activity-17-motion",
+          "title": "切割并拼成平角",
+          "stages": [
+            {
+              "id": "cut",
+              "narration": "连接三边中点，把三角形切成蓝、红、绿三块；先观察三个内角各自属于哪一块。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC",
+                "D",
+                "E",
+                "F",
+                "greenPiece",
+                "redPiece",
+                "bluePiece",
+                "cutAngleA",
+                "cutAngleB",
+                "cutAngleC"
+              ]
+            },
+            {
+              "id": "assemble",
+              "narration": "拖动滑块：前半程蓝色块绕中点 D 旋转 180°，后半程蓝、红两块沿 BC 平移，最终三个角在 C 点拼成平角。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC",
+                "D",
+                "E",
+                "F",
+                "greenPiece",
+                "redPiece",
+                "bluePiece",
+                "cutAngleA",
+                "cutAngleB",
+                "cutAngleC",
+                "t"
+              ],
+              "focus": [
+                "cutAngleA",
+                "cutAngleB",
+                "cutAngleC"
+              ]
+            }
+          ]
         }
       ],
       "provenance": {
         "generator": "agent",
         "sourceRefs": [
           "zjedu-math-8a-2013:printed-18:figure-1-14",
-          "zjedu-math-8a-2013:printed-18:figure-1-15"
+          "zjedu-math-8a-2013:printed-18:figure-1-15",
+          "https://www.geogebra.org/m/GqrfqFBB"
         ]
       }
     }
@@ -541,6 +609,508 @@
             }
           },
           {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "D"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "E"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.midpoint",
+            "outputs": [
+              {
+                "id": "F"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [
+              {
+                "id": "t",
+                "label": "拖动拼角"
+              }
+            ],
+            "params": {
+              "min": 0,
+              "max": 2,
+              "value": 0,
+      "step": 0.02,
+      "position": [
+        -1.2,
+        -0.8
+      ],
+      "length": 3.4
+            }
+          },
+          {
+            "op": "construct",
+            "command": "vector.between_points",
+            "outputs": [
+              {
+                "id": "BCVector",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "vector.scale",
+            "outputs": [
+              {
+                "id": "motionVector",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "BCVector"
+              }
+            ],
+            "params": {
+              "factor": "max(t - 1, 0)"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "transform.rotate",
+            "outputs": [
+              {
+                "id": "spinTransform",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              }
+            ],
+            "params": {
+              "angle": "pi * min(t, 1)"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "transform.translate",
+            "outputs": [
+              {
+                "id": "moveTransform",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "motionVector"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueRotA",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "spinTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueRotD",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "spinTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueRotF",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "F"
+              },
+              {
+                "ref": "spinTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueA",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "blueRotA"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueD",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "blueRotD"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "blueF",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "blueRotF"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "redB",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "redE",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "redD",
+                "type": "point2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "moveTransform"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "greenPiece"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "redPiece"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "redB"
+              },
+              {
+                "ref": "redE"
+              },
+              {
+                "ref": "redD"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "bluePiece"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "blueA"
+              },
+              {
+                "ref": "blueD"
+              },
+              {
+                "ref": "blueF"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "cutAngleA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "blueD"
+              },
+              {
+                "ref": "blueA"
+              },
+              {
+                "ref": "blueF"
+              }
+            ],
+            "params": {
+              "radius": 0.58
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "cutAngleB",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "redE"
+              },
+              {
+                "ref": "redB"
+              },
+              {
+                "ref": "redD"
+              }
+            ],
+            "params": {
+              "radius": 0.58
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "cutAngleC",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              }
+            ],
+            "params": {
+              "radius": 0.58
+            }
+          },
+  {
+    "op": "set_interaction",
+            "policy": {
+              "target": "t",
+              "permissions": [
+                "set_value"
+              ]
+    }
+  },
+  {
+    "op": "set_clock",
+    "clock": {
+      "id": "assemblyClock",
+      "target": "t",
+      "start": 0,
+      "end": 2,
+      "step": 0.02,
+      "intervalMs": 30,
+      "loop": "none",
+      "resetValue": 0
+    }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyPlay", "kind": "button", "label": "播放", "action": { "type": "clock.play", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyPause", "kind": "button", "label": "暂停", "action": { "type": "clock.pause", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyStep", "kind": "button", "label": "单步", "action": { "type": "clock.step", "target": "assemblyClock" } }
+  },
+  {
+    "op": "set_control",
+    "control": { "id": "assemblyReset", "kind": "button", "label": "复位", "action": { "type": "clock.reset", "target": "assemblyClock" } }
+  },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "cut-angle-sum",
+              "predicate": "expression_equal",
+              "arguments": [
+                {
+                  "expr": "value(cutAngleA) + value(cutAngleB) + value(cutAngleC)"
+                },
+                {
+                  "value": 3.141592653589793
+                }
+              ],
+              "tolerance": 0.000000001,
+              "message": "刚体运动过程中三个内角的和始终为 180°。"
+            }
+          },
+          {
             "op": "add_assertion",
             "assertion": {
               "id": "mn-bc",
@@ -641,6 +1211,108 @@
           {
             "op": "set_style",
             "targets": [
+              "greenPiece"
+            ],
+            "style": {
+              "stroke": "#42A84B",
+              "fill": "#DDF5DF",
+              "strokeWidth": 1.8,
+              "fillOpacity": 0.5,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "redPiece"
+            ],
+            "style": {
+              "stroke": "#E14B45",
+              "fill": "#FBE2DF",
+              "strokeWidth": 1.8,
+              "fillOpacity": 0.5,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "bluePiece"
+            ],
+            "style": {
+              "stroke": "#315CF4",
+              "fill": "#E3E8FF",
+              "strokeWidth": 1.8,
+              "fillOpacity": 0.5,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "cutAngleA"
+            ],
+            "style": {
+              "stroke": "#244BE8",
+              "fill": "#315CF4",
+              "strokeWidth": 1.4,
+              "fillOpacity": 0.82
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "cutAngleB"
+            ],
+            "style": {
+              "stroke": "#D93C36",
+              "fill": "#F04A43",
+              "strokeWidth": 1.4,
+              "fillOpacity": 0.82
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "cutAngleC"
+            ],
+            "style": {
+              "stroke": "#269C35",
+              "fill": "#35D84B",
+              "strokeWidth": 1.4,
+              "fillOpacity": 0.82
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "D",
+              "E",
+              "F"
+            ],
+            "style": {
+              "stroke": "#3F4853",
+              "fill": "#3F4853",
+              "pointSize": 3,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "t"
+            ],
+            "style": {
+              "stroke": "#D06A3A",
+              "fill": "#D06A3A",
+              "strokeWidth": 2,
+              "pointSize": 5,
+              "fontSize": 14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
               "B",
               "C",
               "A",
@@ -666,7 +1338,7 @@
     ]
   },
   "expected": {
-    "documentFingerprint": "ed38008bfe2db2ba787592f0912ff45dde6ffbfa7bf0714402412f31af3bb7dd",
+    "documentFingerprint": "ceec88e06fa8a441c519a3561025e99030157d250ff8e61d300ccdb321e54ce5",
     "assertions": [
       {
         "kind": "entity-exists",
@@ -678,7 +1350,20 @@
           "N",
           "AB",
           "AC",
-          "BC"
+          "BC",
+          "D",
+          "E",
+          "F",
+          "t",
+          "motionVector",
+          "spinTransform",
+          "moveTransform",
+          "greenPiece",
+          "redPiece",
+          "bluePiece",
+          "cutAngleA",
+          "cutAngleB",
+          "cutAngleC"
         ]
       },
       {
@@ -686,7 +1371,7 @@
       },
       {
         "kind": "activity-stages",
-        "minimum": 3
+        "minimum": 6
       },
       {
         "kind": "static-render"
@@ -695,7 +1380,12 @@
         "kind": "render-bundle"
       }
     ],
-    "interactions": []
+    "interactions": [
+      {
+        "target": "t",
+        "permission": "set_value"
+      }
+    ]
   },
   "artifacts": {},
   "status": "accepted",

@@ -283,6 +283,8 @@ test("operations schema covers every MathOperation discriminant", () => {
     "delete",
     "expand_macro",
     "remove_assertion",
+    "set_clock",
+    "set_control",
     "set_entity",
     "set_interaction",
     "set_params",

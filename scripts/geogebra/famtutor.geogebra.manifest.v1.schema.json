@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.dev/schemas/geogebra/famtutor.geogebra.manifest.v1.schema.json",
+  "title": "FamTutor GeoGebra inspection manifest v1",
+  "description": "A non-executable structural inventory extracted offline from a GeoGebra .ggb archive.",
+  "type": "object",
+  "required": [
+    "schema",
+    "source",
+    "archive",
+    "format",
+    "construction",
+    "macros",
+    "scripts",
+    "preview",
+    "assets",
+    "capabilityTags",
+    "engineMapping",
+    "security"
+  ],
+  "properties": {
+    "schema": { "const": "famtutor.geogebra.manifest.v1" },
+    "source": {
+      "type": "object",
+      "required": ["bytes", "sha256"],
+      "properties": {
+        "fileName": { "type": "string" },
+        "materialId": { "type": "string" },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "archive": {
+      "type": "object",
+      "required": ["entryCount", "entries"],
+      "properties": {
+        "entryCount": { "type": "integer", "minimum": 1 },
+        "entries": { "type": "array", "items": { "$ref": "#/$defs/fileFingerprint" } }
+      },
+      "additionalProperties": false
+    },
+    "format": { "type": "object" },
+    "construction": {
+      "type": "object",
+      "required": ["elements", "commands", "controls", "conditions", "animations", "views"],
+      "properties": {
+        "elements": { "$ref": "#/$defs/countInventory" },
+        "commands": { "$ref": "#/$defs/countInventory" },
+        "controls": {
+          "type": "object",
+          "required": ["sliders", "checkboxes", "buttons", "inputs"],
+          "properties": {
+            "sliders": { "type": "array", "items": { "type": "object" } },
+            "checkboxes": { "type": "array", "items": { "type": "object" } },
+            "buttons": { "type": "array", "items": { "type": "object" } },
+            "inputs": { "type": "array", "items": { "type": "object" } }
+          },
+          "additionalProperties": false
+        },
+        "conditions": {
+          "type": "object",
+          "required": ["visibility"],
+          "properties": {
+            "visibility": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "expression"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "expression": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "animations": { "type": "array", "items": { "type": "object" } },
+        "views": {
+          "type": "object",
+          "required": ["euclidian2d", "euclidian3d", "spreadsheet", "algebra"],
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "macros": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["inputLabels", "outputLabels", "sourceFile"],
+        "properties": {
+          "commandName": { "type": "string" },
+          "toolName": { "type": "string" },
+          "inputLabels": { "type": "array", "items": { "type": "string" } },
+          "outputLabels": { "type": "array", "items": { "type": "string" } },
+          "sourceFile": { "type": "string" },
+          "construction": {
+            "type": "object",
+            "required": ["elementCount", "commandCount", "commands"],
+            "properties": {
+              "elementCount": { "type": "integer", "minimum": 0 },
+              "commandCount": { "type": "integer", "minimum": 0 },
+              "commands": { "type": "array", "items": { "type": "object" } }
+            },
+            "additionalProperties": false
+          },
+          "engineMapping": {
+            "type": "object",
+            "required": ["status", "expandedCommandEstimate", "primitiveCommands", "macroCalls", "unresolvedCommands"],
+            "properties": {
+              "status": { "enum": ["exact", "gap", "cycle"] },
+              "expandedCommandEstimate": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] },
+              "primitiveCommands": { "type": "array", "items": { "type": "object" } },
+              "macroCalls": { "type": "array", "items": { "type": "object" } },
+              "unresolvedCommands": { "type": "array", "items": { "type": "object" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "description": "Fingerprints only. Script source is never included.",
+      "items": {
+        "type": "object",
+        "required": ["scope", "language", "bytes", "sha256", "redacted"],
+        "properties": {
+          "scope": { "type": "string" },
+          "label": { "type": "string" },
+          "language": { "enum": ["javascript", "ggbscript"] },
+          "event": { "type": "string" },
+          "fileName": { "type": "string" },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "$ref": "#/$defs/sha256" },
+          "apiCalls": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "redacted": { "const": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "preview": {
+      "type": "object",
+      "required": ["thumbnail"],
+      "properties": { "thumbnail": { "oneOf": [{ "$ref": "#/$defs/fileFingerprint" }, { "type": "null" }] } },
+      "additionalProperties": false
+    },
+    "assets": { "type": "array", "items": { "$ref": "#/$defs/fileFingerprint" } },
+    "capabilityTags": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "engineMapping": {
+      "type": "object",
+      "required": ["exact", "gaps", "unknown"],
+      "properties": {
+        "exact": { "type": "array", "items": { "type": "object" } },
+        "gaps": { "type": "array", "items": { "type": "object" } },
+        "unknown": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    },
+    "security": {
+      "type": "object",
+      "required": ["scriptsExecuted", "archiveLimits", "warnings"],
+      "properties": {
+        "scriptsExecuted": { "const": false },
+        "archiveLimits": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "warnings": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "fileFingerprint": {
+      "type": "object",
+      "required": ["fileName", "bytes", "sha256"],
+      "properties": {
+        "fileName": { "type": "string" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "countInventory": {
+      "type": "object",
+      "required": ["total"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "byType": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "byName": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "inventory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": { "label": { "type": "string" }, "type": { "type": "string" } },
+            "additionalProperties": false
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "inputs", "outputs"],
+            "properties": {
+              "name": { "type": "string" },
+              "inputs": { "type": "array", "items": { "type": "string" } },
+              "outputs": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "oneOf": [{ "required": ["byType", "inventory"] }, { "required": ["byName", "signatures"] }],
+      "additionalProperties": false
+    }
+  }
+}

@@ -218,25 +218,8 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
     const A = requireInput(bindings, "A", name);
     const B = requireInput(bindings, "B", name);
     const C = requireInput(bindings, "C", name);
-    const cBA = allocAux("cBA");
-    const lineBC = allocAux("lineBC");
-    const D1 = allocAux("D1");
-    const D2 = allocAux("D2");
-    const cA = allocAux("cA");
-    const cD = allocAux("cD");
-    const E1 = allocAux("E1");
-    const E2 = allocAux("E2");
     const bisector = allocOutput("bisector");
-    // D1 is preferred contact on BC by stable intersection order; E1 preferred bisector point.
-    steps.push(
-      { command: "circle.through_points", inputRefs: [B, A], outputKeys: [cBA], outputTypes: ["circle2"] },
-      { command: "line.through_points", inputRefs: [B, C], outputKeys: [lineBC], outputTypes: ["line2"] },
-      { command: "point.intersection_line_circle", inputRefs: [lineBC, cBA], outputKeys: [D1, D2], outputTypes: ["point2", "point2"] },
-      { command: "circle.through_points", inputRefs: [A, D1], outputKeys: [cA], outputTypes: ["circle2"] },
-      { command: "circle.through_points", inputRefs: [D1, A], outputKeys: [cD], outputTypes: ["circle2"] },
-      { command: "point.intersection_circle_circle", inputRefs: [cA, cD], outputKeys: [E1, E2], outputTypes: ["point2", "point2"] },
-      { command: "ray.from_points", inputRefs: [B, E1], outputKeys: [bisector], outputTypes: ["ray2"] }
-    );
+    steps.push({ command: "ray.angle_bisector", inputRefs: [A, B, C], outputKeys: [bisector], outputTypes: ["ray2"], params: { branch: "internal" } });
   } else if (name === "macro.point.triangle_incenter") {
     const A = requireInput(bindings, "A", name);
     const B = requireInput(bindings, "B", name);
@@ -272,6 +255,20 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
       outputTypes: ["point2"],
       description: "incenter as angle-bisector intersection"
     });
+  } else if (name === "macro.polygon.medial_subdivision") {
+    const A = requireInput(bindings, "A", name);
+    const B = requireInput(bindings, "B", name);
+    const C = requireInput(bindings, "C", name);
+    const D = allocOutput("D");
+    const E = allocOutput("E");
+    const F = allocOutput("F");
+    const medial = allocOutput("medial");
+    steps.push(
+      { command: "point.midpoint", inputRefs: [B, C], outputKeys: [D], outputTypes: ["point2"], description: "midpoint of BC" },
+      { command: "point.midpoint", inputRefs: [C, A], outputKeys: [E], outputTypes: ["point2"], description: "midpoint of CA" },
+      { command: "point.midpoint", inputRefs: [A, B], outputKeys: [F], outputTypes: ["point2"], description: "midpoint of AB" },
+      { command: "polygon.vertices", inputRefs: [D, E, F], outputKeys: [medial], outputTypes: ["polygon2"], description: "medial triangle" }
+    );
   } else if (name === "macro.line.tangent_at_circle_point") {
     const P = requireInput(bindings, "P", name);
     const center = bindings.inputs.center
@@ -301,6 +298,19 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
       { command: "point.intersection_circle_circle", inputRefs: [circle, diam], outputKeys: [T1, T2], outputTypes: ["point2", "point2"] },
       { command: "line.through_points", inputRefs: [P, T1], outputKeys: [tangent1], outputTypes: ["line2"] },
       { command: "line.through_points", inputRefs: [P, T2], outputKeys: [tangent2], outputTypes: ["line2"] }
+    );
+  } else if (name === "macro.line.common_tangents") {
+    const circle1 = requireInput(bindings, "circle1", name);
+    const circle2 = requireInput(bindings, "circle2", name);
+    const external1 = allocOutput("external1");
+    const external2 = allocOutput("external2");
+    const internal1 = allocOutput("internal1");
+    const internal2 = allocOutput("internal2");
+    steps.push(
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [external1], outputTypes: ["line2"], params: { side1: 1, side2: 1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [external2], outputTypes: ["line2"], params: { side1: -1, side2: -1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [internal1], outputTypes: ["line2"], params: { side1: 1, side2: -1 } },
+      { command: "line.common_tangent", inputRefs: [circle1, circle2], outputKeys: [internal2], outputTypes: ["line2"], params: { side1: -1, side2: 1 } }
     );
   } else {
     throw new MathEngineError("MACRO_NOT_EXECUTABLE", `Macro '${name}' has no executable expander yet.`, {

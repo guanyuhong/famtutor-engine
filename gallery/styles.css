@@ -52,6 +52,9 @@ h1 {
   line-height: 1.7;
 }
 
+.research-link { color: #bce8df; font-size: .82rem; font-weight: 750; text-decoration: none; }
+.research-link:hover { color: #fff; }
+
 .summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(6.8rem, 1fr));
@@ -188,6 +191,32 @@ main { padding: 1.5rem clamp(1rem, 4vw, 4rem) 5rem; }
 }
 
 .stage-panel[hidden] { display: none; }
+
+.runtime-control-panel {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.85rem 1rem 0;
+  padding: 0.75rem;
+  border: 1px solid #cfe1de;
+  border-radius: 0.8rem;
+  background: #f4faf8;
+}
+
+.runtime-control-panel[hidden] { display: none; }
+.runtime-control-buttons { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.runtime-control {
+  padding: 0.44rem 0.72rem;
+  border: 1px solid #92beb8;
+  border-radius: 999px;
+  color: #175f59;
+  background: #fff;
+  cursor: pointer;
+}
+.runtime-control:hover { border-color: #0e8378; background: #e8f7f3; }
+.runtime-control:disabled { cursor: wait; opacity: 0.5; }
+.runtime-checkbox { display: inline-flex; align-items: center; gap: 0.42rem; }
+.runtime-checkbox input { width: 1rem; height: 1rem; margin: 0; padding: 0; accent-color: #0e8378; }
+.runtime-control-status { margin: 0; color: #466b68; font: 0.72rem/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
 
 .stage-toolbar {
   display: grid;
