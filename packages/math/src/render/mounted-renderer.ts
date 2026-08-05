@@ -22,6 +22,7 @@ import {
   type MathSetParamsOperation
 } from "../operations.js";
 import { advanceClock, initialClockState, resetClockState, type LogicalClockState } from "../kernel/clock.js";
+import { evaluateMathDocument } from "../kernel/evaluate.js";
 import type { MathControlAction, MathDocument } from "../types.js";
 import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
@@ -33,6 +34,8 @@ const MAX_OPERATIONS = 128;
 export type MathInteractionAction =
   | { type: "point.set"; target: string; payload: { coords: [number, number] } }
   | { type: "scalar.set"; target: string; payload: { value: number } }
+  | { type: "boolean.set"; target: string; payload: { value: boolean } }
+  | { type: "boolean.toggle"; target: string; payload: Record<string, never> }
   | { type: "control.invoke"; target: string; payload: Record<string, never> }
   | { type: "clock.play"; target: string; payload: Record<string, never> }
   | { type: "clock.pause"; target: string; payload: Record<string, never> }
@@ -45,6 +48,7 @@ export type MathInteractionAction =
 export type LegacyMathInteractionAction =
   | { type: "point.set"; target: string; coords: [number, number] }
   | { type: "scalar.set"; target: string; value: number }
+  | { type: "boolean.set"; target: string; value: boolean }
   | { type: "stage.set"; stageId?: string }
   | { type: "selection.set"; entityId?: string };
 
@@ -98,7 +102,7 @@ function interactionAllows(document: MathDocument, target: string, permission: "
   if (!entity) return false;
   if (permission === "select") return true;
   if (permission === "drag") return entity.role === "free" && entity.type === "point2";
-  return entity.type === "scalar" && entity.role === "free";
+  return (entity.type === "scalar" || entity.type === "boolean") && entity.role === "free";
 }
 
 export function normalizeMathInteractionAction(action: MathInteractionActionInput): MathInteractionAction {
@@ -111,6 +115,9 @@ export function normalizeMathInteractionAction(action: MathInteractionActionInpu
   }
   if (legacy.type === "scalar.set") {
     return { type: "scalar.set", target: legacy.target, payload: { value: legacy.value } };
+  }
+  if (legacy.type === "boolean.set") {
+    return { type: "boolean.set", target: legacy.target, payload: { value: legacy.value } };
   }
   if (legacy.type === "stage.set") {
     return { type: "stage.set", payload: { stageId: legacy.stageId } };
@@ -816,6 +823,8 @@ class MathMountedRendererImpl implements MathMountedRenderer {
 
   private controlAction(action: MathControlAction): MathInteractionAction {
     if (action.type === "scalar.set") return { type: "scalar.set", target: action.target, payload: { value: action.value } };
+    if (action.type === "boolean.set") return { type: "boolean.set", target: action.target, payload: { value: action.value } };
+    if (action.type === "boolean.toggle") return { type: "boolean.toggle", target: action.target, payload: {} };
     if (action.type === "stage.set") return { type: "stage.set", payload: { stageId: action.stageId } };
     return { type: action.type, target: action.target, payload: {} };
   }
@@ -975,6 +984,14 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       };
     }
 
+    if (action.type === "boolean.toggle") {
+      const runtime = evaluateMathDocument(this.document).entities.get(action.target);
+      if (!runtime?.defined || typeof runtime.value !== "boolean") {
+        return this.interactionDenied(`boolean.toggle target '${action.target}' must evaluate to a boolean.`, action.target);
+      }
+      return this.dispatchLocked({ type: "boolean.set", target: action.target, payload: { value: !runtime.value } });
+    }
+
     const target = action.target;
     const nodeId = producerNodeId(this.document, target);
     if (!nodeId) {
@@ -1015,7 +1032,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       patch = node.command === "point.on_path"
         ? { initial: coords }
         : { coords };
-    } else {
+    } else if (action.type === "scalar.set") {
       const value = action.payload.value;
       if (!finiteNumber(value)) {
         return this.interactionDenied("scalar.set requires a finite numeric value.", value);
@@ -1030,6 +1047,21 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
       }
       if (!this.clockMutation) this.pauseClocksForTarget(target);
+      patch = { value };
+    } else {
+      const value = action.payload.value;
+      if (typeof value !== "boolean") {
+        return this.interactionDenied("boolean.set requires a boolean value.", value);
+      }
+      if (!entity || entity.type !== "boolean") {
+        return this.interactionDenied(`boolean.set target '${target}' must be a boolean.`, target);
+      }
+      if (node?.command !== "boolean.constant") {
+        return this.interactionDenied(`boolean.set only allows boolean.constant (got '${node?.command}').`, node?.command);
+      }
+      if (!interactionAllows(this.document, target, "set_value")) {
+        return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
+      }
       patch = { value };
     }
 

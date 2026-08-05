@@ -1,0 +1,43 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-07-triangle-exterior-angle",
+  "title": "三角形外角定理",
+  "status": "accepted",
+  "caseType": "guided-construction",
+  "difficulty": "mechanism-reference",
+  "source": { "printedPages": [], "pdfPages": [], "references": ["https://www.geogebra.org/m/dfuhbga8"], "note": "题意与机制研究；源 PolyLine 仅用于装饰动画，FamTutor 用既有角、测量和断言原子原创复现。" },
+  "requiredCapabilities": ["boolean.constant", "control.action", "entity.visibleWhen", "angle.three_points", "measurement.angle", "assertion.expression_equal"],
+  "inputs": { "initialDocument": {
+    "schema": "famtutor.math.document.v1", "documentId": "qiu-feng-triangle-exterior-angle", "revision": 1, "seed": 1407,
+    "metadata": { "title": "三角形外角定理", "description": "观察一个外角与两个不相邻内角的数量关系。", "locale": "zh-CN", "purpose": "exploration", "subject": "mathematics", "grade": "grade-8", "tags": ["geogebra-study", "triangle", "exterior-angle", "theorem"] },
+    "entities": [
+      { "id": "showRelation", "type": "boolean", "role": "free", "visible": false },
+      { "id": "A", "type": "point2", "label": "A", "role": "free" }, { "id": "B", "type": "point2", "label": "B", "role": "free" }, { "id": "C", "type": "point2", "label": "C", "role": "free" }, { "id": "D", "type": "point2", "label": "D", "role": "free" },
+      { "id": "triangle", "type": "polygon2", "role": "derived" }, { "id": "CD", "type": "segment2", "role": "derived" },
+      { "id": "angleA", "type": "angle", "label": "∠A", "role": "measurement", "visibleWhen": "showRelation" }, { "id": "angleB", "type": "angle", "label": "∠B", "role": "measurement", "visibleWhen": "showRelation" }, { "id": "exterior", "type": "angle", "label": "外角", "role": "measurement" },
+      { "id": "mA", "type": "scalar", "role": "measurement", "visible": false }, { "id": "mB", "type": "scalar", "role": "measurement", "visible": false }, { "id": "mExterior", "type": "scalar", "role": "measurement", "visible": false }
+    ],
+    "construction": [
+      { "id": "op-show", "command": "boolean.constant", "params": { "value": false }, "outputs": ["showRelation"] },
+      { "id": "op-A", "command": "point.free", "params": { "coords": [-1, 3.5] }, "outputs": ["A"] }, { "id": "op-B", "command": "point.free", "params": { "coords": [-4, -1] }, "outputs": ["B"] }, { "id": "op-C", "command": "point.free", "params": { "coords": [2, -1] }, "outputs": ["C"] }, { "id": "op-D", "command": "point.free", "params": { "coords": [5, -1] }, "outputs": ["D"] },
+      { "id": "op-triangle", "command": "polygon.vertices", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["triangle"] }, { "id": "op-CD", "command": "segment.through_points", "inputs": [{ "ref": "C" }, { "ref": "D" }], "outputs": ["CD"] },
+      { "id": "op-angleA", "command": "angle.three_points", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 0.65, "labelRadius": 1.0 }, "outputs": ["angleA"] }, { "id": "op-angleB", "command": "angle.three_points", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "params": { "radius": 0.65, "labelRadius": 1.0 }, "outputs": ["angleB"] }, { "id": "op-exterior", "command": "angle.three_points", "inputs": [{ "ref": "A" }, { "ref": "C" }, { "ref": "D" }], "params": { "radius": 0.82, "labelRadius": 1.18 }, "outputs": ["exterior"] },
+      { "id": "op-mA", "command": "measurement.angle", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "outputs": ["mA"] }, { "id": "op-mB", "command": "measurement.angle", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["mB"] }, { "id": "op-mExterior", "command": "measurement.angle", "inputs": [{ "ref": "A" }, { "ref": "C" }, { "ref": "D" }], "outputs": ["mExterior"] }
+    ],
+    "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-6, 5.2, 6, -3], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FBFCFE", "cameraPolicy": "document" }],
+    "styles": [
+      { "targets": ["triangle"], "style": { "stroke": "#155B73", "fill": "#BEE4E8", "strokeWidth": 2.2, "fillOpacity": 0.25, "labelVisible": false } }, { "targets": ["CD"], "style": { "stroke": "#155B73", "strokeWidth": 2.2, "labelVisible": false } },
+      { "targets": ["A", "B", "C", "D"], "style": { "stroke": "#155B73", "fill": "#155B73", "pointSize": 4.2, "fontSize": 13, "labelVisible": true, "labelPlacement": "auto" } },
+      { "targets": ["angleA", "angleB"], "style": { "stroke": "#23758A", "fill": "#75C7D1", "fillOpacity": 0.32, "fontSize": 11, "labelVisible": true } }, { "targets": ["exterior"], "style": { "stroke": "#D6763A", "fill": "#F4C7A8", "fillOpacity": 0.5, "fontSize": 11, "labelVisible": true } }
+    ],
+    "interactions": [{ "target": "showRelation", "permissions": ["set_value"] }], "controls": [{ "id": "toggleRelation", "kind": "checkbox", "label": "显示两个不相邻内角", "description": "显示与外角构成数量关系的两个内角。", "action": { "type": "boolean.toggle", "target": "showRelation" } }],
+    "assertions": [
+      { "id": "exterior-sum", "predicate": "expression_equal", "arguments": [{ "expr": "mExterior" }, { "expr": "mA+mB" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "三角形的一个外角等于两个不相邻内角之和。" },
+      { "id": "greater-than-a", "predicate": "value_in_range", "arguments": [{ "expr": "mExterior-mA" }, { "value": 1e-9 }, { "value": 3.141592653589793 }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "外角大于不相邻内角 ∠A。" },
+      { "id": "greater-than-b", "predicate": "value_in_range", "arguments": [{ "expr": "mExterior-mB" }, { "value": 1e-9 }, { "value": 3.141592653589793 }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "外角大于不相邻内角 ∠B。" }
+    ],
+    "activities": [{ "id": "exterior-theorem", "title": "从内角和推得外角定理", "stages": [{ "id": "exterior", "narration": "延长 BC 到 D，∠ACD 是三角形 ABC 的一个外角。" }, { "id": "relation", "narration": "显示两个不相邻内角，比较它们的和与外角。" }, { "id": "conclusion", "narration": "外角等于两个不相邻内角之和，因此大于其中任意一个。" }], "tasks": [{ "id": "verify", "prompt": "打开关系图层，说明 ∠ACD、∠A、∠B 的数量关系。", "allowedTools": ["control.invoke"], "evidence": [{ "kind": "assertion", "ref": "exterior-sum" }], "hints": ["利用三角形内角和与平角。"] }] }],
+    "provenance": { "generator": "agent", "sourceRefs": ["geogebra:dfuhbga8", "mechanism:triangle-exterior-angle", "mapping:polyline-not-required"] }
+  } },
+  "trace": { "changeSets": [] }, "expected": { "assertions": [{ "kind": "runtime-assertions-pass" }, { "kind": "static-render" }, { "kind": "render-bundle" }], "interactions": [{ "target": "showRelation", "permission": "set_value" }] }
+}

@@ -11,7 +11,7 @@ const TOOL_DEFINITIONS = [
       type: "object",
       additionalProperties: false,
       properties: {
-                category: { type: "string", enum: ["scalar", "point", "line", "circle", "polygon", "transform", "function", "annotation", "measurement", "conic"] },
+        category: { type: "string", enum: ["scalar", "point", "line", "circle", "polygon", "transform", "function", "annotation", "measurement", "conic", "geometry3d"] },
         commandPrefix: { type: "string" }
       }
     }

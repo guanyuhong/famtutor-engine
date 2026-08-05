@@ -64,6 +64,48 @@ export function isPolygon(value: unknown): value is Polygon2Value {
   return Boolean(value && typeof value === "object" && (value as Polygon2Value).kind === "polygon2");
 }
 
+export function regularPolygon(
+  center: Point2Value,
+  radius: number,
+  vertexCount: number,
+  rotation = Math.PI / 2
+): Polygon2Value {
+  if (!Number.isFinite(radius) || radius <= 0) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_RADIUS", "Regular polygon radius must be positive and finite.", { actual: radius });
+  }
+  if (!Number.isInteger(vertexCount) || vertexCount < 3 || vertexCount > 64) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_VERTEX_COUNT", "Regular polygon vertexCount must be an integer from 3 to 64.", { actual: vertexCount, expected: "3..64" });
+  }
+  if (!Number.isFinite(rotation)) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_ROTATION", "Regular polygon rotation must be finite.", { actual: rotation });
+  }
+  return {
+    kind: "polygon2",
+    vertices: Array.from({ length: vertexCount }, (_, index) => point(
+      center.x + radius * Math.cos(rotation + 2 * Math.PI * index / vertexCount),
+      center.y + radius * Math.sin(rotation + 2 * Math.PI * index / vertexCount)
+    ))
+  };
+}
+
+export function polygonDiagonals(value: Polygon2Value, fromVertex?: number): Segment2Value[] {
+  const count = value.vertices.length;
+  if (count < 3) throw new MathEngineError("INVALID_POLYGON", "Polygon diagonals require at least three vertices.");
+  if (fromVertex !== undefined && (!Number.isInteger(fromVertex) || fromVertex < 0 || fromVertex >= count)) {
+    throw new MathEngineError("INVALID_POLYGON_VERTEX_INDEX", "fromVertex must identify an existing zero-based polygon vertex.", { actual: fromVertex, expected: `0..${count - 1}` });
+  }
+  const diagonals: Segment2Value[] = [];
+  for (let left = 0; left < count; left += 1) {
+    for (let right = left + 1; right < count; right += 1) {
+      const adjacent = right === left + 1 || (left === 0 && right === count - 1);
+      if (adjacent) continue;
+      if (fromVertex !== undefined && left !== fromVertex && right !== fromVertex) continue;
+      diagonals.push(segment(value.vertices[left]!, value.vertices[right]!));
+    }
+  }
+  return diagonals;
+}
+
 export function isAngle(value: unknown): value is AngleValue {
   return Boolean(value && typeof value === "object" && (value as AngleValue).kind === "angle");
 }
@@ -260,6 +302,35 @@ export function ray(from: Point2Value, through: Point2Value): Ray2Value {
     throw new MathEngineError("DEGENERATE_RAY", "A ray requires two distinct points.");
   }
   return { kind: "ray2", from, through, direction: normalized(direction) };
+}
+
+export function angleBisectorRay(
+  left: Point2Value,
+  vertex: Point2Value,
+  right: Point2Value,
+  branch: "internal" | "external"
+): Ray2Value {
+  const leftVector = subtractPoints(left, vertex);
+  const rightVector = subtractPoints(right, vertex);
+  const leftNorm = norm(leftVector);
+  const rightNorm = norm(rightVector);
+  if (leftNorm <= DEFAULT_TOLERANCE || rightNorm <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("DEGENERATE_ANGLE", "An angle bisector requires both arms to have nonzero length.");
+  }
+  const leftUnit = scaleVector(leftVector, 1 / leftNorm);
+  const rightUnit = scaleVector(rightVector, 1 / rightNorm);
+  const direction = branch === "internal"
+    ? vector(leftUnit.x + rightUnit.x, leftUnit.y + rightUnit.y)
+    : vector(leftUnit.x - rightUnit.x, leftUnit.y - rightUnit.y);
+  if (norm(direction) <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError(
+      "DEGENERATE_ANGLE_BISECTOR",
+      branch === "internal"
+        ? "The internal bisector is undefined for opposite angle arms."
+        : "The external bisector is undefined for coincident angle arms."
+    );
+  }
+  return ray(vertex, addPointVector(vertex, normalized(direction)));
 }
 
 export function circle(center: Point2Value, radius: number): Circle2Value {

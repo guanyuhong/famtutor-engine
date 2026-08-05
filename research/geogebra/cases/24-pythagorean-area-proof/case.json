@@ -1,0 +1,34 @@
+{
+  "schema":"famtutor.case.v1","caseId":"research-geogebra-24-pythagorean-area-proof","title":"用三个正方形证明勾股定理","status":"accepted","caseType":"demonstration","difficulty":"mechanism-reference",
+  "source":{"printedPages":[],"pdfPages":[],"references":["https://www.geogebra.org/m/sw7nbppf"],"note":"依据公开题意原创构造直角三角形三边上的正方形。"},
+  "requiredCapabilities":["polygon.vertices","measurement.area","scalar.slider","marker.right_angle","assertion.expression_equal"],
+  "inputs":{"initialDocument":{
+    "schema":"famtutor.math.document.v1","documentId":"qiu-feng-pythagorean-area-proof","revision":1,"seed":2424,
+    "metadata":{"title":"勾股定理的面积证明","description":"改变两条直角边，三个正方形面积始终满足 a²+b²=c²。","locale":"zh-CN","purpose":"demonstration","subject":"mathematics","grade":"grade-8","tags":["pythagorean-theorem","area-proof","right-triangle"]},
+    "entities":[
+      {"id":"a","type":"scalar","label":"直角边 a","role":"free"},{"id":"b","type":"scalar","label":"直角边 b","role":"free"},
+      {"id":"A","type":"point2","label":"A","role":"derived"},{"id":"B","type":"point2","label":"B","role":"derived"},{"id":"C","type":"point2","label":"C","role":"derived"},
+      {"id":"D","type":"point2","role":"auxiliary"},{"id":"E","type":"point2","role":"auxiliary"},{"id":"F","type":"point2","role":"auxiliary"},{"id":"G","type":"point2","role":"auxiliary"},{"id":"H","type":"point2","role":"auxiliary"},{"id":"I","type":"point2","role":"auxiliary"},
+      {"id":"tri","type":"polygon2","label":"△ABC","role":"derived"},{"id":"sqA","type":"polygon2","label":"a²","role":"derived"},{"id":"sqB","type":"polygon2","label":"b²","role":"derived"},{"id":"sqC","type":"polygon2","label":"c²","role":"derived"},
+      {"id":"right","type":"angle","role":"measurement"},{"id":"rightMark","type":"polygon2","role":"annotation"},{"id":"areaA","type":"scalar","role":"measurement","visible":false},{"id":"areaB","type":"scalar","role":"measurement","visible":false},{"id":"areaC","type":"scalar","role":"measurement","visible":false}
+    ],
+    "construction":[
+      {"id":"a","command":"scalar.slider","params":{"min":2,"max":4,"value":3.2,"step":0.1,"position":[-6.5,-5.8],"length":5},"outputs":["a"]},{"id":"b","command":"scalar.slider","params":{"min":2,"max":4,"value":2.5,"step":0.1,"position":[0.5,-5.8],"length":5},"outputs":["b"]},
+      {"id":"A","command":"point.from_expressions","params":{"x":"-1","y":"-1"},"outputs":["A"]},{"id":"B","command":"point.from_expressions","params":{"x":"a-1","y":"-1"},"outputs":["B"]},{"id":"C","command":"point.from_expressions","params":{"x":"-1","y":"b-1"},"outputs":["C"]},
+      {"id":"D","command":"point.from_expressions","params":{"x":"a-1","y":"-1-a"},"outputs":["D"]},{"id":"E","command":"point.from_expressions","params":{"x":"-1","y":"-1-a"},"outputs":["E"]},
+      {"id":"F","command":"point.from_expressions","params":{"x":"-1-b","y":"-1"},"outputs":["F"]},{"id":"G","command":"point.from_expressions","params":{"x":"-1-b","y":"b-1"},"outputs":["G"]},
+      {"id":"H","command":"point.from_expressions","params":{"x":"b-1","y":"a+b-1"},"outputs":["H"]},{"id":"I","command":"point.from_expressions","params":{"x":"a+b-1","y":"a-1"},"outputs":["I"]},
+      {"id":"tri","command":"polygon.vertices","inputs":[{"ref":"A"},{"ref":"B"},{"ref":"C"}],"outputs":["tri"]},{"id":"sqA","command":"polygon.vertices","inputs":[{"ref":"A"},{"ref":"B"},{"ref":"D"},{"ref":"E"}],"outputs":["sqA"]},{"id":"sqB","command":"polygon.vertices","inputs":[{"ref":"A"},{"ref":"F"},{"ref":"G"},{"ref":"C"}],"outputs":["sqB"]},{"id":"sqC","command":"polygon.vertices","inputs":[{"ref":"B"},{"ref":"C"},{"ref":"H"},{"ref":"I"}],"outputs":["sqC"]},
+      {"id":"right","command":"angle.three_points","inputs":[{"ref":"B"},{"ref":"A"},{"ref":"C"}],"outputs":["right"]},{"id":"rightMark","command":"marker.right_angle","inputs":[{"ref":"right"}],"params":{"size":0.35},"outputs":["rightMark"]},
+      {"id":"areaA","command":"measurement.area","inputs":[{"ref":"sqA"}],"outputs":["areaA"]},{"id":"areaB","command":"measurement.area","inputs":[{"ref":"sqB"}],"outputs":["areaB"]},{"id":"areaC","command":"measurement.area","inputs":[{"ref":"sqC"}],"outputs":["areaC"]}
+    ],
+    "views":[{"id":"main","kind":"graphics2d","visible":true,"renderer":"jsxgraph-svg","boundingBox":[-7,7,7,-6.6],"axes":false,"grid":false,"keepAspectRatio":true,"background":"#FBFCFE","cameraPolicy":"document"}],
+    "styles":[
+      {"targets":["tri"],"style":{"stroke":"#15365F","strokeWidth":2.8,"fill":"#FFFFFF","fillOpacity":0.9,"fontSize":12}},{"targets":["sqA"],"style":{"stroke":"#D06A3A","strokeWidth":2,"fill":"#F4C7B5","fillOpacity":0.35,"fontSize":15}},{"targets":["sqB"],"style":{"stroke":"#0E8378","strokeWidth":2,"fill":"#A7DED8","fillOpacity":0.35,"fontSize":15}},{"targets":["sqC"],"style":{"stroke":"#5C62D6","strokeWidth":2,"fill":"#C8C9F4","fillOpacity":0.3,"fontSize":15}},{"targets":["A","B","C"],"style":{"stroke":"#155B73","fill":"#155B73","pointSize":4,"fontSize":11,"labelPlacement":"auto"}},{"targets":["D","E","F","G","H","I"],"style":{"pointSize":1,"opacity":0,"labelVisible":false}},{"targets":["right"],"style":{"opacity":0,"labelVisible":false}},{"targets":["rightMark"],"style":{"stroke":"#15365F","strokeWidth":1.5,"fillOpacity":0}}
+    ],
+    "interactions":[{"target":"a","permissions":["set_value"]},{"target":"b","permissions":["set_value"]}],
+    "assertions":[{"id":"pythagorean-area","predicate":"expression_equal","arguments":[{"expr":"areaA+areaB"},{"expr":"areaC"}],"expected":true,"tolerance":1e-8,"requiredMethod":"numeric","severity":"error","message":"两直角边上的正方形面积和等于斜边上的正方形面积。"}],
+    "activities":[{"id":"proof","title":"面积恒等式","stages":[{"id":"triangle","narration":"先观察直角三角形 ABC，两条直角边长为 a、b，斜边长为 c。"},{"id":"squares","narration":"分别在三边外侧作正方形，它们的面积是 a²、b²、c²。"},{"id":"area","narration":"无论怎样改变 a、b，橙色与绿色面积之和都等于紫色面积，因此 a²+b²=c²。"}]}],
+    "provenance":{"generator":"agent","sourceRefs":["geogebra:sw7nbppf","pattern:pythagorean-area-proof"]}
+  }},"trace":{"changeSets":[]},"expected":{"assertions":[{"kind":"runtime-assertions-pass"},{"kind":"static-render"},{"kind":"render-bundle"}],"interactions":[{"target":"a","permission":"set_value"},{"target":"b","permission":"set_value"}]}
+}

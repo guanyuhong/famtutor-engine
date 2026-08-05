@@ -72,7 +72,7 @@ test("offline inspector extracts construction, controls, animation, macros and r
         <euclidianView/><spreadsheetView/>
         <macro cmdName="InlineTool" toolName="Inline Tool"><input a0="A"/><output a0="B"/></macro>
         <construction>
-          <element type="point" label="A"><show object="true"/></element>
+          <element type="point" label="A"><show object="true"/><condition showObject="showPieces"/></element>
           <element type="line" label="axis"/>
           <element type="numeric" label="t">
             <slider min="0" max="2" width="220" horizontal="true"/>
@@ -98,16 +98,18 @@ test("offline inspector extracts construction, controls, animation, macros and r
   assert.equal(manifest.construction.controls.sliders[0].label, "t");
   assert.equal(manifest.construction.controls.checkboxes[0].label, "showPieces");
   assert.equal(manifest.construction.controls.buttons[0].label, "reset");
+  assert.deepEqual(manifest.construction.conditions.visibility, [{ label: "A", expression: "showPieces" }]);
   assert.equal(manifest.construction.animations[0].playing, true);
   assert.deepEqual(manifest.macros.map(macro => macro.commandName), ["InlineTool", "RotationArrow"]);
   assert.deepEqual(manifest.macros[1].inputLabels, ["A", "B"]);
   assert.deepEqual(manifest.macros[1].outputLabels, ["arrow"]);
   assert.equal(manifest.scripts.length, 3);
   assert.equal(manifest.scripts.every(script => script.redacted === true), true);
+  assert.deepEqual(manifest.scripts.map(script => script.apiCalls), [["SetValue"], [], ["setValue"]]);
   assert.equal(JSON.stringify(manifest).includes("SetValue[t,0]"), false);
   assert.equal(manifest.security.scriptsExecuted, false);
   assert.equal(manifest.preview.thumbnail.bytes, 3);
-  assert.deepEqual(manifest.capabilityTags, ["animation", "custom_tool", "geometry", "script", "sequence", "simulation", "spreadsheet", "transform"]);
+  assert.deepEqual(manifest.capabilityTags, ["animation", "conditional_visibility", "custom_tool", "geometry", "script", "sequence", "simulation", "spreadsheet", "transform"]);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Rotate"), true);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Mirror" && item.condition === "line-like mirror"), true);
   assert.equal(manifest.engineMapping.exact.some(item => item.command === "Sequence" && item.mapsTo === "collection.sequence"), true);

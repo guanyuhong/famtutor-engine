@@ -218,25 +218,8 @@ function planSteps(definition: MacroDefinition, document: MathDocument, bindings
     const A = requireInput(bindings, "A", name);
     const B = requireInput(bindings, "B", name);
     const C = requireInput(bindings, "C", name);
-    const cBA = allocAux("cBA");
-    const lineBC = allocAux("lineBC");
-    const D1 = allocAux("D1");
-    const D2 = allocAux("D2");
-    const cA = allocAux("cA");
-    const cD = allocAux("cD");
-    const E1 = allocAux("E1");
-    const E2 = allocAux("E2");
     const bisector = allocOutput("bisector");
-    // D1 is preferred contact on BC by stable intersection order; E1 preferred bisector point.
-    steps.push(
-      { command: "circle.through_points", inputRefs: [B, A], outputKeys: [cBA], outputTypes: ["circle2"] },
-      { command: "line.through_points", inputRefs: [B, C], outputKeys: [lineBC], outputTypes: ["line2"] },
-      { command: "point.intersection_line_circle", inputRefs: [lineBC, cBA], outputKeys: [D1, D2], outputTypes: ["point2", "point2"] },
-      { command: "circle.through_points", inputRefs: [A, D1], outputKeys: [cA], outputTypes: ["circle2"] },
-      { command: "circle.through_points", inputRefs: [D1, A], outputKeys: [cD], outputTypes: ["circle2"] },
-      { command: "point.intersection_circle_circle", inputRefs: [cA, cD], outputKeys: [E1, E2], outputTypes: ["point2", "point2"] },
-      { command: "ray.from_points", inputRefs: [B, E1], outputKeys: [bisector], outputTypes: ["ray2"] }
-    );
+    steps.push({ command: "ray.angle_bisector", inputRefs: [A, B, C], outputKeys: [bisector], outputTypes: ["ray2"], params: { branch: "internal" } });
   } else if (name === "macro.point.triangle_incenter") {
     const A = requireInput(bindings, "A", name);
     const B = requireInput(bindings, "B", name);

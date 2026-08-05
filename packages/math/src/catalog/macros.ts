@@ -45,12 +45,9 @@ export const MACRO_DEFINITIONS: readonly MacroDefinition[] = Object.freeze([
     inputs: ["A", "B", "C"],
     outputs: ["bisector"],
     expandsTo: [
-      "circle.through_points(B,A) -> c1",
-      "point.intersection_line_circle(ray BC / line BC, c1) -> P (choose arm point)",
-      "circle.through_points(B, unit on BA) / equal-radius intersections -> Q",
-      "ray.from_points(B, angle-equal construction point) -> bisector"
+      "ray.angle_bisector(A,B,C, branch=internal) -> bisector"
     ],
-    reasonKeptAsMacro: "Multiple equivalent L0 constructions; do not freeze one as a primitive."
+    reasonKeptAsMacro: "Compatibility authoring alias; lowers to the branch-explicit L0 atom after the former circle-intersection recipe proved unable to select the internal branch deterministically."
   },
   {
     name: "macro.point.triangle_centroid",

@@ -1,4 +1,4 @@
-import { mountMathRenderer, validateMathDocument } from "../dist/index.js";
+import { evaluateMathDocument, mountMathRenderer, validateMathDocument } from "../dist/index.js";
 
 const select = document.querySelector("#example");
 const host = document.querySelector("#board");
@@ -9,6 +9,7 @@ const strategyBadge = document.querySelector("#strategy");
 const eventLog = document.querySelector("#events");
 const btnAgent = document.querySelector("#btn-agent");
 const btnIllegal = document.querySelector("#btn-illegal");
+const documentControls = document.querySelector("#document-controls");
 
 let renderer;
 let events = [];
@@ -30,6 +31,46 @@ function syncBadges(update) {
     lastUpdate: update ?? null,
     entities: doc.entities.map(entity => entity.id)
   }, null, 2);
+  renderDocumentControls();
+}
+
+function renderDocumentControls() {
+  const doc = renderer?.getDocument();
+  const controls = doc?.controls ?? [];
+  documentControls.replaceChildren();
+  documentControls.hidden = controls.length === 0;
+  if (controls.length === 0) return;
+
+  const runtime = evaluateMathDocument(doc);
+  const title = document.createElement("h2");
+  title.textContent = "案例控件";
+  documentControls.append(title);
+
+  for (const control of controls) {
+    const row = document.createElement("label");
+    row.className = "document-control";
+    if (control.description) row.title = control.description;
+
+    const input = document.createElement("input");
+    input.type = control.kind === "checkbox" ? "checkbox" : "button";
+    if (control.kind === "checkbox") {
+      input.checked = runtime.entities.get(control.action.target)?.value === true;
+    } else {
+      input.value = control.label;
+    }
+    const text = document.createElement("span");
+    text.textContent = control.label;
+    if (control.kind === "button") text.hidden = true;
+
+    input.addEventListener(control.kind === "checkbox" ? "change" : "click", async () => {
+      input.disabled = true;
+      const result = await renderer.dispatch({ type: "control.invoke", target: control.id, payload: {} });
+      validationBadge.textContent = result.ok ? validateMathDocument(result.document).status : "invalid";
+      syncBadges(result);
+    });
+    row.append(input, text);
+    documentControls.append(row);
+  }
 }
 
 async function loadExample(name) {
@@ -46,6 +87,9 @@ async function loadExample(name) {
   renderer.subscribe(pushEvent);
   strategyBadge.textContent = "rebuild";
   syncBadges();
+  const is3D = documentModel.views.some(view => view.kind === "graphics3d");
+  btnAgent.disabled = is3D;
+  btnIllegal.disabled = false;
 }
 
 async function simulateAgentSteps() {

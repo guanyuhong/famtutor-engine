@@ -105,15 +105,33 @@ Role 用于交互默认、样式 token 和作者语义，不替代 command 类�
 
 锚点只决定记号位置，线性对象提供方向；返回的两个 `segment2` 是一个开放箭形的两条短臂。接口会规范化线段端点方向，反转端点不会翻转记号。双箭形必须由两个不同锚点的调用组合。
 
-## 5. Views
+## 5. Boolean Control 与条件显隐
 
-v0.1 协议定义：
+`boolean.constant` 声明一个可审计修改的自由布尔状态；`boolean.expression` 负责派生组合条件。实体的 `visibleWhen` 只引用一个 Boolean Entity：
+
+```json
+{
+  "id": "proofLine",
+  "type": "segment2",
+  "role": "auxiliary",
+  "visibleWhen": "showProof"
+}
+```
+
+静态 Direct SVG 和 Mounted JSXGraph 使用同一规则：`visible !== false`、`visibleWhen` 为真且当前 Stage 未隐藏时才渲染。条件显隐属于 presentation dependency，不进入构造 DAG，也不会令隐藏对象变成 undefined。
+
+`checkbox` 控件必须使用 `boolean.toggle`，目标必须由 `boolean.constant` 产生；需要明确赋值时使用 `boolean.set`。删除显隐条件实体时，引用方会保守地变为静态隐藏，避免意外泄露教学结论。
+
+## 6. Views
+
+协议定义：
 
 - `graphics2d`；
+- `graphics3d`；
 - `construction`；
 - `algebra`。
 
-真正实现渲染的是 `graphics2d`。另外两个 view 是为后续多视图联动预留的 canonical 声明。
+真正实现渲染的是 `graphics2d` 与 `graphics3d`。另外两个 view 是为后续多视图联动预留的 canonical 声明。
 
 ```json
 {
@@ -130,7 +148,9 @@ v0.1 协议定义：
 }
 ```
 
-## 6. Styles
+`graphics3d.boundingBox3D` 使用 `[[xmin,xmax],[ymin,ymax],[zmin,zmax]]`；`camera.azimuth` 与 `camera.elevation` 单位为弧度。MountedRenderer 由 JSXGraph View3D 驱动，Direct SVG 使用相同相机声明生成确定性投影。
+
+## 7. Styles
 
 样式绑定通过 entity IDs，不进入数学构造：
 
@@ -171,7 +191,7 @@ Token：`primary`、`accent`、`auxiliary`、`danger`、`muted`、`success`。
 
 两者单位均为文档坐标；`radius` 控制角弧，`labelRadius` 控制标签中心沿角平分线的位置。未提供 `labelRadius` 时，渲染器根据字体和角度自动估算安全位置。
 
-## 7. Interactions
+## 8. Interactions
 
 ```json
 {
@@ -184,7 +204,7 @@ Token：`primary`、`accent`、`auxiliary`、`danger`、`muted`、`success`。
 
 运行时和仿真都会检查权限。`role: free` 不自动绕过显式 interaction policy。
 
-## 8. Assertions
+## 9. Assertions
 
 ```json
 {
@@ -208,7 +228,7 @@ expression_equal point_on collinear parallel perpendicular
 coincident equal_length equal_angle value_in_range
 ```
 
-## 9. Activities
+## 10. Activities
 
 Activities 不改变数学真值，只描述教学运行：
 
@@ -238,7 +258,7 @@ Activities 不改变数学真值，只描述教学运行：
 }
 ```
 
-## 10. Versioning
+## 11. Versioning
 
 - `schema` 负责协议主版本；
 - `revision` 负责同一 document 的并发写入版本；

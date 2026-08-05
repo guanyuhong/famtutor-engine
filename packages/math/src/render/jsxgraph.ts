@@ -1,6 +1,7 @@
 import { MathEngineError } from "../errors.js";
 import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
 import {
+  angleBisectorRay,
   angleValue,
   applyTransform,
   arcFromCenterPoints,
@@ -65,6 +66,7 @@ import type {
   DirectSvgResult,
   EntityStyle,
   Graphics2DView,
+  Graphics3DView,
   JsonValue,
   MathDocument,
   NormalizedMathEvent,
@@ -78,10 +80,13 @@ import { renderDirectSvg } from "./direct-svg.js";
 import { layoutPointLabels, type LabelViewport } from "./point-label-layout.js";
 import { styleForEntity } from "./style.js";
 import { intervalFromBounds } from "../kernel/interval.js";
+import { mountJsxGraph3D } from "./jsxgraph3d.js";
+import { isEntityVisible } from "./visibility.js";
 
-interface JxgObject {
+export interface JxgObject {
   X?: () => number;
   Y?: () => number;
+  Z?: () => number;
   Value?: () => number;
   L?: () => number;
   Radius?: () => number;
@@ -101,7 +106,7 @@ interface JxgObject {
   [key: string]: unknown;
 }
 
-interface JxgBoard {
+export interface JxgBoard {
   create: (kind: string, parents: unknown[], attributes?: Record<string, unknown>) => JxgObject;
   suspendUpdate?: () => void;
   unsuspendUpdate?: () => void;
@@ -116,12 +121,13 @@ interface JxgBoard {
   [key: string]: unknown;
 }
 
-interface JxgNamespace {
+export interface JxgNamespace {
   JSXGraph: {
     initBoard: (containerId: string, options: Record<string, unknown>) => JxgBoard;
     freeBoard: (board: JxgBoard) => void;
   };
   COORDS_BY_USER?: number;
+  Options?: { axes3d?: Record<string, Record<string, unknown>> };
 }
 
 export interface JsxGraphRuntimeOptions {
@@ -136,7 +142,7 @@ export interface JsxGraphRuntimeOptions {
 export interface JsxGraphRuntimeHandle {
   readonly board: JxgBoard;
   readonly document: MathDocument;
-  readonly view: Graphics2DView;
+  readonly view: Graphics2DView | Graphics3DView;
   readonly ready: Promise<void>;
   getNative(entityId: string): JxgObject | undefined;
   getValue(entityId: string): RuntimeValue | undefined;
@@ -361,7 +367,7 @@ function normalizeSvg(svg: string): string {
   return svg;
 }
 
-export function mountJsxGraph(
+function mountJsxGraph2D(
   host: HTMLElement,
   document: MathDocument,
   options: JsxGraphRuntimeOptions = {}
@@ -457,7 +463,7 @@ export function mountJsxGraph(
 
   const visibleIdsForStage = (nextStage?: string): Set<string> => {
     const stage = document.activities?.flatMap(activity => activity.stages ?? []).find(candidate => candidate.id === nextStage);
-    const authoredVisibleIds = new Set(document.entities.filter(entity => entity.visible !== false).map(entity => entity.id));
+    const authoredVisibleIds = new Set(document.entities.filter(entity => isEntityVisible(entity, valueOf)).map(entity => entity.id));
     const visibleIds = stage?.reveal
       ? new Set(stage.reveal.filter(id => authoredVisibleIds.has(id)))
       : new Set(authoredVisibleIds);
@@ -551,6 +557,14 @@ export function mountJsxGraph(
     switch (node.command) {
       case "scalar.constant": {
         const value = numericParam(node, "value");
+        valueResolvers.set(output, () => value);
+        return;
+      }
+      case "boolean.constant": {
+        if (typeof node.params?.value !== "boolean") {
+          throw new MathEngineError("INVALID_PARAMETER", "boolean.constant params.value must be boolean.");
+        }
+        const value = node.params.value;
         valueResolvers.set(output, () => value);
         return;
       }
@@ -833,6 +847,20 @@ export function mountJsxGraph(
         valueResolvers.set(output, () => ray(pointOf(refs[0]!), pointOf(refs[1]!)));
         break;
       }
+      case "ray.angle_bisector": {
+        const branch = node.params?.branch;
+        if (branch !== "internal" && branch !== "external") {
+          throw new MathEngineError("INVALID_PARAMETER", "ray.angle_bisector params.branch must be 'internal' or 'external'.", { actual: branch });
+        }
+        const current = () => angleBisectorRay(pointOf(refs[0]!), pointOf(refs[1]!), pointOf(refs[2]!), branch);
+        const through = board.create("point", [() => current().through.x, () => current().through.y], { visible: false, fixed: true, name: "" });
+        native = board.create("line", [pointNative(objects, refs[1]!), through], {
+          ...jxgAttributes(document, output, true), straightFirst: false, straightLast: true, lastArrow: true
+        });
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "line.parallel_through": {
         native = board.create("parallel", [pointNative(objects, refs[0]!), lineLikeNative(objects, refs[1]!)], jxgAttributes(document, output, true));
         objects.set(output, native);
@@ -1027,6 +1055,55 @@ export function mountJsxGraph(
         }
         objects.set(output, native);
         valueResolvers.set(output, () => ({ kind: "polygon2", vertices: refs.map(pointOf) }));
+        break;
+      }
+      case "polygon.regular": {
+        const maxVertices = Number(node.params?.maxVertices);
+        if (!Number.isInteger(maxVertices) || maxVertices < 3 || maxVertices > 64) {
+          throw new MathEngineError("INVALID_REGULAR_POLYGON_BOUND", "Mounted regular polygon requires maxVertices from 3 to 64.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!isPolygon(value)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a polygon2 at runtime.`);
+          return value;
+        };
+        const vertices = Array.from({ length: maxVertices }, (_, index) => board.create("point", [
+          () => current().vertices[Math.min(index, current().vertices.length - 1)]!.x,
+          () => current().vertices[Math.min(index, current().vertices.length - 1)]!.y
+        ], { fixed: true, visible: false, name: "", withLabel: false }));
+        native = board.create("polygon", vertices, jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
+      case "polygon.diagonals": {
+        const maxItems = Number(node.params?.maxItems);
+        if (!Number.isInteger(maxItems) || maxItems < 1 || maxItems > 256) {
+          throw new MathEngineError("INVALID_COLLECTION_LIMIT", "Mounted polygon diagonals require maxItems from 1 to 256.");
+        }
+        const current = () => {
+          const value = currentHeadlessValues().get(output);
+          if (!value || typeof value !== "object" || value.kind !== "collection" || value.itemType !== "segment2") {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", `Entity '${output}' is not a segment2 collection at runtime.`);
+          }
+          return value;
+        };
+        native = board.create("point", [0, 0], { fixed: true, visible: false, name: "", withLabel: false });
+        native.fmeVisibility = () => false;
+        native.fmeChildren = [];
+        for (let index = 0; index < maxItems; index += 1) {
+          const coordinate = (endpoint: "from" | "to", axis: "x" | "y") => {
+            const item = current().items[index];
+            return isSegment(item) ? item[endpoint][axis] : Number.NaN;
+          };
+          const from = board.create("point", [() => coordinate("from", "x"), () => coordinate("from", "y")], { fixed: true, visible: false, name: "", withLabel: false });
+          const to = board.create("point", [() => coordinate("to", "x"), () => coordinate("to", "y")], { fixed: true, visible: false, name: "", withLabel: false });
+          const child = board.create("segment", [from, to], { ...jxgAttributes(document, output, true), name: "", withLabel: false });
+          child.fmeVisibility = () => index < current().items.length;
+          native.fmeChildren.push(child);
+        }
+        objects.set(output, native);
+        valueResolvers.set(output, current);
         break;
       }
       case "angle.three_points": {
@@ -1738,4 +1815,15 @@ export function mountJsxGraph(
   };
 
   return handle;
+}
+
+export function mountJsxGraph(
+  host: HTMLElement,
+  document: MathDocument,
+  options: JsxGraphRuntimeOptions = {}
+): JsxGraphRuntimeHandle {
+  const requested = options.viewId ? document.views.find(view => view.id === options.viewId) : undefined;
+  const default3D = !requested && !document.views.some(view => view.kind === "graphics2d") && document.views.some(view => view.kind === "graphics3d");
+  if (requested?.kind === "graphics3d" || default3D) return mountJsxGraph3D(host, document, options);
+  return mountJsxGraph2D(host, document, options);
 }

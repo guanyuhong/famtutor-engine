@@ -102,6 +102,28 @@ function sha256(buffer) {
   return createHash("sha256").update(buffer).digest("hex");
 }
 
+function scriptApiCalls(content, language) {
+  const calls = new Set();
+  if (language === "ggbscript") {
+    for (const match of content.matchAll(/\b([A-Za-z][A-Za-z0-9_]*)\s*\[/g)) calls.add(match[1]);
+  } else {
+    for (const match of content.matchAll(/\b(?:ggbApplet|applet)\s*\.\s*([A-Za-z][A-Za-z0-9_]*)\s*\(/g)) calls.add(match[1]);
+  }
+  return [...calls].sort((left, right) => left.localeCompare(right));
+}
+
+function scriptFingerprint(content, language, fields = {}) {
+  const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
+  return {
+    ...fields,
+    language,
+    bytes: buffer.length,
+    sha256: sha256(buffer),
+    apiCalls: scriptApiCalls(buffer.toString("utf8"), language),
+    redacted: true
+  };
+}
+
 function assertArchive(condition, code, message, details = {}) {
   if (condition) return;
   const error = new Error(message);
@@ -236,6 +258,7 @@ function parseConstructionXml(xml, fileName) {
     elements: { total: 0, byType: {}, inventory: [] },
     commands: { total: 0, byName: {}, signatures: [] },
     controls: { sliders: [], checkboxes: [], buttons: [], inputs: [] },
+    conditions: { visibility: [] },
     animations: [],
     scripts: [],
     views: { euclidian2d: 0, euclidian3d: 0, spreadsheet: 0, algebra: 0 },
@@ -282,18 +305,19 @@ function parseConstructionXml(xml, fileName) {
           type: attrs.type,
           playing: booleanAttribute(attrs.playing)
         });
+      } else if (lowered === "condition" && currentElement && attrs.showObject) {
+        result.conditions.visibility.push({
+          label: currentElement.label,
+          expression: attrs.showObject
+        });
       } else if (lowered.includes("script")) {
         const content = attrs.val ?? attrs.script ?? "";
         if (!content) return;
-        result.scripts.push({
+        result.scripts.push(scriptFingerprint(content, lowered.includes("java") ? "javascript" : "ggbscript", {
           scope: currentElement ? "object" : "document",
           label: currentElement?.label,
-          language: lowered.includes("java") ? "javascript" : "ggbscript",
-          event: attrs.event,
-          bytes: Buffer.byteLength(content),
-          sha256: sha256(Buffer.from(content)),
-          redacted: true
-        });
+          event: attrs.event
+        }));
       } else if (lowered === "euclidianview") result.views.euclidian2d += 1;
       else if (lowered === "euclidianview3d") result.views.euclidian3d += 1;
       else if (lowered === "spreadsheetview") result.views.spreadsheet += 1;
@@ -312,14 +336,10 @@ function parseConstructionXml(xml, fileName) {
     if (!content) continue;
     const fingerprint = sha256(Buffer.from(content));
     if (result.scripts.some(script => script.sha256 === fingerprint)) continue;
-    result.scripts.push({
+    result.scripts.push(scriptFingerprint(content, match[1].toLowerCase() === "javascript" ? "javascript" : "ggbscript", {
       scope: "document",
-      language: match[1].toLowerCase() === "javascript" ? "javascript" : "ggbscript",
-      event: attrs.event,
-      bytes: Buffer.byteLength(content),
-      sha256: fingerprint,
-      redacted: true
-    });
+      event: attrs.event
+    }));
   }
   return result;
 }
@@ -461,6 +481,7 @@ function capabilityTags(parsed, macros, globalScripts) {
   if (commands.some(command => /intersectregion|union|difference|coefficients/.test(command))) tags.add("region_boolean");
   if (types.some(type => type.includes("3d")) || parsed.views.euclidian3d > 0 || commands.includes("surface")) tags.add("3d");
   if (parsed.views.spreadsheet > 0) tags.add("spreadsheet");
+  if (parsed.conditions.visibility.length > 0) tags.add("conditional_visibility");
   if (macros.length > 0) tags.add("custom_tool");
   if (parsed.scripts.length > 0 || globalScripts.length > 0) tags.add("script");
   if (tags.has("animation") && (commands.some(command => /locus|trace/.test(command)) || parsed.controls.buttons.length > 0)) tags.add("simulation");
@@ -473,6 +494,7 @@ function mergeParsed(parts) {
     elements: { total: 0, byType: {}, inventory: [] },
     commands: { total: 0, byName: {}, signatures: [] },
     controls: { sliders: [], checkboxes: [], buttons: [], inputs: [] },
+    conditions: { visibility: [] },
     animations: [],
     scripts: [],
     views: { euclidian2d: 0, euclidian3d: 0, spreadsheet: 0, algebra: 0 },
@@ -487,6 +509,7 @@ function mergeParsed(parts) {
     for (const [key, count] of Object.entries(part.commands.byName)) merged.commands.byName[key] = (merged.commands.byName[key] ?? 0) + count;
     merged.commands.signatures.push(...part.commands.signatures);
     for (const key of Object.keys(merged.controls)) merged.controls[key].push(...part.controls[key]);
+    merged.conditions.visibility.push(...part.conditions.visibility);
     merged.animations.push(...part.animations);
     merged.scripts.push(...part.scripts);
     for (const key of Object.keys(merged.views)) merged.views[key] += part.views[key];
@@ -516,7 +539,7 @@ export function inspectGgb(input, options = {}) {
     )));
   const globalScripts = [...entries.entries()]
     .filter(([name]) => /(^|\/)(geogebra(_javascript)?\.js|geogebra\.js)$/i.test(name))
-    .map(([name, data]) => ({ scope: "global-file", language: "javascript", fileName: name, bytes: data.length, sha256: sha256(data), redacted: true }));
+    .map(([name, data]) => scriptFingerprint(data, "javascript", { scope: "global-file", fileName: name }));
   const knownCoreFiles = new Set(["geogebra.xml", "geogebra_macro.xml", "geogebra.js", "geogebra_javascript.js", "geogebra_thumbnail.png"]);
   const assets = [...entries.entries()]
     .filter(([name]) => !knownCoreFiles.has(name) && !name.endsWith("/geogebra.xml") && !name.endsWith("/geogebra_macro.xml"))
@@ -545,6 +568,7 @@ export function inspectGgb(input, options = {}) {
       elements: parsed.elements,
       commands: parsed.commands,
       controls: parsed.controls,
+      conditions: parsed.conditions,
       animations: parsed.animations,
       views: parsed.views
     },

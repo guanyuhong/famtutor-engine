@@ -25,7 +25,8 @@ export interface CommandDefinition {
     | "annotation"
     | "measurement"
     | "conic"
-    | "collection";
+    | "collection"
+    | "geometry3d";
   renderer: "jsxgraph" | "computed" | "both";
 }
 
@@ -47,6 +48,8 @@ const TRANSFORMABLE = [
 
 const COLLECTION_DEPENDENCY = ENTITY_TYPES.filter(type => type !== "collection") as Exclude<EntityType, "collection">[];
 
+const POINT3_INPUTS = ["point3"] as const;
+
 const definitions: CommandDefinition[] = [
   {
     name: "scalar.constant",
@@ -67,6 +70,16 @@ const definitions: CommandDefinition[] = [
     requiredParams: ["min", "max", "value"],
     category: "scalar",
     renderer: "jsxgraph"
+  },
+  {
+    name: "boolean.constant",
+    title: "Mutable boolean",
+    description: "Create a free boolean from params.value. Hosts may change it only through audited boolean.set or boolean.toggle actions.",
+    inputTypes: [],
+    outputTypes: ["boolean"],
+    requiredParams: ["value"],
+    category: "scalar",
+    renderer: "computed"
   },
   {
     name: "boolean.expression",
@@ -124,6 +137,66 @@ const definitions: CommandDefinition[] = [
     requiredParams: ["itemType", "variable", "template", "maxItems"],
     category: "collection",
     renderer: "both"
+  },
+  {
+    name: "point3.free",
+    title: "Free 3D point",
+    description: "Create a free 3D point from params.coords = [x,y,z]. The point is renderer-neutral and may be mounted by a graphics3d backend.",
+    inputTypes: [], outputTypes: ["point3"], requiredParams: ["coords"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "point3.from_expressions",
+    title: "3D point from expressions",
+    description: "Create a derived 3D point from safe x, y and z expressions.",
+    inputTypes: [], outputTypes: ["point3"], requiredParams: ["x", "y", "z"], expressionParams: ["x", "y", "z"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "vector3.between_points",
+    title: "3D vector between points",
+    description: "Create the vector from the first 3D point to the second.",
+    inputTypes: ["point3", "point3"], outputTypes: ["vector3"], category: "geometry3d", renderer: "computed"
+  },
+  {
+    name: "line3.through_points",
+    title: "3D line through points",
+    description: "Create an infinite 3D line through two distinct points.",
+    inputTypes: ["point3", "point3"], outputTypes: ["line3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "segment3.through_points",
+    title: "3D segment through points",
+    description: "Create a finite 3D segment between two distinct points.",
+    inputTypes: ["point3", "point3"], outputTypes: ["segment3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "plane3.through_points",
+    title: "Plane through three points",
+    description: "Create a plane from three non-collinear 3D points. Optional params.uRange and params.vRange bound its visual patch.",
+    inputTypes: ["point3", "point3", "point3"], outputTypes: ["plane3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "polygon3.vertices",
+    title: "3D polygon from vertices",
+    description: "Create a planar teaching polygon from at least three ordered 3D points.",
+    inputTypes: POINT3_INPUTS, variadicInputType: "point3", minInputs: 3, maxInputs: 64, outputTypes: ["polygon3"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "sphere3.center_radius",
+    title: "Sphere from center and radius",
+    description: "Create a sphere from a 3D center and either scalar input or numeric/expression params.radius.",
+    inputTypes: ["point3"], variadicInputType: "scalar", minInputs: 1, maxInputs: 2, outputTypes: ["sphere3"], expressionParams: ["radius"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "curve3.parametric",
+    title: "Parametric space curve",
+    description: "Create a 3D parametric curve from x/y/z expressions, a parameter name and params.domain=[min,max].",
+    inputTypes: [], outputTypes: ["curve3"], requiredParams: ["xExpression", "yExpression", "zExpression", "domain"], expressionParams: ["xExpression", "yExpression", "zExpression"], category: "geometry3d", renderer: "both"
+  },
+  {
+    name: "surface3.parametric",
+    title: "Parametric surface",
+    description: "Create a 3D parametric surface from x/y/z expressions, two parameter names, and finite uDomain/vDomain intervals.",
+    inputTypes: [], outputTypes: ["surface3"], requiredParams: ["xExpression", "yExpression", "zExpression", "uDomain", "vDomain"], expressionParams: ["xExpression", "yExpression", "zExpression"], category: "geometry3d", renderer: "both"
   },
   {
     name: "point.from_expressions",
@@ -242,6 +315,16 @@ const definitions: CommandDefinition[] = [
     description: "Create a ray starting at the first point and passing through the second.",
     inputTypes: ["point2", "point2"],
     outputTypes: ["ray2"],
+    category: "line",
+    renderer: "both"
+  },
+  {
+    name: "ray.angle_bisector",
+    title: "Internal or external angle bisector",
+    description: "Create the internal or external angle-bisector ray of angle left-vertex-right. params.branch must be 'internal' or 'external'. The external direction is normalized(vertex→left) minus normalized(vertex→right), so swapping the arm inputs reverses that ray.",
+    inputTypes: ["point2", "point2", "point2"],
+    outputTypes: ["ray2"],
+    requiredParams: ["branch"],
     category: "line",
     renderer: "both"
   },
@@ -390,6 +473,27 @@ const definitions: CommandDefinition[] = [
     minInputs: 3,
     maxInputs: 64,
     outputTypes: ["polygon2"],
+    category: "polygon",
+    renderer: "both"
+  },
+  {
+    name: "polygon.regular",
+    title: "Regular polygon",
+    description: "Create a regular polygon centered at a point. Inputs are center point, circumradius scalar, and integer vertex-count scalar. params.maxVertices is a required renderer bound from 3 to 64; optional params.rotation is the first-vertex angle in radians (default pi/2). Fails when radius is non-positive, vertexCount is non-integral/outside 3..maxVertices, or maxVertices is invalid.",
+    inputTypes: ["point2", "scalar", "scalar"],
+    outputTypes: ["polygon2"],
+    requiredParams: ["maxVertices"],
+    expressionParams: ["rotation"],
+    category: "polygon",
+    renderer: "both"
+  },
+  {
+    name: "polygon.diagonals",
+    title: "Polygon diagonals",
+    description: "Create a bounded segment collection containing every diagonal of a polygon, or only diagonals incident to optional zero-based params.fromVertex. params.maxItems is required (1..256); evaluation fails instead of truncating when the result exceeds it.",
+    inputTypes: ["polygon2"],
+    outputTypes: ["collection"],
+    requiredParams: ["maxItems"],
     category: "polygon",
     renderer: "both"
   },

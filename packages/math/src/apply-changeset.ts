@@ -311,7 +311,11 @@ function operationDelete(document: MathDocument, operation: Record<string, unkno
   const deleteNodes = new Set([...producerNodes, ...(cascade ? dependentNodes : [])]);
   const deleteEntities = new Set([...deleteNodes].flatMap(nodeId => graph.outputsByNode.get(nodeId) ?? []));
   document.construction = document.construction.filter(node => !deleteNodes.has(node.id));
-  document.entities = document.entities.filter(entity => !deleteEntities.has(entity.id));
+  document.entities = document.entities
+    .filter(entity => !deleteEntities.has(entity.id))
+    .map(entity => entity.visibleWhen && deleteEntities.has(entity.visibleWhen)
+      ? { ...entity, visible: false, visibleWhen: undefined }
+      : entity);
   document.styles = document.styles
     ?.map(binding => ({ ...binding, targets: binding.targets.filter(target => !deleteEntities.has(target)) }))
     .filter(binding => binding.targets.length > 0);
@@ -319,7 +323,7 @@ function operationDelete(document: MathDocument, operation: Record<string, unkno
   document.clocks = document.clocks?.filter(clock => !deleteEntities.has(clock.target));
   const remainingClockIds = new Set(document.clocks?.map(clock => clock.id) ?? []);
   document.controls = document.controls?.filter(control => {
-    if (control.action.type === "scalar.set") return !deleteEntities.has(control.action.target);
+    if (control.action.type === "scalar.set" || control.action.type === "boolean.set" || control.action.type === "boolean.toggle") return !deleteEntities.has(control.action.target);
     if (control.action.type === "clock.play" || control.action.type === "clock.pause"
       || control.action.type === "clock.reset" || control.action.type === "clock.step") {
       return remainingClockIds.has(control.action.target);

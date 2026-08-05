@@ -1,0 +1,92 @@
+{
+  "schema": "famtutor.math.document.v1",
+  "documentId": "conditional-triangle-angle-sum",
+  "revision": 1,
+  "seed": 8201,
+  "metadata": {
+    "title": "三角形内角和：条件证明",
+    "description": "勾选显示过顶点 A 的平行线，把三个内角在同一点拼成平角。",
+    "locale": "zh-CN",
+    "purpose": "exploration",
+    "subject": "mathematics",
+    "grade": "grade-8",
+    "tags": ["geometry2d", "triangle", "angle-sum", "conditional-visibility", "boolean-control"]
+  },
+  "entities": [
+    { "id": "showProof", "type": "boolean", "label": "显示证明", "role": "free", "visible": false },
+    { "id": "A", "type": "point2", "label": "A", "role": "free" },
+    { "id": "B", "type": "point2", "label": "B", "role": "free" },
+    { "id": "C", "type": "point2", "label": "C", "role": "free" },
+    { "id": "triangle", "type": "polygon2", "role": "derived" },
+    { "id": "AB", "type": "segment2", "role": "derived" },
+    { "id": "BC", "type": "segment2", "role": "derived" },
+    { "id": "CA", "type": "segment2", "role": "derived" },
+    { "id": "D", "type": "point2", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "E", "type": "point2", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "parallel", "type": "line2", "label": "l ∥ BC", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "copyB", "type": "angle", "label": "∠B", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "angleA", "type": "angle", "label": "∠A", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "copyC", "type": "angle", "label": "∠C", "role": "auxiliary", "visibleWhen": "showProof" },
+    { "id": "measureA", "type": "scalar", "role": "derived", "visible": false },
+    { "id": "measureB", "type": "scalar", "role": "derived", "visible": false },
+    { "id": "measureC", "type": "scalar", "role": "derived", "visible": false },
+    { "id": "title", "type": "text", "role": "annotation" },
+    { "id": "prompt", "type": "text", "role": "annotation" },
+    { "id": "conclusion", "type": "text", "role": "annotation", "visibleWhen": "showProof" }
+  ],
+  "construction": [
+    { "id": "op-showProof", "command": "boolean.constant", "params": { "value": false }, "outputs": ["showProof"] },
+    { "id": "op-A", "command": "point.free", "params": { "coords": [0, 2.2] }, "outputs": ["A"] },
+    { "id": "op-B", "command": "point.free", "params": { "coords": [-3, -1.8] }, "outputs": ["B"] },
+    { "id": "op-C", "command": "point.free", "params": { "coords": [3, -1.8] }, "outputs": ["C"] },
+    { "id": "op-triangle", "command": "polygon.vertices", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["triangle"] },
+    { "id": "op-AB", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "B" }], "outputs": ["AB"] },
+    { "id": "op-BC", "command": "segment.through_points", "inputs": [{ "ref": "B" }, { "ref": "C" }], "outputs": ["BC"] },
+    { "id": "op-CA", "command": "segment.through_points", "inputs": [{ "ref": "C" }, { "ref": "A" }], "outputs": ["CA"] },
+    { "id": "op-D", "command": "point.free", "params": { "coords": [-4.3, 2.2] }, "outputs": ["D"] },
+    { "id": "op-E", "command": "point.free", "params": { "coords": [4.3, 2.2] }, "outputs": ["E"] },
+    { "id": "op-parallel", "command": "line.parallel_through", "inputs": [{ "ref": "A" }, { "ref": "BC" }], "outputs": ["parallel"] },
+    { "id": "op-copyB", "command": "angle.three_points", "inputs": [{ "ref": "D" }, { "ref": "A" }, { "ref": "B" }], "params": { "radius": 0.72, "labelRadius": 1.15 }, "outputs": ["copyB"] },
+    { "id": "op-angleA", "command": "angle.three_points", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 0.72, "labelRadius": 1.15 }, "outputs": ["angleA"] },
+    { "id": "op-copyC", "command": "angle.three_points", "inputs": [{ "ref": "C" }, { "ref": "A" }, { "ref": "E" }], "params": { "radius": 0.72, "labelRadius": 1.15 }, "outputs": ["copyC"] },
+    { "id": "op-measureA", "command": "measurement.angle", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "outputs": ["measureA"] },
+    { "id": "op-measureB", "command": "measurement.angle", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["measureB"] },
+    { "id": "op-measureC", "command": "measurement.angle", "inputs": [{ "ref": "A" }, { "ref": "C" }, { "ref": "B" }], "outputs": ["measureC"] },
+    { "id": "op-title", "command": "text.at", "params": { "text": "三角形内角和为什么等于 180°？", "at": [-4.75, 4.35] }, "outputs": ["title"] },
+    { "id": "op-prompt", "command": "text.at", "params": { "text": "勾选右侧“显示平行线证明”，观察三个角如何拼成平角。", "at": [-4.75, 3.72] }, "outputs": ["prompt"] },
+    { "id": "op-conclusion", "command": "text.at", "params": { "text": "∠B + ∠A + ∠C = 180°", "at": [-2.25, 3.12] }, "outputs": ["conclusion"] }
+  ],
+  "views": [
+    { "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-5.25, 4.8, 5.25, -3.1], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FBFCFE", "cameraPolicy": "document" }
+  ],
+  "styles": [
+    { "targets": ["triangle"], "style": { "stroke": "#315F78", "strokeWidth": 2.2, "fill": "#EAF4F5", "fillOpacity": 0.55, "labelVisible": false } },
+    { "targets": ["AB", "BC", "CA"], "style": { "stroke": "#315F78", "strokeWidth": 2.4, "labelVisible": false } },
+    { "targets": ["A", "B", "C"], "style": { "stroke": "#155B73", "fill": "#155B73", "pointSize": 4.8, "fontSize": 15, "labelVisible": true } },
+    { "targets": ["A"], "style": { "labelPlacement": "top" } },
+    { "targets": ["B"], "style": { "labelPlacement": "bottom-left" } },
+    { "targets": ["C"], "style": { "labelPlacement": "bottom-right" } },
+    { "targets": ["D", "E"], "style": { "pointSize": 2, "opacity": 0, "labelVisible": false } },
+    { "targets": ["parallel"], "style": { "stroke": "#8B9CAA", "strokeWidth": 1.8, "dash": "dashed", "fontSize": 12, "labelVisible": true, "lineLabelPosition": 0.86, "lineLabelSide": "left", "lineLabelDistance": 2 } },
+    { "targets": ["copyB"], "style": { "stroke": "#E38A2F", "fill": "#F8C784", "strokeWidth": 2, "fillOpacity": 0.5, "fontSize": 13, "labelVisible": true } },
+    { "targets": ["angleA"], "style": { "stroke": "#197C77", "fill": "#74C6BD", "strokeWidth": 2, "fillOpacity": 0.45, "fontSize": 13, "labelVisible": true } },
+    { "targets": ["copyC"], "style": { "stroke": "#7A66C7", "fill": "#BDB3EA", "strokeWidth": 2, "fillOpacity": 0.45, "fontSize": 13, "labelVisible": true } },
+    { "targets": ["title"], "style": { "stroke": "#15365F", "fontSize": 18 } },
+    { "targets": ["prompt"], "style": { "stroke": "#5D6F7B", "fontSize": 13 } },
+    { "targets": ["conclusion"], "style": { "stroke": "#0E8378", "fontSize": 16 } }
+  ],
+  "interactions": [
+    { "target": "showProof", "permissions": ["set_value"] }
+  ],
+  "controls": [
+    { "id": "toggleProof", "kind": "checkbox", "label": "显示平行线证明", "description": "显示或隐藏证明所需的辅助线、角标和结论。", "action": { "type": "boolean.toggle", "target": "showProof" } }
+  ],
+  "assertions": [
+    { "id": "parallel-proof-line", "predicate": "parallel", "arguments": [{ "ref": "parallel" }, { "ref": "BC" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "construction", "severity": "error", "message": "过 A 的辅助线必须与 BC 平行。" },
+    { "id": "triangle-angle-sum", "predicate": "expression_equal", "arguments": [{ "expr": "measureA + measureB + measureC" }, { "value": 3.141592653589793 }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "三角形三个内角之和应为 π。" }
+  ],
+  "activities": [
+    { "id": "discover-angle-sum", "title": "把三个内角拼成平角", "stages": [{ "id": "observe", "narration": "先观察三角形，再勾选显示证明，比较三个彩色角与平角的位置关系。", "focus": ["A", "B", "C"] }], "tasks": [{ "id": "explain-proof", "prompt": "为什么平行线能把 B、C 两个角搬到顶点 A？", "allowedTools": ["control.invoke"], "evidence": [{ "kind": "assertion", "ref": "parallel-proof-line" }, { "kind": "assertion", "ref": "triangle-angle-sum" }], "hints": ["回忆两直线平行时的内错角关系。", "观察顶点 A 下方三个相邻的角。"] }] }
+  ],
+  "provenance": { "generator": "agent", "sourceRefs": ["mechanism:boolean-control", "mechanism:conditional-visibility", "concept:triangle-angle-sum"] }
+}

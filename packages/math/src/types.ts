@@ -20,6 +20,15 @@ export const ENTITY_TYPES = [
   "function1",
   "curve2",
   "collection",
+  "vector3",
+  "point3",
+  "line3",
+  "segment3",
+  "plane3",
+  "polygon3",
+  "sphere3",
+  "curve3",
+  "surface3",
   "text"
 ] as const;
 
@@ -42,6 +51,8 @@ export interface MathEntity {
   label?: string;
   role: EntityRole;
   visible?: boolean;
+  /** Render only when this referenced boolean entity evaluates to true. */
+  visibleWhen?: string;
   description?: string;
 }
 
@@ -82,6 +93,22 @@ export interface Graphics2DView {
   title?: string;
 }
 
+export interface Graphics3DView {
+  id: string;
+  kind: "graphics3d";
+  visible: boolean;
+  renderer: GraphicsRenderer;
+  /** JSXGraph View3D domain: [[xmin,xmax],[ymin,ymax],[zmin,zmax]]. */
+  boundingBox3D: [[number, number], [number, number], [number, number]];
+  /** Initial azimuth/elevation in radians and optional perspective distance. */
+  camera?: { azimuth: number; elevation: number; distance?: number };
+  projection?: "parallel" | "central";
+  axes?: boolean;
+  background?: string;
+  entityIds?: string[];
+  title?: string;
+}
+
 export interface ConstructionView {
   id: string;
   kind: "construction";
@@ -98,7 +125,7 @@ export interface AlgebraView {
   title?: string;
 }
 
-export type MathView = Graphics2DView | ConstructionView | AlgebraView;
+export type MathView = Graphics2DView | Graphics3DView | ConstructionView | AlgebraView;
 
 export interface EntityStyle {
   token?: "primary" | "accent" | "auxiliary" | "danger" | "muted" | "success";
@@ -143,6 +170,8 @@ export interface InteractionPolicy {
 
 export type MathControlAction =
   | { type: "scalar.set"; target: string; value: number }
+  | { type: "boolean.set"; target: string; value: boolean }
+  | { type: "boolean.toggle"; target: string }
   | { type: "stage.set"; stageId: string }
   | { type: "clock.play"; target: string }
   | { type: "clock.pause"; target: string }
@@ -152,7 +181,7 @@ export type MathControlAction =
 /** A host-rendered, document-owned control with one auditable action. */
 export interface MathControl {
   id: string;
-  kind: "button";
+  kind: "button" | "checkbox";
   label: string;
   action: MathControlAction;
   description?: string;
@@ -408,6 +437,37 @@ export interface CollectionValue {
   items: RuntimeValue[];
 }
 
+export interface Point3Value { kind: "point3"; x: number; y: number; z: number }
+export interface Vector3Value { kind: "vector3"; x: number; y: number; z: number }
+export interface Line3Value { kind: "line3"; point: Point3Value; direction: Vector3Value }
+export interface Segment3Value { kind: "segment3"; from: Point3Value; to: Point3Value }
+export interface Plane3Value {
+  kind: "plane3";
+  origin: Point3Value;
+  basisU: Vector3Value;
+  basisV: Vector3Value;
+  normal: Vector3Value;
+}
+export interface Polygon3Value { kind: "polygon3"; vertices: Point3Value[] }
+export interface Sphere3Value { kind: "sphere3"; center: Point3Value; radius: number }
+export interface Curve3Value {
+  kind: "curve3";
+  xExpression: string;
+  yExpression: string;
+  zExpression: string;
+  parameter: string;
+  domain: [number, number];
+}
+export interface Surface3Value {
+  kind: "surface3";
+  xExpression: string;
+  yExpression: string;
+  zExpression: string;
+  parameters: [string, string];
+  uDomain: [number, number];
+  vDomain: [number, number];
+}
+
 export interface TextValue {
   kind: "text";
   text: string;
@@ -433,6 +493,15 @@ export type RuntimeValue =
   | Function1Value
   | Curve2Value
   | CollectionValue
+  | Point3Value
+  | Vector3Value
+  | Line3Value
+  | Segment3Value
+  | Plane3Value
+  | Polygon3Value
+  | Sphere3Value
+  | Curve3Value
+  | Surface3Value
   | TextValue;
 
 export interface RuntimeEntity {

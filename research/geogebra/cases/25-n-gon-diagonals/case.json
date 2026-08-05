@@ -1,0 +1,22 @@
+{
+  "schema":"famtutor.case.v1","caseId":"research-geogebra-25-n-gon-diagonals","title":"n 边形的对角线与三角形分割","status":"accepted","caseType":"exploration","difficulty":"mechanism-reference",
+  "source":{"printedPages":[],"pdfPages":[],"references":["https://www.geogebra.org/m/kguph7a6"],"note":"依据公开公式与动态结构原创复现。GeoGebra First 映射为 polygon.diagonals 的指定顶点参数。"},
+  "requiredCapabilities":["polygon.regular","polygon.diagonals","scalar.slider","measurement.area"],
+  "inputs":{"initialDocument":{
+    "schema":"famtutor.math.document.v1","documentId":"qiu-feng-n-gon-diagonals","revision":1,"seed":2525,
+    "metadata":{"title":"n 边形的对角线","description":"改变 n，观察一个顶点的对角线、三角形分割和全部对角线。","locale":"zh-CN","purpose":"exploration","subject":"mathematics","grade":"grade-8","tags":["polygon","diagonals","sequence","combinatorics"]},
+    "entities":[{"id":"O","type":"point2","label":"O","role":"auxiliary"},{"id":"r","type":"scalar","role":"derived","visible":false},{"id":"n","type":"scalar","label":"边数 n","role":"free"},{"id":"poly","type":"polygon2","role":"derived"},{"id":"fan","type":"collection","role":"auxiliary"},{"id":"all","type":"collection","role":"derived"},{"id":"area","type":"scalar","role":"measurement","visible":false},{"id":"formula","type":"text","role":"annotation"}],
+    "construction":[
+      {"id":"O","command":"point.free","params":{"coords":[0,0]},"outputs":["O"]},{"id":"r","command":"scalar.constant","params":{"value":3.6},"outputs":["r"]},{"id":"n","command":"scalar.slider","params":{"min":3,"max":10,"value":6,"step":1,"position":[-5.4,-5.2],"length":6},"outputs":["n"]},
+      {"id":"poly","command":"polygon.regular","inputs":[{"ref":"O"},{"ref":"r"},{"ref":"n"}],"params":{"maxVertices":10,"rotation":"pi/2"},"outputs":["poly"]},
+      {"id":"fan","command":"polygon.diagonals","inputs":[{"ref":"poly"}],"params":{"fromVertex":0,"maxItems":7},"outputs":["fan"]},{"id":"all","command":"polygon.diagonals","inputs":[{"ref":"poly"}],"params":{"maxItems":35},"outputs":["all"]},{"id":"area","command":"measurement.area","inputs":[{"ref":"poly"}],"outputs":["area"]},
+      {"id":"formula","command":"text.at","params":{"text":"一个顶点：n−3 条；全部：n(n−3)/2 条","at":[-5.3,4.7]},"outputs":["formula"]}
+    ],
+    "views":[{"id":"main","kind":"graphics2d","visible":true,"renderer":"jsxgraph-svg","boundingBox":[-6,5.4,6,-6],"axes":false,"grid":false,"keepAspectRatio":true,"background":"#FBFCFE","cameraPolicy":"document"}],
+    "styles":[{"targets":["poly"],"style":{"stroke":"#15365F","strokeWidth":2.6,"fill":"#DDEAF0","fillOpacity":0.25,"labelVisible":false}},{"targets":["fan"],"style":{"stroke":"#D06A3A","strokeWidth":2.2,"labelVisible":false}},{"targets":["all"],"style":{"stroke":"#6C5CE7","strokeWidth":1.3,"opacity":0.55,"labelVisible":false}},{"targets":["O"],"style":{"opacity":0,"pointSize":1,"labelVisible":false}},{"targets":["formula"],"style":{"stroke":"#315F78","fontSize":12}}],
+    "interactions":[{"target":"n","permissions":["set_value"]}],
+    "assertions":[{"id":"positive-polygon-area","predicate":"value_in_range","arguments":[{"ref":"area"},{"value":0.1},{"value":100}],"expected":true,"tolerance":0,"requiredMethod":"numeric","severity":"error"}],
+    "activities":[{"id":"diagonals","title":"从一个顶点到全部对角线","stages":[{"id":"polygon","narration":"改变 n，得到 3 到 10 边的规则多边形。","hide":["fan","all"]},{"id":"fan","narration":"从一个顶点不能连自己和两个相邻顶点，所以可作 n−3 条对角线，并分成 n−2 个三角形。","hide":["all"]},{"id":"all","narration":"每个顶点贡献 n−3 条，但每条对角线被两个端点重复计算，因此共有 n(n−3)/2 条。","hide":["fan"]}]}],
+    "provenance":{"generator":"agent","sourceRefs":["geogebra:kguph7a6","capability:polygon-diagonals"]}
+  }},"trace":{"changeSets":[]},"expected":{"assertions":[{"kind":"runtime-assertions-pass"},{"kind":"static-render"},{"kind":"render-bundle"}],"interactions":[{"target":"n","permission":"set_value"}]}
+}

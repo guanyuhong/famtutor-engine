@@ -44,7 +44,7 @@
     "format": { "type": "object" },
     "construction": {
       "type": "object",
-      "required": ["elements", "commands", "controls", "animations", "views"],
+      "required": ["elements", "commands", "controls", "conditions", "animations", "views"],
       "properties": {
         "elements": { "$ref": "#/$defs/countInventory" },
         "commands": { "$ref": "#/$defs/countInventory" },
@@ -56,6 +56,25 @@
             "checkboxes": { "type": "array", "items": { "type": "object" } },
             "buttons": { "type": "array", "items": { "type": "object" } },
             "inputs": { "type": "array", "items": { "type": "object" } }
+          },
+          "additionalProperties": false
+        },
+        "conditions": {
+          "type": "object",
+          "required": ["visibility"],
+          "properties": {
+            "visibility": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "expression"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "expression": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            }
           },
           "additionalProperties": false
         },
@@ -119,6 +138,7 @@
           "fileName": { "type": "string" },
           "bytes": { "type": "integer", "minimum": 0 },
           "sha256": { "$ref": "#/$defs/sha256" },
+          "apiCalls": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
           "redacted": { "const": true }
         },
         "additionalProperties": false

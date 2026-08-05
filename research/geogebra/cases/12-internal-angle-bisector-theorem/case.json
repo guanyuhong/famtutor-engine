@@ -1,0 +1,33 @@
+{
+  "schema": "famtutor.case.v1", "caseId": "research-geogebra-12-internal-angle-bisector-theorem", "title": "三角形内角平分线定理", "status": "accepted", "caseType": "guided-construction", "difficulty": "mechanism-reference",
+  "source": { "printedPages": [], "pdfPages": [], "references": ["https://www.geogebra.org/m/w4v8ujek"], "note": "题意与证明结构研究；FamTutor 使用分支显式的角平分射线原创复现。" },
+  "requiredCapabilities": ["ray.angle_bisector", "point.intersection_line_line", "assertion.equal_angle", "assertion.expression_equal"],
+  "inputs": { "initialDocument": {
+    "schema": "famtutor.math.document.v1", "documentId": "qiu-feng-internal-angle-bisector-theorem", "revision": 1, "seed": 1412,
+    "metadata": { "title": "三角形内角平分线定理", "description": "AD 平分 ∠BAC，验证 AB/AC=BD/DC。", "locale": "zh-CN", "purpose": "exploration", "subject": "mathematics", "grade": "grade-9", "tags": ["geogebra-study", "triangle", "angle-bisector", "similarity", "ratio"] },
+    "entities": [
+      { "id": "A", "type": "point2", "label": "A", "role": "free" }, { "id": "B", "type": "point2", "label": "B", "role": "free" }, { "id": "C", "type": "point2", "label": "C", "role": "free" }, { "id": "triangle", "type": "polygon2", "role": "derived" },
+      { "id": "BCline", "type": "line2", "role": "auxiliary", "visible": false }, { "id": "bisector", "type": "ray2", "label": "AD", "role": "derived" }, { "id": "D", "type": "point2", "label": "D", "role": "derived" }, { "id": "AD", "type": "segment2", "role": "derived" },
+      { "id": "AB", "type": "segment2", "role": "derived" }, { "id": "AC", "type": "segment2", "role": "derived" }, { "id": "BD", "type": "segment2", "role": "derived" }, { "id": "DC", "type": "segment2", "role": "derived" },
+      { "id": "angleBAD", "type": "angle", "label": "α", "role": "measurement" }, { "id": "angleDAC", "type": "angle", "label": "α", "role": "measurement" }
+    ],
+    "construction": [
+      { "id": "op-A", "command": "point.free", "params": { "coords": [0, 3.4] }, "outputs": ["A"] }, { "id": "op-B", "command": "point.free", "params": { "coords": [-4, -1] }, "outputs": ["B"] }, { "id": "op-C", "command": "point.free", "params": { "coords": [3, -1] }, "outputs": ["C"] },
+      { "id": "op-triangle", "command": "polygon.vertices", "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }], "outputs": ["triangle"] }, { "id": "op-BCline", "command": "line.through_points", "inputs": [{ "ref": "B" }, { "ref": "C" }], "outputs": ["BCline"] },
+      { "id": "op-bisector", "command": "ray.angle_bisector", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "params": { "branch": "internal" }, "outputs": ["bisector"] }, { "id": "op-D", "command": "point.intersection_line_line", "inputs": [{ "ref": "bisector" }, { "ref": "BCline" }], "outputs": ["D"] },
+      { "id": "op-AD", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "D" }], "outputs": ["AD"] }, { "id": "op-AB", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "B" }], "outputs": ["AB"] }, { "id": "op-AC", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "C" }], "outputs": ["AC"] }, { "id": "op-BD", "command": "segment.through_points", "inputs": [{ "ref": "B" }, { "ref": "D" }], "outputs": ["BD"] }, { "id": "op-DC", "command": "segment.through_points", "inputs": [{ "ref": "D" }, { "ref": "C" }], "outputs": ["DC"] },
+      { "id": "op-angle1", "command": "angle.three_points", "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "D" }], "params": { "radius": 0.58, "labelRadius": 0.88 }, "outputs": ["angleBAD"] }, { "id": "op-angle2", "command": "angle.three_points", "inputs": [{ "ref": "D" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 0.83, "labelRadius": 1.14 }, "outputs": ["angleDAC"] }
+    ],
+    "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-5.5, 5, 5, -3], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FBFCFE", "cameraPolicy": "document" }],
+    "styles": [
+      { "targets": ["triangle"], "style": { "stroke": "#155B73", "fill": "#BEE4E8", "strokeWidth": 2.2, "fillOpacity": 0.2, "labelVisible": false } }, { "targets": ["bisector"], "style": { "stroke": "#D6763A", "strokeWidth": 1.4, "dash": "dashed", "labelVisible": false } }, { "targets": ["AD"], "style": { "stroke": "#D6763A", "strokeWidth": 2.4, "labelVisible": false } }, { "targets": ["AB", "AC", "BD", "DC"], "style": { "stroke": "#155B73", "strokeWidth": 2.1, "labelVisible": false } },
+      { "targets": ["A", "B", "C", "D"], "style": { "stroke": "#155B73", "fill": "#155B73", "pointSize": 4.2, "fontSize": 13, "labelVisible": true, "labelPlacement": "auto" } }, { "targets": ["angleBAD", "angleDAC"], "style": { "stroke": "#D6763A", "fill": "#F4C7A8", "fillOpacity": 0.32, "fontSize": 10, "labelVisible": true } }
+    ],
+    "assertions": [
+      { "id": "bisected", "predicate": "equal_angle", "arguments": [{ "ref": "angleBAD" }, { "ref": "angleDAC" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "AD 平分 ∠BAC。" },
+      { "id": "ratio-theorem", "predicate": "expression_equal", "arguments": [{ "expr": "distance(A,B)/distance(A,C)" }, { "expr": "distance(B,D)/distance(D,C)" }], "expected": true, "tolerance": 1e-9, "requiredMethod": "numeric", "severity": "error", "message": "内角平分线分对边所得线段之比等于邻边之比。" }
+    ],
+    "activities": [{ "id": "internal-bisector", "title": "内角平分线定理", "stages": [{ "id": "given", "narration": "从 A 作 ∠BAC 的内角平分射线，与 BC 交于 D。" }, { "id": "ratio", "narration": "比较邻边 AB、AC 与对边上的 BD、DC。" }, { "id": "conclusion", "narration": "内角平分线定理给出 AB/AC=BD/DC。可用等高面积比或平行线相似证明。" }], "tasks": [{ "id": "prove", "prompt": "选择一种证明路线说明两个比值为什么相等。", "allowedTools": [], "evidence": [{ "kind": "assertion", "ref": "bisected" }, { "kind": "assertion", "ref": "ratio-theorem" }], "hints": ["比较 △ABD 与 △ADC 的面积比。"] }] }],
+    "provenance": { "generator": "agent", "sourceRefs": ["geogebra:w4v8ujek", "mechanism:internal-angle-bisector-theorem"] }
+  } }, "trace": { "changeSets": [] }, "expected": { "assertions": [{ "kind": "runtime-assertions-pass" }, { "kind": "static-render" }, { "kind": "render-bundle" }] }
+}

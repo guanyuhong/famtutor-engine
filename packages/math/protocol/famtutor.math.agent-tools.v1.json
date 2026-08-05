@@ -22,7 +22,8 @@
               "function",
               "annotation",
               "measurement",
-              "conic"
+              "conic",
+              "geometry3d"
             ]
           },
           "commandPrefix": {

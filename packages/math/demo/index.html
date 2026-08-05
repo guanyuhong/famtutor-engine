@@ -6,6 +6,9 @@
   <title>FamTutor Math MountedRenderer Live Demo</title>
   <link rel="stylesheet" href="../vendor/jsxgraph/jsxgraph.css" />
   <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    { "imports": { "@famtutor/core": "/packages/core/dist/index.js" } }
+  </script>
 </head>
 <body>
   <header>
@@ -19,6 +22,8 @@
       <option value="circle-intersections.json">两圆交点</option>
       <option value="transformations.json">二维变换</option>
       <option value="command-catalog-coverage.json">命令覆盖场景</option>
+      <option value="conditional-triangle-angle-sum.json">三角形内角和：条件证明</option>
+      <option value="jsxgraph-3d-foundation.json">JSXGraph 3D 基础能力</option>
     </select>
   </header>
   <main>
@@ -29,6 +34,7 @@
         <span class="badge" id="revision">rev —</span>
         <span class="badge" id="strategy">—</span>
       </div>
+      <div id="document-controls" class="document-controls" hidden></div>
       <div class="actions">
         <button type="button" id="btn-agent">模拟 Agent ChangeSet</button>
         <button type="button" id="btn-illegal">非法 ChangeSet</button>

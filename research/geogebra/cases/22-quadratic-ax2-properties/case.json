@@ -1,0 +1,540 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-22-quadratic-ax2-properties",
+  "title": "二次函数 y=ax² 的图象和性质",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/m/y3mgqmzm"
+    ],
+    "note": "CurveCartesian 映射到通用 function.explicit；依据公开性质文本原创复现。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "scalar.slider",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "assertion.expression_equal"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "qiu-feng-quadratic-ax2-properties",
+      "revision": 1,
+      "seed": 2222,
+      "metadata": {
+        "title": "二次函数 y=ax² 的图象和性质",
+        "description": "改变 a 和取样位置，观察开口、宽窄、对称性和增减性。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9",
+        "tags": [
+          "geogebra-study",
+          "quadratic-function",
+          "parabola",
+          "symmetry",
+          "monotonicity"
+        ]
+      },
+      "entities": [
+        {
+          "id": "a",
+          "type": "scalar",
+          "label": "系数 a",
+          "role": "free"
+        },
+        {
+          "id": "t",
+          "type": "scalar",
+          "label": "取样 |x|",
+          "role": "free"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "label": "y=ax²",
+          "role": "derived"
+        },
+        {
+          "id": "O",
+          "type": "point2",
+          "label": "O(0,0)",
+          "role": "derived"
+        },
+        {
+          "id": "L",
+          "type": "point2",
+          "label": "L",
+          "role": "derived"
+        },
+        {
+          "id": "R",
+          "type": "point2",
+          "label": "R",
+          "role": "derived"
+        },
+        {
+          "id": "LR",
+          "type": "segment2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "positive",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "negative",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "zero",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "upText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "downText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "zeroText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "op-a",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -2.5,
+            "max": 2.5,
+            "step": 0.1,
+          "position": [
+            -5.3,
+            -5.65
+          ],
+          "length": 5.4
+          },
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "id": "op-t",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1.5,
+            "min": 0.4,
+            "max": 2.5,
+            "step": 0.1,
+          "position": [
+            -5.3,
+            -6.35
+          ],
+          "length": 5.4
+          },
+          "outputs": [
+            "t"
+          ]
+        },
+        {
+          "id": "op-f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "a*x^2",
+            "domain": [
+              -5,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "op-O",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "0",
+            "y": "0"
+          },
+          "outputs": [
+            "O"
+          ]
+        },
+        {
+          "id": "op-L",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "-t",
+            "y": "a*t^2"
+          },
+          "outputs": [
+            "L"
+          ]
+        },
+        {
+          "id": "op-R",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "t",
+            "y": "a*t^2"
+          },
+          "outputs": [
+            "R"
+          ]
+        },
+        {
+          "id": "op-LR",
+          "command": "segment.through_points",
+          "inputs": [
+            {
+              "ref": "L"
+            },
+            {
+              "ref": "R"
+            }
+          ],
+          "outputs": [
+            "LR"
+          ]
+        },
+        {
+          "id": "op-positive",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a>0"
+          },
+          "outputs": [
+            "positive"
+          ]
+        },
+        {
+          "id": "op-negative",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a<0"
+          },
+          "outputs": [
+            "negative"
+          ]
+        },
+        {
+          "id": "op-zero",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a==0"
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "op-upText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "positive"
+            }
+          ],
+          "params": {
+            "trueText": "a>0：开口向上，O 是最低点",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.55
+            ]
+          },
+          "outputs": [
+            "upText"
+          ]
+        },
+        {
+          "id": "op-downText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "negative"
+            }
+          ],
+          "params": {
+            "trueText": "a<0：开口向下，O 是最高点",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.55
+            ]
+          },
+          "outputs": [
+            "downText"
+          ]
+        },
+        {
+          "id": "op-zeroText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "zero"
+            }
+          ],
+          "params": {
+            "trueText": "a=0：退化为 y=0，不再是二次函数",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.55
+            ]
+          },
+          "outputs": [
+            "zeroText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            5.2,
+            6,
+          -6.95
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "O"
+          ],
+          "style": {
+            "stroke": "#B84C2D",
+            "fill": "#E36E45",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "bottom-right"
+          }
+        },
+        {
+          "targets": [
+            "L",
+            "R"
+          ],
+          "style": {
+            "stroke": "#6C5CE7",
+            "fill": "#6C5CE7",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "auto"
+          }
+        },
+        {
+          "targets": [
+            "LR"
+          ],
+          "style": {
+            "stroke": "#9DA9B5",
+            "strokeWidth": 1.3,
+            "dash": "dashed",
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "upText",
+            "downText",
+            "zeroText"
+          ],
+          "style": {
+            "stroke": "#315F78",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "a",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "t",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        }
+      ],
+      "assertions": [
+        {
+          "id": "symmetry-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(L)"
+            },
+            {
+              "expr": "y(R)"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1E-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "关于 y 轴对称的两点纵坐标相等。"
+        },
+        {
+          "id": "opposite-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(L)"
+            },
+            {
+              "expr": "-x(R)"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1E-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "L、R 关于 y 轴对称。"
+        },
+        {
+          "id": "vertex",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(O)"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1E-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点始终是原点。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "quadratic",
+          "title": "开口、对称和增减性",
+          "stages": [
+            {
+              "id": "opening",
+              "narration": "a 的符号决定开口方向；|a| 越大，抛物线开口越窄。"
+            },
+            {
+              "id": "symmetry",
+              "narration": "L、R 的横坐标互为相反数，纵坐标相等，对称轴是 y 轴。"
+            },
+            {
+              "id": "monotonicity",
+              "narration": "a>0 时左减右增；a<0 时左增右减。a=0 是明确的退化边界。"
+            }
+          ],
+          "tasks": [
+            {
+              "id": "explore",
+              "prompt": "分别取正、负和零的 a，再改变 |x|。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "symmetry-y"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "opposite-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "vertex"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "geogebra:y3mgqmzm",
+          "mechanism:parametric-quadratic-properties"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "a",
+        "permission": "drag"
+      },
+      {
+        "target": "t",
+        "permission": "drag"
+      }
+    ]
+  }
+}
