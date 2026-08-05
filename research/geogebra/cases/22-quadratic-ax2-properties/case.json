@@ -1,7 +1,7 @@
 {
   "schema": "famtutor.case.v1",
   "caseId": "research-geogebra-22-quadratic-ax2-properties",
-  "title": "二次函数 y=ax² 的图象和性质",
+  "title": "非线性母函数 y=ax² 的伸缩与反射",
   "status": "accepted",
   "caseType": "exploration",
   "difficulty": "mechanism-reference",
@@ -9,9 +9,10 @@
     "printedPages": [],
     "pdfPages": [],
     "references": [
-      "https://www.geogebra.org/m/y3mgqmzm"
+      "https://www.geogebra.org/m/y3mgqmzm",
+      "https://www.geogebra.org/math/functions?lang=en-GB"
     ],
-    "note": "CurveCartesian 映射到通用 function.explicit；依据公开性质文本原创复现。"
+    "note": "原 y=ax² 机制案例升级为 GeoGebra Math 9–12 母函数变换垂直素材。"
   },
   "requiredCapabilities": [
     "function.explicit",
@@ -19,7 +20,8 @@
     "point.from_expressions",
     "boolean.expression",
     "text.conditional",
-    "assertion.expression_equal"
+    "assertion.expression_equal",
+    "function.value_at"
   ],
   "inputs": {
     "initialDocument": {
@@ -28,18 +30,22 @@
       "revision": 1,
       "seed": 2222,
       "metadata": {
-        "title": "二次函数 y=ax² 的图象和性质",
-        "description": "改变 a 和取样位置，观察开口、宽窄、对称性和增减性。",
+        "title": "非线性母函数 y=ax² 的伸缩与反射",
+        "description": "改变 a，观察母函数 y=x² 的竖直伸缩、关于 x 轴的反射和 a=0 边界。",
         "locale": "zh-CN",
         "purpose": "exploration",
         "subject": "mathematics",
-        "grade": "grade-9",
+        "grade": "grade-9-12",
         "tags": [
           "geogebra-study",
           "quadratic-function",
           "parabola",
           "symmetry",
-          "monotonicity"
+          "monotonicity",
+          "geogebra-math-index",
+          "grade-9-12",
+          "parent-function-transformations",
+          "function-value-at"
         ]
       },
       "entities": [
@@ -60,6 +66,12 @@
           "type": "function1",
           "label": "y=ax²",
           "role": "derived"
+        },
+        {
+          "id": "yT",
+          "type": "scalar",
+          "role": "derived",
+          "label": "f(t)"
         },
         {
           "id": "O",
@@ -127,11 +139,11 @@
             "min": -2.5,
             "max": 2.5,
             "step": 0.1,
-          "position": [
-            -5.3,
-            -5.65
-          ],
-          "length": 5.4
+            "position": [
+              -5.3,
+              -5.65
+            ],
+            "length": 5.4
           },
           "outputs": [
             "a"
@@ -145,11 +157,11 @@
             "min": 0.4,
             "max": 2.5,
             "step": 0.1,
-          "position": [
-            -5.3,
-            -6.35
-          ],
-          "length": 5.4
+            "position": [
+              -5.3,
+              -6.35
+            ],
+            "length": 5.4
           },
           "outputs": [
             "t"
@@ -170,6 +182,21 @@
           ]
         },
         {
+          "id": "op-yT",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "t"
+            }
+          ],
+          "outputs": [
+            "yT"
+          ]
+        },
+        {
           "id": "op-O",
           "command": "point.from_expressions",
           "params": {
@@ -185,7 +212,7 @@
           "command": "point.from_expressions",
           "params": {
             "x": "-t",
-            "y": "a*t^2"
+            "y": "yT"
           },
           "outputs": [
             "L"
@@ -196,7 +223,7 @@
           "command": "point.from_expressions",
           "params": {
             "x": "t",
-            "y": "a*t^2"
+            "y": "yT"
           },
           "outputs": [
             "R"
@@ -318,7 +345,7 @@
             -6,
             5.2,
             6,
-          -6.95
+            -6.95
           ],
           "axes": true,
           "grid": true,
@@ -419,7 +446,7 @@
             }
           ],
           "expected": true,
-          "tolerance": 1E-9,
+          "tolerance": 1e-9,
           "requiredMethod": "numeric",
           "severity": "error",
           "message": "关于 y 轴对称的两点纵坐标相等。"
@@ -436,7 +463,7 @@
             }
           ],
           "expected": true,
-          "tolerance": 1E-9,
+          "tolerance": 1e-9,
           "requiredMethod": "numeric",
           "severity": "error",
           "message": "L、R 关于 y 轴对称。"
@@ -453,28 +480,61 @@
             }
           ],
           "expected": true,
-          "tolerance": 1E-9,
+          "tolerance": 1e-9,
           "requiredMethod": "numeric",
           "severity": "error",
           "message": "顶点始终是原点。"
+        },
+        {
+          "id": "function-value",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "yT"
+            },
+            {
+              "expr": "a*t^2"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "函数实体在 t 处求值得到 at²。"
         }
       ],
       "activities": [
         {
           "id": "quadratic",
-          "title": "开口、对称和增减性",
+          "title": "母函数的伸缩、反射和边界",
           "stages": [
             {
-              "id": "opening",
-              "narration": "a 的符号决定开口方向；|a| 越大，抛物线开口越窄。"
+              "id": "parent",
+              "narration": "从母函数 y=x² 出发；a=1 时保留原图像，顶点和对称轴不变。",
+              "focus": [
+                "f",
+                "O"
+              ]
             },
             {
-              "id": "symmetry",
-              "narration": "L、R 的横坐标互为相反数，纵坐标相等，对称轴是 y 轴。"
+              "id": "stretch",
+              "narration": "|a| 改变纵向伸缩：|a| 越大图像越窄，0<|a|<1 时越宽。",
+              "focus": [
+                "f",
+                "L",
+                "R",
+                "LR"
+              ]
             },
             {
-              "id": "monotonicity",
-              "narration": "a>0 时左减右增；a<0 时左增右减。a=0 是明确的退化边界。"
+              "id": "reflect",
+              "narration": "a<0 时图像关于 x 轴反射；a=0 是常数函数边界，不再是二次函数。",
+              "focus": [
+                "f",
+                "upText",
+                "downText",
+                "zeroText"
+              ]
             }
           ],
           "tasks": [
@@ -506,7 +566,10 @@
         "generator": "agent",
         "sourceRefs": [
           "geogebra:y3mgqmzm",
-          "mechanism:parametric-quadratic-properties"
+          "mechanism:parametric-quadratic-properties",
+          "ggb.math.occurrence.functions.9-12.07",
+          "ggb.math.skill.transformations-on-nonlinear-parent-functions",
+          "https://www.geogebra.org/math/functions?lang=en-GB"
         ]
       }
     }

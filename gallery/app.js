@@ -68,7 +68,23 @@ const CASE_PATHS = [
   "/research/geogebra/cases/24-pythagorean-area-proof/case.json?v=qiu-feng-wave-9",
   "/research/geogebra/cases/25-n-gon-diagonals/case.json?v=qiu-feng-wave-9",
   "/research/geogebra/cases/26-rigid-transform-properties/case.json?v=qiu-feng-wave-9",
-  "/research/geogebra/cases/27-triangle-definition-boundary/case.json?v=qiu-feng-wave-10"
+  "/research/geogebra/cases/27-triangle-definition-boundary/case.json?v=qiu-feng-wave-10",
+  "/research/geogebra/cases/28-functions-and-function-notation/case.json?v=geogebra-math-g9-12-wave-1",
+  "/research/geogebra/cases/29-exponential-equation-graph-critical-values/case.json?v=geogebra-math-g9-12-wave-1",
+  "/research/geogebra/cases/30-graphing-quadratic-functions/case.json?v=geogebra-math-g9-12-wave-1",
+  "/research/geogebra/cases/31-zeros-of-quadratic-functions/case.json?v=geogebra-math-g9-12-wave-1",
+  "/research/geogebra/cases/32-representations-of-relations-and-functions/case.json?v=geogebra-math-g9-12-wave-2",
+  "/research/geogebra/cases/33-increasing-and-decreasing-functions/case.json?v=geogebra-math-g9-12-wave-2",
+  "/research/geogebra/cases/34-graphing-absolute-value-functions-and-inequalities/case.json?v=geogebra-math-g9-12-wave-2",
+  "/research/geogebra/cases/35-graphing-to-solve-quadratic-equations/case.json?v=geogebra-math-g9-12-wave-2",
+  "/research/geogebra/cases/36-domain-and-range-of-special-functions/case.json?v=geogebra-math-g9-12-wave-3",
+  "/research/geogebra/cases/37-composition-and-inverse-of-functions/case.json?v=geogebra-math-g9-12-wave-3",
+  "/research/geogebra/cases/38-solving-systems-of-linear-equations/case.json?v=geogebra-math-g9-12-wave-3",
+  "/research/geogebra/cases/39-discriminant-and-roots-of-a-quadratic-equation/case.json?v=geogebra-math-g9-12-wave-3",
+  "/research/geogebra/cases/40-solving-linear-inequalities/case.json?v=geogebra-math-g9-12-wave-4",
+  "/research/geogebra/cases/41-systems-of-linear-inequalities/case.json?v=geogebra-math-g9-12-wave-4",
+  "/research/geogebra/cases/42-solving-nonlinear-systems-of-equations-and-inequalities/case.json?v=geogebra-math-g9-12-wave-4",
+  "/research/geogebra/cases/43-using-the-quadratic-formula-to-solve-quadratic-equations/case.json?v=geogebra-math-g9-12-wave-4"
 ];
 
 const runtime = new MathDomainRuntime();
@@ -177,7 +193,21 @@ const STAGE_LABELS = {
   range: "工作范围",
   check: "动态检验",
   counterexamples: "两个反例",
-  locus: "比值轨迹"
+  locus: "比值轨迹",
+  notation: "函数记号",
+  evaluate: "代入求值",
+  "graph-point": "图上点",
+  parent: "母函数",
+  stretch: "伸缩",
+  "exponential-equation": "指数式",
+  "growth-decay": "增长与衰减",
+  "critical-values": "关键值",
+  "vertex-form": "顶点式",
+  "vertex-axis": "顶点与对称轴",
+  "key-points": "关键点",
+  "factored-form": "因式分解式",
+  "zeros-intercepts": "零点与截距",
+  "double-root": "重根"
 };
 
 function caseNumber(caseId) {

@@ -1,0 +1,175 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-solving-nonlinear-systems-of-equations-and-inequalities",
+  "title": "解非线性方程组与不等式组",
+  "titleEn": "Solving Nonlinear Systems of Equations and Inequalities",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.solving-nonlinear-systems-of-equations-and-inequalities",
+    "occurrenceIds": [
+      "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    ],
+    "topicSlug": "system-of-equations-and-inequalities"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-solving-nonlinear-systems-of-equations-and-inequalities-1",
+      "type": "concept",
+      "visibleText": "非线性系统至少含一个非线性关系。",
+      "narrationSeed": "非线性系统至少含一个非线性关系。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    },
+    {
+      "id": "atom-solving-nonlinear-systems-of-equations-and-inequalities-2",
+      "type": "rule",
+      "visibleText": "两个图像的公共点同时满足两个方程。",
+      "narrationSeed": "两个图像的公共点同时满足两个方程。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    },
+    {
+      "id": "atom-solving-nonlinear-systems-of-equations-and-inequalities-3",
+      "type": "procedure",
+      "visibleText": "令两个函数值相等可转化为差函数求零点。",
+      "narrationSeed": "令两个函数值相等可转化为差函数求零点。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    },
+    {
+      "id": "atom-solving-nonlinear-systems-of-equations-and-inequalities-4",
+      "type": "representation",
+      "visibleText": "不等式系统的解是两个区域的公共部分。",
+      "narrationSeed": "不等式系统的解是两个区域的公共部分。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    },
+    {
+      "id": "atom-solving-nonlinear-systems-of-equations-and-inequalities-5",
+      "type": "misconception",
+      "visibleText": "函数交点的横坐标不能脱离原方程单独解释。",
+      "narrationSeed": "函数交点的横坐标不能脱离原方程单独解释。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/42-solving-nonlinear-systems-of-equations-and-inequalities/case.json",
+    "caseId": "research-geogebra-42-solving-nonlinear-systems-of-equations-and-inequalities",
+    "documentId": "geogebra-math-solving-nonlinear-systems"
+  },
+  "stages": [
+    {
+      "id": "equations",
+      "order": 1
+    },
+    {
+      "id": "intersections",
+      "order": 2
+    },
+    {
+      "id": "inequalities",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-solving-nonlinear-systems-of-equations-and-inequalities-1",
+      "type": "short_answer",
+      "stem": "说明：非线性系统至少含一个非线性关系。",
+      "answer": "非线性系统至少含一个非线性关系。",
+      "feedback": {
+        "correct": "非线性系统至少含一个非线性关系。",
+        "incorrect": "非线性系统至少含一个非线性关系。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-nonlinear-systems-of-equations-and-inequalities-1"
+      ]
+    },
+    {
+      "id": "quiz-solving-nonlinear-systems-of-equations-and-inequalities-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：两个图像的公共点同时满足两个方程。",
+      "answer": "两个图像的公共点同时满足两个方程。",
+      "feedback": {
+        "correct": "两个图像的公共点同时满足两个方程。",
+        "incorrect": "两个图像的公共点同时满足两个方程。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-nonlinear-systems-of-equations-and-inequalities-2"
+      ]
+    },
+    {
+      "id": "quiz-solving-nonlinear-systems-of-equations-and-inequalities-3",
+      "type": "short_answer",
+      "stem": "说明：令两个函数值相等可转化为差函数求零点。",
+      "answer": "令两个函数值相等可转化为差函数求零点。",
+      "feedback": {
+        "correct": "令两个函数值相等可转化为差函数求零点。",
+        "incorrect": "令两个函数值相等可转化为差函数求零点。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-nonlinear-systems-of-equations-and-inequalities-3"
+      ]
+    },
+    {
+      "id": "quiz-solving-nonlinear-systems-of-equations-and-inequalities-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：不等式系统的解是两个区域的公共部分。",
+      "answer": "不等式系统的解是两个区域的公共部分。",
+      "feedback": {
+        "correct": "不等式系统的解是两个区域的公共部分。",
+        "incorrect": "不等式系统的解是两个区域的公共部分。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-nonlinear-systems-of-equations-and-inequalities-4"
+      ]
+    },
+    {
+      "id": "quiz-solving-nonlinear-systems-of-equations-and-inequalities-5",
+      "type": "short_answer",
+      "stem": "说明：函数交点的横坐标不能脱离原方程单独解释。",
+      "answer": "函数交点的横坐标不能脱离原方程单独解释。",
+      "feedback": {
+        "correct": "函数交点的横坐标不能脱离原方程单独解释。",
+        "incorrect": "函数交点的横坐标不能脱离原方程单独解释。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-nonlinear-systems-of-equations-and-inequalities-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01",
+        "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "substitution and region checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 84-card page",
+        "four-case stage-switch review",
+        "region boundary and auxiliary-entity visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer Gallery gate",
+        "stage switching",
+        "Render Bundle"
+      ]
+    }
+  }
+}

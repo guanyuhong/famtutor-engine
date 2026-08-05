@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-solving-systems-of-linear-equations",
+  "title": "解二元一次方程组",
+  "titleEn": "Solving Systems of Linear Equations",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.solving-systems-of-linear-equations",
+    "occurrenceIds": [
+      "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    ],
+    "topicSlug": "system-of-equations-and-inequalities"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-solving-systems-of-linear-equations-1",
+      "type": "concept",
+      "visibleText": "方程组的解同时满足所有方程。",
+      "narrationSeed": "方程组的解同时满足所有方程。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-systems-of-linear-equations-2",
+      "type": "rule",
+      "visibleText": "两直线相交时有唯一解。",
+      "narrationSeed": "两直线相交时有唯一解。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-systems-of-linear-equations-3",
+      "type": "procedure",
+      "visibleText": "不同平行线对应无解。",
+      "narrationSeed": "不同平行线对应无解。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-systems-of-linear-equations-4",
+      "type": "representation",
+      "visibleText": "重合直线对应无穷多解。",
+      "narrationSeed": "重合直线对应无穷多解。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-systems-of-linear-equations-5",
+      "type": "misconception",
+      "visibleText": "图像公共点与代数公共解是同一对象。",
+      "narrationSeed": "图像公共点与代数公共解是同一对象。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/38-solving-systems-of-linear-equations/case.json",
+    "caseId": "research-geogebra-38-solving-systems-of-linear-equations",
+    "documentId": "geogebra-math-linear-systems"
+  },
+  "stages": [
+    {
+      "id": "one-solution",
+      "order": 1
+    },
+    {
+      "id": "no-solution",
+      "order": 2
+    },
+    {
+      "id": "many-solutions",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-solving-systems-of-linear-equations-1",
+      "type": "short_answer",
+      "stem": "说明：方程组的解同时满足所有方程。",
+      "answer": "方程组的解同时满足所有方程。",
+      "feedback": {
+        "correct": "方程组的解同时满足所有方程。",
+        "incorrect": "方程组的解同时满足所有方程。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-systems-of-linear-equations-1"
+      ]
+    },
+    {
+      "id": "quiz-solving-systems-of-linear-equations-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：两直线相交时有唯一解。",
+      "answer": "两直线相交时有唯一解。",
+      "feedback": {
+        "correct": "两直线相交时有唯一解。",
+        "incorrect": "两直线相交时有唯一解。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-systems-of-linear-equations-2"
+      ]
+    },
+    {
+      "id": "quiz-solving-systems-of-linear-equations-3",
+      "type": "short_answer",
+      "stem": "说明：不同平行线对应无解。",
+      "answer": "不同平行线对应无解。",
+      "feedback": {
+        "correct": "不同平行线对应无解。",
+        "incorrect": "不同平行线对应无解。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-systems-of-linear-equations-3"
+      ]
+    },
+    {
+      "id": "quiz-solving-systems-of-linear-equations-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：重合直线对应无穷多解。",
+      "answer": "重合直线对应无穷多解。",
+      "feedback": {
+        "correct": "重合直线对应无穷多解。",
+        "incorrect": "重合直线对应无穷多解。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-systems-of-linear-equations-4"
+      ]
+    },
+    {
+      "id": "quiz-solving-systems-of-linear-equations-5",
+      "type": "short_answer",
+      "stem": "说明：图像公共点与代数公共解是同一对象。",
+      "answer": "图像公共点与代数公共解是同一对象。",
+      "feedback": {
+        "correct": "图像公共点与代数公共解是同一对象。",
+        "incorrect": "图像公共点与代数公共解是同一对象。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-systems-of-linear-equations-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02",
+        "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "boundary/classification checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 80-card page",
+        "four-case stage-switch review",
+        "piecewise endpoint visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

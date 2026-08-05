@@ -67,6 +67,7 @@ export function styleForEntity(
     opacity: authored.opacity ?? tokenStyle.opacity ?? 1,
     fillOpacity: authored.fillOpacity ?? (
       entity.type === "polygon2" ? 0.13
+        : entity.type === "region2" ? 0.16
         : entity.type === "circle2" ? 0.04
           : entity.type === "angle" ? 0.16
             : entity.type === "point2" || entity.type === "scalar" ? 1

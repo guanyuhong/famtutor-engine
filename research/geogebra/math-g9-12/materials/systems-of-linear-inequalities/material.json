@@ -1,0 +1,175 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-systems-of-linear-inequalities",
+  "title": "线性不等式组",
+  "titleEn": "Systems of Linear Inequalities",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.systems-of-linear-inequalities",
+    "occurrenceIds": [
+      "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    ],
+    "topicSlug": "system-of-equations-and-inequalities"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-systems-of-linear-inequalities-1",
+      "type": "concept",
+      "visibleText": "每个线性不等式确定一个半平面。",
+      "narrationSeed": "每个线性不等式确定一个半平面。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    },
+    {
+      "id": "atom-systems-of-linear-inequalities-2",
+      "type": "rule",
+      "visibleText": "系统的解必须同时满足所有不等式。",
+      "narrationSeed": "系统的解必须同时满足所有不等式。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    },
+    {
+      "id": "atom-systems-of-linear-inequalities-3",
+      "type": "procedure",
+      "visibleText": "公共解集是各半平面的交集。",
+      "narrationSeed": "公共解集是各半平面的交集。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    },
+    {
+      "id": "atom-systems-of-linear-inequalities-4",
+      "type": "representation",
+      "visibleText": "测试点需要逐个条件核验。",
+      "narrationSeed": "测试点需要逐个条件核验。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    },
+    {
+      "id": "atom-systems-of-linear-inequalities-5",
+      "type": "misconception",
+      "visibleText": "只满足其中一个条件的点不是系统的解。",
+      "narrationSeed": "只满足其中一个条件的点不是系统的解。",
+      "sourceRef": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/41-systems-of-linear-inequalities/case.json",
+    "caseId": "research-geogebra-41-systems-of-linear-inequalities",
+    "documentId": "geogebra-math-systems-linear-inequalities"
+  },
+  "stages": [
+    {
+      "id": "first",
+      "order": 1
+    },
+    {
+      "id": "second",
+      "order": 2
+    },
+    {
+      "id": "intersection",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-systems-of-linear-inequalities-1",
+      "type": "short_answer",
+      "stem": "说明：每个线性不等式确定一个半平面。",
+      "answer": "每个线性不等式确定一个半平面。",
+      "feedback": {
+        "correct": "每个线性不等式确定一个半平面。",
+        "incorrect": "每个线性不等式确定一个半平面。"
+      },
+      "sourceAtomIds": [
+        "atom-systems-of-linear-inequalities-1"
+      ]
+    },
+    {
+      "id": "quiz-systems-of-linear-inequalities-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：系统的解必须同时满足所有不等式。",
+      "answer": "系统的解必须同时满足所有不等式。",
+      "feedback": {
+        "correct": "系统的解必须同时满足所有不等式。",
+        "incorrect": "系统的解必须同时满足所有不等式。"
+      },
+      "sourceAtomIds": [
+        "atom-systems-of-linear-inequalities-2"
+      ]
+    },
+    {
+      "id": "quiz-systems-of-linear-inequalities-3",
+      "type": "short_answer",
+      "stem": "说明：公共解集是各半平面的交集。",
+      "answer": "公共解集是各半平面的交集。",
+      "feedback": {
+        "correct": "公共解集是各半平面的交集。",
+        "incorrect": "公共解集是各半平面的交集。"
+      },
+      "sourceAtomIds": [
+        "atom-systems-of-linear-inequalities-3"
+      ]
+    },
+    {
+      "id": "quiz-systems-of-linear-inequalities-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：测试点需要逐个条件核验。",
+      "answer": "测试点需要逐个条件核验。",
+      "feedback": {
+        "correct": "测试点需要逐个条件核验。",
+        "incorrect": "测试点需要逐个条件核验。"
+      },
+      "sourceAtomIds": [
+        "atom-systems-of-linear-inequalities-4"
+      ]
+    },
+    {
+      "id": "quiz-systems-of-linear-inequalities-5",
+      "type": "short_answer",
+      "stem": "说明：只满足其中一个条件的点不是系统的解。",
+      "answer": "只满足其中一个条件的点不是系统的解。",
+      "feedback": {
+        "correct": "只满足其中一个条件的点不是系统的解。",
+        "incorrect": "只满足其中一个条件的点不是系统的解。"
+      },
+      "sourceAtomIds": [
+        "atom-systems-of-linear-inequalities-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03",
+        "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "substitution and region checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 84-card page",
+        "four-case stage-switch review",
+        "region boundary and auxiliary-entity visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer Gallery gate",
+        "stage switching",
+        "Render Bundle"
+      ]
+    }
+  }
+}

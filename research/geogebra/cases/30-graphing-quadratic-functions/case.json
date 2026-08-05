@@ -1,0 +1,805 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-30-graphing-quadratic-functions",
+  "title": "二次函数作图",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/quadratic-functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "function.value_at",
+    "scalar.slider",
+    "point.from_expressions",
+    "assertion.expression_equal",
+    "line.through_points",
+    "boolean.expression",
+    "text.conditional"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-graphing-quadratic-functions",
+      "revision": 1,
+      "seed": 3001,
+      "metadata": {
+        "title": "二次函数作图",
+        "description": "用顶点式参数、顶点、对称轴、y 轴截距和一个动态图上点确定二次函数图像。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "quadratic-function",
+          "vertex-form",
+          "axis-of-symmetry",
+          "intercepts"
+        ]
+      },
+      "entities": [
+        {
+          "id": "a",
+          "type": "scalar",
+          "role": "free",
+          "label": "a"
+        },
+        {
+          "id": "h",
+          "type": "scalar",
+          "role": "free",
+          "label": "h"
+        },
+        {
+          "id": "k",
+          "type": "scalar",
+          "role": "free",
+          "label": "k"
+        },
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "取样 x"
+        },
+        {
+          "id": "zero",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "y=a(x−h)²+k"
+        },
+        {
+          "id": "vertexY",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "sampleY",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "interceptY",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "V",
+          "type": "point2",
+          "role": "derived",
+          "label": "V(h,k)"
+        },
+        {
+          "id": "P",
+          "type": "point2",
+          "role": "derived",
+          "label": "P"
+        },
+        {
+          "id": "Y",
+          "type": "point2",
+          "role": "derived",
+          "label": "Y"
+        },
+        {
+          "id": "axisLow",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "axisHigh",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "axis",
+          "type": "line2",
+          "role": "auxiliary",
+          "label": "x=h"
+        },
+        {
+          "id": "up",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "down",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "flat",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "upText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "downText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "flatText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "op-a",
+          "command": "scalar.slider",
+          "params": {
+            "value": 0.8,
+            "min": -1.5,
+            "max": 1.5,
+            "step": 0.1,
+            "position": [
+              -5.3,
+              -6.2
+            ],
+            "length": 2.8
+          },
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "id": "op-h",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -2.5,
+            "max": 2.5,
+            "step": 0.1,
+            "position": [
+              -5.3,
+              -6.95
+            ],
+            "length": 2.8
+          },
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "id": "op-k",
+          "command": "scalar.slider",
+          "params": {
+            "value": -1,
+            "min": -2.5,
+            "max": 2.5,
+            "step": 0.1,
+            "position": [
+              0.4,
+              -6.2
+            ],
+            "length": 2.8
+          },
+          "outputs": [
+            "k"
+          ]
+        },
+        {
+          "id": "op-x0",
+          "command": "scalar.slider",
+          "params": {
+            "value": 2.5,
+            "min": -4,
+            "max": 4,
+            "step": 0.1,
+            "position": [
+              0.4,
+              -6.95
+            ],
+            "length": 2.8
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "op-zero",
+          "command": "scalar.constant",
+          "params": {
+            "value": 0
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "op-f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "a*(x-h)^2+k",
+            "domain": [
+              -5,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "op-vertex-y",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "h"
+            }
+          ],
+          "outputs": [
+            "vertexY"
+          ]
+        },
+        {
+          "id": "op-sample-y",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "sampleY"
+          ]
+        },
+        {
+          "id": "op-intercept-y",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "zero"
+            }
+          ],
+          "outputs": [
+            "interceptY"
+          ]
+        },
+        {
+          "id": "op-V",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "h",
+            "y": "vertexY"
+          },
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "id": "op-P",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "sampleY"
+          },
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "id": "op-Y",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "0",
+            "y": "interceptY"
+          },
+          "outputs": [
+            "Y"
+          ]
+        },
+        {
+          "id": "op-axis-low",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "h",
+            "y": "-5"
+          },
+          "outputs": [
+            "axisLow"
+          ]
+        },
+        {
+          "id": "op-axis-high",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "h",
+            "y": "5"
+          },
+          "outputs": [
+            "axisHigh"
+          ]
+        },
+        {
+          "id": "op-axis",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "axisLow"
+            },
+            {
+              "ref": "axisHigh"
+            }
+          ],
+          "outputs": [
+            "axis"
+          ]
+        },
+        {
+          "id": "op-up",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a>0"
+          },
+          "outputs": [
+            "up"
+          ]
+        },
+        {
+          "id": "op-down",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a<0"
+          },
+          "outputs": [
+            "down"
+          ]
+        },
+        {
+          "id": "op-flat",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "a==0"
+          },
+          "outputs": [
+            "flat"
+          ]
+        },
+        {
+          "id": "op-up-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "up"
+            }
+          ],
+          "params": {
+            "trueText": "a>0：V 是最小值点",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              5.35
+            ]
+          },
+          "outputs": [
+            "upText"
+          ]
+        },
+        {
+          "id": "op-down-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "down"
+            }
+          ],
+          "params": {
+            "trueText": "a<0：V 是最大值点",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              5.35
+            ]
+          },
+          "outputs": [
+            "downText"
+          ]
+        },
+        {
+          "id": "op-flat-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "flat"
+            }
+          ],
+          "params": {
+            "trueText": "a=0：退化为常数函数",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              5.35
+            ]
+          },
+          "outputs": [
+            "flatText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            5.9,
+            6,
+            -7.55
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "a",
+            "h",
+            "k",
+            "x0"
+          ],
+          "style": {
+            "fontSize": 12,
+            "labelOffset": [
+              4,
+              0
+            ]
+          }
+        },
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "V"
+          ],
+          "style": {
+            "stroke": "#E36E45",
+            "fill": "#E36E45",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "bottom-right"
+          }
+        },
+        {
+          "targets": [
+            "P"
+          ],
+          "style": {
+            "stroke": "#6C5CE7",
+            "fill": "#6C5CE7",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "Y"
+          ],
+          "style": {
+            "stroke": "#2B8A3E",
+            "fill": "#2B8A3E",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "left"
+          }
+        },
+        {
+          "targets": [
+            "axisLow",
+            "axisHigh"
+          ],
+          "style": {
+            "opacity": 0,
+            "pointSize": 1,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "axis"
+          ],
+          "style": {
+            "stroke": "#9DA9B5",
+            "strokeWidth": 1.3,
+            "dash": "dashed",
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "upText",
+            "downText",
+            "flatText"
+          ],
+          "style": {
+            "stroke": "#315F78",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "a",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "h",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "k",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        }
+      ],
+      "assertions": [
+        {
+          "id": "vertex-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(V)"
+            },
+            {
+              "expr": "h"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点横坐标是 h。"
+        },
+        {
+          "id": "vertex-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(V)"
+            },
+            {
+              "expr": "k"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点纵坐标是 k。"
+        },
+        {
+          "id": "sample-on-graph",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(P)"
+            },
+            {
+              "expr": "sampleY"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "P 是由函数实体求值得到的图上点。"
+        },
+        {
+          "id": "y-intercept",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(Y)"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "Y 是 y 轴截距点。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-graphing-quadratic-functions",
+          "title": "二次函数作图",
+          "stages": [
+            {
+              "id": "vertex-form",
+              "narration": "顶点式 y=a(x-h)^2+k 直接给出三个作图参数：开口与宽窄、水平位置和竖直位置。",
+              "focus": [
+                "f",
+                "a",
+                "h",
+                "k"
+              ]
+            },
+            {
+              "id": "vertex-axis",
+              "narration": "V(h,k) 是顶点，对称轴是 x=h；a 的符号决定 V 是最大值点还是最小值点。",
+              "focus": [
+                "V",
+                "axis",
+                "upText",
+                "downText",
+                "flatText"
+              ]
+            },
+            {
+              "id": "key-points",
+              "narration": "Y 给出 y 轴截距，P 是可移动取样点；顶点、对称轴和关键点共同约束图像。",
+              "focus": [
+                "V",
+                "Y",
+                "P"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "graph-from-vertex-form",
+              "prompt": "改变 a、h、k，先预测顶点和对称轴，再拖动 x 检查图上点。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-y"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "sample-on-graph"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "y-intercept"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.quadratic-functions.9-12.04",
+          "ggb.math.skill.graphing-quadratic-functions",
+          "https://www.geogebra.org/math/quadratic-functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "a",
+        "permission": "drag"
+      },
+      {
+        "target": "h",
+        "permission": "drag"
+      },
+      {
+        "target": "k",
+        "permission": "drag"
+      },
+      {
+        "target": "x0",
+        "permission": "drag"
+      }
+    ]
+  }
+}

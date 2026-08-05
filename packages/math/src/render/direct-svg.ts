@@ -34,6 +34,7 @@ import { styleForEntity, type ResolvedStyle } from "./style.js";
 import { renderDirectSvg3D } from "./direct-svg3d.js";
 import { isEntityVisible } from "./visibility.js";
 import { isInterval } from "../kernel/interval.js";
+import { functionValueAt } from "../kernel/function.js";
 
 export interface DirectSvgOptions {
   viewId?: string;
@@ -180,6 +181,72 @@ function renderFunction(
   return pathFromSamples(samples, height * 1.25)
     .map(path => `<path data-entity-id="${escapeXml(entityId)}" d="${path}" ${styleAttributes(style)}/>`)
     .join("");
+}
+
+function renderPiecewiseFunction(
+  value: Extract<RuntimeValue, { kind: "function1" }>,
+  values: Map<string, RuntimeValue>,
+  transform: CoordinateTransform,
+  style: ResolvedStyle,
+  entityId: string,
+  samplesCount: number,
+  height: number,
+  theme: "light" | "dark"
+): string {
+  const branches = value.branches ?? [];
+  const curveParts = branches.map(branch => renderFunction(
+    branch.expression,
+    branch.domain,
+    values,
+    transform,
+    style,
+    entityId,
+    Math.max(24, Math.round(samplesCount / branches.length)),
+    height
+  ));
+  const endpointParts: string[] = [];
+  for (const branch of branches) {
+    for (const [x, closed] of [[branch.domain[0], branch.lowerClosed], [branch.domain[1], branch.upperClosed]] as Array<[number, boolean]>) {
+      try {
+        const y = evaluateNumericExpression(branch.expression, name => name === "x" ? x : values.get(name));
+        if (!Number.isFinite(y)) continue;
+        const [cx, cy] = transform.point({ x, y });
+        endpointParts.push(`<circle data-piecewise-endpoint-for="${escapeXml(entityId)}" cx="${cx}" cy="${cy}" r="4" fill="${closed ? escapeXml(style.fill) : theme === "dark" ? "#111820" : "#ffffff"}" stroke="${escapeXml(style.stroke)}" stroke-width="2"/>`);
+      } catch { /* invalid dynamic branch samples are already reported by evaluation */ }
+    }
+  }
+  return curveParts.join("") + endpointParts.join("");
+}
+
+function renderFunctionRegion(
+  value: Extract<RuntimeValue, { kind: "region2" }>,
+  values: Map<string, RuntimeValue>,
+  transform: CoordinateTransform,
+  style: ResolvedStyle,
+  entityId: string,
+  samplesCount: number,
+  height: number
+): string {
+  const samples: Array<[number, number] | null> = [];
+  for (let index = 0; index <= samplesCount; index += 1) {
+    const x = value.domain[0] + (value.domain[1] - value.domain[0]) * (index / samplesCount);
+    try {
+      const y = functionValueAt(value.boundary, x, name => values.get(name));
+      samples.push(Number.isFinite(y) ? [transform.x(x), Math.max(0, Math.min(height, transform.y(y)))] : null);
+    } catch {
+      samples.push(null);
+    }
+  }
+  const edgeY = value.relation === "above" ? 0 : height;
+  return pathFromSamples(samples, height * 1.25).map(boundaryPath => {
+    const coordinates = [...boundaryPath.matchAll(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g)];
+    if (coordinates.length < 2) return "";
+    const firstX = coordinates[0]![1];
+    const lastX = coordinates.at(-1)![1];
+    const areaPath = `${boundaryPath} L${lastX} ${edgeY} L${firstX} ${edgeY} Z`;
+    const dash = value.boundaryIncluded ? style : { ...style, dashArray: "8 6" };
+    return `<path data-entity-id="${escapeXml(entityId)}" d="${areaPath}" fill="${escapeXml(style.fill)}" fill-opacity="${style.fillOpacity}" stroke="none"/><path data-region-boundary-for="${escapeXml(entityId)}" d="${boundaryPath}" ${styleAttributes(dash)}/>`;
+  }).join("");
 }
 
 function renderParametricCurve(
@@ -472,7 +539,11 @@ function renderEntity(
   }
   if (isAngle(value)) return renderAngle(value, transform, style, entity, document, options.theme);
   if (value && typeof value === "object" && value.kind === "function1") {
+    if (value.branches) return renderPiecewiseFunction(value, values, transform, style, entity.id, options.functionSamples, height, options.theme);
     return renderFunction(value.expression, value.domain, values, transform, style, entity.id, options.functionSamples, height);
+  }
+  if (value && typeof value === "object" && value.kind === "region2") {
+    return renderFunctionRegion(value, values, transform, style, entity.id, options.functionSamples, height);
   }
   if (value && typeof value === "object" && value.kind === "curve2") {
     return renderParametricCurve(value.xExpression, value.yExpression, value.parameter, value.domain, values, transform, style, entity.id, options.curveSamples, height);
@@ -528,6 +599,7 @@ function renderDirectSvg2D(document: MathDocument, options: DirectSvgOptions = {
   const pointParts: string[] = [];
 
   const layerOrder: Record<string, number> = {
+    region2: 5,
     function1: 10,
     curve2: 10,
     collection: 25,

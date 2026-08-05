@@ -21,6 +21,7 @@ export * from "./kernel/dag.js";
 export * from "./kernel/evaluate.js";
 export * from "./kernel/assertions.js";
 export * from "./kernel/simulate.js";
+export * from "./kernel/function.js";
 
 export * from "./protocol/validate.js";
 

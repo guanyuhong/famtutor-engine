@@ -668,6 +668,45 @@ const definitions: CommandDefinition[] = [
     renderer: "both"
   },
   {
+    name: "function.piecewise",
+    title: "Piecewise function",
+    description: "Create one function1 from 1..16 ordered non-overlapping branches. Each params.branches item has expression, domain=[from,to], and optional lowerClosed/upperClosed endpoint flags; two branches cannot both include a shared endpoint.",
+    inputTypes: [],
+    outputTypes: ["function1"],
+    requiredParams: ["branches"],
+    category: "function",
+    renderer: "both"
+  },
+  {
+    name: "function.value_at",
+    title: "Function value at an input",
+    description: "Evaluate an existing function1 at a scalar input. The input must lie inside the function's declared closed domain.",
+    inputTypes: ["function1", "scalar"],
+    outputTypes: ["scalar"],
+    category: "function",
+    renderer: "computed"
+  },
+  {
+    name: "point.function_root",
+    title: "Bracketed function root",
+    description: "Find one x-axis point of an existing function1 inside params.bracket=[from,to] using deterministic bisection. Endpoints must lie in the function domain and either contain a root or have opposite signs.",
+    inputTypes: ["function1"],
+    outputTypes: ["point2"],
+    requiredParams: ["bracket"],
+    category: "point",
+    renderer: "computed"
+  },
+  {
+    name: "region.function_inequality",
+    title: "Function inequality region",
+    description: "Create the plane region above or below an existing function1 on params.domain=[from,to]. params.relation is above or below; boundaryIncluded defaults to true and controls the boundary line style.",
+    inputTypes: ["function1"],
+    outputTypes: ["region2"],
+    requiredParams: ["relation", "domain"],
+    category: "function",
+    renderer: "both"
+  },
+  {
     name: "curve.parametric",
     title: "Parametric curve",
     description: "Create [x(t), y(t)] from safe expressions and a parameter domain.",

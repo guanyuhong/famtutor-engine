@@ -288,6 +288,55 @@ v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform �
 
 `scalar.slider.params.animation` 保留为 JSXGraph 原生 glider 动画，适合无控制面板的轻量视觉演示。需要播放、暂停、复位、单步、确定性重放或跨宿主一致状态时，应使用文档级 `clocks[]` 与 `controls[]`；不要创建 Case 专属计时器。用户手动修改目标滑块时，确定性时钟自动暂停。
 
+滑块标签复用通用实体样式：`fontSize` 控制字号，`labelOffset: [dx, dy]` 以像素微调 JSXGraph 原生标签。多个滑块共享画布时，应先用 `position` 和 `length` 建立稳定布局，再用 `labelOffset` 做最后微调；不要用 `text.at` 复制滑块名称和值。
+
+`function.value_at(function1, scalar) -> scalar` 对已有函数实体求值，并复用该实体的表达式、闭定义域和文档依赖。输入不是有限数时诊断为 `FUNCTION_INPUT_NOT_FINITE`，输入超出定义域时诊断为 `FUNCTION_INPUT_OUTSIDE_DOMAIN`：
+
+```json
+{
+  "entities": [
+    { "id": "a", "type": "scalar", "role": "free" },
+    { "id": "x0", "type": "scalar", "role": "free" },
+    { "id": "f", "type": "function1", "role": "derived" },
+    { "id": "y0", "type": "scalar", "role": "derived" }
+  ],
+  "construction": [
+    { "id": "op-a", "command": "scalar.slider", "params": { "min": -2, "max": 2, "value": 1 }, "outputs": ["a"] },
+    { "id": "op-x0", "command": "scalar.slider", "params": { "min": -3, "max": 3, "value": 1.5 }, "outputs": ["x0"] },
+    { "id": "op-f", "command": "function.explicit", "params": { "expression": "a*x^2-1", "domain": [-3, 3] }, "outputs": ["f"] },
+    { "id": "op-y0", "command": "function.value_at", "inputs": [{ "ref": "f" }, { "ref": "x0" }], "outputs": ["y0"] }
+  ]
+}
+```
+
+`point.function_root(function1, params.bracket) -> point2` 在一个已隔离、端点异号的闭区间内用确定性二分法构造单个 x 轴交点。它不会猜测扫描步长，也不声称枚举全部根；区间超出函数定义域或未夹住根时返回结构化诊断。
+
+```json
+{ "id": "op-root", "command": "point.function_root", "inputs": [{ "ref": "f" }], "params": { "bracket": [-2, 0] }, "outputs": ["root"] }
+```
+
+`region.function_inequality(function1, params) -> region2` 组合已有函数边界，表示指定闭 x 域内的上方或下方二维区域。`relation` 为 `above`/`below`，`boundaryIncluded` 决定实线或虚线边界；Direct SVG 与 JSXGraph 使用相同语义。
+
+```json
+{ "id": "op-solution", "command": "region.function_inequality", "inputs": [{ "ref": "f" }], "params": { "relation": "above", "domain": [-5, 5], "boundaryIncluded": true }, "outputs": ["solution"] }
+```
+
+`function.piecewise(params.branches) -> function1` 把 1–16 个显式分支组合为同一个函数实体。每个分支声明表达式、闭 x 域及端点是否计入；分支不得重叠，也不能同时包含共享端点。求值、Direct SVG 的开闭端点和 JSXGraph 挂载共享同一语义。
+
+```json
+{
+  "id": "op-piecewise",
+  "command": "function.piecewise",
+  "params": {
+    "branches": [
+      { "expression": "x+2", "domain": [-3, 0], "lowerClosed": true, "upperClosed": false },
+      { "expression": "x^2", "domain": [0, 3], "lowerClosed": true, "upperClosed": true }
+    ]
+  },
+  "outputs": ["f"]
+}
+```
+
 ```json
 {
   "id": "op-progress",

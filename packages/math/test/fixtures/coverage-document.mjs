@@ -91,6 +91,13 @@ export function coverageDocument() {
   add("xfDilate", "transform2", "derived", "transform.dilate", [{ ref: "M" }], { factor: "1.5" });
   add("applied", "point2", "derived", "transform.apply", [{ ref: "D" }, { ref: "xfRotate" }]);
   add("f", "function1", "derived", "function.explicit", [], { expression: "s*sin(x)", domain: [-5, 5] });
+  add("piecewise", "function1", "derived", "function.piecewise", [], { branches: [
+    { expression: "-x", domain: [-4, 0], lowerClosed: true, upperClosed: false },
+    { expression: "x+1", domain: [0, 4], lowerClosed: true, upperClosed: true }
+  ] });
+  add("fAtS", "scalar", "derived", "function.value_at", [{ ref: "f" }, { ref: "s" }]);
+  add("fRoot", "point2", "derived", "point.function_root", [{ ref: "f" }], { bracket: [-1, 1] });
+  add("fBelow", "region2", "derived", "region.function_inequality", [{ ref: "f" }], { relation: "below", domain: [-4, 4], boundaryIncluded: true });
   add("curve", "curve2", "derived", "curve.parametric", [], { xExpression: "3*cos(t)", yExpression: "2*sin(t)", parameter: "t", domain: [0, 6.283185307179586] });
   add("text", "text", "annotation", "text.at", [{ ref: "C" }], { text: "C" });
   add("conditionalText", "text", "annotation", "text.conditional", [{ ref: "condition" }, { ref: "expressionPoint" }], { trueText: "s > k", falseText: "s ≤ k" });

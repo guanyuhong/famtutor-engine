@@ -1,0 +1,173 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-functions-and-function-notation",
+  "title": "函数与函数记号",
+  "titleEn": "Functions and Function Notation",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.functions-and-function-notation",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.03"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-function-name",
+      "type": "concept",
+      "visibleText": "f 是函数名，x 是输入。",
+      "narrationSeed": "f 是函数名，x 是输入。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.03"
+    },
+    {
+      "id": "atom-function-value",
+      "type": "rule",
+      "visibleText": "f(x) 表示输入 x 对应的输出。",
+      "narrationSeed": "f(x) 表示输入 x 对应的输出。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.03"
+    },
+    {
+      "id": "atom-evaluate",
+      "type": "procedure",
+      "visibleText": "代入输入，按同一函数规则求值。",
+      "narrationSeed": "代入输入，按同一函数规则求值。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.03"
+    },
+    {
+      "id": "atom-graph-point",
+      "type": "representation",
+      "visibleText": "输入输出对对应点 (x,f(x))。",
+      "narrationSeed": "输入输出对对应点 (x,f(x))。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.03"
+    },
+    {
+      "id": "atom-notation-misread",
+      "type": "misconception",
+      "visibleText": "f(x) 不是 f 与 x 的乘积。",
+      "narrationSeed": "f(x) 不是 f 与 x 的乘积。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.03"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/28-functions-and-function-notation/case.json",
+    "caseId": "research-geogebra-28-functions-and-function-notation",
+    "documentId": "geogebra-math-functions-notation"
+  },
+  "stages": [
+    {
+      "id": "notation",
+      "order": 1
+    },
+    {
+      "id": "evaluate",
+      "order": 2
+    },
+    {
+      "id": "graph-point",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-function-value",
+      "type": "short_answer",
+      "stem": "若 f(x)=2x-3，f(4) 等于多少？",
+      "answer": "5",
+      "feedback": {
+        "correct": "把 x=4 代入同一个函数规则。",
+        "incorrect": "把 x=4 代入同一个函数规则。"
+      },
+      "sourceAtomIds": [
+        "atom-function-name"
+      ]
+    },
+    {
+      "id": "quiz-notation-name",
+      "type": "short_answer",
+      "stem": "在 f(2) 中，2 表示什么？",
+      "answer": "输入",
+      "feedback": {
+        "correct": "括号中的量是函数输入。",
+        "incorrect": "括号中的量是函数输入。"
+      },
+      "sourceAtomIds": [
+        "atom-function-value"
+      ]
+    },
+    {
+      "id": "quiz-notation-output",
+      "type": "short_answer",
+      "stem": "点 (3,7) 在 y=f(x) 上说明什么？",
+      "answer": "f(3)=7",
+      "feedback": {
+        "correct": "图上点把输入和输出配成有序对。",
+        "incorrect": "图上点把输入和输出配成有序对。"
+      },
+      "sourceAtomIds": [
+        "atom-evaluate"
+      ]
+    },
+    {
+      "id": "quiz-notation-misconception",
+      "type": "true_false",
+      "stem": "判断：f(x) 一定等于 f×x。",
+      "answer": "错误",
+      "feedback": {
+        "correct": "f(x) 是函数值记号，不是普通乘法。",
+        "incorrect": "f(x) 是函数值记号，不是普通乘法。"
+      },
+      "sourceAtomIds": [
+        "atom-graph-point"
+      ]
+    },
+    {
+      "id": "quiz-notation-transfer",
+      "type": "short_answer",
+      "stem": "若 f(-1)=4，图像上必经过哪个点？",
+      "answer": "(-1,4)",
+      "feedback": {
+        "correct": "函数值可直接转成图上点。",
+        "incorrect": "函数值可直接转成图上点。"
+      },
+      "sourceAtomIds": [
+        "atom-notation-misread"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.03",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "parameter sweep test"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at 330px height",
+        "six-case stage-switch review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

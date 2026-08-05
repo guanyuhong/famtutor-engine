@@ -1,7 +1,7 @@
 {
   "schema": "famtutor.case.v1",
   "caseId": "research-geogebra-21-linear-function-properties",
-  "title": "一次函数 y=kx+b 的图象和性质",
+  "title": "斜率与截距变化对直线的影响",
   "status": "accepted",
   "caseType": "exploration",
   "difficulty": "mechanism-reference",
@@ -9,9 +9,10 @@
     "printedPages": [],
     "pdfPages": [],
     "references": [
-      "https://www.geogebra.org/m/xbq2dzub"
+      "https://www.geogebra.org/m/xbq2dzub",
+      "https://www.geogebra.org/math/linear-functions?lang=en-GB"
     ],
-    "note": "依据公开题意与构造结构原创复现。"
+    "note": "原机制案例升级为 GeoGebra Math 9–12 垂直素材；依据公开目标原创复现。"
   },
   "requiredCapabilities": [
     "function.explicit",
@@ -19,7 +20,8 @@
     "point.from_expressions",
     "boolean.expression",
     "text.conditional",
-    "assertion.expression_equal"
+    "assertion.expression_equal",
+    "function.value_at"
   ],
   "inputs": {
     "initialDocument": {
@@ -33,13 +35,16 @@
         "locale": "zh-CN",
         "purpose": "exploration",
         "subject": "mathematics",
-        "grade": "grade-8",
+        "grade": "grade-9-12",
         "tags": [
           "geogebra-study",
           "linear-function",
           "slope",
           "intercept",
-          "monotonicity"
+          "monotonicity",
+          "geogebra-math-index",
+          "grade-9-12",
+          "function-value-at"
         ]
       },
       "entities": [
@@ -66,6 +71,12 @@
           "type": "function1",
           "label": "y=kx+b",
           "role": "derived"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "derived",
+          "label": "f(x)"
         },
         {
           "id": "O",
@@ -138,11 +149,11 @@
             "min": -2.5,
             "max": 2.5,
             "step": 0.1,
-          "position": [
-            -5.3,
-            -5.35
-          ],
-          "length": 5.4
+            "position": [
+              -5.3,
+              -5.35
+            ],
+            "length": 5.4
           },
           "outputs": [
             "k"
@@ -156,11 +167,11 @@
             "min": -3,
             "max": 3,
             "step": 0.1,
-          "position": [
-            -5.3,
-            -6.05
-          ],
-          "length": 5.4
+            "position": [
+              -5.3,
+              -6.05
+            ],
+            "length": 5.4
           },
           "outputs": [
             "b"
@@ -174,11 +185,11 @@
             "min": -4,
             "max": 4,
             "step": 0.1,
-          "position": [
-            -5.3,
-            -6.75
-          ],
-          "length": 5.4
+            "position": [
+              -5.3,
+              -6.75
+            ],
+            "length": 5.4
           },
           "outputs": [
             "x0"
@@ -196,6 +207,21 @@
           },
           "outputs": [
             "f"
+          ]
+        },
+        {
+          "id": "op-y0",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "y0"
           ]
         },
         {
@@ -227,7 +253,7 @@
           "command": "point.from_expressions",
           "params": {
             "x": "x0",
-            "y": "k*x0+b"
+            "y": "y0"
           },
           "outputs": [
             "P"
@@ -360,7 +386,7 @@
             -6,
             5.1,
             6,
-          -7.35
+            -7.35
           ],
           "axes": true,
           "grid": true,
@@ -487,11 +513,11 @@
               "expr": "y(P)"
             },
             {
-              "expr": "k*x(P)+b"
+              "expr": "y0"
             }
           ],
           "expected": true,
-          "tolerance": 1E-9,
+          "tolerance": 1e-9,
           "requiredMethod": "numeric",
           "severity": "error",
           "message": "P 满足 y=kx+b。"
@@ -508,10 +534,27 @@
             }
           ],
           "expected": true,
-          "tolerance": 1E-9,
+          "tolerance": 1e-9,
           "requiredMethod": "numeric",
           "severity": "error",
           "message": "图象与 y 轴交于 (0,b)。"
+        },
+        {
+          "id": "function-value",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y0"
+            },
+            {
+              "expr": "k*x0+b"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "函数实体在 x0 处求值得到 kx0+b。"
         }
       ],
       "activities": [
@@ -557,7 +600,10 @@
         "generator": "agent",
         "sourceRefs": [
           "geogebra:xbq2dzub",
-          "mechanism:parametric-function-properties"
+          "mechanism:parametric-function-properties",
+          "ggb.math.occurrence.linear-functions.9-12.01",
+          "ggb.math.skill.effects-of-changes-in-slope-and-intercepts-of-lines",
+          "https://www.geogebra.org/math/linear-functions?lang=en-GB"
         ]
       }
     }

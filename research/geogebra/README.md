@@ -32,7 +32,7 @@ npm run gallery
 2. `CASE 17 · demonstration`：选择“拼角”阶段，再使用“播放 / 暂停 / 单步 / 复位”。状态栏应显示 `assemblyClock` 的 status、`t` 和逻辑 tick。
 3. 动画播放时手动拖动 `t`，时钟应转为 `paused`，证明手动控制优先。
 
-当前 Gallery 会展示 41 个教材 Case 加 27 个机制研究 Case，共 68 张卡片；Case 17 是原教材 Case 的能力升级，不重复计数。RESEARCH 03 验收 Sequence / Zip，RESEARCH 04 验收 Imported Macro DAG，RESEARCH 05/06 验收“秋风”Triangle / Circle 第一批原创同构，RESEARCH 07–09 验收外角定理、一线三等角和等边三角形手拉手，RESEARCH 10/11 验收参数化旋转不变量，RESEARCH 12/13 验收内、外角平分线定理，RESEARCH 14 验收路径点上的角平分线—高夹角不变量，RESEARCH 15–18 验收 SSS/SAS/ASA/AAS 动态全等判定组，RESEARCH 19/20 验收垂直平分线轨迹与等腰三角形性质，RESEARCH 21/22 验收一次函数与 `y=ax²` 的参数、采样点、对称性和条件性质反馈，RESEARCH 23–26 验收轴对称最短路径、勾股面积证明、动态 n 边形对角线和三类刚体变换，RESEARCH 27 验收三角形定义及共线退化边界。
+当前 Gallery 会展示 41 个教材 Case 加 43 个机制研究 Case，共 84 张卡片；Case 17 是原教材 Case 的能力升级，不重复计数。RESEARCH 28–31 验收 Wave 01，RESEARCH 32–35 验收 Wave 02，RESEARCH 36–39 验收 Wave 03，RESEARCH 40–43 验收 Wave 04 的二元线性不等式、线性不等式组、非线性系统和二次求根公式。RESEARCH 21/22 同时升级为首批 9–12 垂直素材的一部分。
 
 ## 几何素材目录
 
@@ -54,6 +54,11 @@ npm run gallery
 - “秋风”Function Wave 08：`batches/qiu-feng-function-wave-08.md`
 - “秋风”Theorem / Transform Wave 09：`batches/qiu-feng-theorem-transform-wave-09.md`
 - “秋风”First 12 Closure Wave 10：`batches/qiu-feng-first-12-closure-wave-10.md`
+- GeoGebra Math 9–12 Wave 01：`batches/geogebra-math-g9-12-wave-01.md`
+- GeoGebra Math 9–12 Wave 02：`batches/geogebra-math-g9-12-wave-02.md`
+- GeoGebra Math 9–12 Wave 03：`batches/geogebra-math-g9-12-wave-03.md`
+- GeoGebra Math 9–12 Wave 04：`batches/geogebra-math-g9-12-wave-04.md`
+- GeoGebra Math 9–12 素材索引：`math-g9-12/material-index.v1.json`
 - “秋风”能力缺口账本：`qiu-feng-wave-01-gap-ledger.json`
 - 设计与第一批队列：`../../docs/geogebra-geometry-material-library.md`
 

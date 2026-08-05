@@ -18,6 +18,7 @@ export const ENTITY_TYPES = [
   "transform2",
   "interval1",
   "function1",
+  "region2",
   "curve2",
   "collection",
   "vector3",
@@ -408,6 +409,24 @@ export interface Function1Value {
   kind: "function1";
   expression: string;
   domain: [number, number];
+  /** Ordered, non-overlapping branches. Present only for function.piecewise. */
+  branches?: FunctionBranchValue[];
+}
+
+export interface FunctionBranchValue {
+  expression: string;
+  domain: [number, number];
+  lowerClosed: boolean;
+  upperClosed: boolean;
+}
+
+/** The portion of the plane above or below a function boundary on a closed x-domain. */
+export interface FunctionInequalityRegion2Value {
+  kind: "region2";
+  boundary: Function1Value;
+  relation: "above" | "below";
+  domain: [number, number];
+  boundaryIncluded: boolean;
 }
 
 /** A connected subset of the real line. `null` denotes an infinite bound. */
@@ -491,6 +510,7 @@ export type RuntimeValue =
   | AngleValue
   | Interval1Value
   | Function1Value
+  | FunctionInequalityRegion2Value
   | Curve2Value
   | CollectionValue
   | Point3Value

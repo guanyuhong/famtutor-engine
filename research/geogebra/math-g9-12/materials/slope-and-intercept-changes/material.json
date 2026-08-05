@@ -1,0 +1,173 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-slope-and-intercept-changes",
+  "title": "斜率和截距变化",
+  "titleEn": "Effects of Changes in Slope and Intercepts of Lines",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.effects-of-changes-in-slope-and-intercepts-of-lines",
+    "occurrenceIds": [
+      "ggb.math.occurrence.linear-functions.9-12.01"
+    ],
+    "topicSlug": "linear-functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-slope-sign",
+      "type": "rule",
+      "visibleText": "k 的符号决定直线上升或下降。",
+      "narrationSeed": "k 的符号决定直线上升或下降。",
+      "sourceRef": "ggb.math.occurrence.linear-functions.9-12.01"
+    },
+    {
+      "id": "atom-slope-size",
+      "type": "rule",
+      "visibleText": "|k| 影响直线倾斜程度。",
+      "narrationSeed": "|k| 影响直线倾斜程度。",
+      "sourceRef": "ggb.math.occurrence.linear-functions.9-12.01"
+    },
+    {
+      "id": "atom-intercept",
+      "type": "concept",
+      "visibleText": "b 是图像与 y 轴交点的纵坐标。",
+      "narrationSeed": "b 是图像与 y 轴交点的纵坐标。",
+      "sourceRef": "ggb.math.occurrence.linear-functions.9-12.01"
+    },
+    {
+      "id": "atom-parallel-shift",
+      "type": "representation",
+      "visibleText": "固定 k 改变 b，直线保持平行移动。",
+      "narrationSeed": "固定 k 改变 b，直线保持平行移动。",
+      "sourceRef": "ggb.math.occurrence.linear-functions.9-12.01"
+    },
+    {
+      "id": "atom-zero-slope",
+      "type": "misconception",
+      "visibleText": "k=0 时是常数函数，不是无图像。",
+      "narrationSeed": "k=0 时是常数函数，不是无图像。",
+      "sourceRef": "ggb.math.occurrence.linear-functions.9-12.01"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/21-linear-function-properties/case.json",
+    "caseId": "research-geogebra-21-linear-function-properties",
+    "documentId": "qiu-feng-linear-function-properties"
+  },
+  "stages": [
+    {
+      "id": "slope",
+      "order": 1
+    },
+    {
+      "id": "intercept",
+      "order": 2
+    },
+    {
+      "id": "sample",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-slope-intercept",
+      "type": "short_answer",
+      "stem": "固定 k，仅增大 b，直线怎样变化？",
+      "answer": "向上平移",
+      "feedback": {
+        "correct": "斜率不变，所以方向不变。",
+        "incorrect": "斜率不变，所以方向不变。"
+      },
+      "sourceAtomIds": [
+        "atom-slope-sign"
+      ]
+    },
+    {
+      "id": "quiz-slope-sign",
+      "type": "short_answer",
+      "stem": "k<0 时直线从左到右怎样？",
+      "answer": "下降",
+      "feedback": {
+        "correct": "负斜率表示随 x 墠大 y 减小。",
+        "incorrect": "负斜率表示随 x 墠大 y 减小。"
+      },
+      "sourceAtomIds": [
+        "atom-slope-size"
+      ]
+    },
+    {
+      "id": "quiz-intercept",
+      "type": "short_answer",
+      "stem": "y=2x-3 的 y 轴截距是多少？",
+      "answer": "-3",
+      "feedback": {
+        "correct": "令 x=0 得 y=-3。",
+        "incorrect": "令 x=0 得 y=-3。"
+      },
+      "sourceAtomIds": [
+        "atom-intercept"
+      ]
+    },
+    {
+      "id": "quiz-parallel",
+      "type": "true_false",
+      "stem": "哪两条直线一定平行？",
+      "answer": "斜率相同的两条不同直线",
+      "feedback": {
+        "correct": "相同斜率给出相同方向。",
+        "incorrect": "相同斜率给出相同方向。"
+      },
+      "sourceAtomIds": [
+        "atom-parallel-shift"
+      ]
+    },
+    {
+      "id": "quiz-zero-slope",
+      "type": "short_answer",
+      "stem": "y=4 的斜率是多少？",
+      "answer": "0",
+      "feedback": {
+        "correct": "水平直线的斜率为零。",
+        "incorrect": "水平直线的斜率为零。"
+      },
+      "sourceAtomIds": [
+        "atom-zero-slope"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.linear-functions.9-12.01",
+        "https://www.geogebra.org/math/linear-functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "parameter sweep test"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at 330px height",
+        "six-case stage-switch review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

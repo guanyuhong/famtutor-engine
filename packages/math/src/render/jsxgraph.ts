@@ -80,6 +80,7 @@ import { renderDirectSvg } from "./direct-svg.js";
 import { layoutPointLabels, type LabelViewport } from "./point-label-layout.js";
 import { styleForEntity } from "./style.js";
 import { intervalFromBounds } from "../kernel/interval.js";
+import { functionInequalityRegion, functionRootInInterval, functionValueAt, isFunction1, piecewiseFunction } from "../kernel/function.js";
 import { mountJsxGraph3D } from "./jsxgraph3d.js";
 import { isEntityVisible } from "./visibility.js";
 
@@ -274,7 +275,7 @@ function inputRefs(node: ConstructionNode): string[] {
   return (node.inputs ?? []).flatMap(input => "ref" in input ? [input.ref] : []);
 }
 
-function jxgAttributes(document: MathDocument, entityId: string, forceFixed = false): Record<string, unknown> {
+export function jxgAttributes(document: MathDocument, entityId: string, forceFixed = false): Record<string, unknown> {
   const entity = document.entities.find(candidate => candidate.id === entityId);
   if (!entity) return {};
   const style = styleForEntity(document, entity);
@@ -304,6 +305,12 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
       autoPosition: false
     });
   }
+  if (entity.type === "scalar") {
+    Object.assign(label, {
+      offset: style.labelOffset,
+      autoPosition: false
+    });
+  }
   const attributes: Record<string, unknown> = {
     name: style.labelVisible ? (entity.label ?? (entity.type === "point2" ? entity.id : "")) : "",
     withLabel: entity.type === "polygon2" ? false : style.labelVisible && Boolean(entity.label),
@@ -318,6 +325,7 @@ function jxgAttributes(document: MathDocument, entityId: string, forceFixed = fa
     strokeOpacity: style.opacity ?? 1,
     fillOpacity: (style.fillOpacity ?? (
       entity.type === "polygon2" ? 0.12
+        : entity.type === "region2" ? 0.16
         : entity.type === "circle2" ? 0.04
           : entity.type === "angle" ? 0.16
             : entity.type === "point2" || entity.type === "scalar" ? 1
@@ -754,6 +762,21 @@ function mountJsxGraph2D(
         ], jxgAttributes(document, output, true));
         objects.set(output, native);
         valueResolvers.set(output, () => safeRuntimePoint(native!));
+        break;
+      }
+      case "point.function_root": {
+        const bracket = pairParam(node, "bracket", [0, 1]);
+        const tolerance = numericParam(node, "tolerance", 1e-9);
+        const maxIterations = Math.round(numericParam(node, "maxIterations", 80));
+        const current = () => {
+          const functionValue = valueOf(refs[0]!);
+          if (!isFunction1(functionValue)) {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "point.function_root requires a function1 input.");
+          }
+          return functionRootInInterval(functionValue, bracket, name => valueOf(name), tolerance, maxIterations);
+        };
+        native = board.create("point", [() => current().x, () => current().y], jxgAttributes(document, output, true));
+        valueResolvers.set(output, current);
         break;
       }
       case "point.on_path": {
@@ -1531,6 +1554,94 @@ function mountJsxGraph2D(
         ], jxgAttributes(document, output, true));
         objects.set(output, native);
         valueResolvers.set(output, () => ({ kind: "function1", expression, domain }));
+        break;
+      }
+      case "function.piecewise": {
+        const value = piecewiseFunction(node.params?.branches);
+        const attributes: Record<string, unknown> = { ...jxgAttributes(document, output, true), name: "", withLabel: false };
+        native = board.create("point", [0, 0], { fixed: true, visible: false, name: "", withLabel: false });
+        native.fmeVisibility = () => false;
+        native.fmeChildren = [];
+        for (const branch of value.branches ?? []) {
+          const graph = board.create("functiongraph", [
+            (x: number) => x >= branch.domain[0] && x <= branch.domain[1]
+              ? expressionValue(branch.expression, { x })
+              : Number.NaN,
+            branch.domain[0],
+            branch.domain[1]
+          ], attributes);
+          native.fmeChildren.push(graph);
+          for (const [x, closed] of [[branch.domain[0], branch.lowerClosed], [branch.domain[1], branch.upperClosed]] as Array<[number, boolean]>) {
+            const endpoint = board.create("point", [
+              x,
+              () => expressionValue(branch.expression, { x })
+            ], {
+              ...attributes,
+              size: 3,
+              fillColor: closed ? attributes["fillColor"] : (view.background ?? "#FBFCFE"),
+              fillOpacity: 1,
+              strokeWidth: 2
+            });
+            native.fmeChildren.push(endpoint);
+          }
+        }
+        objects.set(output, native);
+        valueResolvers.set(output, () => piecewiseFunction(node.params?.branches));
+        break;
+      }
+      case "function.value_at": {
+        valueResolvers.set(output, () => {
+          const functionValue = valueOf(refs[0]!);
+          const x = valueOf(refs[1]!);
+          if (!isFunction1(functionValue) || typeof x !== "number") {
+            throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "function.value_at requires function1 and scalar inputs.");
+          }
+          return functionValueAt(functionValue, x, name => valueOf(name));
+        });
+        return;
+      }
+      case "region.function_inequality": {
+        const relation = stringParam(node, "relation");
+        if (relation !== "above" && relation !== "below") {
+          throw new MathEngineError("FUNCTION_REGION_INVALID_RELATION", "region.function_inequality relation must be 'above' or 'below'.");
+        }
+        const domain = domainParam(node);
+        const included = node.params?.boundaryIncluded === undefined ? true : node.params.boundaryIncluded;
+        if (typeof included !== "boolean") {
+          throw new MathEngineError("FUNCTION_REGION_INVALID_BOUNDARY", "region.function_inequality boundaryIncluded must be boolean.");
+        }
+        const boundaryValue = valueOf(refs[0]!);
+        if (!isFunction1(boundaryValue)) {
+          throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "region.function_inequality requires a function1 input.");
+        }
+        functionInequalityRegion(boundaryValue, relation, domain, included);
+        const curve = board.create("functiongraph", [
+          (x: number) => {
+            const current = valueOf(refs[0]!);
+            return isFunction1(current) && x >= domain[0] && x <= domain[1]
+              ? functionValueAt(current, x, name => valueOf(name))
+              : Number.NaN;
+          },
+          domain[0],
+          domain[1]
+        ], { ...jxgAttributes(document, output, true), dash: included ? 0 : 2 });
+        native = board.create("inequality", [curve], {
+          ...jxgAttributes(document, output, false),
+          inverse: relation === "above",
+          // The inequality curve closes its fill at the finite function domain.
+          // Those closure edges are clipping mechanics, not mathematical
+          // boundaries. Keep the separately-created function graph as the only
+          // visible boundary and the only label carrier.
+          strokeOpacity: 0,
+          highlightStrokeOpacity: 0,
+          name: "",
+          withLabel: false
+        });
+        objects.set(output, native);
+        valueResolvers.set(output, () => {
+          const current = valueOf(refs[0]!);
+          return isFunction1(current) ? functionInequalityRegion(current, relation, domain, included) : undefined;
+        });
         break;
       }
       case "curve.parametric": {

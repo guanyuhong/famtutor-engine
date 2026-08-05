@@ -1,0 +1,33 @@
+{
+  "schema": "famtutor.geogebra.math.source-snapshot.v1",
+  "retrievedAt": "2026-08-05",
+  "sourceIndex": {
+    "package": "famtutor-geogebra-math-skill-index-v0.2.0",
+    "schema": "famtutor.geogebra_math.skill_index.v0.2.0"
+  },
+  "occurrences": [
+    {
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.06",
+      "uniqueSkillId": "ggb.math.skill.representations-of-relations-and-functions",
+      "gradeBand": "9-12",
+      "topicSlug": "functions",
+      "skillTitleEnRaw": "Representations of Relations and Functions",
+      "skillTitleEnNormalized": "Representations of Relations and Functions",
+      "skillTitleZhReviewedForMaterial": "关系与函数的多种表示"
+    }
+  ],
+  "officialPage": {
+    "url": "https://www.geogebra.org/math/functions?lang=en-GB",
+    "objectiveSummaryZh": "使用表、坐标平面、代数式和语言陈述转换关系与函数的表示。",
+    "verification": "browser-reviewed"
+  },
+  "curriculumAlignment": {
+    "status": "not-mapped",
+    "reason": "GeoGebra 仅给出 9–12 宽学段；本批次未获得适用的中国高中课程切片。",
+    "authorInferences": [
+      "将公开目标拆成三阶段交互板。",
+      "quiz seeds 为原创检查题，不复制 GeoGebra 活动题目。"
+    ]
+  },
+  "copyrightBoundary": "只保留短标题、来源 URL 和原创中文概述；不复制活动正文、插图、Applet、脚本或 .ggb 文件。"
+}

@@ -623,7 +623,7 @@ def main() -> int:
         summary["mountMathRenderBundleCases"] = bundle_api_checks
         bundle_page.close()
 
-        # User-facing 41-case Gallery acceptance: every CaseSpec is replayed in-browser,
+        # User-facing Gallery acceptance: every CaseSpec is replayed in-browser,
         # mounted at once, and exposes the honest accepted/unsupported split.
         gallery_page = browser.new_page(viewport={"width": 1440, "height": 1000})
         gallery_page.on("console", lambda message: console_messages.append(f"gallery {message.type}: {message.text}"))
@@ -635,11 +635,59 @@ def main() -> int:
               const cards = [...document.querySelectorAll('.case-card')];
               const accepted = cards.filter(card => card.dataset.status === 'accepted');
               const unsupported = cards.filter(card => card.dataset.status === 'expected-unsupported');
-              if (cards.length !== 41 || accepted.length !== 40 || unsupported.length !== 1) {
+              if (cards.length !== 84 || accepted.length !== 83 || unsupported.length !== 1) {
                 throw new Error(`Gallery totals mismatch: ${cards.length}/${accepted.length}/${unsupported.length}`);
               }
               if (!cards.every(card => card.dataset.mounted === 'true')) {
                 throw new Error('Gallery has unmounted cards');
+              }
+              const verticalStages = new Map([
+                ['research-geogebra-21-linear-function-properties', 'intercept'],
+                ['research-geogebra-22-quadratic-ax2-properties', 'stretch'],
+                ['research-geogebra-28-functions-and-function-notation', 'evaluate'],
+                ['research-geogebra-29-exponential-equation-graph-critical-values', 'growth-decay'],
+                ['research-geogebra-30-graphing-quadratic-functions', 'vertex-axis'],
+                ['research-geogebra-31-zeros-of-quadratic-functions', 'zeros-intercepts'],
+                ['research-geogebra-32-representations-of-relations-and-functions', 'table'],
+                ['research-geogebra-33-increasing-and-decreasing-functions', 'turning'],
+                ['research-geogebra-34-graphing-absolute-value-functions-and-inequalities', 'transform'],
+                ['research-geogebra-35-graphing-to-solve-quadratic-equations', 'graph'],
+                ['research-geogebra-36-domain-and-range-of-special-functions', 'step'],
+                ['research-geogebra-37-composition-and-inverse-of-functions', 'inverse'],
+                ['research-geogebra-38-solving-systems-of-linear-equations', 'no-solution'],
+                ['research-geogebra-39-discriminant-and-roots-of-a-quadratic-equation', 'classify'],
+                ['research-geogebra-40-solving-linear-inequalities', 'boundary-line'],
+                ['research-geogebra-41-systems-of-linear-inequalities', 'second'],
+                ['research-geogebra-42-solving-nonlinear-systems-of-equations-and-inequalities', 'intersections'],
+                ['research-geogebra-43-using-the-quadratic-formula-to-solve-quadratic-equations', 'formula']
+              ]);
+              const rectanglesOverlap = (left, right) => left.left < right.right
+                && left.right > right.left
+                && left.top < right.bottom
+                && left.bottom > right.top;
+              for (const [caseId, targetStage] of verticalStages) {
+                const renderer = window.__famtutorGallery.rendererByCase.get(caseId);
+                const card = document.querySelector(`[data-case-id="${caseId}"]`);
+                if (!renderer || !card) {
+                  throw new Error(`${caseId}: missing mounted vertical material`);
+                }
+                const switched = await window.__famtutorGallery.setCaseStage(caseId, 1);
+                if (!switched || renderer.getState().stageId !== targetStage || card.dataset.stageId !== targetStage) {
+                  throw new Error(`${caseId}: vertical material stage switch failed`);
+                }
+              }
+              for (const [caseId, prefixes] of [
+                ['research-geogebra-30-graphing-quadratic-functions', ['a =', 'h =', 'k =', '取样 x =']],
+                ['research-geogebra-31-zeros-of-quadratic-functions', ['零点 r₁', '零点 r₂']]
+              ]) {
+                const card = document.querySelector(`[data-case-id="${caseId}"]`);
+                const labels = [...card.querySelectorAll('.JXGtext')]
+                  .filter(element => prefixes.some(prefix => element.textContent?.trim().startsWith(prefix)))
+                  .map(element => element.getBoundingClientRect());
+                if (labels.length !== prefixes.length
+                  || labels.some((left, index) => labels.slice(index + 1).some(right => rectanglesOverlap(left, right)))) {
+                  throw new Error(`${caseId}: scalar slider labels overlap`);
+                }
               }
               const case04 = window.__famtutorGallery.rendererByCase.get('zj8a-1-1-04-adjust-three-segments');
               const changed = await case04.dispatch({ type: 'scalar.set', target: 'sideA', payload: { value: 10 } });

@@ -87,6 +87,7 @@ import {
   vector
 } from "./geometry.js";
 import { intervalFromBounds, isInterval } from "./interval.js";
+import { functionInequalityRegion, functionRootInInterval, functionValueAt, isFunction1, piecewiseFunction } from "./function.js";
 import {
   isLine3,
   isPlane3,
@@ -161,6 +162,11 @@ function requireScalarValue(value: RuntimeValue | JsonValue, context: string): n
 
 function requireBooleanValue(value: RuntimeValue | JsonValue, context: string): boolean {
   if (typeof value !== "boolean") throw new MathEngineError("TYPE_MISMATCH", `${context} requires a boolean.`);
+  return value;
+}
+
+function requireFunctionValue(value: RuntimeValue | JsonValue, context: string) {
+  if (!isFunction1(value)) throw new MathEngineError("TYPE_MISMATCH", `${context} requires function1.`);
   return value;
 }
 
@@ -275,6 +281,7 @@ function runtimeTypeMatches(type: EntityType, value: RuntimeValue): boolean {
   if (type === "angle") return typeof value === "object" && value.kind === "angle";
   if (type === "interval1") return isInterval(value);
   if (type === "function1") return typeof value === "object" && value.kind === "function1";
+  if (type === "region2") return typeof value === "object" && value.kind === "region2";
   if (type === "curve2") return typeof value === "object" && value.kind === "curve2";
   if (type === "collection") return isCollectionValue(value);
   if (type === "point3") return isPoint3(value);
@@ -849,6 +856,46 @@ function executeNode(
         expression: stringParam(node, "expression"),
         domain: domainParam(node)
       }];
+    case "function.piecewise": {
+      const value = piecewiseFunction(paramsObject(node).branches);
+      for (const branch of value.branches ?? []) {
+        const sample = (branch.domain[0] + branch.domain[1]) / 2;
+        functionValueAt(value, sample, name => values.get(name));
+      }
+      return [value];
+    }
+    case "function.value_at":
+      return [functionValueAt(
+        requireFunctionValue(inputs[0]!, "function.value_at input 1"),
+        requireScalarValue(inputs[1]!, "function.value_at input 2"),
+        name => values.get(name)
+      )];
+    case "point.function_root": {
+      const bracket = pairParam(node, "bracket");
+      return [functionRootInInterval(
+        requireFunctionValue(inputs[0]!, "point.function_root input 1"),
+        bracket,
+        name => values.get(name),
+        paramsObject(node).tolerance === undefined ? 1e-9 : numberParam(node, "tolerance"),
+        Math.round(paramsObject(node).maxIterations === undefined ? 80 : numberParam(node, "maxIterations"))
+      )];
+    }
+    case "region.function_inequality": {
+      const relation = stringParam(node, "relation");
+      if (relation !== "above" && relation !== "below") {
+        throw new MathEngineError("FUNCTION_REGION_INVALID_RELATION", "region.function_inequality relation must be 'above' or 'below'.", { actual: relation });
+      }
+      const included = paramsObject(node).boundaryIncluded;
+      if (included !== undefined && typeof included !== "boolean") {
+        throw new MathEngineError("FUNCTION_REGION_INVALID_BOUNDARY", "region.function_inequality boundaryIncluded must be boolean.", { actual: included });
+      }
+      return [functionInequalityRegion(
+        requireFunctionValue(inputs[0]!, "region.function_inequality input 1"),
+        relation,
+        pairParam(node, "domain"),
+        included === undefined ? true : included
+      )];
+    }
     case "curve.parametric":
       return [{
         kind: "curve2",

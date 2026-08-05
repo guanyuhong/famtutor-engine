@@ -1,0 +1,224 @@
+{
+  "schema": "famtutor.geogebra.math.gap-ledger.v1",
+  "wave": "01-04",
+  "generatedAt": "2026-08-05",
+  "materials": [
+    "ggb-math-g9-12-functions-and-function-notation",
+    "ggb-math-g9-12-slope-and-intercept-changes",
+    "ggb-math-g9-12-nonlinear-parent-function-transformations",
+    "ggb-math-g9-12-exponential-equation-graph-critical-values",
+    "ggb-math-g9-12-graphing-quadratic-functions",
+    "ggb-math-g9-12-zeros-of-quadratic-functions",
+    "ggb-math-g9-12-representations-of-relations-and-functions",
+    "ggb-math-g9-12-increasing-and-decreasing-functions",
+    "ggb-math-g9-12-graphing-absolute-value-functions-and-inequalities",
+    "ggb-math-g9-12-graphing-to-solve-quadratic-equations",
+    "ggb-math-g9-12-domain-and-range-of-special-functions",
+    "ggb-math-g9-12-composition-and-inverse-of-functions",
+    "ggb-math-g9-12-solving-systems-of-linear-equations",
+    "ggb-math-g9-12-discriminant-and-roots-of-a-quadratic-equation",
+    "ggb-math-g9-12-solving-linear-inequalities",
+    "ggb-math-g9-12-systems-of-linear-inequalities",
+    "ggb-math-g9-12-solving-nonlinear-systems-of-equations-and-inequalities",
+    "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations"
+  ],
+  "gaps": [
+    {
+      "capability": "function.value_at",
+      "layer": "kernel",
+      "status": "closed-new-l0",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-functions-and-function-notation",
+        "ggb-math-g9-12-slope-and-intercept-changes",
+        "ggb-math-g9-12-nonlinear-parent-function-transformations",
+        "ggb-math-g9-12-exponential-equation-graph-critical-values",
+        "ggb-math-g9-12-graphing-quadratic-functions",
+        "ggb-math-g9-12-zeros-of-quadratic-functions"
+      ],
+      "evidence": "function1 原先只能绘制；六个素材中的采样点或关键值都需要在给定标量输入上复用同一函数实体。",
+      "decision": "新增 function.value_at(function1, scalar) -> scalar；域外输入产生结构化失败，JSXGraph 与 headless 共用求值语义。"
+    },
+    {
+      "capability": "nonlinear-parent-transform-authoring",
+      "layer": "authoring",
+      "status": "closed-compose-existing",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-nonlinear-parent-function-transformations",
+        "ggb-math-g9-12-graphing-quadratic-functions"
+      ],
+      "decision": "参数滑块 + function.explicit 足以表达伸缩、反射和平移；不新增母函数专用命令。"
+    },
+    {
+      "capability": "scalar-slider-label-offset",
+      "layer": "renderer",
+      "status": "closed-existing-style-semantics",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-graphing-quadratic-functions",
+        "ggb-math-g9-12-zeros-of-quadratic-functions"
+      ],
+      "evidence": "多滑块窄画布暴露标签拥挤；通用 EntityStyle.labelOffset 已发布，但 JSXGraph scalar slider 未消费该字段。",
+      "decision": "补齐 scalar slider 对 fontSize/labelOffset 的原生 JSXGraph 映射；素材只使用公开样式，不添加案例文字覆盖或 Gallery 分支。"
+    },
+    {
+      "capability": "general-function-critical-points",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-exponential-equation-graph-critical-values",
+        "ggb-math-g9-12-graphing-quadratic-functions"
+      ],
+      "decision": "本批关键点由函数定义和已知参数给出；等待独立素材要求从任意 function1 数值求零点或极值后再设计通用测量。"
+    },
+    {
+      "capability": "dynamic-math-text",
+      "layer": "presentation",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-functions-and-function-notation",
+        "ggb-math-g9-12-slope-and-intercept-changes",
+        "ggb-math-g9-12-nonlinear-parent-function-transformations",
+        "ggb-math-g9-12-exponential-equation-graph-critical-values",
+        "ggb-math-g9-12-graphing-quadratic-functions",
+        "ggb-math-g9-12-zeros-of-quadratic-functions"
+      ],
+      "decision": "当前用短标签、条件文本和 narration 表达；不因六个案例需要显示数值字符串就扩张数学内核。"
+    },
+    {
+      "capability": "point.function_root",
+      "layer": "kernel",
+      "status": "closed-new-l0",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-graphing-to-solve-quadratic-equations"
+      ],
+      "evidence": "已有 function1 能绘图和求值，但不能从同一函数实体构造可断言的 x 轴交点。",
+      "decision": "新增单职责的括号根 point.function_root(function1, bracket)->point2；不新增一次返回全部 roots 的集合原语。"
+    },
+    {
+      "capability": "region.function_inequality",
+      "layer": "kernel-renderer",
+      "status": "closed-new-l0",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-graphing-absolute-value-functions-and-inequalities"
+      ],
+      "evidence": "polygon2 会重复并冻结函数边界语义，且不能随函数参数同步。",
+      "decision": "新增由既有 function1 组合的上方/下方二维区域；Direct SVG 与 JSXGraph 共享 relation/domain/boundaryIncluded 语义。"
+    },
+    {
+      "capability": "piecewise-function",
+      "layer": "kernel",
+      "status": "superseded-by-function.piecewise",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-domain-and-range-of-special-functions"
+      ],
+      "decision": "Wave 02 的候选项已由官网明确的分段函数素材验证，并收敛为公开命令 function.piecewise。"
+    },
+    {
+      "capability": "function.piecewise",
+      "layer": "kernel-renderer",
+      "status": "closed-new-l0",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-domain-and-range-of-special-functions"
+      ],
+      "evidence": "GeoGebra 官方目标明确要求写出和绘制 step/constant/piecewise 函数；单一安全表达式无法表达分支域及端点开闭。",
+      "decision": "新增 function.piecewise：1–16 个不重叠显式分支，复用 function1、function.value_at、根构造和区域语义；Direct SVG 与 JSXGraph 原生显示开闭端点。"
+    },
+    {
+      "capability": "function.compose",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-composition-and-inverse-of-functions"
+      ],
+      "decision": "当前通过 function.value_at 的标量求值链验证 g(f(x))=x；尚无第二个素材要求把复合作为可绘制 function1 实体。"
+    },
+    {
+      "capability": "function.inverse",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-composition-and-inverse-of-functions"
+      ],
+      "decision": "本素材用显式逆函数、坐标交换和 y=x 对称验证；一般逆函数还需单调性、定义域限制和多值失败语义，证据不足。"
+    },
+    {
+      "capability": "table",
+      "layer": "presentation",
+      "status": "deferred-to-presentation-contract",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-representations-of-relations-and-functions",
+        "ggb-math-g9-12-solving-systems-of-linear-equations"
+      ],
+      "evidence": "表格需求已在两个素材重复，但它是有界数据的教学呈现，不是几何或函数内核。",
+      "decision": "不新增 Math L0；后续在通用教学卡/数据板协议设计 table，并由数学实体提供数据。"
+    },
+    {
+      "capability": "linear-system-solution-set",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-solving-systems-of-linear-equations"
+      ],
+      "decision": "唯一解用现有交点，平行/重合用直线关系和阶段表达；尚无需要跨命令消费系统解分类的第二素材。"
+    },
+    {
+      "capability": "discriminant-classification",
+      "layer": "kernel",
+      "status": "closed-compose-existing",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-discriminant-and-roots-of-a-quadratic-equation"
+      ],
+      "decision": "安全标量/布尔表达式、条件文本和函数图像足以同步表示 Δ 的正零负分类，不新增判别式专用命令。"
+    },
+    {
+      "capability": "solution-set-1d",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-domain-and-range-of-special-functions",
+        "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations"
+      ],
+      "decision": "Wave 04 官方线性不等式目标是二元半平面，不产生一维区间集合消费需求；二次公式只需两个可断言根点。有限点集、区间并集与空集仍未形成共同输入输出语义。"
+    },
+    {
+      "capability": "region.intersection",
+      "layer": "kernel-renderer",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-systems-of-linear-inequalities",
+        "ggb-math-g9-12-solving-nonlinear-systems-of-equations-and-inequalities"
+      ],
+      "evidence": "两个素材重复出现公共区域，但目前只用于可视化和测试点合取，没有下游命令消费交集边界。",
+      "decision": "保持多个 region2 的公开组合与布尔合取；待出现面积、边界或命中测试等消费需求后再定义复合区域的失败和渲染语义。"
+    },
+    {
+      "capability": "function.intersections",
+      "layer": "kernel",
+      "status": "closed-compose-existing",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-solving-nonlinear-systems-of-equations-and-inequalities"
+      ],
+      "decision": "以差函数 function1 + point.function_root + point.from_expressions 组合得到函数交点，数学断言可核验且双后端语义一致；不新增单题式 line-parabola 特例。"
+    },
+    {
+      "capability": "all-function-roots",
+      "layer": "kernel",
+      "status": "deferred",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-graphing-to-solve-quadratic-equations",
+        "ggb-math-g9-12-discriminant-and-roots-of-a-quadratic-equation",
+        "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations"
+      ],
+      "evidence": "第三个素材再次需要根，但通用 all-roots 对任意函数无法可靠定义搜索范围、完备性、不连续点和重根。",
+      "decision": "继续使用单根括号求解或已知二次公式表达式；不把二次方程的封闭公式伪装成任意函数的全根原语。"
+    },
+    {
+      "capability": "quadratic-formula-roots",
+      "layer": "kernel",
+      "status": "closed-compose-existing",
+      "evidenceMaterials": [
+        "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations"
+      ],
+      "decision": "scalar.constant、function.explicit、point.from_expressions 与数学断言足以表达系数、公式根和代回核验；只有一个素材，暂不新增 quadratic.roots。"
+    }
+  ]
+}

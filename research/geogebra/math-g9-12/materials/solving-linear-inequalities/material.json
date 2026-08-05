@@ -1,0 +1,175 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-solving-linear-inequalities",
+  "title": "解二元线性不等式",
+  "titleEn": "Solving Linear Inequalities",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.solving-linear-inequalities",
+    "occurrenceIds": [
+      "ggb.math.occurrence.inequalities.9-12.02"
+    ],
+    "topicSlug": "inequalities"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-solving-linear-inequalities-1",
+      "type": "concept",
+      "visibleText": "二元线性不等式的边界是对应的等式直线。",
+      "narrationSeed": "二元线性不等式的边界是对应的等式直线。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-linear-inequalities-2",
+      "type": "rule",
+      "visibleText": "测试点代入不等式可判断所选半平面。",
+      "narrationSeed": "测试点代入不等式可判断所选半平面。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-linear-inequalities-3",
+      "type": "procedure",
+      "visibleText": "含等号时边界属于解集。",
+      "narrationSeed": "含等号时边界属于解集。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-linear-inequalities-4",
+      "type": "representation",
+      "visibleText": "图像中的阴影点与代数解一一对应。",
+      "narrationSeed": "图像中的阴影点与代数解一一对应。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.02"
+    },
+    {
+      "id": "atom-solving-linear-inequalities-5",
+      "type": "misconception",
+      "visibleText": "不能只画边界线而忽略满足条件的整个半平面。",
+      "narrationSeed": "不能只画边界线而忽略满足条件的整个半平面。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.02"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/40-solving-linear-inequalities/case.json",
+    "caseId": "research-geogebra-40-solving-linear-inequalities",
+    "documentId": "geogebra-math-solving-linear-inequalities"
+  },
+  "stages": [
+    {
+      "id": "algebra",
+      "order": 1
+    },
+    {
+      "id": "boundary-line",
+      "order": 2
+    },
+    {
+      "id": "test-point",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-solving-linear-inequalities-1",
+      "type": "short_answer",
+      "stem": "说明：二元线性不等式的边界是对应的等式直线。",
+      "answer": "二元线性不等式的边界是对应的等式直线。",
+      "feedback": {
+        "correct": "二元线性不等式的边界是对应的等式直线。",
+        "incorrect": "二元线性不等式的边界是对应的等式直线。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-linear-inequalities-1"
+      ]
+    },
+    {
+      "id": "quiz-solving-linear-inequalities-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：测试点代入不等式可判断所选半平面。",
+      "answer": "测试点代入不等式可判断所选半平面。",
+      "feedback": {
+        "correct": "测试点代入不等式可判断所选半平面。",
+        "incorrect": "测试点代入不等式可判断所选半平面。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-linear-inequalities-2"
+      ]
+    },
+    {
+      "id": "quiz-solving-linear-inequalities-3",
+      "type": "short_answer",
+      "stem": "说明：含等号时边界属于解集。",
+      "answer": "含等号时边界属于解集。",
+      "feedback": {
+        "correct": "含等号时边界属于解集。",
+        "incorrect": "含等号时边界属于解集。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-linear-inequalities-3"
+      ]
+    },
+    {
+      "id": "quiz-solving-linear-inequalities-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：图像中的阴影点与代数解一一对应。",
+      "answer": "图像中的阴影点与代数解一一对应。",
+      "feedback": {
+        "correct": "图像中的阴影点与代数解一一对应。",
+        "incorrect": "图像中的阴影点与代数解一一对应。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-linear-inequalities-4"
+      ]
+    },
+    {
+      "id": "quiz-solving-linear-inequalities-5",
+      "type": "short_answer",
+      "stem": "说明：不能只画边界线而忽略满足条件的整个半平面。",
+      "answer": "不能只画边界线而忽略满足条件的整个半平面。",
+      "feedback": {
+        "correct": "不能只画边界线而忽略满足条件的整个半平面。",
+        "incorrect": "不能只画边界线而忽略满足条件的整个半平面。"
+      },
+      "sourceAtomIds": [
+        "atom-solving-linear-inequalities-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.inequalities.9-12.02",
+        "https://www.geogebra.org/math/inequalities?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "substitution and region checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 84-card page",
+        "four-case stage-switch review",
+        "region boundary and auxiliary-entity visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer Gallery gate",
+        "stage switching",
+        "Render Bundle"
+      ]
+    }
+  }
+}
