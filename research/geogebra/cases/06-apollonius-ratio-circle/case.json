@@ -1,0 +1,87 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-06-apollonius-ratio-circle",
+  "title": "阿波罗尼斯圆：定比点的轨迹",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": ["https://www.geogebra.org/m/jeeyncug"],
+    "note": "题意与机制研究；FamTutor 使用定比圆解析构造原创复现，不复制源工作表。"
+  },
+  "requiredCapabilities": ["scalar.slider", "point.from_expressions", "circle.center_radius", "point.on_path", "entity.visibleWhen", "assertion.expression_equal"],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "qiu-feng-apollonius-ratio-circle",
+      "revision": 1,
+      "seed": 3102,
+      "metadata": {
+        "title": "阿波罗尼斯圆",
+        "description": "当 PA/PB=k 且 k≠1 时，动点 P 的轨迹是一条圆。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "tags": ["geogebra-study", "circle", "similarity", "locus", "ratio", "conditional-visibility"]
+      },
+      "entities": [
+        { "id": "showConstruction", "type": "boolean", "role": "free", "visible": false },
+        { "id": "k", "type": "scalar", "label": "k = PA/PB", "role": "free" },
+        { "id": "A", "type": "point2", "label": "A", "role": "free" },
+        { "id": "B", "type": "point2", "label": "B", "role": "free" },
+        { "id": "AB", "type": "segment2", "role": "derived" },
+        { "id": "O", "type": "point2", "label": "O", "role": "derived", "visibleWhen": "showConstruction" },
+        { "id": "locusCircle", "type": "circle2", "label": "PA/PB = k", "role": "derived" },
+        { "id": "P", "type": "point2", "label": "P", "role": "free" },
+        { "id": "PA", "type": "segment2", "label": "PA", "role": "derived" },
+        { "id": "PB", "type": "segment2", "label": "PB", "role": "derived" },
+        { "id": "OA", "type": "segment2", "role": "auxiliary", "visibleWhen": "showConstruction" },
+        { "id": "OB", "type": "segment2", "role": "auxiliary", "visibleWhen": "showConstruction" }
+      ],
+      "construction": [
+        { "id": "op-showConstruction", "command": "boolean.constant", "params": { "value": false }, "outputs": ["showConstruction"] },
+        { "id": "op-k", "command": "scalar.slider", "params": { "min": 1.25, "max": 3, "value": 2, "step": 0.05, "position": [-3.5, -3.5], "length": 4.5 }, "outputs": ["k"] },
+        { "id": "op-A", "command": "point.free", "params": { "coords": [-2, 0] }, "outputs": ["A"] },
+        { "id": "op-B", "command": "point.free", "params": { "coords": [2, 0] }, "outputs": ["B"] },
+        { "id": "op-AB", "command": "segment.through_points", "inputs": [{ "ref": "A" }, { "ref": "B" }], "outputs": ["AB"] },
+        { "id": "op-O", "command": "point.from_expressions", "params": { "x": "(x(A)-k*k*x(B))/(1-k*k)", "y": "0" }, "outputs": ["O"] },
+        { "id": "op-locus", "command": "circle.center_radius", "inputs": [{ "ref": "O" }], "params": { "radius": "k*distance(A,B)/abs(1-k*k)" }, "outputs": ["locusCircle"] },
+        { "id": "op-P", "command": "point.on_path", "inputs": [{ "ref": "locusCircle" }], "params": { "initial": [0.6666666666666666, 0] }, "outputs": ["P"] },
+        { "id": "op-PA", "command": "segment.through_points", "inputs": [{ "ref": "P" }, { "ref": "A" }], "outputs": ["PA"] },
+        { "id": "op-PB", "command": "segment.through_points", "inputs": [{ "ref": "P" }, { "ref": "B" }], "outputs": ["PB"] },
+        { "id": "op-OA", "command": "segment.through_points", "inputs": [{ "ref": "O" }, { "ref": "A" }], "outputs": ["OA"] },
+        { "id": "op-OB", "command": "segment.through_points", "inputs": [{ "ref": "O" }, { "ref": "B" }], "outputs": ["OB"] }
+      ],
+      "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-4.5, 5, 7, -4.2], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FBFCFE", "cameraPolicy": "document" }],
+      "styles": [
+        { "targets": ["locusCircle"], "style": { "stroke": "#197C77", "strokeWidth": 2.3, "fill": "#BFE5DF", "fillOpacity": 0.13, "fontSize": 13, "labelVisible": true } },
+        { "targets": ["AB"], "style": { "stroke": "#8796A5", "strokeWidth": 1.8, "labelVisible": false } },
+        { "targets": ["PA"], "style": { "stroke": "#D6763A", "strokeWidth": 2.2, "labelVisible": true, "lineLabelPosition": 0.48, "lineLabelSide": "left", "lineLabelDistance": 2 } },
+        { "targets": ["PB"], "style": { "stroke": "#5576B9", "strokeWidth": 2.2, "labelVisible": true, "lineLabelPosition": 0.48, "lineLabelSide": "right", "lineLabelDistance": 2 } },
+        { "targets": ["OA", "OB"], "style": { "stroke": "#9DA9B5", "strokeWidth": 1.4, "dash": "dashed", "labelVisible": false } },
+        { "targets": ["A", "B", "O"], "style": { "stroke": "#155B73", "fill": "#155B73", "pointSize": 4.5, "fontSize": 14, "labelVisible": true, "labelPlacement": "auto" } },
+        { "targets": ["P"], "style": { "stroke": "#B84C2D", "fill": "#E36E45", "pointSize": 5.5, "fontSize": 14, "labelVisible": true, "labelPlacement": "auto" } },
+        { "targets": ["k"], "style": { "stroke": "#197C77", "fill": "#197C77", "fontSize": 13 } }
+      ],
+      "interactions": [
+        { "target": "k", "permissions": ["set_value"] },
+        { "target": "P", "permissions": ["select", "drag"], "dragMode": "along_path", "dragTarget": "locusCircle" },
+        { "target": "showConstruction", "permissions": ["set_value"] }
+      ],
+      "controls": [{ "id": "toggleConstruction", "kind": "checkbox", "label": "显示圆心构造", "description": "显示解析构造得到的圆心 O 以及 OA、OB。", "action": { "type": "boolean.toggle", "target": "showConstruction" } }],
+      "assertions": [
+        { "id": "constant-ratio", "predicate": "expression_equal", "arguments": [{ "expr": "distance(P,A)/distance(P,B)" }, { "expr": "k" }], "expected": true, "tolerance": 1e-8, "requiredMethod": "numeric", "severity": "error", "message": "轨迹圆上的点始终满足 PA/PB=k。" },
+        { "id": "center-division", "predicate": "expression_equal", "arguments": [{ "expr": "distance(O,A)/distance(O,B)" }, { "expr": "k*k" }], "expected": true, "tolerance": 1e-8, "requiredMethod": "numeric", "severity": "error", "message": "圆心 O 按 k² 外分 AB。" }
+      ],
+      "activities": [{ "id": "apollonius", "title": "定比点的轨迹", "stages": [{ "id": "locus", "narration": "沿圆拖动 P，观察 PA/PB 始终等于滑块 k。" }, { "id": "construct", "narration": "显示圆心构造；改变 k，比较圆心和半径怎样变化。" }], "tasks": [{ "id": "drag-ratio", "prompt": "拖动 P 到至少三个位置，并改变 k，验证定比关系。", "allowedTools": ["interaction.drag", "interaction.set_value", "control.invoke"], "evidence": [{ "kind": "event", "ref": "P" }, { "kind": "assertion", "ref": "constant-ratio" }], "hints": ["先固定 k，只沿圆拖动 P。", "k 越接近 1，轨迹圆会怎样变化？"] }] }],
+      "provenance": { "generator": "agent", "sourceRefs": ["geogebra:jeeyncug", "mechanism:ratio-locus", "mechanism:conditional-visibility"] }
+    }
+  },
+  "trace": { "changeSets": [] },
+  "expected": {
+    "assertions": [{ "kind": "runtime-assertions-pass" }, { "kind": "static-render" }, { "kind": "render-bundle" }],
+    "interactions": [{ "target": "k", "permission": "set_value" }, { "target": "P", "permission": "drag" }, { "target": "showConstruction", "permission": "set_value" }]
+  }
+}

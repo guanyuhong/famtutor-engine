@@ -1,0 +1,408 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-43-using-the-quadratic-formula-to-solve-quadratic-equations",
+  "title": "用求根公式解二次方程",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.constant",
+    "function.explicit",
+    "point.from_expressions",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-quadratic-formula",
+      "revision": 1,
+      "seed": 4301,
+      "metadata": {
+        "title": "用求根公式解二次方程",
+        "description": "从标准式识别系数，计算判别式，并由同一安全表达式构造两个根点。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-04"
+        ]
+      },
+      "entities": [
+        {
+          "id": "a",
+          "type": "scalar",
+          "role": "auxiliary",
+          "label": "a=2"
+        },
+        {
+          "id": "b",
+          "type": "scalar",
+          "role": "auxiliary",
+          "label": "b=-5"
+        },
+        {
+          "id": "c",
+          "type": "scalar",
+          "role": "auxiliary",
+          "label": "c=-3"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "2x²-5x-3"
+        },
+        {
+          "id": "R1",
+          "type": "point2",
+          "role": "derived",
+          "label": "x=-0.5"
+        },
+        {
+          "id": "R2",
+          "type": "point2",
+          "role": "derived",
+          "label": "x=3"
+        },
+        {
+          "id": "formula",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "substitution",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "a",
+          "command": "scalar.constant",
+          "params": {
+            "value": 2
+          },
+          "outputs": [
+            "a"
+          ]
+        },
+        {
+          "id": "b",
+          "command": "scalar.constant",
+          "params": {
+            "value": -5
+          },
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "id": "c",
+          "command": "scalar.constant",
+          "params": {
+            "value": -3
+          },
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "a*x^2+b*x+c",
+            "domain": [
+              -3,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "r1",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "(-b-sqrt(b^2-4*a*c))/(2*a)",
+            "y": "0"
+          },
+          "outputs": [
+            "R1"
+          ]
+        },
+        {
+          "id": "r2",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "(-b+sqrt(b^2-4*a*c))/(2*a)",
+            "y": "0"
+          },
+          "outputs": [
+            "R2"
+          ]
+        },
+        {
+          "id": "formula",
+          "command": "text.at",
+          "params": {
+            "text": "x = (-b ± √(b²-4ac)) / 2a",
+            "at": [
+              -5.4,
+              5.75
+            ]
+          },
+          "outputs": [
+            "formula"
+          ]
+        },
+        {
+          "id": "sub",
+          "command": "text.at",
+          "params": {
+            "text": "2x²-5x-3=0；Δ=49；x=-0.5 或 3",
+            "at": [
+              -5.4,
+              5.2
+            ]
+          },
+          "outputs": [
+            "substitution"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "R1",
+            "R2"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "bottom"
+          }
+        },
+        {
+          "targets": [
+            "formula",
+            "substitution"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [],
+      "assertions": [
+        {
+          "id": "root-one",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(R1)"
+            },
+            {
+              "expr": "-0.5"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "较小根正确。"
+        },
+        {
+          "id": "root-two",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(R2)"
+            },
+            {
+              "expr": "3"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "较大根正确。"
+        },
+        {
+          "id": "root-one-check",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "a*x(R1)^2+b*x(R1)+c"
+            },
+            {
+              "expr": "0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "较小根代回方程成立。"
+        },
+        {
+          "id": "root-two-check",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "a*x(R2)^2+b*x(R2)+c"
+            },
+            {
+              "expr": "0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "较大根代回方程成立。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-quadratic-formula",
+          "title": "用求根公式解二次方程",
+          "stages": [
+            {
+              "id": "coefficients",
+              "narration": "先写成 ax²+bx+c=0，并连同符号识别 a=2、b=-5、c=-3。",
+              "reveal": [
+                "a",
+                "b",
+                "c",
+                "f",
+                "substitution"
+              ]
+            },
+            {
+              "id": "formula",
+              "narration": "计算 Δ=b²-4ac=49，再代入 x=(-b±√Δ)/(2a)。",
+              "reveal": [
+                "a",
+                "b",
+                "c",
+                "f",
+                "formula",
+                "substitution"
+              ]
+            },
+            {
+              "id": "verify",
+              "narration": "两个公式结果对应图像的 x 轴交点；把它们代回原方程都得到 0。",
+              "reveal": [
+                "a",
+                "b",
+                "c",
+                "f",
+                "R1",
+                "R2",
+                "formula",
+                "substitution"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-quadratic-formula-task",
+              "prompt": "切换阶段并用图像、代数与测试点核验结论。",
+              "allowedTools": [],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "root-one"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "root-two"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "root-one-check"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "root-two-check"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.quadratic-equations.9-12.06",
+          "ggb.math.skill.using-the-quadratic-formula-to-solve-quadratic-equations",
+          "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  }
+}

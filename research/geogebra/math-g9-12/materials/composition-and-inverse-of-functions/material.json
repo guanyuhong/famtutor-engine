@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-composition-and-inverse-of-functions",
+  "title": "函数的复合与反函数",
+  "titleEn": "Composition and Inverse of Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.composition-and-inverse-of-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.01"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-composition-and-inverse-of-functions-1",
+      "type": "concept",
+      "visibleText": "复合函数把前一个函数的输出作为后一个输入。",
+      "narrationSeed": "复合函数把前一个函数的输出作为后一个输入。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.01"
+    },
+    {
+      "id": "atom-composition-and-inverse-of-functions-2",
+      "type": "rule",
+      "visibleText": "反函数撤销原函数的映射。",
+      "narrationSeed": "反函数撤销原函数的映射。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.01"
+    },
+    {
+      "id": "atom-composition-and-inverse-of-functions-3",
+      "type": "procedure",
+      "visibleText": "g(f(x))=x 可验证互逆关系。",
+      "narrationSeed": "g(f(x))=x 可验证互逆关系。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.01"
+    },
+    {
+      "id": "atom-composition-and-inverse-of-functions-4",
+      "type": "representation",
+      "visibleText": "反函数对应点交换横纵坐标。",
+      "narrationSeed": "反函数对应点交换横纵坐标。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.01"
+    },
+    {
+      "id": "atom-composition-and-inverse-of-functions-5",
+      "type": "misconception",
+      "visibleText": "互逆函数图像关于 y=x 对称。",
+      "narrationSeed": "互逆函数图像关于 y=x 对称。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.01"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/37-composition-and-inverse-of-functions/case.json",
+    "caseId": "research-geogebra-37-composition-and-inverse-of-functions",
+    "documentId": "geogebra-math-composition-inverse"
+  },
+  "stages": [
+    {
+      "id": "function",
+      "order": 1
+    },
+    {
+      "id": "inverse",
+      "order": 2
+    },
+    {
+      "id": "composition",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-composition-and-inverse-of-functions-1",
+      "type": "short_answer",
+      "stem": "说明：复合函数把前一个函数的输出作为后一个输入。",
+      "answer": "复合函数把前一个函数的输出作为后一个输入。",
+      "feedback": {
+        "correct": "复合函数把前一个函数的输出作为后一个输入。",
+        "incorrect": "复合函数把前一个函数的输出作为后一个输入。"
+      },
+      "sourceAtomIds": [
+        "atom-composition-and-inverse-of-functions-1"
+      ]
+    },
+    {
+      "id": "quiz-composition-and-inverse-of-functions-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：反函数撤销原函数的映射。",
+      "answer": "反函数撤销原函数的映射。",
+      "feedback": {
+        "correct": "反函数撤销原函数的映射。",
+        "incorrect": "反函数撤销原函数的映射。"
+      },
+      "sourceAtomIds": [
+        "atom-composition-and-inverse-of-functions-2"
+      ]
+    },
+    {
+      "id": "quiz-composition-and-inverse-of-functions-3",
+      "type": "short_answer",
+      "stem": "说明：g(f(x))=x 可验证互逆关系。",
+      "answer": "g(f(x))=x 可验证互逆关系。",
+      "feedback": {
+        "correct": "g(f(x))=x 可验证互逆关系。",
+        "incorrect": "g(f(x))=x 可验证互逆关系。"
+      },
+      "sourceAtomIds": [
+        "atom-composition-and-inverse-of-functions-3"
+      ]
+    },
+    {
+      "id": "quiz-composition-and-inverse-of-functions-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：反函数对应点交换横纵坐标。",
+      "answer": "反函数对应点交换横纵坐标。",
+      "feedback": {
+        "correct": "反函数对应点交换横纵坐标。",
+        "incorrect": "反函数对应点交换横纵坐标。"
+      },
+      "sourceAtomIds": [
+        "atom-composition-and-inverse-of-functions-4"
+      ]
+    },
+    {
+      "id": "quiz-composition-and-inverse-of-functions-5",
+      "type": "short_answer",
+      "stem": "说明：互逆函数图像关于 y=x 对称。",
+      "answer": "互逆函数图像关于 y=x 对称。",
+      "feedback": {
+        "correct": "互逆函数图像关于 y=x 对称。",
+        "incorrect": "互逆函数图像关于 y=x 对称。"
+      },
+      "sourceAtomIds": [
+        "atom-composition-and-inverse-of-functions-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.01",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "boundary/classification checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 80-card page",
+        "four-case stage-switch review",
+        "piecewise endpoint visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

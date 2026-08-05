@@ -1,0 +1,33 @@
+{
+  "schema": "famtutor.geogebra.math.source-snapshot.v1",
+  "retrievedAt": "2026-08-05",
+  "sourceIndex": {
+    "package": "famtutor-geogebra-math-skill-index-v0.2.0",
+    "schema": "famtutor.geogebra_math.skill_index.v0.2.0"
+  },
+  "occurrences": [
+    {
+      "occurrenceId": "ggb.math.occurrence.quadratic-equations.9-12.02",
+      "uniqueSkillId": "ggb.math.skill.discriminant-and-roots-of-a-quadratic-equation",
+      "gradeBand": "9-12",
+      "topicSlug": "quadratic-equations",
+      "skillTitleEnRaw": "Discriminant and Roots of a Quadratic Equation",
+      "skillTitleEnNormalized": "Discriminant and Roots of a Quadratic Equation",
+      "skillTitleZhReviewedForMaterial": "判别式与二次方程根的情况"
+    }
+  ],
+  "officialPage": {
+    "url": "https://www.geogebra.org/math/quadratic-equations?lang=en-GB",
+    "objectiveSummaryZh": "使用判别式确定二次方程根的数量和性质。",
+    "verification": "browser-reviewed"
+  },
+  "curriculumAlignment": {
+    "status": "not-mapped",
+    "reason": "GeoGebra 仅给出 9–12 宽学段；当前可用中国课程切片只覆盖 S4（7–9），不据此臆测高中具体年级。",
+    "authorInferences": [
+      "将公开目标拆成三阶段交互板。",
+      "quiz seeds 为原创检查题，不复制 GeoGebra 活动题目。"
+    ]
+  },
+  "copyrightBoundary": "只保留短标题、来源 URL 和原创中文概述；不复制活动正文、插图、Applet、脚本或 .ggb 文件。"
+}

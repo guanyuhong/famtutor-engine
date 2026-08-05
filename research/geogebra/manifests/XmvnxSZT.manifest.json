@@ -1,0 +1,503 @@
+{
+  "schema": "famtutor.geogebra.manifest.v1",
+  "source": {
+    "fileName": "geogebra-XmvnxSZT.ggb",
+    "materialId": "XmvnxSZT",
+    "sourceUrl": "https://www.geogebra.org/m/XmvnxSZT",
+    "bytes": 56562,
+    "sha256": "b90dc56bd48ad45be568e40e8fd356d42ffe5fca1d5188d5e9429693075374b4"
+  },
+  "archive": {
+    "entryCount": 6,
+    "entries": [
+      {
+        "fileName": "geogebra_macro.xml",
+        "bytes": 1716,
+        "sha256": "55061145e05e6e88bf3b9a89518eb03898e43011fffb74ad217c89faaa1c5706"
+      },
+      {
+        "fileName": "geogebra_defaults2d.xml",
+        "bytes": 9744,
+        "sha256": "4c345da3066befceea4db73a364991726e7b0b4cc2c04544e1da798870168415"
+      },
+      {
+        "fileName": "geogebra_defaults3d.xml",
+        "bytes": 3266,
+        "sha256": "f32ba38e85ed91ed73847a1298ec3852faa1c3cf6cc0307db0afe98958eb9b67"
+      },
+      {
+        "fileName": "geogebra_javascript.js",
+        "bytes": 24,
+        "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98"
+      },
+      {
+        "fileName": "geogebra.xml",
+        "bytes": 15328,
+        "sha256": "09571cdad6a651702fda7a900487f53b6e23737d230231676ac747e565fe1bd5"
+      },
+      {
+        "fileName": "geogebra_thumbnail.png",
+        "bytes": 51131,
+        "sha256": "0eb4b5df123b23805faa59a479a7796a1220c310b11874ba4f8421489a488175"
+      }
+    ]
+  },
+  "format": {
+    "version": "5.0.467.0",
+    "app": "classic"
+  },
+  "construction": {
+    "elements": {
+      "total": 29,
+      "byType": {
+        "numeric": 1,
+        "point": 10,
+        "conic": 6,
+        "list": 1,
+        "functionNVar": 11
+      },
+      "inventory": [
+        {
+          "label": "r",
+          "type": "numeric"
+        },
+        {
+          "label": "A",
+          "type": "point"
+        },
+        {
+          "label": "B",
+          "type": "point"
+        },
+        {
+          "label": "C",
+          "type": "point"
+        },
+        {
+          "label": "D",
+          "type": "point"
+        },
+        {
+          "label": "c2",
+          "type": "conic"
+        },
+        {
+          "label": "E",
+          "type": "point"
+        },
+        {
+          "label": "F",
+          "type": "point"
+        },
+        {
+          "label": "G",
+          "type": "point"
+        },
+        {
+          "label": "e",
+          "type": "conic"
+        },
+        {
+          "label": "H",
+          "type": "point"
+        },
+        {
+          "label": "I",
+          "type": "point"
+        },
+        {
+          "label": "J",
+          "type": "point"
+        },
+        {
+          "label": "g",
+          "type": "conic"
+        },
+        {
+          "label": "h",
+          "type": "conic"
+        },
+        {
+          "label": "co",
+          "type": "list"
+        },
+        {
+          "label": "b",
+          "type": "functionNVar"
+        },
+        {
+          "label": "i",
+          "type": "functionNVar"
+        },
+        {
+          "label": "j",
+          "type": "functionNVar"
+        },
+        {
+          "label": "k",
+          "type": "functionNVar"
+        },
+        {
+          "label": "l",
+          "type": "functionNVar"
+        },
+        {
+          "label": "c1",
+          "type": "conic"
+        },
+        {
+          "label": "m",
+          "type": "functionNVar"
+        },
+        {
+          "label": "n",
+          "type": "functionNVar"
+        },
+        {
+          "label": "o",
+          "type": "functionNVar"
+        },
+        {
+          "label": "c0",
+          "type": "conic"
+        },
+        {
+          "label": "a",
+          "type": "functionNVar"
+        },
+        {
+          "label": "p",
+          "type": "functionNVar"
+        },
+        {
+          "label": "c",
+          "type": "functionNVar"
+        }
+      ]
+    },
+    "commands": {
+      "total": 12,
+      "byName": {
+        "Circle": 3,
+        "Ellipse": 2,
+        "Point": 1,
+        "Coefficients": 1,
+        "ineq": 5
+      },
+      "signatures": [
+        {
+          "name": "Circle",
+          "inputs": [
+            "C",
+            "r"
+          ],
+          "outputs": [
+            "c2"
+          ]
+        },
+        {
+          "name": "Ellipse",
+          "inputs": [
+            "E",
+            "F",
+            "G"
+          ],
+          "outputs": [
+            "e"
+          ]
+        },
+        {
+          "name": "Point",
+          "inputs": [
+            "e"
+          ],
+          "outputs": [
+            "J"
+          ]
+        },
+        {
+          "name": "Ellipse",
+          "inputs": [
+            "H",
+            "I",
+            "J"
+          ],
+          "outputs": [
+            "g"
+          ]
+        },
+        {
+          "name": "Coefficients",
+          "inputs": [
+            "h"
+          ],
+          "outputs": [
+            "co"
+          ]
+        },
+        {
+          "name": "ineq",
+          "inputs": [
+            "g"
+          ],
+          "outputs": [
+            "i"
+          ]
+        },
+        {
+          "name": "ineq",
+          "inputs": [
+            "e"
+          ],
+          "outputs": [
+            "j"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "A",
+            "r"
+          ],
+          "outputs": [
+            "c1"
+          ]
+        },
+        {
+          "name": "ineq",
+          "inputs": [
+            "c1"
+          ],
+          "outputs": [
+            "m"
+          ]
+        },
+        {
+          "name": "ineq",
+          "inputs": [
+            "c2"
+          ],
+          "outputs": [
+            "n"
+          ]
+        },
+        {
+          "name": "Circle",
+          "inputs": [
+            "B",
+            "r"
+          ],
+          "outputs": [
+            "c0"
+          ]
+        },
+        {
+          "name": "ineq",
+          "inputs": [
+            "c0"
+          ],
+          "outputs": [
+            "a"
+          ]
+        }
+      ]
+    },
+    "controls": {
+      "sliders": [],
+      "checkboxes": [],
+      "buttons": [],
+      "inputs": []
+    },
+    "animations": [
+      {
+        "label": "r",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      },
+      {
+        "label": "A",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "B",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "C",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "D",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "E",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "F",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "G",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "H",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "I",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "J",
+        "step": "1",
+        "speed": "1",
+        "type": "1",
+        "playing": false
+      },
+      {
+        "label": "h",
+        "step": "1",
+        "speed": "1",
+        "type": "0",
+        "playing": false
+      }
+    ],
+    "views": {
+      "euclidian2d": 1,
+      "euclidian3d": 0,
+      "spreadsheet": 0,
+      "algebra": 1
+    }
+  },
+  "macros": [
+    {
+      "commandName": "ineq",
+      "toolName": "ineq",
+      "inputLabels": [
+        "h"
+      ],
+      "outputLabels": [
+        "b"
+      ],
+      "sourceFile": "geogebra_macro.xml"
+    }
+  ],
+  "scripts": [
+    {
+      "scope": "global-file",
+      "language": "javascript",
+      "fileName": "geogebra_javascript.js",
+      "bytes": 24,
+      "sha256": "90d66739c7658fadada2635213419190cd92f745f4950b71c6573970a8bd1c98",
+      "redacted": true
+    }
+  ],
+  "preview": {
+    "thumbnail": {
+      "fileName": "geogebra_thumbnail.png",
+      "bytes": 51131,
+      "sha256": "0eb4b5df123b23805faa59a479a7796a1220c310b11874ba4f8421489a488175"
+    }
+  },
+  "assets": [
+    {
+      "fileName": "geogebra_defaults2d.xml",
+      "bytes": 9744,
+      "sha256": "4c345da3066befceea4db73a364991726e7b0b4cc2c04544e1da798870168415"
+    },
+    {
+      "fileName": "geogebra_defaults3d.xml",
+      "bytes": 3266,
+      "sha256": "f32ba38e85ed91ed73847a1298ec3852faa1c3cf6cc0307db0afe98958eb9b67"
+    }
+  ],
+  "capabilityTags": [
+    "animation",
+    "curve",
+    "custom_tool",
+    "function_plot",
+    "geometry",
+    "region_boolean",
+    "script"
+  ],
+  "engineMapping": {
+    "exact": [
+      {
+        "command": "Circle",
+        "count": 3,
+        "mapsTo": "circle.*"
+      },
+      {
+        "command": "Ellipse",
+        "count": 2,
+        "mapsTo": "conic.ellipse_foci"
+      },
+      {
+        "command": "Point",
+        "count": 1,
+        "mapsTo": "point.free/point.on_path"
+      }
+    ],
+    "gaps": [
+      {
+        "command": "Coefficients",
+        "count": 1,
+        "requiredCapability": "symbolic_polynomial"
+      },
+      {
+        "command": "ineq",
+        "count": 5,
+        "requiredCapability": "imported_macro_semantic_review",
+        "condition": "custom tool invocation"
+      }
+    ],
+    "unknown": []
+  },
+  "security": {
+    "scriptsExecuted": false,
+    "archiveLimits": {
+      "maxArchiveBytes": 134217728,
+      "maxEntries": 512,
+      "maxEntryBytes": 33554432,
+      "maxExpandedBytes": 100663296,
+      "maxXmlBytes": 25165824
+    },
+    "warnings": [
+      {
+        "code": "GGB_SCRIPT_REDACTED",
+        "message": "Scripts were fingerprinted but never executed or copied into the manifest."
+      }
+    ]
+  }
+}

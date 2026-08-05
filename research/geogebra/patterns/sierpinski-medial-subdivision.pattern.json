@@ -1,0 +1,52 @@
+{
+  "schema": "famtutor.geometry.pattern.v1",
+  "patternId": "triangle.sierpinski-medial-subdivision",
+  "title": "中点三角形递归细分",
+  "status": "semantic-pattern-reviewed",
+  "kind": "construction-pattern",
+  "sourceResearch": {
+    "materialId": "wEkG5mAm",
+    "sourceUrl": "https://www.geogebra.org/m/wEkG5mAm",
+    "manifest": "../manifests/wEkG5mAm.manifest.json"
+  },
+  "intent": "对三角形 ABC 取三边中点 D、E、F，以中点三角形 DEF 作为孔洞，再对三个角三角形重复同一构造。",
+  "inputs": [
+    { "id": "A", "type": "point2" },
+    { "id": "B", "type": "point2" },
+    { "id": "C", "type": "point2", "constraint": "A、B、C 不共线" }
+  ],
+  "construction": [
+    { "id": "midpoints", "semantic": "分别取得 BC、CA、AB 的中点 D、E、F", "mapsTo": ["point.midpoint"] },
+    { "id": "medial", "semantic": "连接 D、E、F 形成中点三角形", "mapsTo": ["polygon.vertices"] },
+    { "id": "compose", "semantic": "把相同 Macro 应用于 AFE、FBD、EDC 三个角三角形", "mapsTo": ["macro.polygon.medial_subdivision"] }
+  ],
+  "invariants": [
+    "D、E、F 分别是 BC、CA、AB 的中点",
+    "中点三角形的每条边平行于原三角形的一条边",
+    "每次细分产生三个相似角三角形和一个中点孔洞",
+    "深度 3 共执行 1+3+9=13 次相同 Macro"
+  ],
+  "famTutorMapping": {
+    "existingCommands": ["point.midpoint", "polygon.vertices"],
+    "gaps": [],
+    "decision": "发布 macro.polygon.medial_subdivision；递归层级在 authoring 阶段有界展开为 L0 DAG，不增加运行时递归原语。"
+  },
+  "visualRecipe": {
+    "primary": "外三角形使用单一强调色填充",
+    "auxiliary": "中点默认隐藏，避免递归层级产生标签拥挤",
+    "markers": "本模式关注组合结构，不额外添加等长刻痕",
+    "labels": "只显示可拖动的 A、B、C；孔洞多边形不显示名称"
+  },
+  "interactionRecipe": {
+    "draggable": ["A", "B", "C"],
+    "stages": ["第一层 1 个孔洞", "第二层新增 3 个孔洞", "第三层新增 9 个孔洞"],
+    "clock": null
+  },
+  "evidence": {
+    "sourceSha256": "8e70fb42b507b5f7306a19ef6efef738a81b63c75ba57f1f20c23ee9111b9d24",
+    "commands": 25,
+    "exactMapped": 25,
+    "gaps": 0,
+    "scriptsExecuted": false
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-01-chinese-remainder",
+  "title": "中国剩余定理：用控制按钮比较余数",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": ["https://www.geogebra.org/m/esztrerw"],
+    "note": "Mechanism study; original FamTutor construction, not a copied GeoGebra worksheet."
+  },
+  "requiredCapabilities": [
+    "control.action",
+    "scalar.slider",
+    "point.from_expressions",
+    "text.conditional",
+    "assertion.expression_equal"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-crt-control-reference",
+      "revision": 1,
+      "seed": 4201,
+      "metadata": {
+        "title": "中国剩余定理：控制动作机制",
+        "description": "按钮以受限 scalar.set 动作选择整数，两个点分别显示模 3 与模 5 的余数。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "tags": ["geogebra-study", "control-action", "number-theory"]
+      },
+      "entities": [
+        { "id": "x", "type": "scalar", "label": "整数 x", "role": "free" },
+        { "id": "m3a", "type": "point2", "role": "auxiliary", "visible": false },
+        { "id": "m3b", "type": "point2", "role": "auxiliary", "visible": false },
+        { "id": "m5a", "type": "point2", "role": "auxiliary", "visible": false },
+        { "id": "m5b", "type": "point2", "role": "auxiliary", "visible": false },
+        { "id": "track3", "type": "segment2", "role": "auxiliary" },
+        { "id": "track5", "type": "segment2", "role": "auxiliary" },
+        { "id": "r3", "type": "point2", "label": "x mod 3", "role": "derived" },
+        { "id": "r5", "type": "point2", "label": "x mod 5", "role": "derived" },
+        { "id": "title", "type": "text", "role": "annotation" },
+        { "id": "label3", "type": "text", "role": "annotation" },
+        { "id": "label5", "type": "text", "role": "annotation" },
+        { "id": "is7", "type": "boolean", "role": "derived", "visible": false },
+        { "id": "is11", "type": "boolean", "role": "derived", "visible": false },
+        { "id": "is23", "type": "boolean", "role": "derived", "visible": false },
+        { "id": "feedback7", "type": "text", "role": "annotation" },
+        { "id": "feedback11", "type": "text", "role": "annotation" },
+        { "id": "feedback23", "type": "text", "role": "annotation" }
+      ],
+      "construction": [
+        { "id": "op-x", "command": "scalar.slider", "params": { "min": 0, "max": 29, "value": 7, "step": 1, "position": [0, -1.7], "length": 7 }, "outputs": ["x"] },
+        { "id": "op-m3a", "command": "point.free", "params": { "coords": [0, 2] }, "outputs": ["m3a"] },
+        { "id": "op-m3b", "command": "point.free", "params": { "coords": [6, 2] }, "outputs": ["m3b"] },
+        { "id": "op-m5a", "command": "point.free", "params": { "coords": [0, 0] }, "outputs": ["m5a"] },
+        { "id": "op-m5b", "command": "point.free", "params": { "coords": [8, 0] }, "outputs": ["m5b"] },
+        { "id": "op-track3", "command": "segment.through_points", "inputs": [{ "ref": "m3a" }, { "ref": "m3b" }], "outputs": ["track3"] },
+        { "id": "op-track5", "command": "segment.through_points", "inputs": [{ "ref": "m5a" }, { "ref": "m5b" }], "outputs": ["track5"] },
+        { "id": "op-r3", "command": "point.from_expressions", "params": { "x": "3*(x-3*floor(x/3))", "y": "2" }, "outputs": ["r3"] },
+        { "id": "op-r5", "command": "point.from_expressions", "params": { "x": "2*(x-5*floor(x/5))", "y": "0" }, "outputs": ["r5"] },
+        { "id": "op-title", "command": "text.at", "params": { "text": "同一个整数，在不同模数轨道上留下不同余数", "at": [0, 3.35] }, "outputs": ["title"] },
+        { "id": "op-label3", "command": "text.at", "params": { "text": "模 3：余数 0 / 1 / 2", "at": [0, 2.65] }, "outputs": ["label3"] },
+        { "id": "op-label5", "command": "text.at", "params": { "text": "模 5：余数 0 / 1 / 2 / 3 / 4", "at": [0, 0.65] }, "outputs": ["label5"] },
+        { "id": "op-is7", "command": "boolean.expression", "params": { "expression": "x == 7" }, "outputs": ["is7"] },
+        { "id": "op-is11", "command": "boolean.expression", "params": { "expression": "x == 11" }, "outputs": ["is11"] },
+        { "id": "op-is23", "command": "boolean.expression", "params": { "expression": "x == 23" }, "outputs": ["is23"] },
+        { "id": "op-feedback7", "command": "text.conditional", "inputs": [{ "ref": "is7" }], "params": { "trueText": "x=7 → (mod 3, mod 5) = (1, 2)", "falseText": "​", "at": [0, -0.75] }, "outputs": ["feedback7"] },
+        { "id": "op-feedback11", "command": "text.conditional", "inputs": [{ "ref": "is11" }], "params": { "trueText": "x=11 → (mod 3, mod 5) = (2, 1)", "falseText": "​", "at": [0, -0.75] }, "outputs": ["feedback11"] },
+        { "id": "op-feedback23", "command": "text.conditional", "inputs": [{ "ref": "is23" }], "params": { "trueText": "x=23 → (mod 3, mod 5) = (2, 3)", "falseText": "​", "at": [0, -0.75] }, "outputs": ["feedback23"] }
+      ],
+      "views": [
+        { "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-1, 4, 9, -2.4], "axes": false, "grid": false, "keepAspectRatio": true, "background": "#FAF8F2", "cameraPolicy": "document" }
+      ],
+      "styles": [
+        { "targets": ["track3"], "style": { "stroke": "#315CF4", "strokeWidth": 3, "labelVisible": false } },
+        { "targets": ["track5"], "style": { "stroke": "#E14B45", "strokeWidth": 3, "labelVisible": false } },
+        { "targets": ["r3"], "style": { "stroke": "#244BE8", "fill": "#315CF4", "pointSize": 7, "fontSize": 14, "labelPlacement": "top" } },
+        { "targets": ["r5"], "style": { "stroke": "#D93C36", "fill": "#F04A43", "pointSize": 7, "fontSize": 14, "labelPlacement": "top" } },
+        { "targets": ["title"], "style": { "stroke": "#15365F", "fontSize": 17 } },
+        { "targets": ["label3", "label5"], "style": { "stroke": "#46616E", "fontSize": 13 } },
+        { "targets": ["feedback7", "feedback11", "feedback23"], "style": { "stroke": "#0E8378", "fontSize": 14 } },
+        { "targets": ["x"], "style": { "stroke": "#D06A3A", "fill": "#D06A3A", "fontSize": 13 } }
+      ],
+      "interactions": [{ "target": "x", "permissions": ["set_value"] }],
+      "controls": [
+        { "id": "choose7", "kind": "button", "label": "选择 7", "action": { "type": "scalar.set", "target": "x", "value": 7 } },
+        { "id": "choose11", "kind": "button", "label": "选择 11", "action": { "type": "scalar.set", "target": "x", "value": 11 } },
+        { "id": "choose23", "kind": "button", "label": "选择 23", "action": { "type": "scalar.set", "target": "x", "value": 23 } },
+        { "id": "choose0", "kind": "button", "label": "清零", "action": { "type": "scalar.set", "target": "x", "value": 0 } }
+      ],
+      "assertions": [
+        { "id": "residue3", "predicate": "expression_equal", "arguments": [{ "expr": "x(r3)/3" }, { "expr": "x-3*floor(x/3)" }], "tolerance": 1e-9, "message": "模 3 余数点必须正确。" },
+        { "id": "residue5", "predicate": "expression_equal", "arguments": [{ "expr": "x(r5)/2" }, { "expr": "x-5*floor(x/5)" }], "tolerance": 1e-9, "message": "模 5 余数点必须正确。" }
+      ],
+      "activities": [{ "id": "crt", "title": "比较余数", "stages": [{ "id": "explore", "narration": "点击预设整数或拖动滑块，观察两个余数点。" }] }],
+      "provenance": { "generator": "agent", "sourceRefs": ["geogebra:esztrerw", "mechanism:control-action"] }
+    }
+  },
+  "trace": { "changeSets": [] },
+  "expected": {
+    "assertions": [{ "kind": "runtime-assertions-pass" }, { "kind": "static-render" }, { "kind": "render-bundle" }],
+    "interactions": [{ "target": "x", "permission": "set_value" }]
+  }
+}

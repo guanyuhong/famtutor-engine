@@ -69,6 +69,8 @@ Intent → Typed Operations → Canonical Document → Validation
 - 未来可以做宏展开和 Construction View；
 - Agent 可以只 patch 参数而不重建整份文档。
 
+`visibleWhen` 是独立的 presentation dependency：它引用一个 Boolean Entity，供所有渲染器决定是否呈现实体，但不进入 Construction DAG。自由状态由 `boolean.constant` 提供，复合条件由 `boolean.expression` 提供；宿主只能通过 `boolean.set` / `boolean.toggle` 审计动作修改自由状态。这样条件显隐不会改变几何定义、求值结果或断言证据。
+
 ## 4. Construction DAG
 
 `buildConstructionGraph()` 建立：
@@ -185,7 +187,19 @@ construction semantics > symbolic (future) > numeric > visual appearance (never 
 
 ## 8. Renderers
 
-### JSXGraph Adapter
+### MathMountedRenderer（PR3）
+
+高层 API：`mountMathRenderer(host, document)`。
+
+- `applyChangeSet` / `replaceDocument`：staging rebuild → swap；`strategy: "rebuild"`
+- 保留外部 renderer 对象 identity；恢复 camera / stage / selection
+- 交互 `point.set` / `scalar.set` 经 ChangeSet 提交；stage/selection 为 ephemeral
+- snapshot：`direct-svg` / `jsxgraph-svg` 诚实 mediaType；canvas → `UNSUPPORTED_SNAPSHOT`
+- **不**承诺 JSXGraph native object identity；dirty-set reconcile 属后续
+
+### JSXGraph Adapter（低层）
+
+`mountJsxGraph` 仍保留为低层 API。
 
 负责：
 
@@ -196,6 +210,8 @@ construction semantics > symbolic (future) > numeric > visual appearance (never 
 - 暴露 `setPoint`、`setScalar`、`getValue`；
 - SVG DOM snapshot；
 - renderer report 与 skipped entity。
+
+当 view 为 `graphics3d` 时，适配器降低到 JSXGraph View3D。3D 数学值仍由 kernel 生成；相机只影响投影，不改变 `point3`、`plane3`、`sphere3`、`curve3` 或 `surface3` 的语义。
 
 不负责：
 
@@ -215,6 +231,8 @@ construction semantics > symbolic (future) > numeric > visual appearance (never 
 - 不含浏览器 DOM 的批处理。
 
 JSXGraph SVG 是“当前交互画布快照”，Direct SVG 是“协议驱动的 canonical 静态输出”，两者用途不同。
+
+3D Direct SVG 当前采用文档相机的确定性平行/中心投影，并对参数曲线与曲面使用固定采样。它是 Bundle fallback，不承担复杂遮挡、光照或 CAD 精确曲面求交。
 
 ## 9. Agent Runtime
 

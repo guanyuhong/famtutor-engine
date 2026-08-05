@@ -2,10 +2,15 @@ import { MathEngineError } from "../errors.js";
 import type { JsonValue, MathDocument } from "../types.js";
 import { deepClone } from "../util.js";
 
+interface IdempotencyEntry {
+  requestFingerprint: string;
+  result: JsonValue;
+}
+
 interface StoredRecord {
   document: MathDocument;
   history: MathDocument[];
-  idempotency: Map<string, JsonValue>;
+  idempotency: Map<string, IdempotencyEntry>;
 }
 
 export interface StoreOptions {
@@ -97,17 +102,35 @@ export class DocumentStore {
     const restored = deepClone(previous);
     restored.revision = record.document.revision + 1;
     record.document = restored;
+    record.idempotency.clear();
     return deepClone(restored);
   }
 
-  getIdempotent(documentId: string, key: string): JsonValue | undefined {
-    return this.#records.get(documentId)?.idempotency.get(key);
+  clearIdempotency(documentId: string): void {
+    const record = this.#records.get(documentId);
+    if (record) record.idempotency.clear();
   }
 
-  setIdempotent(documentId: string, key: string, result: JsonValue): void {
+  /**
+   * Clone-on-read idempotent lookup.
+   * Returns { hit, conflict, result }.
+   * conflict=true when the same key was used with a different request fingerprint.
+   */
+  lookupIdempotent(
+    documentId: string,
+    key: string,
+    requestFingerprint: string
+  ): { hit: false } | { hit: true; conflict: false; result: JsonValue } | { hit: true; conflict: true } {
+    const entry = this.#records.get(documentId)?.idempotency.get(key);
+    if (!entry) return { hit: false };
+    if (entry.requestFingerprint !== requestFingerprint) return { hit: true, conflict: true };
+    return { hit: true, conflict: false, result: deepClone(entry.result) };
+  }
+
+  setIdempotent(documentId: string, key: string, requestFingerprint: string, result: JsonValue): void {
     const record = this.#records.get(documentId);
     if (!record) throw new MathEngineError("DOCUMENT_NOT_FOUND", `Document '${documentId}' was not found.`);
-    record.idempotency.set(key, deepClone(result));
+    record.idempotency.set(key, { requestFingerprint, result: deepClone(result) });
     if (record.idempotency.size > 128) {
       const first = record.idempotency.keys().next().value as string | undefined;
       if (first) record.idempotency.delete(first);

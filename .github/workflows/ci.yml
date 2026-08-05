@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  verify:
+    name: verify (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python smoke dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-smoke.txt
+          python -m playwright install --with-deps chromium
+          echo "PLAYWRIGHT_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Verify
+        run: npm run verify
+        env:
+          PLAYWRIGHT_PYTHON: ${{ env.PLAYWRIGHT_PYTHON }}

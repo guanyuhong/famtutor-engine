@@ -1,0 +1,56 @@
+{
+  "schema": "famtutor.geometry.pattern.v1",
+  "patternId": "circle.apollonius-tangent-to-three-circles",
+  "title": "与三个给定圆相切的阿波罗尼亚圆",
+  "status": "semantic-pattern-reviewed",
+  "kind": "construction-pattern",
+  "sourceResearch": {
+    "materialId": "kktgdvAH",
+    "sourceUrl": "https://www.geogebra.org/m/kktgdvAH",
+    "manifest": "../manifests/kktgdvAH.manifest.json"
+  },
+  "intent": "研究给定三个圆时的内切、外切组合解。源文件使用圆反演、两圆公切线工具和偏移参数 s 组织多个分支。",
+  "inputs": [
+    { "id": "c1", "type": "circle2" },
+    { "id": "c2", "type": "circle2" },
+    { "id": "c3", "type": "circle2" },
+    { "id": "s", "type": "scalar", "description": "有向半径偏移，用于内切/外切分支" }
+  ],
+  "construction": [
+    { "id": "components", "semantic": "读取三个圆的圆心和半径，构造有向偏移圆", "mapsTo": ["point.circle_center", "measurement.circle_radius", "circle.center_radius"] },
+    { "id": "inversion", "semantic": "选择反演圆，将不经过反演中心的偏移圆映射为圆", "mapsTo": ["circle.invert_in_circle"] },
+    { "id": "common-tangents", "semantic": "对反演后的两个分离圆构造两条内公切线和两条外公切线", "mapsTo": ["macro.line.common_tangents"] },
+    { "id": "recover-centers", "semantic": "利用垂线、交点与中点恢复候选解圆心", "mapsTo": ["line.perpendicular_through", "point.intersection_line_line", "point.midpoint"] },
+    { "id": "inverse-back", "semantic": "将候选点或候选圆反演回原圆系并按内切/外切符号筛选", "mapsTo": ["point.invert_in_circle", "circle.invert_in_circle"] }
+  ],
+  "invariants": [
+    "每个输出圆与三个输入圆分别满足指定的内切或外切关系",
+    "一般位置最多产生八种有向相切分支",
+    "退化、包含、同心或相切输入会使部分分支重合、消失或转化为直线"
+  ],
+  "famTutorMapping": {
+    "existingCommands": ["circle.center_radius", "circle.invert_in_circle", "line.common_tangent", "line.perpendicular_through", "macro.line.common_tangents", "measurement.circle_radius", "measurement.distance", "point.circle_center", "point.intersection_circle_circle", "point.intersection_line_line", "point.invert_in_circle", "point.midpoint", "point.projection"],
+    "gaps": [],
+    "decision": "采用类型稳定的点反演与圆反演 L0；圆经过反演中心而映为直线时明确报错。四条公切线由有向单支 L0 组合为 L1 Macro，不复制源文件的 14 个内部辅助输出。"
+  },
+  "visualRecipe": {
+    "primary": "三个输入圆使用稳定中性色，当前候选解圆使用单一强调色",
+    "branches": "八种分支按教学阶段或筛选控件拆开，不同时显示全部 22 个布尔层",
+    "auxiliary": "反演圆、公切线、垂线默认隐藏，仅在解释构造时逐阶段显示",
+    "labels": "圆以中心标签和内/外切符号说明，不在密集切点附近堆放长文本"
+  },
+  "interactionRecipe": {
+    "draggable": ["三个圆心", "三个半径"],
+    "controls": ["选择切向符号组合", "显示辅助构造", "复位"],
+    "clock": null
+  },
+  "evidence": {
+    "sourceSha256": "392675b623339b98456ef3de0392f49d1b3bf3f67067ee3b5567698a5d7bf69e",
+    "commands": 42,
+    "exactMappedAfterCircleComponents": 42,
+    "remainingGapOccurrences": 0,
+    "customTools": ["CommonTangents"],
+    "scriptsExecuted": false,
+    "reviewNote": "源文件包含大量分支布尔量；当前仅提取数学核心，不复制其 UI 和脚本。"
+  }
+}

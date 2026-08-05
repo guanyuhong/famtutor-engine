@@ -1,0 +1,364 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-33-increasing-and-decreasing-functions",
+  "title": "函数的递增与递减",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "point.from_expressions",
+    "interval.from_bounds",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-increasing-decreasing",
+      "revision": 1,
+      "seed": 3301,
+      "metadata": {
+        "title": "函数的递增与递减",
+        "description": "用移动顶点识别二次函数的递减、递增区间。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-02"
+        ]
+      },
+      "entities": [
+        {
+          "id": "h",
+          "type": "scalar",
+          "role": "free",
+          "label": "顶点横坐标 h"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=(x-h)²-2"
+        },
+        {
+          "id": "V",
+          "type": "point2",
+          "role": "derived",
+          "label": "V"
+        },
+        {
+          "id": "left",
+          "type": "interval1",
+          "role": "auxiliary",
+          "label": "递减区间"
+        },
+        {
+          "id": "right",
+          "type": "interval1",
+          "role": "auxiliary",
+          "label": "递增区间"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "h",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -2,
+            "max": 2,
+            "step": 0.25,
+            "position": [
+              -5.3,
+              -5.05
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "(x-h)^2-2",
+            "domain": [
+              -5,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "v",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "h",
+            "y": "-2"
+          },
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "id": "left",
+          "command": "interval.from_bounds",
+          "params": {
+            "upper": "h",
+            "upperClosed": false,
+            "y": -3.7
+          },
+          "outputs": [
+            "left"
+          ]
+        },
+        {
+          "id": "right",
+          "command": "interval.from_bounds",
+          "params": {
+            "lower": "h",
+            "lowerClosed": false,
+            "y": -4.35
+          },
+          "outputs": [
+            "right"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "转折点 x=h 把定义域分成两个单调区间",
+            "at": [
+              -5.3,
+              6
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.7
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "V"
+          ],
+          "style": {
+            "token": "accent",
+            "labelPlacement": "bottom-right"
+          }
+        },
+        {
+          "targets": [
+            "left"
+          ],
+          "style": {
+            "token": "danger",
+            "lineLabelSide": "left"
+          }
+        },
+        {
+          "targets": [
+            "right"
+          ],
+          "style": {
+            "token": "success",
+            "lineLabelSide": "right"
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "h",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "vertex-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(V)"
+            },
+            {
+              "expr": "h"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点横坐标等于 h。"
+        },
+        {
+          "id": "vertex-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(V)"
+            },
+            {
+              "expr": "-2"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点纵坐标保持 -2。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-increasing-decreasing",
+          "title": "函数的递增与递减",
+          "stages": [
+            {
+              "id": "behavior",
+              "narration": "从左向右追踪函数值的变化，而不是只看曲线朝向。",
+              "focus": [
+                "f"
+              ]
+            },
+            {
+              "id": "turning",
+              "narration": "顶点 x=h 是由递减转为递增的分界。",
+              "focus": [
+                "V",
+                "h"
+              ]
+            },
+            {
+              "id": "intervals",
+              "narration": "开区间 (-∞,h) 递减，(h,∞) 递增；转折点不属于任一严格单调区间。",
+              "focus": [
+                "left",
+                "right",
+                "V"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-increasing-decreasing-task",
+              "prompt": "拖动参数、切换阶段，并用图像与代数互相核验。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.functions.9-12.04",
+          "ggb.math.skill.increasing-and-decreasing-functions",
+          "https://www.geogebra.org/math/functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "h",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

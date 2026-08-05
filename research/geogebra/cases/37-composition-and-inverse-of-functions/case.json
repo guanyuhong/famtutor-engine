@@ -1,0 +1,473 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-37-composition-and-inverse-of-functions",
+  "title": "函数的复合与反函数",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "function.value_at",
+    "point.from_expressions",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-composition-inverse",
+      "revision": 1,
+      "seed": 3701,
+      "metadata": {
+        "title": "函数的复合与反函数",
+        "description": "沿求值链验证 g(f(x))=x，并比较互换坐标后的图像对称。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-03"
+        ]
+      },
+      "entities": [
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "x"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=2x+1"
+        },
+        {
+          "id": "g",
+          "type": "function1",
+          "role": "derived",
+          "label": "g(x)=(x-1)/2"
+        },
+        {
+          "id": "identity",
+          "type": "function1",
+          "role": "auxiliary",
+          "label": "y=x"
+        },
+        {
+          "id": "fx",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "gfx",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "P",
+          "type": "point2",
+          "role": "derived",
+          "label": "P(x,f(x))"
+        },
+        {
+          "id": "Q",
+          "type": "point2",
+          "role": "derived",
+          "label": "Q(f(x),x)"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "x",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -3,
+            "max": 3,
+            "step": 0.25,
+            "position": [
+              -5.3,
+              -5.15
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "2*x+1",
+            "domain": [
+              -5,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "g",
+          "command": "function.explicit",
+          "params": {
+            "expression": "(x-1)/2",
+            "domain": [
+              -7,
+              7
+            ]
+          },
+          "outputs": [
+            "g"
+          ]
+        },
+        {
+          "id": "identity",
+          "command": "function.explicit",
+          "params": {
+            "expression": "x",
+            "domain": [
+              -6,
+              6
+            ]
+          },
+          "outputs": [
+            "identity"
+          ]
+        },
+        {
+          "id": "fx",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "fx"
+          ]
+        },
+        {
+          "id": "gfx",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "g"
+            },
+            {
+              "ref": "fx"
+            }
+          ],
+          "outputs": [
+            "gfx"
+          ]
+        },
+        {
+          "id": "p",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "fx"
+          },
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "id": "q",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "fx",
+            "y": "x0"
+          },
+          "outputs": [
+            "Q"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "g(f(x))=x；反函数图像关于 y=x 对称",
+            "at": [
+              -5.4,
+              6
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            7,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.7,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "g"
+          ],
+          "style": {
+            "token": "accent",
+            "strokeWidth": 2.7,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "identity"
+          ],
+          "style": {
+            "token": "auxiliary",
+            "dash": "dashed",
+            "strokeWidth": 1.4,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "P"
+          ],
+          "style": {
+            "token": "primary",
+            "labelPlacement": "top-left"
+          }
+        },
+        {
+          "targets": [
+            "Q"
+          ],
+          "style": {
+            "token": "accent",
+            "labelPlacement": "bottom-right"
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "composition-identity",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "gfx"
+            },
+            {
+              "expr": "x0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "复合 g(f(x)) 返回原输入。"
+        },
+        {
+          "id": "swap-one",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(Q)"
+            },
+            {
+              "expr": "y(P)"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "反函数对应点交换坐标。"
+        },
+        {
+          "id": "swap-two",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(Q)"
+            },
+            {
+              "expr": "x(P)"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "反函数对应点交换坐标。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-composition-inverse",
+          "title": "函数的复合与反函数",
+          "stages": [
+            {
+              "id": "function",
+              "narration": "f 把输入 x 映射到 2x+1。",
+              "reveal": [
+                "x0",
+                "f",
+                "fx",
+                "P"
+              ]
+            },
+            {
+              "id": "inverse",
+              "narration": "g 撤销 f 的作用；图像上的对应点交换横纵坐标。",
+              "reveal": [
+                "x0",
+                "f",
+                "g",
+                "identity",
+                "fx",
+                "P",
+                "Q",
+                "note"
+              ]
+            },
+            {
+              "id": "composition",
+              "narration": "把 f 的输出继续作为 g 的输入，运行时通过两次 function.value_at 复用两个函数实体。",
+              "reveal": [
+                "x0",
+                "f",
+                "g",
+                "identity",
+                "fx",
+                "gfx",
+                "P",
+                "Q",
+                "note"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-composition-inverse-task",
+              "prompt": "切换阶段并核验图像、代数关系和边界条件。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "composition-identity"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "swap-one"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "swap-two"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.functions.9-12.01",
+          "ggb.math.skill.composition-and-inverse-of-functions",
+          "https://www.geogebra.org/math/functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "x0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

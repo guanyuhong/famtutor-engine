@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-representations-of-relations-and-functions",
+  "title": "关系与函数的多种表示",
+  "titleEn": "Representations of Relations and Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.representations-of-relations-and-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.06"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-representations-of-relations-and-functions-1",
+      "type": "concept",
+      "visibleText": "同一关系可用规则、表、图像或语言表示。",
+      "narrationSeed": "同一关系可用规则、表、图像或语言表示。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.06"
+    },
+    {
+      "id": "atom-representations-of-relations-and-functions-2",
+      "type": "rule",
+      "visibleText": "有序对把一个输入与一个输出配对。",
+      "narrationSeed": "有序对把一个输入与一个输出配对。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.06"
+    },
+    {
+      "id": "atom-representations-of-relations-and-functions-3",
+      "type": "procedure",
+      "visibleText": "表中的点应满足同一代数规则。",
+      "narrationSeed": "表中的点应满足同一代数规则。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.06"
+    },
+    {
+      "id": "atom-representations-of-relations-and-functions-4",
+      "type": "representation",
+      "visibleText": "图像是所有输入输出对的集合。",
+      "narrationSeed": "图像是所有输入输出对的集合。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.06"
+    },
+    {
+      "id": "atom-representations-of-relations-and-functions-5",
+      "type": "misconception",
+      "visibleText": "转换表示时不能改变对应关系。",
+      "narrationSeed": "转换表示时不能改变对应关系。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.06"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/32-representations-of-relations-and-functions/case.json",
+    "caseId": "research-geogebra-32-representations-of-relations-and-functions",
+    "documentId": "geogebra-math-function-representations"
+  },
+  "stages": [
+    {
+      "id": "rule",
+      "order": 1
+    },
+    {
+      "id": "table",
+      "order": 2
+    },
+    {
+      "id": "graph",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-representations-of-relations-and-functions-1",
+      "type": "short_answer",
+      "stem": "用一句话说明：同一关系可用规则、表、图像或语言表示。",
+      "answer": "同一关系可用规则、表、图像或语言表示。",
+      "feedback": {
+        "correct": "同一关系可用规则、表、图像或语言表示。",
+        "incorrect": "同一关系可用规则、表、图像或语言表示。"
+      },
+      "sourceAtomIds": [
+        "atom-representations-of-relations-and-functions-1"
+      ]
+    },
+    {
+      "id": "quiz-representations-of-relations-and-functions-2",
+      "type": "short_answer",
+      "stem": "举一个能检验“有序对把一个输入与一个输出配对。”的例子。",
+      "answer": "有序对把一个输入与一个输出配对。",
+      "feedback": {
+        "correct": "有序对把一个输入与一个输出配对。",
+        "incorrect": "有序对把一个输入与一个输出配对。"
+      },
+      "sourceAtomIds": [
+        "atom-representations-of-relations-and-functions-2"
+      ]
+    },
+    {
+      "id": "quiz-representations-of-relations-and-functions-3",
+      "type": "short_answer",
+      "stem": "用一句话说明：表中的点应满足同一代数规则。",
+      "answer": "表中的点应满足同一代数规则。",
+      "feedback": {
+        "correct": "表中的点应满足同一代数规则。",
+        "incorrect": "表中的点应满足同一代数规则。"
+      },
+      "sourceAtomIds": [
+        "atom-representations-of-relations-and-functions-3"
+      ]
+    },
+    {
+      "id": "quiz-representations-of-relations-and-functions-4",
+      "type": "short_answer",
+      "stem": "举一个能检验“图像是所有输入输出对的集合。”的例子。",
+      "answer": "图像是所有输入输出对的集合。",
+      "feedback": {
+        "correct": "图像是所有输入输出对的集合。",
+        "incorrect": "图像是所有输入输出对的集合。"
+      },
+      "sourceAtomIds": [
+        "atom-representations-of-relations-and-functions-4"
+      ]
+    },
+    {
+      "id": "quiz-representations-of-relations-and-functions-5",
+      "type": "short_answer",
+      "stem": "用一句话说明：转换表示时不能改变对应关系。",
+      "answer": "转换表示时不能改变对应关系。",
+      "feedback": {
+        "correct": "转换表示时不能改变对应关系。",
+        "incorrect": "转换表示时不能改变对应关系。"
+      },
+      "sourceAtomIds": [
+        "atom-representations-of-relations-and-functions-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.06",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "deterministic evaluation"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 76-card page",
+        "four-case stage-switch review",
+        "scalar label overlap check"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

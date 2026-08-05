@@ -1,0 +1,173 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-nonlinear-parent-function-transformations",
+  "title": "非线性母函数变换",
+  "titleEn": "Transformations on Nonlinear Parent Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.transformations-on-nonlinear-parent-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.07"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-parent",
+      "type": "concept",
+      "visibleText": "y=x² 是本素材的母函数。",
+      "narrationSeed": "y=x² 是本素材的母函数。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.07"
+    },
+    {
+      "id": "atom-vertical-scale",
+      "type": "rule",
+      "visibleText": "|a| 控制 y=ax² 的纵向伸缩。",
+      "narrationSeed": "|a| 控制 y=ax² 的纵向伸缩。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.07"
+    },
+    {
+      "id": "atom-reflection",
+      "type": "rule",
+      "visibleText": "a<0 时图像关于 x 轴反射。",
+      "narrationSeed": "a<0 时图像关于 x 轴反射。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.07"
+    },
+    {
+      "id": "atom-invariant",
+      "type": "representation",
+      "visibleText": "伸缩和反射不改变顶点与对称轴。",
+      "narrationSeed": "伸缩和反射不改变顶点与对称轴。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.07"
+    },
+    {
+      "id": "atom-boundary",
+      "type": "misconception",
+      "visibleText": "a=0 时不再是二次函数。",
+      "narrationSeed": "a=0 时不再是二次函数。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.07"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/22-quadratic-ax2-properties/case.json",
+    "caseId": "research-geogebra-22-quadratic-ax2-properties",
+    "documentId": "qiu-feng-quadratic-ax2-properties"
+  },
+  "stages": [
+    {
+      "id": "parent",
+      "order": 1
+    },
+    {
+      "id": "stretch",
+      "order": 2
+    },
+    {
+      "id": "reflect",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-parent-transform",
+      "type": "short_answer",
+      "stem": "由 y=x² 变为 y=-2x²，发生了什么？",
+      "answer": "纵向伸长并关于 x 轴反射",
+      "feedback": {
+        "correct": "|a|=2 控制伸长，负号控制反射。",
+        "incorrect": "|a|=2 控制伸长，负号控制反射。"
+      },
+      "sourceAtomIds": [
+        "atom-parent"
+      ]
+    },
+    {
+      "id": "quiz-parent",
+      "type": "short_answer",
+      "stem": "y=x² 的顶点在哪里？",
+      "answer": "(0,0)",
+      "feedback": {
+        "correct": "母函数顶点是原点。",
+        "incorrect": "母函数顶点是原点。"
+      },
+      "sourceAtomIds": [
+        "atom-vertical-scale"
+      ]
+    },
+    {
+      "id": "quiz-scale",
+      "type": "short_answer",
+      "stem": "0<|a|<1 时图像通常怎样？",
+      "answer": "更宽",
+      "feedback": {
+        "correct": "纵向压缩在图像上表现为开口变宽。",
+        "incorrect": "纵向压缩在图像上表现为开口变宽。"
+      },
+      "sourceAtomIds": [
+        "atom-reflection"
+      ]
+    },
+    {
+      "id": "quiz-reflect",
+      "type": "true_false",
+      "stem": "a 的什么性质决定开口方向？",
+      "answer": "符号",
+      "feedback": {
+        "correct": "正负号决定是否关于 x 轴反射。",
+        "incorrect": "正负号决定是否关于 x 轴反射。"
+      },
+      "sourceAtomIds": [
+        "atom-invariant"
+      ]
+    },
+    {
+      "id": "quiz-boundary",
+      "type": "short_answer",
+      "stem": "判断：y=0x² 仍是二次函数。",
+      "answer": "错误",
+      "feedback": {
+        "correct": "二次项系数必须非零。",
+        "incorrect": "二次项系数必须非零。"
+      },
+      "sourceAtomIds": [
+        "atom-boundary"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.07",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "parameter sweep test"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at 330px height",
+        "six-case stage-switch review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

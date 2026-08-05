@@ -2,23 +2,17 @@ import { mkdir } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveTsc } from "./resolve-tsc.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const artifacts = join(root, "artifacts");
 await mkdir(artifacts, { recursive: true });
 
-const bundle = join(artifacts, "runtime.browser.amd.js");
-const compiled = spawnSync("tsc", [
-  "--target", "ES2022",
-  "--module", "AMD",
-  "--moduleResolution", "Node",
-  "--outFile", bundle,
-  "--lib", "ES2022,DOM",
-  "--strict",
-  "--esModuleInterop",
-  "--skipLibCheck",
-  join(root, "src/index.ts")
-], { cwd: root, stdio: "inherit" });
+const tsc = resolveTsc();
+const compiled = spawnSync(process.execPath, [tsc, "-p", join(root, "tsconfig.browser-smoke.json")], {
+  cwd: root,
+  stdio: "inherit"
+});
 if (compiled.status !== 0) process.exit(compiled.status ?? 1);
 
 const candidates = [
@@ -40,3 +34,6 @@ if (!python) {
 }
 const result = spawnSync(python, [join(root, "scripts/browser-smoke.py")], { cwd: root, stdio: "inherit" });
 if (result.status !== 0) process.exit(result.status ?? 1);
+
+const live = spawnSync(python, [join(root, "scripts/browser-live-smoke.py")], { cwd: root, stdio: "inherit" });
+if (live.status !== 0) process.exit(live.status ?? 1);

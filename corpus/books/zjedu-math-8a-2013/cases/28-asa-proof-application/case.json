@@ -1,0 +1,737 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-28-asa-proof-application",
+  "title": "ASA 证明线段相等",
+  "description": "按教材图 1-36实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      32
+    ],
+    "pdfPages": [
+      35
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "asa",
+    "congruence-proof",
+    "parallel-angle-relations"
+  ],
+  "learningObjective": "由平行线得到一组角相等，再用 ASA 证明 △ABE≌△DCF 和 AE=DF。",
+  "caseType": "guided-construction",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "angle.three_points",
+    "marker.segment_tick",
+    "assertion.parallel",
+    "assertion.equal_length",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 228,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-28-asa-proof-application",
+      "revision": 1,
+      "seed": 228,
+      "metadata": {
+        "title": "ASA 证明线段相等",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "asa",
+          "congruence-proof",
+          "parallel-angle-relations"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            4,
+            6,
+            -4
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-28",
+          "title": "ASA 证明线段相等",
+          "stages": [
+            {
+              "id": "given",
+              "narration": "图 1-36：B、E、F、C 共线，AB∥CD，且 AB=CD、∠A=∠D。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "AE",
+                "BE",
+                "CD",
+                "DF",
+                "CF",
+                "angleA",
+                "angleD",
+                "tickAB",
+                "tickCD"
+              ]
+            },
+            {
+              "id": "derive",
+              "narration": "由 AB∥CD 得 ∠B=∠C；在 △ABE 与 △DCF 中形成 ASA 条件。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "AE",
+                "BE",
+                "CD",
+                "DF",
+                "CF",
+                "angleA",
+                "angleD",
+                "angleB",
+                "angleC",
+                "tickAB",
+                "tickCD"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "△ABE≌△DCF（ASA），因此对应边 AE=DF。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "AB",
+                "AE",
+                "BE",
+                "CD",
+                "DF",
+                "CF",
+                "tickAB",
+                "tickCD",
+                "tickAE",
+                "tickDF"
+              ],
+              "focus": [
+                "AE",
+                "DF"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-32:figure-1-36"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-28-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-28-asa-proof-application",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "E",
+                "label": "E"
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "F",
+                "label": "F"
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                -3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "E"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "E"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "DF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleA",
+                "label": "∠A"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "E"
+              }
+            ],
+            "params": {
+              "radius": 0.45,
+              "labelRadius": 0.82
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleD",
+                "label": "∠D"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "F"
+              }
+            ],
+            "params": {
+              "radius": 0.45,
+              "labelRadius": 0.82
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleB",
+                "label": "∠B"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "E"
+              }
+            ],
+            "params": {
+              "radius": 0.38,
+              "labelRadius": 0.75
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleC",
+                "label": "∠C"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "F"
+              }
+            ],
+            "params": {
+              "radius": 0.38,
+              "labelRadius": 0.75
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickCD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "CD"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AE"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.5
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickDF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "DF"
+              }
+            ],
+            "params": {
+              "size": 0.3,
+              "position": 0.5
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "parallel-given",
+              "predicate": "parallel",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "CD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AB∥CD。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "ab-cd",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "CD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AB=CD。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "angles-a-d",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleA"
+                },
+                {
+                  "ref": "angleD"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "∠A=∠D。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "angles-b-c",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleB"
+                },
+                {
+                  "ref": "angleC"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "∠B=∠C。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "ae-df",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AE"
+                },
+                {
+                  "ref": "DF"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AE=DF。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AE",
+              "BE",
+              "CD",
+              "DF",
+              "CF"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickAB",
+              "tickCD",
+              "tickAE",
+              "tickDF",
+              "angleA",
+              "angleD",
+              "angleB",
+              "angleC"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "B",
+              "E",
+              "F",
+              "C",
+              "A",
+              "D"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "e6a65e15eeb2812c240ecc52af85d01114e174ab16b36e594303d5d2f389d194",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "B",
+          "E",
+          "F",
+          "C",
+          "A",
+          "D",
+          "AB",
+          "AE"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

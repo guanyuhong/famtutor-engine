@@ -1,0 +1,790 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-31-congruence-boundaries",
+  "title": "AAA 与 SSA 为什么不能判定全等",
+  "description": "按教材印刷页 31–33实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      31,
+      33
+    ],
+    "pdfPages": [
+      34,
+      36
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "congruence-counterexample",
+    "aaa",
+    "ssa"
+  ],
+  "learningObjective": "用缩放反例和双解构造分别识别 AAA、SSA 的判定边界。",
+  "caseType": "exploration",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "transform.dilate",
+    "point.intersection_line_circle",
+    "circle.center_radius",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 231,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-31-congruence-boundaries",
+      "revision": 1,
+      "seed": 231,
+      "metadata": {
+        "title": "AAA 与 SSA 为什么不能判定全等",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "congruence-counterexample",
+          "aaa",
+          "ssa"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -7,
+            4,
+            10,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-31",
+          "title": "AAA 与 SSA 为什么不能判定全等",
+          "stages": [
+            {
+              "id": "aaa",
+              "narration": "左侧两三角形三个角都对应相等，但后一三角形是前者的 1.5 倍；AAA 只能保证形状相同，不能保证大小相同。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "AB",
+                "AC",
+                "BC",
+                "A2B2",
+                "A2C2",
+                "B2C2",
+                "AAA1",
+                "AAA2"
+              ]
+            },
+            {
+              "id": "ssa",
+              "narration": "右侧固定 ST、∠T 和非夹边 SU=3；圆与已知射线有两个交点 U₁、U₂。",
+              "reveal": [
+                "S",
+                "T",
+                "U1",
+                "U2",
+                "ST",
+                "ssaRay",
+                "ssaCircle",
+                "SU1",
+                "TU1",
+                "SU2",
+                "TU2"
+              ]
+            },
+            {
+              "id": "boundary",
+              "narration": "两个候选三角形同时满足 SSA 条件，却不全等。因此全等判定不能擅自扩展为 AAA 或 SSA。",
+              "reveal": [
+                "S",
+                "T",
+                "U1",
+                "U2",
+                "ST",
+                "SU1",
+                "TU1",
+                "SU2",
+                "TU2"
+              ],
+              "focus": [
+                "SU1",
+                "TU1",
+                "SU2",
+                "TU2"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-31",
+          "zjedu-math-8a-2013:printed-33"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-31-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-31-congruence-boundaries",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                -6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                -3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                -5,
+                2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A2",
+                "label": "A′"
+              }
+            ],
+            "params": {
+              "coords": [
+                -1,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B2",
+                "label": "B′"
+              }
+            ],
+            "params": {
+              "coords": [
+                3.5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C2",
+                "label": "C′"
+              }
+            ],
+            "params": {
+              "coords": [
+                0.5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2B2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2C2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "B2C2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "AAA1",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.35
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "AAA2",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "C2"
+              }
+            ],
+            "params": {
+              "radius": 0.45
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "S",
+                "label": "S"
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "T",
+                "label": "T"
+              }
+            ],
+            "params": {
+              "coords": [
+                9,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Q",
+                "label": "Q",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                5.535898,
+                2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "ST"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "S"
+              },
+              {
+                "ref": "T"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "ssaRay"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "T"
+              },
+              {
+                "ref": "Q"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "ssaCircle"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "S"
+              }
+            ],
+            "params": {
+              "radius": 3
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_line_circle",
+            "outputs": [
+              {
+                "id": "U1",
+                "label": "U₁"
+              },
+              {
+                "id": "U2",
+                "label": "U₂"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "ssaRay"
+              },
+              {
+                "ref": "ssaCircle"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "SU1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "S"
+              },
+              {
+                "ref": "U1"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "TU1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "T"
+              },
+              {
+                "ref": "U1"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "SU2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "S"
+              },
+              {
+                "ref": "U2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "TU2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "T"
+              },
+              {
+                "ref": "U2"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "aaa-angle",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "AAA1"
+                },
+                {
+                  "ref": "AAA2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "缩放后三角形对应角相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "ssa-side",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "SU1"
+                },
+                {
+                  "ref": "SU2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "两个解都满足 SU=3。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "ssa-collinear",
+              "predicate": "collinear",
+              "arguments": [
+                {
+                  "ref": "T"
+                },
+                {
+                  "ref": "U1"
+                },
+                {
+                  "ref": "U2"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "两个候选点在同一已知射线上。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AC",
+              "BC",
+              "A2B2",
+              "A2C2",
+              "B2C2",
+              "ST",
+              "TU1",
+              "SU1",
+              "TU2",
+              "SU2"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "ssaRay",
+              "ssaCircle"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AAA1",
+              "AAA2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "TU2",
+              "SU2"
+            ],
+            "style": {
+              "stroke": "#EF6C22",
+              "strokeWidth": 2,
+              "dash": "dashed"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "C",
+              "A2",
+              "B2",
+              "C2",
+              "S",
+              "T",
+              "Q",
+              "U1",
+              "U2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "5f8814bb74bdfbf7102589ae10c5987db3d241eb3cb3217a723dda88fc100324",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "C",
+          "A2",
+          "B2",
+          "C2",
+          "AB",
+          "AC"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

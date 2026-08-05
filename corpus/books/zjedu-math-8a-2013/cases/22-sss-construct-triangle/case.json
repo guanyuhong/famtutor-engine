@@ -1,0 +1,455 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-22-sss-construct-triangle",
+  "title": "按三边作三角形",
+  "description": "按教材图 1-21实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      25
+    ],
+    "pdfPages": [
+      28
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "sss",
+    "ruler-compass-construction"
+  ],
+  "learningObjective": "用两个定长圆的交点确定第三个顶点，观察三边确定三角形。",
+  "caseType": "guided-construction",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "circle.center_radius",
+    "point.intersection_circle_circle",
+    "polygon.vertices",
+    "assertion.point_on",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 222,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-22-sss-construct-triangle",
+      "revision": 1,
+      "seed": 222,
+      "metadata": {
+        "title": "按三边作三角形",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "sss",
+          "ruler-compass-construction"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            3,
+            3,
+            -0.8
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-22",
+          "title": "按三边作三角形",
+          "stages": [
+            {
+              "id": "base",
+              "narration": "先画线段 EF=1.3。",
+              "reveal": [
+                "E",
+                "F",
+                "EF"
+              ]
+            },
+            {
+              "id": "arcs",
+              "narration": "分别以 E、F 为圆心，以 2.5、1.9 为半径画弧。",
+              "reveal": [
+                "E",
+                "F",
+                "EF",
+                "circleE",
+                "circleF"
+              ]
+            },
+            {
+              "id": "intersection",
+              "narration": "两弧交于 D；交点同时满足 DE=2.5、DF=1.9。",
+              "reveal": [
+                "D",
+                "E",
+                "F",
+                "EF",
+                "circleE",
+                "circleF"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "连接 DE、DF，得到满足三条给定边的 △DEF。镜像位置 D′ 形成的三角形与它全等。",
+              "reveal": [
+                "D",
+                "E",
+                "F",
+                "EF",
+                "ED",
+                "FD",
+                "triangleDEF"
+              ],
+              "focus": [
+                "triangleDEF"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-25:figure-1-21"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-22-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-22-sss-construct-triangle",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "E",
+                "label": "E"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "F",
+                "label": "F"
+              }
+            ],
+            "params": {
+              "coords": [
+                1.3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "EF",
+                "label": "1.3"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "circleE"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              }
+            ],
+            "params": {
+              "radius": 2.5
+            }
+          },
+          {
+            "op": "construct",
+            "command": "circle.center_radius",
+            "outputs": [
+              {
+                "id": "circleF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "F"
+              }
+            ],
+            "params": {
+              "radius": 1.9
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_circle_circle",
+            "outputs": [
+              {
+                "id": "Dlow",
+                "label": "Dlow",
+                "visible": false
+              },
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "circleE"
+              },
+              {
+                "ref": "circleF"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "ED",
+                "label": "2.5"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "FD",
+                "label": "1.9"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "F"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "triangleDEF"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "E"
+              },
+              {
+                "ref": "F"
+              }
+            ]
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "d-on-e-circle",
+              "predicate": "point_on",
+              "arguments": [
+                {
+                  "ref": "D"
+                },
+                {
+                  "ref": "circleE"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "DE=2.5。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "d-on-f-circle",
+              "predicate": "point_on",
+              "arguments": [
+                {
+                  "ref": "D"
+                },
+                {
+                  "ref": "circleF"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "DF=1.9。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "EF",
+              "ED",
+              "FD",
+              "triangleDEF"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "circleE",
+              "circleF"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "triangleDEF"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "fill": "#DCEFE7",
+              "fillOpacity": 0.18,
+              "strokeWidth": 2.3,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "E",
+              "F",
+              "Dlow",
+              "D"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "ab6a2fc3032a70f1c0d957b18fec09b0f8ecb59e3605beb7df4fca5656367510",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "E",
+          "F",
+          "EF",
+          "circleE",
+          "circleF",
+          "Dlow",
+          "D",
+          "ED"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

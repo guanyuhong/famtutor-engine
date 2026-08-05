@@ -1,0 +1,347 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-35-graphing-to-solve-quadratic-equations",
+  "title": "用图像解二次方程",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "point.function_root",
+    "point.from_expressions",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-graph-solve-quadratic",
+      "revision": 1,
+      "seed": 3501,
+      "metadata": {
+        "title": "用图像解二次方程",
+        "description": "把方程化为 f(x)=0，并从函数图像与 x 轴的交点读出两根。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-02"
+        ]
+      },
+      "entities": [
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "y=x²-2x-3"
+        },
+        {
+          "id": "R1",
+          "type": "point2",
+          "role": "derived",
+          "label": "x=-1"
+        },
+        {
+          "id": "R2",
+          "type": "point2",
+          "role": "derived",
+          "label": "x=3"
+        },
+        {
+          "id": "vertex",
+          "type": "point2",
+          "role": "derived",
+          "label": "V(1,-4)"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "x^2-2*x-3",
+            "domain": [
+              -4,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "r1",
+          "command": "point.function_root",
+          "inputs": [
+            {
+              "ref": "f"
+            }
+          ],
+          "params": {
+            "bracket": [
+              -2,
+              0
+            ]
+          },
+          "outputs": [
+            "R1"
+          ]
+        },
+        {
+          "id": "r2",
+          "command": "point.function_root",
+          "inputs": [
+            {
+              "ref": "f"
+            }
+          ],
+          "params": {
+            "bracket": [
+              2,
+              4
+            ]
+          },
+          "outputs": [
+            "R2"
+          ]
+        },
+        {
+          "id": "v",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "1",
+            "y": "-4"
+          },
+          "outputs": [
+            "vertex"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "解 f(x)=0 ⇔ 图像与 x 轴交点的横坐标",
+            "at": [
+              -4.5,
+              6
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -5,
+            6.5,
+            6,
+            -5.5
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "R1",
+            "R2"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "bottom"
+          }
+        },
+        {
+          "targets": [
+            "vertex"
+          ],
+          "style": {
+            "token": "accent",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [],
+      "assertions": [
+        {
+          "id": "root-one",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(R1)"
+            },
+            {
+              "expr": "-1"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "左根为 -1。"
+        },
+        {
+          "id": "root-two",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(R2)"
+            },
+            {
+              "expr": "3"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "右根为 3。"
+        },
+        {
+          "id": "roots-on-axis",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(R1)+y(R2)"
+            },
+            {
+              "expr": "0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "两个根点都在 x 轴。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-graph-solve-quadratic",
+          "title": "用图像解二次方程",
+          "stages": [
+            {
+              "id": "equation",
+              "narration": "先把二次方程写成 f(x)=0。",
+              "focus": [
+                "note"
+              ]
+            },
+            {
+              "id": "graph",
+              "narration": "画 y=f(x)，方程的解对应 y=0。",
+              "focus": [
+                "f",
+                "vertex"
+              ]
+            },
+            {
+              "id": "intersections",
+              "narration": "两个 x 轴交点给出 x=-1 与 x=3；根由函数实体上的括号区间确定。",
+              "focus": [
+                "R1",
+                "R2"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-graph-solve-quadratic-task",
+              "prompt": "拖动参数、切换阶段，并用图像与代数互相核验。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "root-one"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "root-two"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "roots-on-axis"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.quadratic-equations.9-12.03",
+          "ggb.math.skill.graphing-to-solve-quadratic-equations",
+          "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  }
+}

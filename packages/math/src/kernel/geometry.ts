@@ -64,6 +64,48 @@ export function isPolygon(value: unknown): value is Polygon2Value {
   return Boolean(value && typeof value === "object" && (value as Polygon2Value).kind === "polygon2");
 }
 
+export function regularPolygon(
+  center: Point2Value,
+  radius: number,
+  vertexCount: number,
+  rotation = Math.PI / 2
+): Polygon2Value {
+  if (!Number.isFinite(radius) || radius <= 0) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_RADIUS", "Regular polygon radius must be positive and finite.", { actual: radius });
+  }
+  if (!Number.isInteger(vertexCount) || vertexCount < 3 || vertexCount > 64) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_VERTEX_COUNT", "Regular polygon vertexCount must be an integer from 3 to 64.", { actual: vertexCount, expected: "3..64" });
+  }
+  if (!Number.isFinite(rotation)) {
+    throw new MathEngineError("INVALID_REGULAR_POLYGON_ROTATION", "Regular polygon rotation must be finite.", { actual: rotation });
+  }
+  return {
+    kind: "polygon2",
+    vertices: Array.from({ length: vertexCount }, (_, index) => point(
+      center.x + radius * Math.cos(rotation + 2 * Math.PI * index / vertexCount),
+      center.y + radius * Math.sin(rotation + 2 * Math.PI * index / vertexCount)
+    ))
+  };
+}
+
+export function polygonDiagonals(value: Polygon2Value, fromVertex?: number): Segment2Value[] {
+  const count = value.vertices.length;
+  if (count < 3) throw new MathEngineError("INVALID_POLYGON", "Polygon diagonals require at least three vertices.");
+  if (fromVertex !== undefined && (!Number.isInteger(fromVertex) || fromVertex < 0 || fromVertex >= count)) {
+    throw new MathEngineError("INVALID_POLYGON_VERTEX_INDEX", "fromVertex must identify an existing zero-based polygon vertex.", { actual: fromVertex, expected: `0..${count - 1}` });
+  }
+  const diagonals: Segment2Value[] = [];
+  for (let left = 0; left < count; left += 1) {
+    for (let right = left + 1; right < count; right += 1) {
+      const adjacent = right === left + 1 || (left === 0 && right === count - 1);
+      if (adjacent) continue;
+      if (fromVertex !== undefined && left !== fromVertex && right !== fromVertex) continue;
+      diagonals.push(segment(value.vertices[left]!, value.vertices[right]!));
+    }
+  }
+  return diagonals;
+}
+
 export function isAngle(value: unknown): value is AngleValue {
   return Boolean(value && typeof value === "object" && (value as AngleValue).kind === "angle");
 }
@@ -114,6 +156,97 @@ export function normalized(value: Vector2Value, tolerance = DEFAULT_TOLERANCE): 
     throw new MathEngineError("DEGENERATE_VECTOR", "A zero-length vector cannot be normalized.");
   }
   return vector(value.x / length, value.y / length);
+}
+
+export function rightAngleMarkerPolygon(
+  angle: AngleValue,
+  size: number,
+  tolerance = 1e-6
+): Polygon2Value {
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Right-angle marker size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const residual = Math.abs(angle.radians - Math.PI / 2);
+  if (residual > tolerance) {
+    throw new MathEngineError("NOT_RIGHT_ANGLE", "marker.right_angle requires an angle equal to 90 degrees.", {
+      expected: Math.PI / 2,
+      actual: angle.radians
+    });
+  }
+  const firstDirection = normalized(subtractPoints(angle.from, angle.vertex));
+  const secondDirection = normalized(subtractPoints(angle.to, angle.vertex));
+  const firstCorner = addPointVector(angle.vertex, scaleVector(firstDirection, size));
+  const secondCorner = addPointVector(angle.vertex, scaleVector(secondDirection, size));
+  const outerCorner = addPointVector(firstCorner, scaleVector(secondDirection, size));
+  return { kind: "polygon2", vertices: [angle.vertex, firstCorner, outerCorner, secondCorner] };
+}
+
+/**
+ * Create one standard equality tick centered on a segment.
+ *
+ * `position` is the fractional distance from `source.from` to `source.to` and
+ * `size` is the full tick length, both independent of renderer pixels.
+ * Multiple-tick conventions are composed by calling this atom more than once
+ * with different positions.
+ */
+export function segmentTickMarker(
+  source: Segment2Value,
+  position: number,
+  size: number
+): Segment2Value {
+  if (!Number.isFinite(position) || position < 0 || position > 1) {
+    throw new MathEngineError("INVALID_MARKER_POSITION", "Segment tick position must be between 0 and 1.", {
+      actual: position
+    });
+  }
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Segment tick size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const direction = normalized(subtractPoints(source.to, source.from));
+  const normal = vector(-direction.y, direction.x);
+  const center = point(
+    source.from.x + (source.to.x - source.from.x) * position,
+    source.from.y + (source.to.y - source.from.y) * position
+  );
+  const half = scaleVector(normal, size / 2);
+  return segment(addPointVector(center, scaleVector(half, -1)), addPointVector(center, half));
+}
+
+/**
+ * Create one renderer-independent parallel-line chevron.
+ *
+ * The anchor selects the marker location and the line-like input supplies only
+ * orientation. Direction is canonicalized so reversing a segment's endpoints
+ * does not flip the visual convention. A double chevron is two calls with two
+ * nearby anchor points, keeping this L0 primitive atomic.
+ */
+export function parallelChevronMarker(
+  anchor: Point2Value,
+  source: Line2Value | Segment2Value | Ray2Value,
+  size: number
+): [Segment2Value, Segment2Value] {
+  if (!Number.isFinite(size) || size <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVALID_MARKER_SIZE", "Parallel chevron size must be finite and positive.", {
+      actual: size
+    });
+  }
+  const line = lineLikeToLine(source);
+  let tangent = normalized(line.direction);
+  if (tangent.x < -DEFAULT_TOLERANCE || (Math.abs(tangent.x) <= DEFAULT_TOLERANCE && tangent.y < 0)) {
+    tangent = scaleVector(tangent, -1);
+  }
+  const normal = vector(-tangent.y, tangent.x);
+  const tip = addPointVector(anchor, scaleVector(tangent, size / 2));
+  const back = addPointVector(anchor, scaleVector(tangent, -size / 2));
+  const halfHeight = scaleVector(normal, size / 2);
+  return [
+    segment(addPointVector(back, halfHeight), tip),
+    segment(addPointVector(back, scaleVector(halfHeight, -1)), tip)
+  ];
 }
 
 export function distance(left: Point2Value, right: Point2Value): number {
@@ -169,6 +302,35 @@ export function ray(from: Point2Value, through: Point2Value): Ray2Value {
     throw new MathEngineError("DEGENERATE_RAY", "A ray requires two distinct points.");
   }
   return { kind: "ray2", from, through, direction: normalized(direction) };
+}
+
+export function angleBisectorRay(
+  left: Point2Value,
+  vertex: Point2Value,
+  right: Point2Value,
+  branch: "internal" | "external"
+): Ray2Value {
+  const leftVector = subtractPoints(left, vertex);
+  const rightVector = subtractPoints(right, vertex);
+  const leftNorm = norm(leftVector);
+  const rightNorm = norm(rightVector);
+  if (leftNorm <= DEFAULT_TOLERANCE || rightNorm <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("DEGENERATE_ANGLE", "An angle bisector requires both arms to have nonzero length.");
+  }
+  const leftUnit = scaleVector(leftVector, 1 / leftNorm);
+  const rightUnit = scaleVector(rightVector, 1 / rightNorm);
+  const direction = branch === "internal"
+    ? vector(leftUnit.x + rightUnit.x, leftUnit.y + rightUnit.y)
+    : vector(leftUnit.x - rightUnit.x, leftUnit.y - rightUnit.y);
+  if (norm(direction) <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError(
+      "DEGENERATE_ANGLE_BISECTOR",
+      branch === "internal"
+        ? "The internal bisector is undefined for opposite angle arms."
+        : "The external bisector is undefined for coincident angle arms."
+    );
+  }
+  return ray(vertex, addPointVector(vertex, normalized(direction)));
 }
 
 export function circle(center: Point2Value, radius: number): Circle2Value {
@@ -356,6 +518,90 @@ export function projectPointToPath(source: Point2Value, target: RuntimeValue): P
   if (isArc(target)) return projectPointToArc(source, target);
   if (isPolygon(target)) return projectPointToPolygon(source, target);
   throw new MathEngineError("UNSUPPORTED_PATH", "Point-on-path supports line, segment, ray, circle, arc, and polygon.");
+}
+
+/** Invert a point in a circle. The inversion center itself has no finite image. */
+export function invertPointInCircle(source: Point2Value, inversion: Circle2Value): Point2Value {
+  const delta = subtractPoints(source, inversion.center);
+  const distanceSquared = dot(delta, delta);
+  if (distanceSquared <= DEFAULT_TOLERANCE ** 2) {
+    throw new MathEngineError("INVERSION_CENTER_UNDEFINED", "The inversion center has no finite inverse point.", {
+      actual: [source.x, source.y],
+      retryable: true
+    });
+  }
+  return addPointVector(inversion.center, scaleVector(delta, inversion.radius ** 2 / distanceSquared));
+}
+
+/**
+ * Invert a circle in another circle.
+ *
+ * A source circle through the inversion center maps to a line and is rejected
+ * because this command has the intentionally narrow `circle2 -> circle2`
+ * contract. This keeps entity typing deterministic without introducing a
+ * generalized-circle union before a real downstream need exists.
+ */
+export function invertCircleInCircle(source: Circle2Value, inversion: Circle2Value): Circle2Value {
+  const centerDelta = subtractPoints(source.center, inversion.center);
+  const denominator = dot(centerDelta, centerDelta) - source.radius ** 2;
+  if (Math.abs(denominator) <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("INVERSION_OUTPUT_NOT_CIRCLE", "A circle through the inversion center maps to a line, not circle2.", {
+      actual: {
+        source: [source.center.x, source.center.y, source.radius],
+        inversion: [inversion.center.x, inversion.center.y, inversion.radius]
+      },
+      expected: "source circle not passing through inversion center",
+      retryable: true
+    });
+  }
+  const scale = inversion.radius ** 2 / denominator;
+  return circle(
+    addPointVector(inversion.center, scaleVector(centerDelta, scale)),
+    Math.abs(scale) * source.radius
+  );
+}
+
+/**
+ * Select one oriented common tangent of two circles.
+ *
+ * `side1` and `side2` are signed contact sides (`-1` or `1`). Calling this
+ * atom for all four sign pairs yields the four common tangents of strictly
+ * disjoint circles; impossible branches fail with `COMMON_TANGENT_UNDEFINED`.
+ */
+export function commonTangentLine(
+  first: Circle2Value,
+  second: Circle2Value,
+  side1: number,
+  side2: number
+): Line2Value {
+  if (![side1, side2].every(side => side === -1 || side === 1)) {
+    throw new MathEngineError("INVALID_TANGENT_SIDE", "Common-tangent sides must be -1 or 1.", {
+      actual: [side1, side2],
+      expected: [-1, 1]
+    });
+  }
+  const between = subtractPoints(second.center, first.center);
+  const centerDistance = norm(between);
+  if (centerDistance <= DEFAULT_TOLERANCE) {
+    throw new MathEngineError("CONCENTRIC_CIRCLES", "Concentric circles do not define a unique common-tangent branch.");
+  }
+  const signedRadiusDelta = side1 * first.radius - side2 * second.radius;
+  const cosine = signedRadiusDelta / centerDistance;
+  if (Math.abs(cosine) > 1 + DEFAULT_TOLERANCE) {
+    throw new MathEngineError("COMMON_TANGENT_UNDEFINED", "The selected common-tangent branch does not exist for these circles.", {
+      actual: { centerDistance, signedRadiusDelta, side1, side2 },
+      retryable: true
+    });
+  }
+  const axis = scaleVector(between, 1 / centerDistance);
+  const boundedCosine = clamp(cosine, -1, 1);
+  const sine = Math.sqrt(Math.max(0, 1 - boundedCosine ** 2));
+  const normalVector = vector(
+    axis.x * boundedCosine - axis.y * sine,
+    axis.y * boundedCosine + axis.x * sine
+  );
+  const firstContact = addPointVector(first.center, scaleVector(normalVector, side1 * first.radius));
+  return lineFromPointDirection(firstContact, vector(-normalVector.y, normalVector.x));
 }
 
 /** Stable order: increasing signed parameter t along the line direction. Tangent → duplicate point. */

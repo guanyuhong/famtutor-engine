@@ -1,0 +1,173 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-zeros-of-quadratic-functions",
+  "title": "二次函数的零点",
+  "titleEn": "Zeros of Quadratic Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.zeros-of-quadratic-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.quadratic-functions.9-12.07"
+    ],
+    "topicSlug": "quadratic-functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-zero-definition",
+      "type": "concept",
+      "visibleText": "函数零点满足 f(x)=0。",
+      "narrationSeed": "函数零点满足 f(x)=0。",
+      "sourceRef": "ggb.math.occurrence.quadratic-functions.9-12.07"
+    },
+    {
+      "id": "atom-factored-form",
+      "type": "rule",
+      "visibleText": "一个因式为零时乘积为零。",
+      "narrationSeed": "一个因式为零时乘积为零。",
+      "sourceRef": "ggb.math.occurrence.quadratic-functions.9-12.07"
+    },
+    {
+      "id": "atom-intercept",
+      "type": "representation",
+      "visibleText": "零点对应图像与 x 轴交点。",
+      "narrationSeed": "零点对应图像与 x 轴交点。",
+      "sourceRef": "ggb.math.occurrence.quadratic-functions.9-12.07"
+    },
+    {
+      "id": "atom-axis",
+      "type": "rule",
+      "visibleText": "两零点中点位于对称轴上。",
+      "narrationSeed": "两零点中点位于对称轴上。",
+      "sourceRef": "ggb.math.occurrence.quadratic-functions.9-12.07"
+    },
+    {
+      "id": "atom-double-root",
+      "type": "misconception",
+      "visibleText": "重根对应一个相切点，不是无零点。",
+      "narrationSeed": "重根对应一个相切点，不是无零点。",
+      "sourceRef": "ggb.math.occurrence.quadratic-functions.9-12.07"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/31-zeros-of-quadratic-functions/case.json",
+    "caseId": "research-geogebra-31-zeros-of-quadratic-functions",
+    "documentId": "geogebra-math-quadratic-zeros"
+  },
+  "stages": [
+    {
+      "id": "factored-form",
+      "order": 1
+    },
+    {
+      "id": "zeros-intercepts",
+      "order": 2
+    },
+    {
+      "id": "double-root",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-quadratic-zero",
+      "type": "short_answer",
+      "stem": "f(x)=(x-2)(x+3) 的零点是什么？",
+      "answer": "2 和 -3",
+      "feedback": {
+        "correct": "分别令两个因式为零。",
+        "incorrect": "分别令两个因式为零。"
+      },
+      "sourceAtomIds": [
+        "atom-zero-definition"
+      ]
+    },
+    {
+      "id": "quiz-zero-definition",
+      "type": "short_answer",
+      "stem": "函数零点满足什么等式？",
+      "answer": "f(x)=0",
+      "feedback": {
+        "correct": "零点是使函数值为零的输入。",
+        "incorrect": "零点是使函数值为零的输入。"
+      },
+      "sourceAtomIds": [
+        "atom-factored-form"
+      ]
+    },
+    {
+      "id": "quiz-intercept",
+      "type": "short_answer",
+      "stem": "零点在图像上对应哪类点？",
+      "answer": "x 轴交点",
+      "feedback": {
+        "correct": "x 轴上纵坐标为零。",
+        "incorrect": "x 轴上纵坐标为零。"
+      },
+      "sourceAtomIds": [
+        "atom-intercept"
+      ]
+    },
+    {
+      "id": "quiz-double",
+      "type": "true_false",
+      "stem": "r₁=r₂ 时图像与 x 轴怎样相交？",
+      "answer": "相切",
+      "feedback": {
+        "correct": "两个交点合并为一个重根点。",
+        "incorrect": "两个交点合并为一个重根点。"
+      },
+      "sourceAtomIds": [
+        "atom-axis"
+      ]
+    },
+    {
+      "id": "quiz-axis",
+      "type": "short_answer",
+      "stem": "零点为 -1 和 5 时对称轴是什么？",
+      "answer": "x=2",
+      "feedback": {
+        "correct": "对称轴经过两根的中点。",
+        "incorrect": "对称轴经过两根的中点。"
+      },
+      "sourceAtomIds": [
+        "atom-double-root"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.quadratic-functions.9-12.07",
+        "https://www.geogebra.org/math/quadratic-functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "parameter sweep test"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at 330px height",
+        "six-case stage-switch review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

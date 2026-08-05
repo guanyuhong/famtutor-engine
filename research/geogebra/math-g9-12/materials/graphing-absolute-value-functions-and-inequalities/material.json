@@ -1,0 +1,176 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-graphing-absolute-value-functions-and-inequalities",
+  "title": "绝对值函数与不等式作图",
+  "titleEn": "Graphing Absolute Value Functions and Inequalities",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.graphing-absolute-value-functions-and-inequalities",
+    "occurrenceIds": [
+      "ggb.math.occurrence.inequalities.9-12.01",
+      "ggb.math.occurrence.absolute-value.9-12.01"
+    ],
+    "topicSlug": "absolute-value"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-graphing-absolute-value-functions-and-inequalities-1",
+      "type": "concept",
+      "visibleText": "y=|x| 是 V 形母函数。",
+      "narrationSeed": "y=|x| 是 V 形母函数。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.01"
+    },
+    {
+      "id": "atom-graphing-absolute-value-functions-and-inequalities-2",
+      "type": "rule",
+      "visibleText": "h 与 k 决定顶点 (h,k)。",
+      "narrationSeed": "h 与 k 决定顶点 (h,k)。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.01"
+    },
+    {
+      "id": "atom-graphing-absolute-value-functions-and-inequalities-3",
+      "type": "procedure",
+      "visibleText": "函数图像是不等式解区域的边界。",
+      "narrationSeed": "函数图像是不等式解区域的边界。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.01"
+    },
+    {
+      "id": "atom-graphing-absolute-value-functions-and-inequalities-4",
+      "type": "representation",
+      "visibleText": "y≥f(x) 选择边界上方。",
+      "narrationSeed": "y≥f(x) 选择边界上方。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.01"
+    },
+    {
+      "id": "atom-graphing-absolute-value-functions-and-inequalities-5",
+      "type": "misconception",
+      "visibleText": "含等号时边界属于解集并画实线。",
+      "narrationSeed": "含等号时边界属于解集并画实线。",
+      "sourceRef": "ggb.math.occurrence.inequalities.9-12.01"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/34-graphing-absolute-value-functions-and-inequalities/case.json",
+    "caseId": "research-geogebra-34-graphing-absolute-value-functions-and-inequalities",
+    "documentId": "geogebra-math-absolute-value-inequality"
+  },
+  "stages": [
+    {
+      "id": "parent",
+      "order": 1
+    },
+    {
+      "id": "transform",
+      "order": 2
+    },
+    {
+      "id": "inequality",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-graphing-absolute-value-functions-and-inequalities-1",
+      "type": "short_answer",
+      "stem": "用一句话说明：y=|x| 是 V 形母函数。",
+      "answer": "y=|x| 是 V 形母函数。",
+      "feedback": {
+        "correct": "y=|x| 是 V 形母函数。",
+        "incorrect": "y=|x| 是 V 形母函数。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-absolute-value-functions-and-inequalities-1"
+      ]
+    },
+    {
+      "id": "quiz-graphing-absolute-value-functions-and-inequalities-2",
+      "type": "short_answer",
+      "stem": "举一个能检验“h 与 k 决定顶点 (h,k)。”的例子。",
+      "answer": "h 与 k 决定顶点 (h,k)。",
+      "feedback": {
+        "correct": "h 与 k 决定顶点 (h,k)。",
+        "incorrect": "h 与 k 决定顶点 (h,k)。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-absolute-value-functions-and-inequalities-2"
+      ]
+    },
+    {
+      "id": "quiz-graphing-absolute-value-functions-and-inequalities-3",
+      "type": "short_answer",
+      "stem": "用一句话说明：函数图像是不等式解区域的边界。",
+      "answer": "函数图像是不等式解区域的边界。",
+      "feedback": {
+        "correct": "函数图像是不等式解区域的边界。",
+        "incorrect": "函数图像是不等式解区域的边界。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-absolute-value-functions-and-inequalities-3"
+      ]
+    },
+    {
+      "id": "quiz-graphing-absolute-value-functions-and-inequalities-4",
+      "type": "short_answer",
+      "stem": "举一个能检验“y≥f(x) 选择边界上方。”的例子。",
+      "answer": "y≥f(x) 选择边界上方。",
+      "feedback": {
+        "correct": "y≥f(x) 选择边界上方。",
+        "incorrect": "y≥f(x) 选择边界上方。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-absolute-value-functions-and-inequalities-4"
+      ]
+    },
+    {
+      "id": "quiz-graphing-absolute-value-functions-and-inequalities-5",
+      "type": "short_answer",
+      "stem": "用一句话说明：含等号时边界属于解集并画实线。",
+      "answer": "含等号时边界属于解集并画实线。",
+      "feedback": {
+        "correct": "含等号时边界属于解集并画实线。",
+        "incorrect": "含等号时边界属于解集并画实线。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-absolute-value-functions-and-inequalities-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.inequalities.9-12.01",
+        "ggb.math.occurrence.absolute-value.9-12.01",
+        "https://www.geogebra.org/math/absolute-value?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "deterministic evaluation"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 76-card page",
+        "four-case stage-switch review",
+        "scalar label overlap check"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

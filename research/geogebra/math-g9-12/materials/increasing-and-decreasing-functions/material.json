@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-increasing-and-decreasing-functions",
+  "title": "函数的递增与递减",
+  "titleEn": "Increasing and Decreasing Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.increasing-and-decreasing-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.04"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-increasing-and-decreasing-functions-1",
+      "type": "concept",
+      "visibleText": "递增与递减按 x 从左向右判断。",
+      "narrationSeed": "递增与递减按 x 从左向右判断。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.04"
+    },
+    {
+      "id": "atom-increasing-and-decreasing-functions-2",
+      "type": "rule",
+      "visibleText": "递增区间内 x 增大时函数值增大。",
+      "narrationSeed": "递增区间内 x 增大时函数值增大。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.04"
+    },
+    {
+      "id": "atom-increasing-and-decreasing-functions-3",
+      "type": "procedure",
+      "visibleText": "递减区间内 x 增大时函数值减小。",
+      "narrationSeed": "递减区间内 x 增大时函数值减小。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.04"
+    },
+    {
+      "id": "atom-increasing-and-decreasing-functions-4",
+      "type": "representation",
+      "visibleText": "转折点分隔不同单调区间。",
+      "narrationSeed": "转折点分隔不同单调区间。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.04"
+    },
+    {
+      "id": "atom-increasing-and-decreasing-functions-5",
+      "type": "misconception",
+      "visibleText": "严格单调区间通常不含转折点端点。",
+      "narrationSeed": "严格单调区间通常不含转折点端点。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.04"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/33-increasing-and-decreasing-functions/case.json",
+    "caseId": "research-geogebra-33-increasing-and-decreasing-functions",
+    "documentId": "geogebra-math-increasing-decreasing"
+  },
+  "stages": [
+    {
+      "id": "behavior",
+      "order": 1
+    },
+    {
+      "id": "turning",
+      "order": 2
+    },
+    {
+      "id": "intervals",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-increasing-and-decreasing-functions-1",
+      "type": "short_answer",
+      "stem": "用一句话说明：递增与递减按 x 从左向右判断。",
+      "answer": "递增与递减按 x 从左向右判断。",
+      "feedback": {
+        "correct": "递增与递减按 x 从左向右判断。",
+        "incorrect": "递增与递减按 x 从左向右判断。"
+      },
+      "sourceAtomIds": [
+        "atom-increasing-and-decreasing-functions-1"
+      ]
+    },
+    {
+      "id": "quiz-increasing-and-decreasing-functions-2",
+      "type": "short_answer",
+      "stem": "举一个能检验“递增区间内 x 增大时函数值增大。”的例子。",
+      "answer": "递增区间内 x 增大时函数值增大。",
+      "feedback": {
+        "correct": "递增区间内 x 增大时函数值增大。",
+        "incorrect": "递增区间内 x 增大时函数值增大。"
+      },
+      "sourceAtomIds": [
+        "atom-increasing-and-decreasing-functions-2"
+      ]
+    },
+    {
+      "id": "quiz-increasing-and-decreasing-functions-3",
+      "type": "short_answer",
+      "stem": "用一句话说明：递减区间内 x 增大时函数值减小。",
+      "answer": "递减区间内 x 增大时函数值减小。",
+      "feedback": {
+        "correct": "递减区间内 x 增大时函数值减小。",
+        "incorrect": "递减区间内 x 增大时函数值减小。"
+      },
+      "sourceAtomIds": [
+        "atom-increasing-and-decreasing-functions-3"
+      ]
+    },
+    {
+      "id": "quiz-increasing-and-decreasing-functions-4",
+      "type": "short_answer",
+      "stem": "举一个能检验“转折点分隔不同单调区间。”的例子。",
+      "answer": "转折点分隔不同单调区间。",
+      "feedback": {
+        "correct": "转折点分隔不同单调区间。",
+        "incorrect": "转折点分隔不同单调区间。"
+      },
+      "sourceAtomIds": [
+        "atom-increasing-and-decreasing-functions-4"
+      ]
+    },
+    {
+      "id": "quiz-increasing-and-decreasing-functions-5",
+      "type": "short_answer",
+      "stem": "用一句话说明：严格单调区间通常不含转折点端点。",
+      "answer": "严格单调区间通常不含转折点端点。",
+      "feedback": {
+        "correct": "严格单调区间通常不含转折点端点。",
+        "incorrect": "严格单调区间通常不含转折点端点。"
+      },
+      "sourceAtomIds": [
+        "atom-increasing-and-decreasing-functions-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.04",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "deterministic evaluation"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 76-card page",
+        "four-case stage-switch review",
+        "scalar label overlap check"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

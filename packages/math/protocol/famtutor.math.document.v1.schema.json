@@ -64,6 +64,14 @@
         "$ref": "#/$defs/interaction"
       }
     },
+    "controls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/control" }
+    },
+    "clocks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/clock" }
+    },
     "assertions": {
       "type": "array",
       "items": {
@@ -103,8 +111,20 @@
         "polygon2",
         "conic2",
         "transform2",
+        "interval1",
         "function1",
+        "region2",
         "curve2",
+        "collection",
+        "vector3",
+        "point3",
+        "line3",
+        "segment3",
+        "plane3",
+        "polygon3",
+        "sphere3",
+        "curve3",
+        "surface3",
         "text"
       ]
     },
@@ -182,6 +202,9 @@
         "visible": {
           "type": "boolean"
         },
+        "visibleWhen": {
+          "$ref": "#/$defs/id"
+        },
         "description": {
           "type": "string"
         }
@@ -217,10 +240,28 @@
       "enum": [
         "scalar.constant",
         "scalar.slider",
+        "boolean.constant",
+        "boolean.expression",
+        "interval.from_bounds",
         "point.free",
+        "collection.sequence",
+        "collection.map",
+        "point3.free",
+        "point3.from_expressions",
+        "vector3.between_points",
+        "line3.through_points",
+        "segment3.through_points",
+        "plane3.through_points",
+        "polygon3.vertices",
+        "sphere3.center_radius",
+        "curve3.parametric",
+        "surface3.parametric",
+        "point.from_expressions",
         "point.on_path",
         "point.midpoint",
+        "point.circle_center",
         "point.projection",
+        "point.invert_in_circle",
         "point.intersection_line_line",
         "point.intersection_line_circle",
         "point.intersection_circle_circle",
@@ -228,19 +269,28 @@
         "segment.through_points",
         "line.through_points",
         "ray.from_points",
+        "ray.angle_bisector",
         "line.parallel_through",
         "line.perpendicular_through",
+        "line.common_tangent",
         "vector.between_points",
         "vector.components",
         "vector.polar",
+        "vector.scale",
         "circle.center_radius",
         "circle.through_points",
         "circle.through_three_points",
+        "circle.invert_in_circle",
         "arc.center_points",
         "arc.three_points",
         "sector.from_arc",
         "polygon.vertices",
+        "polygon.regular",
+        "polygon.diagonals",
         "angle.three_points",
+        "marker.right_angle",
+        "marker.segment_tick",
+        "marker.parallel_chevron",
         "conic.ellipse_foci",
         "conic.parabola_focus_directrix",
         "conic.hyperbola_foci",
@@ -254,10 +304,16 @@
         "transform.dilate",
         "transform.apply",
         "function.explicit",
+        "function.piecewise",
+        "function.value_at",
+        "point.function_root",
+        "region.function_inequality",
         "curve.parametric",
         "text.at",
+        "text.conditional",
         "measurement.distance",
         "measurement.segment_length",
+        "measurement.circle_radius",
         "measurement.angle",
         "measurement.slope",
         "measurement.area",
@@ -357,6 +413,10 @@
         "keepAspectRatio": {
           "type": "boolean"
         },
+        "background": {
+          "type": "string",
+          "minLength": 1
+        },
         "cameraPolicy": {
           "enum": [
             "document",
@@ -373,6 +433,38 @@
         "title": {
           "type": "string"
         }
+      }
+    },
+    "graphics3dView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "visible", "renderer", "boundingBox3D"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "const": "graphics3d" },
+        "visible": { "type": "boolean" },
+        "renderer": { "enum": ["auto", "jsxgraph-svg", "jsxgraph-canvas", "direct-svg"] },
+        "boundingBox3D": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "items": {
+            "type": "array", "minItems": 2, "maxItems": 2,
+            "prefixItems": [{ "type": "number" }, { "type": "number" }]
+          }
+        },
+        "camera": {
+          "type": "object", "additionalProperties": false,
+          "required": ["azimuth", "elevation"],
+          "properties": {
+            "azimuth": { "type": "number" },
+            "elevation": { "type": "number" },
+            "distance": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "projection": { "enum": ["parallel", "central"] },
+        "axes": { "type": "boolean" },
+        "background": { "type": "string", "minLength": 1 },
+        "entityIds": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "title": { "type": "string" }
       }
     },
     "simpleView": {
@@ -409,6 +501,9 @@
       "oneOf": [
         {
           "$ref": "#/$defs/graphicsView"
+        },
+        {
+          "$ref": "#/$defs/graphics3dView"
         },
         {
           "$ref": "#/$defs/simpleView"
@@ -458,6 +553,41 @@
         },
         "labelVisible": {
           "type": "boolean"
+        },
+        "labelPlacement": {
+          "enum": [
+            "auto",
+            "top",
+            "top-right",
+            "right",
+            "bottom-right",
+            "bottom",
+            "bottom-left",
+            "left",
+            "top-left"
+          ]
+        },
+        "labelOffset": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number" },
+            { "type": "number" }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "lineLabelPosition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "lineLabelSide": {
+          "enum": ["left", "right"]
+        },
+        "lineLabelDistance": {
+          "type": "number",
+          "minimum": 1
         },
         "pointSize": {
           "type": "number",
@@ -537,6 +667,85 @@
             }
           }
         }
+      }
+    },
+    "controlAction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "const": "boolean.set" },
+            "target": { "$ref": "#/$defs/id" },
+            "value": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "const": "boolean.toggle" },
+            "target": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "const": "scalar.set" },
+            "target": { "$ref": "#/$defs/id" },
+            "value": { "type": "number" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "stageId"],
+          "properties": {
+            "type": { "const": "stage.set" },
+            "stageId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "enum": ["clock.play", "clock.pause", "clock.reset", "clock.step"] },
+            "target": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "label", "action"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["button", "checkbox"] },
+        "label": { "type": "string", "minLength": 1 },
+        "action": { "$ref": "#/$defs/controlAction" },
+        "description": { "type": "string" }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target", "start", "end", "step", "intervalMs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target": { "$ref": "#/$defs/id" },
+        "start": { "type": "number" },
+        "end": { "type": "number" },
+        "step": { "type": "number", "exclusiveMinimum": 0 },
+        "intervalMs": { "type": "integer", "minimum": 16, "maximum": 60000 },
+        "loop": { "enum": ["none", "repeat", "alternate"] },
+        "resetValue": { "type": "number" },
+        "autoStart": { "type": "boolean" }
       }
     },
     "assertionArgument": {

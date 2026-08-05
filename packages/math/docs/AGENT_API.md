@@ -95,9 +95,61 @@ add_assertion
 remove_assertion
 set_style
 set_interaction
+set_control
+set_clock
 set_view
 undo
 ```
+
+### 声明式 Control / Action 与确定性 Clock
+
+`set_control` 添加或按 ID 替换一个宿主控件。`button` 和 `checkbox` 只允许执行受限、可审计的 `scalar.set`、`boolean.set`、`boolean.toggle`、`stage.set`、`clock.play`、`clock.pause`、`clock.reset` 或 `clock.step`，不接受 JavaScript。`checkbox` 必须绑定 `boolean.toggle`，且目标必须由 `boolean.constant` 产生：
+
+```json
+{
+  "op": "set_control",
+  "control": {
+    "id": "play",
+    "kind": "button",
+    "label": "播放",
+    "action": { "type": "clock.play", "target": "motionClock" }
+  }
+}
+```
+
+```json
+{
+  "op": "set_control",
+  "control": {
+    "id": "showProof",
+    "kind": "checkbox",
+    "label": "显示证明",
+    "action": { "type": "boolean.toggle", "target": "proofVisible" }
+  }
+}
+```
+
+任意实体可用 `visibleWhen: "proofVisible"` 引用一个 Boolean Entity。组合条件先由 `boolean.expression` 生成，`visibleWhen` 自身不接受表达式，避免在呈现层复制表达式语言。显隐只影响渲染，不改变构造 DAG、数值求值或断言。
+
+`set_clock` 将一个 `scalar.slider` 声明为逻辑时钟目标。每个 tick 恒定增加 `step`，`intervalMs` 只决定展示间隔，不参与数学状态计算：
+
+```json
+{
+  "op": "set_clock",
+  "clock": {
+    "id": "motionClock",
+    "target": "t",
+    "start": 0,
+    "end": 2,
+    "step": 0.02,
+    "intervalMs": 30,
+    "loop": "none",
+    "resetValue": 0
+  }
+}
+```
+
+宿主把 `document.controls` 渲染成合适的 UI，并向 MountedRenderer 派发 `control.invoke`。时钟状态位于 `MountedRendererState.metadata.clocks`；用户手动修改目标滑块时，对应时钟自动暂停。
 
 ### 构造
 
@@ -109,6 +161,77 @@ undo
   "outputs": [{ "id": "bisector", "label": "l" }]
 }
 ```
+
+### 有界 Sequence / Zip 集合
+
+重复几何使用 `collection.sequence` 和 `collection.map`，不要让 Agent 手工复制几十个同构节点。集合必须是同质的 `point2`、`segment2`、`circle2` 或 `polygon2`，并声明 `maxItems`（1–256）。模板只能调用已有单输出 L0 命令，不能嵌套集合命令；外部依赖必须继续显式放在节点 `inputs` 中。
+
+```json
+{
+  "command": "collection.sequence",
+  "inputs": [{ "ref": "n" }],
+  "params": {
+    "itemType": "point2",
+    "variable": "i",
+    "from": 0,
+    "to": "n-1",
+    "maxItems": 40,
+    "template": {
+      "command": "point.from_expressions",
+      "params": { "x": "3*cos(2*pi*i/n)", "y": "3*sin(2*pi*i/n)" }
+    }
+  },
+  "outputs": [{ "id": "centers", "type": "collection" }]
+}
+```
+
+`collection.map` 的第一个 input 是源集合；模板中的 `{ "local": true }` 表示当前项，`{ "input": 1 }` 表示外层第二个 input。数量越界、局部变量与实体 ID 冲突、模板输出类型不符都会产生结构化诊断，而不是部分渲染。
+
+规则多边形及其对角线使用领域原子，不要在 Case 中枚举 3～10 套节点：
+
+```json
+{ "command": "polygon.regular", "inputs": [{ "ref": "O" }, { "ref": "r" }, { "ref": "n" }], "params": { "maxVertices": 10, "rotation": "pi/2" }, "outputs": ["poly"] }
+{ "command": "polygon.diagonals", "inputs": [{ "ref": "poly" }], "params": { "fromVertex": 0, "maxItems": 7 }, "outputs": ["fan"] }
+```
+
+`polygon.regular` 的 `n` 必须是 3～64 的整数且不超过声明的 `maxVertices`；`polygon.diagonals` 返回 `segment2` 集合，省略 `fromVertex` 时返回全部对角线，指定零基顶点索引时只返回与该顶点相连的对角线。`maxItems` 为 1～256 的硬上限，超过时失败而非截断。
+
+圆的组成量使用两个只读原子命令，不要让模型重新猜测圆心或用圆周长反推半径：
+
+```json
+{
+  "op": "construct",
+  "command": "point.circle_center",
+  "inputs": [{ "ref": "circle" }],
+  "outputs": [{ "id": "center", "role": "derived" }]
+}
+```
+
+```json
+{
+  "op": "construct",
+  "command": "measurement.circle_radius",
+  "inputs": [{ "ref": "circle" }],
+  "outputs": [{ "id": "radius", "role": "measurement" }]
+}
+```
+
+两者都要求输入为 `circle2`；圆必须已经有效且半径为正。输出随上游圆确定性更新，不产生独立可拖动状态。
+
+圆反演同样使用类型明确的原子命令：
+
+```json
+{
+  "op": "construct",
+  "command": "circle.invert_in_circle",
+  "inputs": [{ "ref": "sourceCircle" }, { "ref": "inversionCircle" }],
+  "outputs": [{ "id": "imageCircle", "role": "derived" }]
+}
+```
+
+点使用 `point.invert_in_circle(point2, circle2) -> point2`。源圆经过反演中心时其像是直线，因此 `circle.invert_in_circle` 返回 `INVERSION_OUTPUT_NOT_CIRCLE`，模型不能把该退化分支继续声明为 `circle2`。
+
+路径最近点继续使用 `point.projection(point2, path) -> point2`；`path` 可以是 line、segment、ray、circle、arc 或 polygon boundary。区域内部自由点不是最近点语义，不应由此命令替代。
 
 ### L1 宏展开
 
@@ -122,6 +245,8 @@ undo
 ```
 
 宏不是 L0 command：运行时展开为若干 `construct` 等价节点，并写入 `provenance.sourceRefs`。可用宏列表见 `math_capabilities.macros`。
+
+两圆严格分离并需要四条公切线时使用 `macro.line.common_tangents`，绑定 `circle1` 与 `circle2`；输出为 `external1`、`external2`、`internal1`、`internal2`。宏内部仅组合四个带 `side1` / `side2` 的 `line.common_tangent` L0 节点。
 
 `outputs` 可以是 ID 字符串，也可以带 entity metadata：
 
@@ -304,3 +429,40 @@ Agent 策略：
 - `content[0].text`：兼容文本客户端；
 - `isError`；
 - modern protocol 下的 `resultType: "complete"`。
+
+## 14. JSXGraph 3D 文档
+
+3D 与 2D 共用 `math_create`、`math_apply`、`math_validate`、`math_render` 和 Render Bundle。创建 `graphics3d` view 时必须提供：
+
+```json
+{
+  "id": "main3d",
+  "kind": "graphics3d",
+  "visible": true,
+  "renderer": "jsxgraph-svg",
+  "boundingBox3D": [[-5, 5], [-5, 5], [-5, 5]],
+  "camera": { "azimuth": 0.8, "elevation": 0.45, "distance": 24 },
+  "projection": "parallel",
+  "axes": true
+}
+```
+
+参数曲面示例：
+
+```json
+{
+  "id": "make-surface",
+  "command": "surface3.parametric",
+  "params": {
+    "xExpression": "u",
+    "yExpression": "v",
+    "zExpression": "0.2*(u*u-v*v)",
+    "parameters": ["u", "v"],
+    "uDomain": [-2, 2],
+    "vDomain": [-2, 2]
+  },
+  "outputs": ["surface"]
+}
+```
+
+表达式仍经过安全 AST；参数名只进入局部数值环境。模型不得生成 JavaScript 回调或直接编写 JSXGraph 调用。`plane3.through_points` 的 `uRange` / `vRange` 只控制可视平面片范围，不改变无限平面的数学语义。

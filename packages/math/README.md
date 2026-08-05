@@ -28,29 +28,37 @@ Events · Assertions · Simulation · Evidence
 
 ## 已实现能力
 
-| 模块 | v0.1.0 能力 |
+| 模块 | v0.2.0 能力 |
 |---|---|
-| Canonical protocol | `famtutor.math.document.v1`，闭合 JSON Schema、稳定 ID、revision、provenance |
-| 数学命令 | L0 命令目录（由 31 扩展；含弧/扇、圆锥曲线、变换对象、面积/周长等），完整列表见 `capabilities` |
+| Core contracts | `@famtutor/core@0.2.0`：`ApplyResult` union、`RenderResult`、`MountedRenderer` 契约 |
+| Domain apply | 确定性 `applyMathChangeSet`；Agent 必须委托 `domainRuntime.apply` |
+| Live renderer | **`mountMathRenderer`**：rebuild+staging、状态保留、交互 ChangeSet、诚实 snapshot |
+| Canonical protocol | `famtutor.math.document.v1`（不变）+ operations schema |
+| 数学命令 | **58** 个二维/通用 L0 命令 + **10** 个 L1 宏（`expand_macro`）；完整列表见 `capabilities` |
 | Construction DAG | 拓扑排序、循环检测、单一 producer、依赖追踪、级联删除 |
 | 安全表达式 | AST parser/evaluator；支持数学函数、几何测量、`@entity-id`；无 `eval` / `new Function` |
 | Headless kernel | 数值几何、退化检测、运行时类型检查、增量 override 求值 |
 | Assertions | 构造语义证明 + 数值残差；支持等距、点在线上、共线、平行、垂直、等长、等角等 |
 | Simulation | 点拖动、滑块变化、插值采样、事件轨迹、观察值、断言证据、最终状态提交 |
-| Interactive renderer | JSXGraph SVG/Canvas，动态依赖、拖动、滑块、stage、事件桥接、SVG 快照 |
-| Static renderer | 后端无关 Direct SVG，适合缩略图、PDF/Word、服务端批量输出 |
-| Agent runtime | 9 个稳定工具；事务、revision 乐观锁、dry-run、idempotency、undo、结构化错误 |
+| Interactive renderer | JSXGraph 低层 `mountJsxGraph` + 高层 `MathMountedRenderer` |
+| Static renderer | 后端无关 Direct SVG（DomainRuntime artifact 默认） |
+| Agent runtime | 9 个稳定工具；作为 **stateful adapter** 叠在无状态 DomainRuntime 之上 |
 | MCP | stdio JSON-RPC；支持现代 `2026-07-28` 发现协议，同时兼容 `2025-06-18` initialize 客户端 |
 | CLI | validate、render、simulate、inspect、capabilities |
 
 ## 快速开始
 
-环境要求：Node.js 20+；仓库自身无运行时 npm 依赖。JSXGraph 1.12.2 已放在 `vendor/jsxgraph/`，许可证见 `THIRD_PARTY_NOTICES.md`。
+环境要求：Node.js 20+。本包依赖 `@famtutor/core`（workspace）。JSXGraph 1.12.2 已放在 `vendor/jsxgraph/`，许可证见 `THIRD_PARTY_NOTICES.md`。
+
+从仓库根目录：
 
 ```bash
+npm ci
 npm run build
 npm test
 ```
+
+完整 verify（含 browser）需先按根 README 安装 `requirements-smoke.txt` 并设置 `PLAYWRIGHT_PYTHON`。
 
 验证并渲染示例：
 
@@ -123,6 +131,8 @@ const value = handle.getValue("P");
 const snapshot = handle.exportSvg();
 handle.destroy();
 ```
+
+挂载器会观察宿主容器尺寸，并通过 JSXGraph 官方 `updateContainerDims` 路径同步画布；因此响应式网格、折叠面板和阶段切换不需要业务层手工计算 SVG 宽高。
 
 ### 交互仿真
 
@@ -208,16 +218,16 @@ Codex 配置示例：
 ```toml
 [mcp_servers.famtutor_math]
 command = "node"
-args = ["/absolute/path/famtutor-math-runtime-v0.1.0/bin/famtutor-math-mcp.mjs"]
+args = ["/absolute/path/famtutor-engine/packages/math/bin/famtutor-math-mcp.mjs"]
 startup_timeout_sec = 30
 tool_timeout_sec = 120
 ```
 
 MCP server 将数学命令收敛在 9 个稳定工具里，避免把每个几何命令暴露成一个独立 MCP tool。
 
-## 31 个命令 → L0 命令目录
+## L0 命令目录与 L1 宏
 
-v0.1 起步为 31 个核心命令。当前 L0 已扩展（含 arc/sector/conic/transform2 与测量/向量补强），完整列表以运行时为准：
+当前为 **58** 个 L0 命令与 **9** 个 L1 宏。完整列表以运行时为准：
 
 ```bash
 node ./bin/famtutor-math.mjs capabilities
@@ -225,11 +235,13 @@ node ./bin/famtutor-math.mjs capabilities
 
 L1 宏（中垂线、角平分、四心、切线等）见 `src/catalog/macros.ts`，**不**进入 command enum。
 
-历史 v0.1 基线命令：
+v0.1 起步时的历史基线（31 个核心命令）仍可用于对照：
 
 ```text
 scalar.constant
 scalar.slider
+boolean.constant
+boolean.expression
 
 point.free
 point.on_path
@@ -242,6 +254,7 @@ point.intersection_circle_circle
 segment.through_points
 line.through_points
 ray.from_points
+ray.angle_bisector
 line.parallel_through
 line.perpendicular_through
 vector.between_points
@@ -250,6 +263,8 @@ circle.center_radius
 circle.through_points
 circle.through_three_points
 polygon.vertices
+polygon.regular
+polygon.diagonals
 angle.three_points
 
 transform.translate_point
@@ -267,11 +282,135 @@ measurement.angle
 measurement.slope
 ```
 
-命令签名可在运行时动态查询：
+v0.1.1 相对基线新增的 L0 类别包括：arc/sector、conic、transform 对象 + `transform.apply`、area/perimeter、vector.components/polar、`point.intersection_line_conic` 等。`point.circle_center(circle2) -> point2` 与 `measurement.circle_radius(circle2) -> scalar` 是圆状态的纯计算投影。`point.invert_in_circle` 和 `circle.invert_in_circle` 提供类型稳定的圆反演；后者在源圆经过反演中心、结果应为直线时明确失败。`line.common_tangent` 以两个 `side` 参数选择单个有向分支，`macro.line.common_tangents` 再将四个分支组合成常规公切线工具。`point.projection` 的公开输入已与内核对齐，统一表示 line / segment / ray / circle / arc / polygon boundary 的最近点。教材 Case 04 进一步加入 `boolean.expression`、`point.from_expressions` 与 `text.conditional`，以受限表达式提供滑块驱动的条件反馈。`vector.scale` 组合已有 `vector2` 与数值或安全表达式 `params.factor`，用于滑块驱动的向量缩放和平移，不需要重复计算向量的方向。教材精确图增加 `marker.right_angle`，它组合一个已有的 `angle` 实体，并以文档单位的 `size` 绘制标准直角标记。`marker.segment_tick` 组合已有 `segment2`，以文档单位 `size` 和沿线比例 `position` 生成单条标准等长刻痕；多刻痕由同一原语组合。`marker.parallel_chevron` 消费一个锚点和已有线性对象，生成标准平行箭形的两条短臂；双箭形由两个调用组合。
 
-```bash
-node ./bin/famtutor-math.mjs capabilities
+`ray.angle_bisector(left, vertex, right, branch)` 用显式 `internal/external` 分支构造角平分射线；原 `macro.ray.angle_bisector` 保留为兼容入口并直接降解到该原子，避免依赖交点顺序误选内外分支。
+
+`scalar.slider.params.animation` 保留为 JSXGraph 原生 glider 动画，适合无控制面板的轻量视觉演示。需要播放、暂停、复位、单步、确定性重放或跨宿主一致状态时，应使用文档级 `clocks[]` 与 `controls[]`；不要创建 Case 专属计时器。用户手动修改目标滑块时，确定性时钟自动暂停。
+
+滑块标签复用通用实体样式：`fontSize` 控制字号，`labelOffset: [dx, dy]` 以像素微调 JSXGraph 原生标签。多个滑块共享画布时，应先用 `position` 和 `length` 建立稳定布局，再用 `labelOffset` 做最后微调；不要用 `text.at` 复制滑块名称和值。
+
+`function.value_at(function1, scalar) -> scalar` 对已有函数实体求值，并复用该实体的表达式、闭定义域和文档依赖。输入不是有限数时诊断为 `FUNCTION_INPUT_NOT_FINITE`，输入超出定义域时诊断为 `FUNCTION_INPUT_OUTSIDE_DOMAIN`：
+
+```json
+{
+  "entities": [
+    { "id": "a", "type": "scalar", "role": "free" },
+    { "id": "x0", "type": "scalar", "role": "free" },
+    { "id": "f", "type": "function1", "role": "derived" },
+    { "id": "y0", "type": "scalar", "role": "derived" }
+  ],
+  "construction": [
+    { "id": "op-a", "command": "scalar.slider", "params": { "min": -2, "max": 2, "value": 1 }, "outputs": ["a"] },
+    { "id": "op-x0", "command": "scalar.slider", "params": { "min": -3, "max": 3, "value": 1.5 }, "outputs": ["x0"] },
+    { "id": "op-f", "command": "function.explicit", "params": { "expression": "a*x^2-1", "domain": [-3, 3] }, "outputs": ["f"] },
+    { "id": "op-y0", "command": "function.value_at", "inputs": [{ "ref": "f" }, { "ref": "x0" }], "outputs": ["y0"] }
+  ]
+}
 ```
+
+`point.function_root(function1, params.bracket) -> point2` 在一个已隔离、端点异号的闭区间内用确定性二分法构造单个 x 轴交点。它不会猜测扫描步长，也不声称枚举全部根；区间超出函数定义域或未夹住根时返回结构化诊断。
+
+```json
+{ "id": "op-root", "command": "point.function_root", "inputs": [{ "ref": "f" }], "params": { "bracket": [-2, 0] }, "outputs": ["root"] }
+```
+
+`region.function_inequality(function1, params) -> region2` 组合已有函数边界，表示指定闭 x 域内的上方或下方二维区域。`relation` 为 `above`/`below`，`boundaryIncluded` 决定实线或虚线边界；Direct SVG 与 JSXGraph 使用相同语义。
+
+```json
+{ "id": "op-solution", "command": "region.function_inequality", "inputs": [{ "ref": "f" }], "params": { "relation": "above", "domain": [-5, 5], "boundaryIncluded": true }, "outputs": ["solution"] }
+```
+
+`function.piecewise(params.branches) -> function1` 把 1–16 个显式分支组合为同一个函数实体。每个分支声明表达式、闭 x 域及端点是否计入；分支不得重叠，也不能同时包含共享端点。求值、Direct SVG 的开闭端点和 JSXGraph 挂载共享同一语义。
+
+```json
+{
+  "id": "op-piecewise",
+  "command": "function.piecewise",
+  "params": {
+    "branches": [
+      { "expression": "x+2", "domain": [-3, 0], "lowerClosed": true, "upperClosed": false },
+      { "expression": "x^2", "domain": [0, 3], "lowerClosed": true, "upperClosed": true }
+    ]
+  },
+  "outputs": ["f"]
+}
+```
+
+```json
+{
+  "id": "op-progress",
+  "command": "scalar.slider",
+  "outputs": ["progress"],
+  "params": {
+    "min": 0,
+    "max": 2,
+    "value": 0,
+    "step": 0.02,
+    "position": [-1, -1],
+    "length": 3,
+    "animation": {
+      "autoStart": true,
+      "direction": 1,
+      "stepCount": 100,
+      "delayMs": 30,
+      "maxRounds": 1,
+      "startDelayMs": 600
+    }
+  }
+}
+```
+
+`direction` 只接受 `1` 或 `-1`；`stepCount` 为每轮步数，`delayMs` 为帧间隔，`maxRounds=-1` 表示循环播放。教材演示通常使用 `maxRounds=1`，避免持续运动干扰阅读。
+
+确定性时钟的状态转移只依赖 `{start,end,step,loop}` 与当前逻辑状态；`intervalMs` 不进入数学计算。MountedRenderer 支持 `control.invoke` 与 `clock.play/pause/reset/step`，状态通过 `MountedRendererState.metadata.clocks` 暴露给宿主。
+
+`vector.scale` 的最小用法：
+
+```json
+{
+  "id": "op-motion-vector",
+  "command": "vector.scale",
+  "inputs": [{ "ref": "BCVector" }],
+  "params": { "factor": "max(t - 1, 0)" },
+  "outputs": ["motionVector"]
+}
+```
+
+`marker.right_angle` 的最小用法：
+
+```json
+[
+  {
+    "id": "op-angle-abc",
+    "command": "angle.three_points",
+    "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }],
+    "outputs": ["angleABC"]
+  },
+  {
+    "id": "op-right-angle-abc",
+    "command": "marker.right_angle",
+    "inputs": [{ "ref": "angleABC" }],
+    "params": { "size": 0.35 },
+    "outputs": ["rightAngleABC"]
+  }
+]
+```
+
+输入角必须在 `1e-6` 弧度容差内等于 90°；否则求值返回 `NOT_RIGHT_ANGLE`。输出复用 `polygon2`，建议实体 role 使用 `annotation`、填充透明，并通过正常 style binding 设置线色和线宽。
+
+## JSXGraph 3D 基础能力
+
+`graphics3d` 使用同一份 MathDocument 与 Construction DAG，不把 JSXGraph 对象当作数学真值。当前公开的最小原子命令为：
+
+- `point3.free`、`point3.from_expressions`、`vector3.between_points`；
+- `line3.through_points`、`segment3.through_points`、`plane3.through_points`；
+- `polygon3.vertices`、`sphere3.center_radius`；
+- `curve3.parametric`、`surface3.parametric`。
+
+MountedRenderer 使用 JSXGraph `View3D`、`point3d`、`line3d`、`plane3d`、`polygon3d`、`sphere3d`、`curve3d` 与 `parametricsurface3d`。Direct SVG 使用文档相机进行确定性投影，作为 Bundle、服务端预览和证据链的静态兜底。可运行示例见 `examples/jsxgraph-3d-foundation.json`，浏览器 Demo 中选择“JSXGraph 3D 基础能力”。
+
+第一版刻意不重载二维 `point.set`；3D 拖点提交将使用独立 `point3.set` 交互协议，避免 `[x,y]` 与 `[x,y,z]` 含混。
 
 ## 安全边界
 
@@ -285,16 +424,17 @@ node ./bin/famtutor-math.mjs capabilities
 
 ## 测试
 
-完整验证：
+完整验证（仓库根目录，使用 lockfile）：
 
 ```bash
+npm ci
 npm run verify
-npm run benchmark
+npm run benchmark -w @famtutor/math-runtime
 ```
 
 覆盖内容包括：
 
-- 16 个 Node 单元/集成/随机性质测试；
+- Node 单元/集成/随机性质测试（以 `node --test` 当前结果为准，见 [TEST_REPORT.md](TEST_REPORT.md)）；
 - L0 command catalog 的 headless 和真实 Chromium + JSXGraph 渲染覆盖；
 - 250 组随机垂直平分线构型与 680 个随机拖动采样帧；
 - JSON Schema、9 个 Agent tool schema；
@@ -307,18 +447,20 @@ npm run benchmark
 
 ## 当前边界
 
-v0.1.0 有意不包含：
+v0.1.2 有意不包含：
 
+- 挂载后 ChangeSet 增量渲染 / `MountedRenderer`（Engine v0.2 **PR3**）；
+- `famtutor.render.bundle.v1`（**PR4**）；
 - 完整 GeoGebra 式 UI、资源社区和 Spreadsheet；
 - 通用 CAS、精确代数证明和方程求解；
 - 隐函数、不等式区域、轨迹和高级统计；
 - 通用非线性约束求解；
-- 完整 3D；
+- 完整 3D（当前仅提供 JSXGraph 教学型基础图元、参数曲线/曲面与确定性静态投影，尚不包含 CSG、B-Rep、复杂网格和精确曲面求交）；
 - `.ggb` 导入导出；
 - 持久化数据库、多人协作和权限系统；
 - 自动标签避让在 JSXGraph runtime 中的完整接入。
 
-这些能力应在协议稳定后分阶段增加，而不是让 v0.1 的 Agent 可靠性被“大而全”拖累。
+这些能力应在协议与 live runtime 稳定后分阶段增加，而不是让 Agent 可靠性被“大而全”拖累。
 
 ## 仓库结构
 

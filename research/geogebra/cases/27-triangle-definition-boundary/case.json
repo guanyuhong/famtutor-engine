@@ -1,0 +1,27 @@
+{
+  "schema":"famtutor.case.v1","caseId":"research-geogebra-27-triangle-definition-boundary","title":"三角形定义：三条线段与非共线条件","status":"accepted","caseType":"exploration","difficulty":"mechanism-reference",
+  "source":{"printedPages":[],"pdfPages":[],"references":["https://www.geogebra.org/m/u4wxhzvc"],"note":"依据公开定义文本原创复现，重点显式呈现非共线边界。"},
+  "requiredCapabilities":["scalar.slider","point.from_expressions","polygon.vertices","boolean.expression","text.conditional","measurement.area"],
+  "inputs":{"initialDocument":{
+    "schema":"famtutor.math.document.v1","documentId":"qiu-feng-triangle-definition-boundary","revision":1,"seed":2727,
+    "metadata":{"title":"三角形的定义","description":"改变第三个顶点的高度，区分三条线段首尾相接与真正构成三角形。","locale":"zh-CN","purpose":"exploration","subject":"mathematics","grade":"grade-8","tags":["triangle-definition","non-collinear","degenerate-boundary"]},
+    "entities":[
+      {"id":"h","type":"scalar","label":"顶点高度 h","role":"free"},{"id":"A","type":"point2","label":"A","role":"derived"},{"id":"B","type":"point2","label":"B","role":"derived"},{"id":"C","type":"point2","label":"C","role":"derived"},
+      {"id":"AB","type":"segment2","label":"AB","role":"derived"},{"id":"BC","type":"segment2","label":"BC","role":"derived"},{"id":"CA","type":"segment2","label":"CA","role":"derived"},{"id":"triangle","type":"polygon2","label":"△ABC","role":"derived"},
+      {"id":"area","type":"scalar","role":"measurement","visible":false},{"id":"valid","type":"boolean","role":"derived","visible":false},{"id":"degenerate","type":"boolean","role":"derived","visible":false},{"id":"validText","type":"text","role":"annotation"},{"id":"degenerateText","type":"text","role":"annotation"}
+    ],
+    "construction":[
+      {"id":"h","command":"scalar.slider","params":{"min":0,"max":4,"value":2.8,"step":0.1,"position":[-4.8,-3.8],"length":6},"outputs":["h"]},
+      {"id":"A","command":"point.from_expressions","params":{"x":"-3.5","y":"0"},"outputs":["A"]},{"id":"B","command":"point.from_expressions","params":{"x":"3.5","y":"0"},"outputs":["B"]},{"id":"C","command":"point.from_expressions","params":{"x":"0.5","y":"h"},"outputs":["C"]},
+      {"id":"AB","command":"segment.through_points","inputs":[{"ref":"A"},{"ref":"B"}],"outputs":["AB"]},{"id":"BC","command":"segment.through_points","inputs":[{"ref":"B"},{"ref":"C"}],"outputs":["BC"]},{"id":"CA","command":"segment.through_points","inputs":[{"ref":"C"},{"ref":"A"}],"outputs":["CA"]},{"id":"triangle","command":"polygon.vertices","inputs":[{"ref":"A"},{"ref":"B"},{"ref":"C"}],"outputs":["triangle"]},
+      {"id":"area","command":"measurement.area","inputs":[{"ref":"triangle"}],"outputs":["area"]},{"id":"valid","command":"boolean.expression","params":{"expression":"h>0"},"outputs":["valid"]},{"id":"degenerate","command":"boolean.expression","params":{"expression":"h==0"},"outputs":["degenerate"]},
+      {"id":"validText","command":"text.conditional","inputs":[{"ref":"valid"}],"params":{"trueText":"三点不共线：三条线段首尾顺次相接，构成三角形","falseText":"​","at":[-4.7,4.5]},"outputs":["validText"]},{"id":"degenerateText","command":"text.conditional","inputs":[{"ref":"degenerate"}],"params":{"trueText":"h=0：三点共线，图形退化，不是三角形","falseText":"​","at":[-4.7,4.5]},"outputs":["degenerateText"]}
+    ],
+    "views":[{"id":"main","kind":"graphics2d","visible":true,"renderer":"jsxgraph-svg","boundingBox":[-5.5,5.2,5.5,-4.7],"axes":false,"grid":false,"keepAspectRatio":true,"background":"#FBFCFE","cameraPolicy":"document"}],
+    "styles":[{"targets":["triangle"],"style":{"stroke":"#D06A3A","strokeWidth":2.6,"fill":"#F4C7B5","fillOpacity":0.25,"fontSize":13}},{"targets":["AB","BC","CA"],"style":{"stroke":"#15365F","strokeWidth":2.7,"lineLabelPosition":0.5,"lineLabelSide":1,"lineLabelDistance":13,"fontSize":10}},{"targets":["A","B","C"],"style":{"stroke":"#155B73","fill":"#155B73","pointSize":4,"fontSize":11,"labelPlacement":"auto"}},{"targets":["validText"],"style":{"stroke":"#0E756E","fontSize":12}},{"targets":["degenerateText"],"style":{"stroke":"#B84C2D","fontSize":12}}],
+    "interactions":[{"target":"h","permissions":["set_value"]}],
+    "assertions":[{"id":"area-height","predicate":"expression_equal","arguments":[{"expr":"area"},{"expr":"3.5*h"}],"expected":true,"tolerance":1e-8,"requiredMethod":"numeric","severity":"error","message":"底为 7、高为 h，面积为 7h/2。"}],
+    "activities":[{"id":"definition","title":"定义与边界","stages":[{"id":"segments","narration":"三条线段 AB、BC、CA 必须首尾顺次相接，形成封闭图形。"},{"id":"non-collinear","narration":"定义还要求三个顶点不在同一直线上；逐渐减小 h，观察面积同步减小。"},{"id":"boundary","narration":"当 h=0 时三点共线、面积为 0，虽然仍有三条线段，但不构成三角形。"}]}],
+    "provenance":{"generator":"agent","sourceRefs":["geogebra:u4wxhzvc","pattern:triangle-definition-boundary"]}
+  }},"trace":{"changeSets":[]},"expected":{"assertions":[{"kind":"runtime-assertions-pass"},{"kind":"static-render"},{"kind":"render-bundle"}],"interactions":[{"target":"h","permission":"set_value"}]}
+}

@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-graphing-to-solve-quadratic-equations",
+  "title": "用图像解二次方程",
+  "titleEn": "Graphing to Solve Quadratic Equations",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.graphing-to-solve-quadratic-equations",
+    "occurrenceIds": [
+      "ggb.math.occurrence.quadratic-equations.9-12.03"
+    ],
+    "topicSlug": "quadratic-equations"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-graphing-to-solve-quadratic-equations-1",
+      "type": "concept",
+      "visibleText": "把方程整理为 f(x)=0。",
+      "narrationSeed": "把方程整理为 f(x)=0。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.03"
+    },
+    {
+      "id": "atom-graphing-to-solve-quadratic-equations-2",
+      "type": "rule",
+      "visibleText": "绘制 y=f(x)。",
+      "narrationSeed": "绘制 y=f(x)。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.03"
+    },
+    {
+      "id": "atom-graphing-to-solve-quadratic-equations-3",
+      "type": "procedure",
+      "visibleText": "x 轴上的点满足 y=0。",
+      "narrationSeed": "x 轴上的点满足 y=0。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.03"
+    },
+    {
+      "id": "atom-graphing-to-solve-quadratic-equations-4",
+      "type": "representation",
+      "visibleText": "交点横坐标就是方程的实根。",
+      "narrationSeed": "交点横坐标就是方程的实根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.03"
+    },
+    {
+      "id": "atom-graphing-to-solve-quadratic-equations-5",
+      "type": "misconception",
+      "visibleText": "无交点、相切、两交点分别对应 0、1、2 个不同实根。",
+      "narrationSeed": "无交点、相切、两交点分别对应 0、1、2 个不同实根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.03"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/35-graphing-to-solve-quadratic-equations/case.json",
+    "caseId": "research-geogebra-35-graphing-to-solve-quadratic-equations",
+    "documentId": "geogebra-math-graph-solve-quadratic"
+  },
+  "stages": [
+    {
+      "id": "equation",
+      "order": 1
+    },
+    {
+      "id": "graph",
+      "order": 2
+    },
+    {
+      "id": "intersections",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-graphing-to-solve-quadratic-equations-1",
+      "type": "short_answer",
+      "stem": "用一句话说明：把方程整理为 f(x)=0。",
+      "answer": "把方程整理为 f(x)=0。",
+      "feedback": {
+        "correct": "把方程整理为 f(x)=0。",
+        "incorrect": "把方程整理为 f(x)=0。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-to-solve-quadratic-equations-1"
+      ]
+    },
+    {
+      "id": "quiz-graphing-to-solve-quadratic-equations-2",
+      "type": "short_answer",
+      "stem": "举一个能检验“绘制 y=f(x)。”的例子。",
+      "answer": "绘制 y=f(x)。",
+      "feedback": {
+        "correct": "绘制 y=f(x)。",
+        "incorrect": "绘制 y=f(x)。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-to-solve-quadratic-equations-2"
+      ]
+    },
+    {
+      "id": "quiz-graphing-to-solve-quadratic-equations-3",
+      "type": "short_answer",
+      "stem": "用一句话说明：x 轴上的点满足 y=0。",
+      "answer": "x 轴上的点满足 y=0。",
+      "feedback": {
+        "correct": "x 轴上的点满足 y=0。",
+        "incorrect": "x 轴上的点满足 y=0。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-to-solve-quadratic-equations-3"
+      ]
+    },
+    {
+      "id": "quiz-graphing-to-solve-quadratic-equations-4",
+      "type": "short_answer",
+      "stem": "举一个能检验“交点横坐标就是方程的实根。”的例子。",
+      "answer": "交点横坐标就是方程的实根。",
+      "feedback": {
+        "correct": "交点横坐标就是方程的实根。",
+        "incorrect": "交点横坐标就是方程的实根。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-to-solve-quadratic-equations-4"
+      ]
+    },
+    {
+      "id": "quiz-graphing-to-solve-quadratic-equations-5",
+      "type": "short_answer",
+      "stem": "用一句话说明：无交点、相切、两交点分别对应 0、1、2 个不同实根。",
+      "answer": "无交点、相切、两交点分别对应 0、1、2 个不同实根。",
+      "feedback": {
+        "correct": "无交点、相切、两交点分别对应 0、1、2 个不同实根。",
+        "incorrect": "无交点、相切、两交点分别对应 0、1、2 个不同实根。"
+      },
+      "sourceAtomIds": [
+        "atom-graphing-to-solve-quadratic-equations-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.quadratic-equations.9-12.03",
+        "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "deterministic evaluation"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 76-card page",
+        "four-case stage-switch review",
+        "scalar label overlap check"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

@@ -8,6 +8,11 @@ export interface ResolvedStyle {
   fillOpacity: number;
   dashArray?: string;
   labelVisible: boolean;
+  labelPlacement: "auto" | "manual" | "top" | "top-right" | "right" | "bottom-right" | "bottom" | "bottom-left" | "left" | "top-left";
+  labelOffset: [number, number];
+  lineLabelPosition: number;
+  lineLabelSide: "left" | "right";
+  lineLabelDistance: number;
   pointSize: number;
   fontSize: number;
 }
@@ -42,11 +47,19 @@ export function styleForEntity(
   entity: MathEntity,
   theme: "light" | "dark" = "light"
 ): ResolvedStyle {
-  const binding = (document.styles ?? []).find(candidate => candidate.targets.includes(entity.id));
-  const authored: EntityStyle = binding?.style ?? {};
+  // Style operations are patches. An entity may be targeted by several
+  // bindings as an authoring session refines its appearance; later fields
+  // override earlier fields while unrelated earlier fields remain intact.
+  const authored: EntityStyle = Object.assign(
+    {},
+    ...(document.styles ?? [])
+      .filter(candidate => candidate.targets.includes(entity.id))
+      .map(candidate => candidate.style)
+  );
   const token = authored.token ?? defaultToken(entity);
   const tokenStyle = (theme === "dark" ? DARK_TOKENS : LIGHT_TOKENS)[token] ?? {};
   const dashArray = authored.dash === "dashed" ? "8 6" : authored.dash === "dotted" ? "2 5" : undefined;
+  const pointSize = authored.pointSize ?? 5;
   return {
     stroke: authored.stroke ?? tokenStyle.stroke ?? (theme === "dark" ? "#dce8ef" : "#263746"),
     fill: authored.fill ?? tokenStyle.fill ?? (theme === "dark" ? "#dce8ef" : "#263746"),
@@ -54,6 +67,7 @@ export function styleForEntity(
     opacity: authored.opacity ?? tokenStyle.opacity ?? 1,
     fillOpacity: authored.fillOpacity ?? (
       entity.type === "polygon2" ? 0.13
+        : entity.type === "region2" ? 0.16
         : entity.type === "circle2" ? 0.04
           : entity.type === "angle" ? 0.16
             : entity.type === "point2" || entity.type === "scalar" ? 1
@@ -61,7 +75,12 @@ export function styleForEntity(
     ),
     dashArray,
     labelVisible: authored.labelVisible ?? Boolean(entity.label),
-    pointSize: authored.pointSize ?? 5,
+    labelPlacement: authored.labelPlacement ?? (authored.labelOffset ? "manual" : "auto"),
+    labelOffset: authored.labelOffset ?? [0, 0],
+    lineLabelPosition: authored.lineLabelPosition ?? 0.5,
+    lineLabelSide: authored.lineLabelSide ?? "left",
+    lineLabelDistance: authored.lineLabelDistance ?? 1.6,
+    pointSize,
     fontSize: authored.fontSize ?? 16
   };
 }

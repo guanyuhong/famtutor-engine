@@ -1,6 +1,6 @@
 {
   "schema": "famtutor.math.agent-tools.v1",
-  "runtimeVersion": "0.1.0",
+  "runtimeVersion": "0.3.0",
   "tools": [
     {
       "name": "math_capabilities",
@@ -22,7 +22,8 @@
               "function",
               "annotation",
               "measurement",
-              "conic"
+              "conic",
+              "geometry3d"
             ]
           },
           "commandPrefix": {
@@ -81,7 +82,7 @@
     {
       "name": "math_apply",
       "title": "Apply a transactional patch",
-      "description": "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, delete, or undo operations atomically with revision checks.",
+      "description": "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, control, deterministic clock, delete, or undo operations atomically with revision checks.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -126,6 +127,8 @@
                     "remove_assertion",
                     "set_style",
                     "set_interaction",
+                    "set_control",
+                    "set_clock",
                     "set_view",
                     "undo"
                   ]
@@ -301,7 +304,7 @@
     {
       "name": "math_export",
       "title": "Export document or SVG",
-      "description": "Export canonical MathDocument JSON or deterministic SVG with a content hash.",
+      "description": "Export canonical MathDocument JSON, deterministic SVG, or a host-neutral Render Bundle.",
       "inputSchema": {
         "type": "object",
         "additionalProperties": false,
@@ -317,7 +320,8 @@
             "type": "string",
             "enum": [
               "math-document",
-              "svg"
+              "svg",
+              "render-bundle"
             ]
           },
           "viewId": {

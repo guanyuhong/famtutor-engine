@@ -1,0 +1,50 @@
+{
+  "name": "@famtutor/core",
+  "version": "0.3.0",
+  "description": "FamTutor Engine cross-domain runtime contracts: ChangeSet, DomainRuntime, diagnostics, and RenderArtifact.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./protocol/runtime-schema": "./protocol/famtutor.engine.runtime.v1.schema.json",
+    "./protocol/render-bundle-schema": "./protocol/famtutor.render.bundle.v1.schema.json",
+    "./protocol/case-schema": "./protocol/famtutor.case.v1.schema.json"
+  },
+  "files": [
+    "dist",
+    "protocol",
+    "examples",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "prepack": "npm run build",
+    "test": "npm run build && node --test ./test/*.test.mjs",
+    "test:schema": "npm run build && node ./scripts/schema-smoke.mjs",
+    "test:pack": "node ./scripts/package-smoke.mjs",
+    "verify": "npm run test && npm run test:schema && npm run test:pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guanyuhong/famtutor-engine.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/guanyuhong/famtutor-engine/tree/dev/packages/core",
+  "bugs": {
+    "url": "https://github.com/guanyuhong/famtutor-engine/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

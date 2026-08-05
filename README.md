@@ -4,6 +4,15 @@ An agent-native engine for building, simulating, rendering, and assessing intera
 
 面向 Agent 原生的教学内容构建、模拟、渲染与评测引擎。
 
+## Docs
+
+- [Architecture](docs/ARCHITECTURE.md) — engine-level design, three protocol layers, v0.2 PR sequence
+- [Roadmap](docs/ROADMAP.md) — near-term Engine v0.2 priorities and domain backlog
+- [Textbook case corpus](corpus/README.md) — 10 sourced, deterministic Grade 8 seed cases
+- [Core package](packages/core/README.md) — `@famtutor/core` runtime contracts
+- [Math package](packages/math/README.md) — `@famtutor/math-runtime` details
+- [GeoGebra capability mining](docs/geogebra-capability-mining.md) — safe offline `.ggb` inspection and reusable capability planning
+
 ## Positioning
 
 FamTutor Engine is the **domain runtime layer** for interactive learning. Host apps (for example CathyGO Classroom) adapt to Engine protocols — Engine does not need to drop into any specific visual host API.
@@ -26,7 +35,8 @@ Intent / Author / Agent
 
 | Domain | Status | Package |
 |---|---|---|
-| Mathematics | **Shipped (v0.1)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
+| Core contracts | **Shipped (v0.3.0)** | [`packages/core`](packages/core) — `@famtutor/core` |
+| Mathematics | **Shipped (v0.3.0)** | [`packages/math`](packages/math) — `@famtutor/math-runtime` |
 | Physics | Planned | — |
 | Science (general) | Planned | — |
 | Computer Science | Planned | — |
@@ -34,26 +44,54 @@ Intent / Author / Agent
 | Chemistry | Planned | — |
 | Biology | Planned | — |
 
-Each domain owns its document protocol, command/macro catalog, and agent tools. Shared engine conventions (revision, transactions, safe evaluation, evidence) stay consistent across domains.
+Each domain owns its document protocol, command/macro catalog, and agent tools. Shared engine conventions live in `@famtutor/core` (`DomainRuntime`, `ChangeSet`, diagnostics, `RenderArtifact`).
 
-## Quick start (Math)
+## Quick start
+
+TypeScript is pinned via `package-lock.json`. Prefer `npm ci` for Node packages:
+
+```bash
+npm ci
+npm run build
+npm test
+npm run test:corpus
+```
+
+`npm ci` / `npm test` cover Node unit tests for **core, math, then the offline GeoGebra inspector**. They do **not** install Python Playwright/Chromium.
+
+### Full verify (including browser + pack)
+
+1. Create a venv and install pinned smoke deps:
+
+```bash
+python3 -m venv .venv-smoke
+.venv-smoke/bin/pip install -r requirements-smoke.txt
+.venv-smoke/bin/python -m playwright install chromium
+export PLAYWRIGHT_PYTHON="$PWD/.venv-smoke/bin/python"
+```
+
+2. Run the full gate:
+
+```bash
+npm ci
+npm run verify
+```
+
+`npm run verify` builds/tests **core then math**, including schema smoke, Chromium+JSXGraph browser smoke, MCP, CLI, and clean-source consumer pack smoke.
+
+10-case acceptance Gallery:
+
+```bash
+npm run gallery
+# open http://127.0.0.1:4173/gallery/
+```
+
+Single-document interactive demo:
 
 ```bash
 cd packages/math
-npm install   # if needed: npm install --no-save typescript
-npm run build
-npm test
-
-# Interactive demo
 python3 -m http.server 8765
 # open http://127.0.0.1:8765/demo/
-```
-
-From the repo root (workspaces):
-
-```bash
-npm run build
-npm test
 ```
 
 Math CLI / MCP:
@@ -65,17 +103,23 @@ node ./packages/math/bin/famtutor-math-mcp.mjs
 
 ## Math domain (current)
 
-`@famtutor/math-runtime` is the first vertical slice:
+`@famtutor/math-runtime` implements `@famtutor/core` `DomainRuntime`:
 
 - Canonical protocol `famtutor.math.document.v1`
+- Stateless `MathDomainRuntime` + `applyMathChangeSet`
+- Stateful `AgentMathRuntime` / `DocumentStore` adapter (dry-run, undo, idempotency)
 - L0 command catalog + L1 macro expansion (`expand_macro`)
 - Safe expression AST (no arbitrary JavaScript)
 - Headless evaluate / assert / simulate
-- JSXGraph interactive render + Direct SVG
+- JSXGraph interactive render + Direct SVG → `RenderResult` / `RenderArtifact`
+- **`mountMathRenderer` live MountedRenderer**（rebuild；fingerprint 幂等；payload InteractionAction）
+- **`famtutor.render.bundle.v1`** via `createMathRenderBundle` / `mountMathRenderBundle` / `math_export format:render-bundle`
 - 9 Agent tools + MCP stdio
 - Repair diagnostics (`suggestedFixes`)
 
-Details: [packages/math/README.md](packages/math/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
+CathyGO 等宿主按 Engine 协议自建 adapter（本仓库不嵌入 CathyGO）。
+
+Details: [packages/math/README.md](packages/math/README.md) · [packages/core/README.md](packages/core/README.md) · [packages/math/docs/AGENT_API.md](packages/math/docs/AGENT_API.md)
 
 ## Design principles
 

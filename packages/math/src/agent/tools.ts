@@ -11,7 +11,7 @@ const TOOL_DEFINITIONS = [
       type: "object",
       additionalProperties: false,
       properties: {
-                category: { type: "string", enum: ["scalar", "point", "line", "circle", "polygon", "transform", "function", "annotation", "measurement", "conic"] },
+        category: { type: "string", enum: ["scalar", "point", "line", "circle", "polygon", "transform", "function", "annotation", "measurement", "conic", "geometry3d"] },
         commandPrefix: { type: "string" }
       }
     }
@@ -42,7 +42,7 @@ const TOOL_DEFINITIONS = [
   {
     name: "math_apply",
     title: "Apply a transactional patch",
-    description: "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, delete, or undo operations atomically with revision checks.",
+    description: "Apply typed construction, L1 macro expansion, update, assertion, style, interaction, control, deterministic clock, delete, or undo operations atomically with revision checks.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
@@ -62,7 +62,7 @@ const TOOL_DEFINITIONS = [
             properties: {
               op: {
                 type: "string",
-                enum: ["construct", "expand_macro", "set_params", "set_entity", "delete", "add_assertion", "remove_assertion", "set_style", "set_interaction", "set_view", "undo"]
+                enum: ["construct", "expand_macro", "set_params", "set_entity", "delete", "add_assertion", "remove_assertion", "set_style", "set_interaction", "set_control", "set_clock", "set_view", "undo"]
               }
             },
             additionalProperties: true
@@ -150,14 +150,14 @@ const TOOL_DEFINITIONS = [
   {
     name: "math_export",
     title: "Export document or SVG",
-    description: "Export canonical MathDocument JSON or deterministic SVG with a content hash.",
+    description: "Export canonical MathDocument JSON, deterministic SVG, or a host-neutral Render Bundle.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
       required: ["documentId", "format"],
       properties: {
         documentId: { type: "string" },
-        format: { type: "string", enum: ["math-document", "svg"] },
+        format: { type: "string", enum: ["math-document", "svg", "render-bundle"] },
         viewId: { type: "string" },
         width: { type: "integer", minimum: 64, maximum: 4096 },
         height: { type: "integer", minimum: 64, maximum: 4096 }

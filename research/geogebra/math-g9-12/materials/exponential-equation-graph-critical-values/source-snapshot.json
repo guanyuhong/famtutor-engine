@@ -1,0 +1,32 @@
+{
+  "schema": "famtutor.geogebra.math.source-snapshot.v1",
+  "retrievedAt": "2026-08-05",
+  "sourceIndex": {
+    "package": "famtutor-geogebra-math-skill-index-v0.2.0",
+    "schema": "famtutor.geogebra_math.skill_index.v0.2.0"
+  },
+  "occurrence": {
+    "occurrenceId": "ggb.math.occurrence.exponential-functions.9-12.03",
+    "uniqueSkillId": "ggb.math.skill.exponential-functions-equation-graph-and-critical-values",
+    "gradeBand": "9-12",
+    "topicSlug": "exponential-functions",
+    "skillTitleEnRaw": "Exponential Functions- Equation, Graph and Critical Values",
+    "skillTitleEnNormalized": "Exponential Functions: Equation, Graph, and Critical Values",
+    "skillTitleZhReviewedForMaterial": "指数函数的式、图像和关键特征"
+  },
+  "officialPage": {
+    "url": "https://www.geogebra.org/math/exponential-functions?lang=en-GB",
+    "objectiveSummaryZh": "写出并绘制 f(x)=ab^x 等指数函数，识别并解释关键值。",
+    "verification": "browser-reviewed"
+  },
+  "curriculumAlignment": {
+    "status": "not-mapped",
+    "reason": "GeoGebra 仅给出 9–12 宽学段；本批次未获得适用的中国高中课程切片。",
+    "authorInferences": [
+      "将公开目标拆成三阶段交互板。",
+      "选择可展示边界状态的参数范围。",
+      "quiz seeds 为原创检查题，不复制 GeoGebra 活动题目。"
+    ]
+  },
+  "copyrightBoundary": "只保留短标题、来源 URL 和原创中文概述；不复制活动正文、插图、Applet、脚本或 .ggb 文件。"
+}

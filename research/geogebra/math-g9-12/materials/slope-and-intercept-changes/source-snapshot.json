@@ -1,0 +1,32 @@
+{
+  "schema": "famtutor.geogebra.math.source-snapshot.v1",
+  "retrievedAt": "2026-08-05",
+  "sourceIndex": {
+    "package": "famtutor-geogebra-math-skill-index-v0.2.0",
+    "schema": "famtutor.geogebra_math.skill_index.v0.2.0"
+  },
+  "occurrence": {
+    "occurrenceId": "ggb.math.occurrence.linear-functions.9-12.01",
+    "uniqueSkillId": "ggb.math.skill.effects-of-changes-in-slope-and-intercepts-of-lines",
+    "gradeBand": "9-12",
+    "topicSlug": "linear-functions",
+    "skillTitleEnRaw": "Effects of Changes in Slope and Intercepts of Lines",
+    "skillTitleEnNormalized": "Effects of Changes in Slope and Intercepts of Lines",
+    "skillTitleZhReviewedForMaterial": "斜率和截距变化"
+  },
+  "officialPage": {
+    "url": "https://www.geogebra.org/math/linear-functions?lang=en-GB",
+    "objectiveSummaryZh": "判断斜率和截距变化对直线图像与方程的影响。",
+    "verification": "browser-reviewed"
+  },
+  "curriculumAlignment": {
+    "status": "not-mapped",
+    "reason": "GeoGebra 仅给出 9–12 宽学段；本批次未获得适用的中国高中课程切片。",
+    "authorInferences": [
+      "将公开目标拆成三阶段交互板。",
+      "选择可展示边界状态的参数范围。",
+      "quiz seeds 为原创检查题，不复制 GeoGebra 活动题目。"
+    ]
+  },
+  "copyrightBoundary": "只保留短标题、来源 URL 和原创中文概述；不复制活动正文、插图、Applet、脚本或 .ggb 文件。"
+}

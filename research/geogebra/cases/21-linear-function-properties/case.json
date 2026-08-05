@@ -1,0 +1,641 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-21-linear-function-properties",
+  "title": "斜率与截距变化对直线的影响",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/m/xbq2dzub",
+      "https://www.geogebra.org/math/linear-functions?lang=en-GB"
+    ],
+    "note": "原机制案例升级为 GeoGebra Math 9–12 垂直素材；依据公开目标原创复现。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "scalar.slider",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "assertion.expression_equal",
+    "function.value_at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "qiu-feng-linear-function-properties",
+      "revision": 1,
+      "seed": 2121,
+      "metadata": {
+        "title": "一次函数的图象和性质",
+        "description": "改变 k、b 和取样横坐标，观察斜率、截距与增减性。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-study",
+          "linear-function",
+          "slope",
+          "intercept",
+          "monotonicity",
+          "geogebra-math-index",
+          "grade-9-12",
+          "function-value-at"
+        ]
+      },
+      "entities": [
+        {
+          "id": "k",
+          "type": "scalar",
+          "label": "斜率 k",
+          "role": "free"
+        },
+        {
+          "id": "b",
+          "type": "scalar",
+          "label": "截距 b",
+          "role": "free"
+        },
+        {
+          "id": "x0",
+          "type": "scalar",
+          "label": "取样 x",
+          "role": "free"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "label": "y=kx+b",
+          "role": "derived"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "derived",
+          "label": "f(x)"
+        },
+        {
+          "id": "O",
+          "type": "point2",
+          "label": "O",
+          "role": "auxiliary"
+        },
+        {
+          "id": "Q",
+          "type": "point2",
+          "label": "(0,b)",
+          "role": "derived"
+        },
+        {
+          "id": "P",
+          "type": "point2",
+          "label": "P",
+          "role": "derived"
+        },
+        {
+          "id": "X",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "run",
+          "type": "segment2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "positive",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "negative",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "zero",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "upText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "downText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "flatText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "op-k",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1.2,
+            "min": -2.5,
+            "max": 2.5,
+            "step": 0.1,
+            "position": [
+              -5.3,
+              -5.35
+            ],
+            "length": 5.4
+          },
+          "outputs": [
+            "k"
+          ]
+        },
+        {
+          "id": "op-b",
+          "command": "scalar.slider",
+          "params": {
+            "value": 0.8,
+            "min": -3,
+            "max": 3,
+            "step": 0.1,
+            "position": [
+              -5.3,
+              -6.05
+            ],
+            "length": 5.4
+          },
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "id": "op-x0",
+          "command": "scalar.slider",
+          "params": {
+            "value": 2,
+            "min": -4,
+            "max": 4,
+            "step": 0.1,
+            "position": [
+              -5.3,
+              -6.75
+            ],
+            "length": 5.4
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "op-f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "k*x+b",
+            "domain": [
+              -6,
+              6
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "op-y0",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "y0"
+          ]
+        },
+        {
+          "id": "op-O",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              0,
+              0
+            ]
+          },
+          "outputs": [
+            "O"
+          ]
+        },
+        {
+          "id": "op-Q",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "0",
+            "y": "b"
+          },
+          "outputs": [
+            "Q"
+          ]
+        },
+        {
+          "id": "op-P",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "y0"
+          },
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "id": "op-X",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "b"
+          },
+          "outputs": [
+            "X"
+          ]
+        },
+        {
+          "id": "op-run",
+          "command": "segment.through_points",
+          "inputs": [
+            {
+              "ref": "Q"
+            },
+            {
+              "ref": "X"
+            }
+          ],
+          "outputs": [
+            "run"
+          ]
+        },
+        {
+          "id": "op-positive",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "k>0"
+          },
+          "outputs": [
+            "positive"
+          ]
+        },
+        {
+          "id": "op-negative",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "k<0"
+          },
+          "outputs": [
+            "negative"
+          ]
+        },
+        {
+          "id": "op-zero",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "k==0"
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "op-upText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "positive"
+            }
+          ],
+          "params": {
+            "trueText": "k>0：从左到右上升，y 随 x 增大而增大",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.45
+            ]
+          },
+          "outputs": [
+            "upText"
+          ]
+        },
+        {
+          "id": "op-downText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "negative"
+            }
+          ],
+          "params": {
+            "trueText": "k<0：从左到右下降，y 随 x 增大而减小",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.45
+            ]
+          },
+          "outputs": [
+            "downText"
+          ]
+        },
+        {
+          "id": "op-flatText",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "zero"
+            }
+          ],
+          "params": {
+            "trueText": "k=0：退化为常数函数 y=b",
+            "falseText": "​",
+            "at": [
+              -5.5,
+              4.45
+            ]
+          },
+          "outputs": [
+            "flatText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            5.1,
+            6,
+            -7.35
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "O"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "fill": "#155B73",
+            "pointSize": 3,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "bottom-left"
+          }
+        },
+        {
+          "targets": [
+            "Q"
+          ],
+          "style": {
+            "stroke": "#B84C2D",
+            "fill": "#E36E45",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "left"
+          }
+        },
+        {
+          "targets": [
+            "P"
+          ],
+          "style": {
+            "stroke": "#6C5CE7",
+            "fill": "#6C5CE7",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "X"
+          ],
+          "style": {
+            "pointSize": 1,
+            "opacity": 0,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "run"
+          ],
+          "style": {
+            "stroke": "#9DA9B5",
+            "strokeWidth": 1.3,
+            "dash": "dashed",
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "upText",
+            "downText",
+            "flatText"
+          ],
+          "style": {
+            "stroke": "#315F78",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "k",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "b",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        }
+      ],
+      "assertions": [
+        {
+          "id": "point-on-function",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(P)"
+            },
+            {
+              "expr": "y0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "P 满足 y=kx+b。"
+        },
+        {
+          "id": "intercept",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(Q)"
+            },
+            {
+              "expr": "b"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "图象与 y 轴交于 (0,b)。"
+        },
+        {
+          "id": "function-value",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y0"
+            },
+            {
+              "expr": "k*x0+b"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "函数实体在 x0 处求值得到 kx0+b。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "linear",
+          "title": "斜率、截距和增减性",
+          "stages": [
+            {
+              "id": "slope",
+              "narration": "改变 k：符号决定直线上升或下降，绝对值影响倾斜程度。"
+            },
+            {
+              "id": "intercept",
+              "narration": "改变 b：交点 Q=(0,b) 沿 y 轴移动，直线保持平行移动。"
+            },
+            {
+              "id": "sample",
+              "narration": "改变取样 x，P 始终满足 y=kx+b；虚线与橙线展示横向变化和纵向变化。"
+            }
+          ],
+          "tasks": [
+            {
+              "id": "explore",
+              "prompt": "分别取 k>0、k<0、k=0，并改变 b。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "point-on-function"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "intercept"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "geogebra:xbq2dzub",
+          "mechanism:parametric-function-properties",
+          "ggb.math.occurrence.linear-functions.9-12.01",
+          "ggb.math.skill.effects-of-changes-in-slope-and-intercepts-of-lines",
+          "https://www.geogebra.org/math/linear-functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "k",
+        "permission": "drag"
+      },
+      {
+        "target": "b",
+        "permission": "drag"
+      },
+      {
+        "target": "x0",
+        "permission": "drag"
+      }
+    ]
+  }
+}

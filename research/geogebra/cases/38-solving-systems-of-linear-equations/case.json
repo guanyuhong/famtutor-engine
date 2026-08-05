@@ -1,0 +1,642 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-38-solving-systems-of-linear-equations",
+  "title": "解二元一次方程组",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "point.free",
+    "line.through_points",
+    "point.intersection_line_line",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-linear-systems",
+      "revision": 1,
+      "seed": 3801,
+      "metadata": {
+        "title": "解二元一次方程组",
+        "description": "用两条直线的位置关系区分唯一解、无解和无穷多解。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-03"
+        ]
+      },
+      "entities": [
+        {
+          "id": "A",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "B",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "C",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "D",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "l1",
+          "type": "line2",
+          "role": "derived",
+          "label": "y=x+1"
+        },
+        {
+          "id": "l2",
+          "type": "line2",
+          "role": "derived",
+          "label": "y=-x+1"
+        },
+        {
+          "id": "I",
+          "type": "point2",
+          "role": "derived",
+          "label": "唯一解 (0,1)"
+        },
+        {
+          "id": "E",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "F",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "G",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "H",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "p1",
+          "type": "line2",
+          "role": "derived",
+          "label": "平行线 1"
+        },
+        {
+          "id": "p2",
+          "type": "line2",
+          "role": "derived",
+          "label": "平行线 2"
+        },
+        {
+          "id": "J",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "K",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "same1",
+          "type": "line2",
+          "role": "derived",
+          "label": "重合方程 1"
+        },
+        {
+          "id": "same2",
+          "type": "line2",
+          "role": "derived",
+          "label": "重合方程 2"
+        },
+        {
+          "id": "uniqueText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "noneText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "manyText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "a",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -4,
+              -3
+            ]
+          },
+          "outputs": [
+            "A"
+          ]
+        },
+        {
+          "id": "b",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              4,
+              5
+            ]
+          },
+          "outputs": [
+            "B"
+          ]
+        },
+        {
+          "id": "c",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -4,
+              5
+            ]
+          },
+          "outputs": [
+            "C"
+          ]
+        },
+        {
+          "id": "d",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              4,
+              -3
+            ]
+          },
+          "outputs": [
+            "D"
+          ]
+        },
+        {
+          "id": "l1",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "A"
+            },
+            {
+              "ref": "B"
+            }
+          ],
+          "outputs": [
+            "l1"
+          ]
+        },
+        {
+          "id": "l2",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "C"
+            },
+            {
+              "ref": "D"
+            }
+          ],
+          "outputs": [
+            "l2"
+          ]
+        },
+        {
+          "id": "i",
+          "command": "point.intersection_line_line",
+          "inputs": [
+            {
+              "ref": "l1"
+            },
+            {
+              "ref": "l2"
+            }
+          ],
+          "outputs": [
+            "I"
+          ]
+        },
+        {
+          "id": "e",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -4,
+              1
+            ]
+          },
+          "outputs": [
+            "E"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              4,
+              5
+            ]
+          },
+          "outputs": [
+            "F"
+          ]
+        },
+        {
+          "id": "g",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -4,
+              -4
+            ]
+          },
+          "outputs": [
+            "G"
+          ]
+        },
+        {
+          "id": "h",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              4,
+              0
+            ]
+          },
+          "outputs": [
+            "H"
+          ]
+        },
+        {
+          "id": "p1",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "E"
+            },
+            {
+              "ref": "F"
+            }
+          ],
+          "outputs": [
+            "p1"
+          ]
+        },
+        {
+          "id": "p2",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "G"
+            },
+            {
+              "ref": "H"
+            }
+          ],
+          "outputs": [
+            "p2"
+          ]
+        },
+        {
+          "id": "j",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              -4,
+              -1
+            ]
+          },
+          "outputs": [
+            "J"
+          ]
+        },
+        {
+          "id": "k",
+          "command": "point.free",
+          "params": {
+            "coords": [
+              4,
+              3
+            ]
+          },
+          "outputs": [
+            "K"
+          ]
+        },
+        {
+          "id": "same1",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "J"
+            },
+            {
+              "ref": "K"
+            }
+          ],
+          "outputs": [
+            "same1"
+          ]
+        },
+        {
+          "id": "same2",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "J"
+            },
+            {
+              "ref": "K"
+            }
+          ],
+          "outputs": [
+            "same2"
+          ]
+        },
+        {
+          "id": "ut",
+          "command": "text.at",
+          "params": {
+            "text": "相交：一个公共点 → 唯一解",
+            "at": [
+              -5.4,
+              5.8
+            ]
+          },
+          "outputs": [
+            "uniqueText"
+          ]
+        },
+        {
+          "id": "nt",
+          "command": "text.at",
+          "params": {
+            "text": "平行：没有公共点 → 无解",
+            "at": [
+              -5.4,
+              5.8
+            ]
+          },
+          "outputs": [
+            "noneText"
+          ]
+        },
+        {
+          "id": "mt",
+          "command": "text.at",
+          "params": {
+            "text": "重合：所有点都公共 → 无穷多解",
+            "at": [
+              -5.4,
+              5.8
+            ]
+          },
+          "outputs": [
+            "manyText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.4,
+            6,
+            -5.4
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "l1",
+            "p1",
+            "same1"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.6
+          }
+        },
+        {
+          "targets": [
+            "l2",
+            "p2",
+            "same2"
+          ],
+          "style": {
+            "token": "accent",
+            "strokeWidth": 2.6
+          }
+        },
+        {
+          "targets": [
+            "I"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "J",
+            "K"
+          ],
+          "style": {
+            "token": "muted",
+            "pointSize": 1,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "uniqueText",
+            "noneText",
+            "manyText"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [],
+      "assertions": [
+        {
+          "id": "intersection-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(I)"
+            },
+            {
+              "expr": "0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "唯一解横坐标正确。"
+        },
+        {
+          "id": "intersection-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(I)"
+            },
+            {
+              "expr": "1"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "唯一解纵坐标正确。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-linear-systems",
+          "title": "解二元一次方程组",
+          "stages": [
+            {
+              "id": "one-solution",
+              "narration": "两条不平行直线只有一个公共点，这个点同时满足两个方程。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "l1",
+                "l2",
+                "I",
+                "uniqueText"
+              ]
+            },
+            {
+              "id": "no-solution",
+              "narration": "不同的平行直线没有公共点，所以方程组无解。",
+              "reveal": [
+                "E",
+                "F",
+                "G",
+                "H",
+                "p1",
+                "p2",
+                "noneText"
+              ]
+            },
+            {
+              "id": "many-solutions",
+              "narration": "两个方程表示同一条直线时，每个线上的点都满足方程组，因此有无穷多解。",
+              "reveal": [
+                "J",
+                "K",
+                "same1",
+                "same2",
+                "manyText"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-linear-systems-task",
+              "prompt": "切换阶段并核验图像、代数关系和边界条件。",
+              "allowedTools": [],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "intersection-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "intersection-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02",
+          "ggb.math.skill.solving-systems-of-linear-equations",
+          "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  }
+}

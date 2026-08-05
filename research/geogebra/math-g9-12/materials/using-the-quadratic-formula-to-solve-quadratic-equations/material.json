@@ -1,0 +1,175 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations",
+  "title": "用求根公式解二次方程",
+  "titleEn": "Using the Quadratic Formula to Solve Quadratic Equations",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.using-the-quadratic-formula-to-solve-quadratic-equations",
+    "occurrenceIds": [
+      "ggb.math.occurrence.quadratic-equations.9-12.06"
+    ],
+    "topicSlug": "quadratic-equations"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-using-the-quadratic-formula-to-solve-quadratic-equations-1",
+      "type": "concept",
+      "visibleText": "求根公式适用于 ax²+bx+c=0 且 a≠0。",
+      "narrationSeed": "求根公式适用于 ax²+bx+c=0 且 a≠0。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.06"
+    },
+    {
+      "id": "atom-using-the-quadratic-formula-to-solve-quadratic-equations-2",
+      "type": "rule",
+      "visibleText": "系数 b 与 c 的符号必须从标准式完整读取。",
+      "narrationSeed": "系数 b 与 c 的符号必须从标准式完整读取。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.06"
+    },
+    {
+      "id": "atom-using-the-quadratic-formula-to-solve-quadratic-equations-3",
+      "type": "procedure",
+      "visibleText": "判别式 b²-4ac 位于平方根内。",
+      "narrationSeed": "判别式 b²-4ac 位于平方根内。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.06"
+    },
+    {
+      "id": "atom-using-the-quadratic-formula-to-solve-quadratic-equations-4",
+      "type": "representation",
+      "visibleText": "± 通常产生两个候选根。",
+      "narrationSeed": "± 通常产生两个候选根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.06"
+    },
+    {
+      "id": "atom-using-the-quadratic-formula-to-solve-quadratic-equations-5",
+      "type": "misconception",
+      "visibleText": "每个候选根都应代回原方程核验。",
+      "narrationSeed": "每个候选根都应代回原方程核验。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.06"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/43-using-the-quadratic-formula-to-solve-quadratic-equations/case.json",
+    "caseId": "research-geogebra-43-using-the-quadratic-formula-to-solve-quadratic-equations",
+    "documentId": "geogebra-math-quadratic-formula"
+  },
+  "stages": [
+    {
+      "id": "coefficients",
+      "order": 1
+    },
+    {
+      "id": "formula",
+      "order": 2
+    },
+    {
+      "id": "verify",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-using-the-quadratic-formula-to-solve-quadratic-equations-1",
+      "type": "short_answer",
+      "stem": "说明：求根公式适用于 ax²+bx+c=0 且 a≠0。",
+      "answer": "求根公式适用于 ax²+bx+c=0 且 a≠0。",
+      "feedback": {
+        "correct": "求根公式适用于 ax²+bx+c=0 且 a≠0。",
+        "incorrect": "求根公式适用于 ax²+bx+c=0 且 a≠0。"
+      },
+      "sourceAtomIds": [
+        "atom-using-the-quadratic-formula-to-solve-quadratic-equations-1"
+      ]
+    },
+    {
+      "id": "quiz-using-the-quadratic-formula-to-solve-quadratic-equations-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：系数 b 与 c 的符号必须从标准式完整读取。",
+      "answer": "系数 b 与 c 的符号必须从标准式完整读取。",
+      "feedback": {
+        "correct": "系数 b 与 c 的符号必须从标准式完整读取。",
+        "incorrect": "系数 b 与 c 的符号必须从标准式完整读取。"
+      },
+      "sourceAtomIds": [
+        "atom-using-the-quadratic-formula-to-solve-quadratic-equations-2"
+      ]
+    },
+    {
+      "id": "quiz-using-the-quadratic-formula-to-solve-quadratic-equations-3",
+      "type": "short_answer",
+      "stem": "说明：判别式 b²-4ac 位于平方根内。",
+      "answer": "判别式 b²-4ac 位于平方根内。",
+      "feedback": {
+        "correct": "判别式 b²-4ac 位于平方根内。",
+        "incorrect": "判别式 b²-4ac 位于平方根内。"
+      },
+      "sourceAtomIds": [
+        "atom-using-the-quadratic-formula-to-solve-quadratic-equations-3"
+      ]
+    },
+    {
+      "id": "quiz-using-the-quadratic-formula-to-solve-quadratic-equations-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：± 通常产生两个候选根。",
+      "answer": "± 通常产生两个候选根。",
+      "feedback": {
+        "correct": "± 通常产生两个候选根。",
+        "incorrect": "± 通常产生两个候选根。"
+      },
+      "sourceAtomIds": [
+        "atom-using-the-quadratic-formula-to-solve-quadratic-equations-4"
+      ]
+    },
+    {
+      "id": "quiz-using-the-quadratic-formula-to-solve-quadratic-equations-5",
+      "type": "short_answer",
+      "stem": "说明：每个候选根都应代回原方程核验。",
+      "answer": "每个候选根都应代回原方程核验。",
+      "feedback": {
+        "correct": "每个候选根都应代回原方程核验。",
+        "incorrect": "每个候选根都应代回原方程核验。"
+      },
+      "sourceAtomIds": [
+        "atom-using-the-quadratic-formula-to-solve-quadratic-equations-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.quadratic-equations.9-12.06",
+        "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "substitution and region checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 84-card page",
+        "four-case stage-switch review",
+        "region boundary and auxiliary-entity visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer Gallery gate",
+        "stage switching",
+        "Render Bundle"
+      ]
+    }
+  }
+}

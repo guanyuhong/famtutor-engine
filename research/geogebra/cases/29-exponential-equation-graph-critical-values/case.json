@@ -1,0 +1,620 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-29-exponential-equation-graph-critical-values",
+  "title": "指数函数的式、图像和关键特征",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/exponential-functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "function.value_at",
+    "scalar.slider",
+    "point.from_expressions",
+    "assertion.expression_equal",
+    "boolean.expression",
+    "text.conditional"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-exponential-critical-values",
+      "revision": 1,
+      "seed": 2901,
+      "metadata": {
+        "title": "指数函数的式、图像和关键特征",
+        "description": "改变底数 b 与输入 x，比较增长、衰减和 b=1 的边界，并核验关键点。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "exponential-function",
+          "growth-decay",
+          "critical-values"
+        ]
+      },
+      "entities": [
+        {
+          "id": "b",
+          "type": "scalar",
+          "role": "free",
+          "label": "底数 b"
+        },
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "输入 x"
+        },
+        {
+          "id": "zero",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "one",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=bˣ"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "atZero",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "atOne",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "P",
+          "type": "point2",
+          "role": "derived",
+          "label": "P"
+        },
+        {
+          "id": "Q",
+          "type": "point2",
+          "role": "derived",
+          "label": "Q(0,1)"
+        },
+        {
+          "id": "R",
+          "type": "point2",
+          "role": "derived",
+          "label": "R(1,b)"
+        },
+        {
+          "id": "growth",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "decay",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "boundary",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "growthText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "decayText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "boundaryText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "op-b",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1.5,
+            "min": 0.5,
+            "max": 2,
+            "step": 0.1,
+            "position": [
+              -5.2,
+              -4.65
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "b"
+          ]
+        },
+        {
+          "id": "op-x0",
+          "command": "scalar.slider",
+          "params": {
+            "value": 2,
+            "min": -3,
+            "max": 3,
+            "step": 0.1,
+            "position": [
+              -5.2,
+              -5.4
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "op-zero",
+          "command": "scalar.constant",
+          "params": {
+            "value": 0
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "op-one",
+          "command": "scalar.constant",
+          "params": {
+            "value": 1
+          },
+          "outputs": [
+            "one"
+          ]
+        },
+        {
+          "id": "op-f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "b^x",
+            "domain": [
+              -3,
+              3
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "op-y0",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "y0"
+          ]
+        },
+        {
+          "id": "op-at-zero",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "zero"
+            }
+          ],
+          "outputs": [
+            "atZero"
+          ]
+        },
+        {
+          "id": "op-at-one",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "one"
+            }
+          ],
+          "outputs": [
+            "atOne"
+          ]
+        },
+        {
+          "id": "op-P",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "y0"
+          },
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "id": "op-Q",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "0",
+            "y": "atZero"
+          },
+          "outputs": [
+            "Q"
+          ]
+        },
+        {
+          "id": "op-R",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "1",
+            "y": "atOne"
+          },
+          "outputs": [
+            "R"
+          ]
+        },
+        {
+          "id": "op-growth",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "b>1"
+          },
+          "outputs": [
+            "growth"
+          ]
+        },
+        {
+          "id": "op-decay",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "b<1"
+          },
+          "outputs": [
+            "decay"
+          ]
+        },
+        {
+          "id": "op-boundary",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "b==1"
+          },
+          "outputs": [
+            "boundary"
+          ]
+        },
+        {
+          "id": "op-growth-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "growth"
+            }
+          ],
+          "params": {
+            "trueText": "b>1：指数增长",
+            "falseText": "​",
+            "at": [
+              -5.4,
+              7.45
+            ]
+          },
+          "outputs": [
+            "growthText"
+          ]
+        },
+        {
+          "id": "op-decay-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "decay"
+            }
+          ],
+          "params": {
+            "trueText": "0<b<1：指数衰减",
+            "falseText": "​",
+            "at": [
+              -5.4,
+              7.45
+            ]
+          },
+          "outputs": [
+            "decayText"
+          ]
+        },
+        {
+          "id": "op-boundary-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "boundary"
+            }
+          ],
+          "params": {
+            "trueText": "b=1：退化为常数函数 y=1",
+            "falseText": "​",
+            "at": [
+              -5.4,
+              7.45
+            ]
+          },
+          "outputs": [
+            "boundaryText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            8.1,
+            6,
+            -6.05
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "P"
+          ],
+          "style": {
+            "stroke": "#6C5CE7",
+            "fill": "#6C5CE7",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "Q",
+            "R"
+          ],
+          "style": {
+            "stroke": "#E36E45",
+            "fill": "#E36E45",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "auto"
+          }
+        },
+        {
+          "targets": [
+            "growthText",
+            "decayText",
+            "boundaryText"
+          ],
+          "style": {
+            "stroke": "#315F78",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "b",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        }
+      ],
+      "assertions": [
+        {
+          "id": "passes-zero-one",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "atZero"
+            },
+            {
+              "value": 1
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "b^0=1。"
+        },
+        {
+          "id": "passes-one-b",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "atOne"
+            },
+            {
+              "expr": "b"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "b^1=b。"
+        },
+        {
+          "id": "sample-on-graph",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(P)"
+            },
+            {
+              "expr": "y0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "样本点 P 在指数函数图像上。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-exponential-critical-values",
+          "title": "指数函数的式、图像和关键特征",
+          "stages": [
+            {
+              "id": "exponential-equation",
+              "narration": "先固定形式 f(x)=b^x，并保持 b>0；底数是决定增长或衰减的关键参数。",
+              "focus": [
+                "f",
+                "b"
+              ]
+            },
+            {
+              "id": "growth-decay",
+              "narration": "b>1 时从左向右增长，0<b<1 时衰减；b=1 是常数函数边界。",
+              "focus": [
+                "f",
+                "growthText",
+                "decayText",
+                "boundaryText"
+              ]
+            },
+            {
+              "id": "critical-values",
+              "narration": "无论底数怎样变化，图像都经过 Q(0,1)；R(1,b) 把底数直接显示为函数值。",
+              "focus": [
+                "Q",
+                "R",
+                "P"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "compare-growth-decay",
+              "prompt": "分别取 b=0.6、1、1.8，再改变 x，比较图像和函数值。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "passes-zero-one"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "passes-one-b"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "sample-on-graph"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.exponential-functions.9-12.03",
+          "ggb.math.skill.exponential-functions-equation-graph-and-critical-values",
+          "https://www.geogebra.org/math/exponential-functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "b",
+        "permission": "drag"
+      },
+      {
+        "target": "x0",
+        "permission": "drag"
+      }
+    ]
+  }
+}

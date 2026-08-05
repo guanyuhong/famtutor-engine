@@ -1,0 +1,870 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-2-1-37-reflect-triangle-across-line",
+  "title": "作三角形关于直线的轴对称图形",
+  "description": "按教材图 2-6、2-7 实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "2 特殊三角形",
+    "section": "2.1 图形的轴对称",
+    "printedPages": [
+      49
+    ],
+    "pdfPages": [
+      52
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "axial-symmetry",
+    "reflect-point-line",
+    "congruent-figures"
+  ],
+  "learningObjective": "按教材步骤过每个顶点作对称轴的垂线，并在另一侧截取等距点，得到三角形的轴对称图形。",
+  "caseType": "guided-construction",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "transform.reflect",
+    "transform.apply",
+    "point.projection",
+    "marker.right_angle",
+    "marker.segment_tick",
+    "assertion.equal_length",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch2-source-faithful-v1",
+    "seed": 337,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch2-02-reflect-triangle-across-line",
+      "revision": 1,
+      "seed": 337,
+      "metadata": {
+        "title": "作三角形关于直线的轴对称图形",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "2.1",
+          "axial-symmetry",
+          "reflect-point-line",
+          "congruent-figures"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            5,
+            6,
+            -5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-37",
+          "title": "作三角形关于直线的轴对称图形",
+          "stages": [
+            {
+              "id": "source",
+              "narration": "图 2-6：已知 △ABC 和对称轴 m。目标是分别作出 A、B、C 的对称点。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "BC",
+                "CA",
+                "triangleABC",
+                "axisM"
+              ]
+            },
+            {
+              "id": "perpendicular",
+              "narration": "过 A 作 m 的垂线，垂足为 P；延长 AP 到轴的另一侧。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "BC",
+                "CA",
+                "axisM",
+                "P",
+                "AA2",
+                "rightP"
+              ]
+            },
+            {
+              "id": "equal-distance",
+              "narration": "在垂线上截取 PA′=PA；同理作出 B′、C′。对称轴垂直平分每一对对应点的连线。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "axisM",
+                "AA2",
+                "PA",
+                "PA2",
+                "rightP",
+                "tickPA",
+                "tickPA2"
+              ]
+            },
+            {
+              "id": "connect",
+              "narration": "依次连接 A′B′、B′C′、C′A′，得到与 △ABC 关于直线 m 成轴对称的 △A′B′C′。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "A2",
+                "B2",
+                "C2",
+                "AB",
+                "BC",
+                "CA",
+                "triangleABC",
+                "A2B2",
+                "B2C2",
+                "C2A2",
+                "triangleA2B2C2",
+                "axisM"
+              ],
+              "focus": [
+                "triangleA2B2C2"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-49:figure-2-6",
+          "zjedu-math-8a-2013:printed-49:figure-2-7"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-37-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch2-02-reflect-triangle-across-line",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "M1",
+                "label": "M1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -4.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "M2",
+                "label": "M2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                4.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "axisM",
+                "label": "m"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "M1"
+              },
+              {
+                "ref": "M2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                -4.2,
+                2.8
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                -3.1,
+                -2.7
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                -1.1,
+                -1.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "triangleABC",
+                "label": "△ABC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.reflect",
+            "outputs": [
+              {
+                "id": "reflectM",
+                "type": "transform2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "axisM"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "A2",
+                "type": "point2",
+                "label": "A′",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "reflectM"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "B2",
+                "type": "point2",
+                "label": "B′",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "reflectM"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "C2",
+                "type": "point2",
+                "label": "C′",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "reflectM"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2B2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "B2C2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "C2A2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C2"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "polygon.vertices",
+            "outputs": [
+              {
+                "id": "triangleA2B2C2",
+                "label": "△A′B′C′"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B2"
+              },
+              {
+                "ref": "C2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.projection",
+            "outputs": [
+              {
+                "id": "P",
+                "label": "P",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "axisM"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleAPM",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "M2"
+              }
+            ],
+            "params": {
+              "radius": 0.45,
+              "labelRadius": 0.81
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.right_angle",
+            "outputs": [
+              {
+                "id": "rightP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "angleAPM"
+              }
+            ],
+            "params": {
+              "size": 0.28
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PA"
+              }
+            ],
+            "params": {
+              "size": 0.3
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PA2"
+              }
+            ],
+            "params": {
+              "size": 0.3
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "a-midpoint-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "PA"
+                },
+                {
+                  "ref": "PA2"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "PA=PA′。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "aa-perpendicular-axis",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "AA2"
+                },
+                {
+                  "ref": "axisM"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "AA′⊥m。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "triangles-congruent-side-1",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "A2B2"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "AB=A′B′。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "triangles-congruent-side-2",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "BC"
+                },
+                {
+                  "ref": "B2C2"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "BC=B′C′。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "BC",
+              "CA",
+              "triangleABC"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "axisM",
+              "AA2"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.7,
+              "dash": "dashed",
+              "opacity": 0.75
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A2B2",
+              "B2C2",
+              "C2A2",
+              "triangleA2B2C2",
+              "rightP",
+              "tickPA",
+              "tickPA2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "triangleABC"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "fill": "#DCEFE7",
+              "fillOpacity": 0.2,
+              "strokeWidth": 2.3,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "triangleA2B2C2"
+            ],
+            "style": {
+              "stroke": "#EF6C22",
+              "fill": "#FBE6D7",
+              "fillOpacity": 0.2,
+              "strokeWidth": 2.3,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "angleAPM"
+            ],
+            "style": {
+              "opacity": 0,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "M1",
+              "M2",
+              "A",
+              "B",
+              "C",
+              "A2",
+              "B2",
+              "C2",
+              "P"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "61dee4dbf1b31d6a3fca1e47a73464033f37caabea11f39ee3b4ad6af9a470af",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "M1",
+          "M2",
+          "axisM",
+          "A",
+          "B",
+          "C",
+          "AB",
+          "BC"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

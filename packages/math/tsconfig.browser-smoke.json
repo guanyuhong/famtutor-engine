@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "AMD",
+    "moduleResolution": "Node",
+    "outFile": "./artifacts/runtime.browser.amd.js",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "rootDir": "./src"
+  },
+  "files": ["./src/browser-entry.ts"]
+}

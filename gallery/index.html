@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FamTutor 教材案例验收 Gallery</title>
+  <link rel="stylesheet" href="/packages/math/vendor/jsxgraph/jsxgraph.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "@famtutor/core": "/packages/core/dist/index.js"
+      }
+    }
+  </script>
+</head>
+<body data-status="loading">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">FAMTUTOR ENGINE · TEXTBOOK CORPUS</p>
+      <h1>教材案例验收 Gallery</h1>
+      <p class="hero-copy">浏览器内重放 CaseSpec，并以真实 MountedRenderer 挂载全部种子案例。</p>
+      <p><a class="research-link" href="/research/geogebra/geometry-materials.html">查看几何素材研究库 →</a></p>
+    </div>
+    <div class="summary" aria-label="案例验收统计">
+      <div><strong id="total-count">—</strong><span>全部案例</span></div>
+      <div class="accepted"><strong id="accepted-count">—</strong><span>Accepted</span></div>
+      <div class="unsupported"><strong id="unsupported-count">—</strong><span>能力边界</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-label="筛选案例">
+      <div class="filter-group" id="status-filters">
+        <button class="filter active" type="button" data-filter="all">全部</button>
+        <button class="filter" type="button" data-filter="accepted">Accepted</button>
+        <button class="filter" type="button" data-filter="expected-unsupported">能力边界</button>
+      </div>
+      <p id="visible-count" aria-live="polite">正在加载案例…</p>
+    </section>
+
+    <section id="error-panel" class="error-panel" hidden></section>
+    <section id="gallery" class="gallery" aria-live="polite"></section>
+  </main>
+
+  <template id="case-card-template">
+    <article class="case-card">
+      <header class="case-header">
+        <div>
+          <p class="case-id"></p>
+          <h2 class="case-title"></h2>
+        </div>
+        <span class="status-chip"></span>
+      </header>
+      <div class="case-meta"></div>
+      <div class="board-shell">
+        <div class="case-board"></div>
+        <div class="loading-mask">重放并挂载中…</div>
+      </div>
+      <section class="stage-panel" aria-label="教学阶段" hidden>
+        <div class="stage-toolbar">
+          <button class="stage-step stage-previous" type="button" aria-label="上一步">←</button>
+          <div class="stage-tabs" role="tablist" aria-label="选择教学阶段"></div>
+          <button class="stage-step stage-next" type="button" aria-label="下一步">→</button>
+        </div>
+        <p class="stage-narration" aria-live="polite"></p>
+      </section>
+      <section class="runtime-control-panel" aria-label="声明式控制与时钟" hidden>
+        <div class="runtime-control-buttons"></div>
+        <p class="runtime-control-status" aria-live="polite"></p>
+      </section>
+      <div class="interaction-hint"></div>
+      <div class="diagnostic" hidden></div>
+      <footer class="case-footer">
+        <div class="capabilities"></div>
+        <button class="reset-button" type="button">重置案例</button>
+      </footer>
+    </article>
+  </template>
+
+  <script src="/packages/math/vendor/jsxgraph/jsxgraphcore.js"></script>
+  <script type="module" src="./app.js?v=controls-clock-1"></script>
+</body>
+</html>

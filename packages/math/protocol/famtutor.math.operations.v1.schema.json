@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://famtutor.ai/schemas/famtutor.math.operations.v1.schema.json",
+  "title": "FamTutor Math Operations v1",
+  "description": "Domain ChangeSet operations for famtutor.math.document.v1. Session-only undo is excluded.",
+  "$defs": {
+    "entityRefInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "minLength": 1 } }
+    },
+    "literalInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "properties": { "value": true }
+    },
+    "commandInput": {
+      "oneOf": [
+        { "$ref": "#/$defs/entityRefInput" },
+        { "$ref": "#/$defs/literalInput" }
+      ]
+    },
+    "constructOutput": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "type": "string" },
+            "role": { "type": "string" },
+            "label": { "type": "string" },
+            "visible": { "type": "boolean" },
+            "description": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "construct": {
+      "type": "object",
+      "required": ["op", "command", "outputs"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "construct" },
+        "command": { "type": "string", "minLength": 1 },
+        "outputs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/constructOutput" } },
+        "inputs": { "type": "array", "items": { "$ref": "#/$defs/commandInput" } },
+        "params": { "type": "object", "additionalProperties": true },
+        "nodeId": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "expand_macro": {
+      "type": "object",
+      "required": ["op", "macro", "inputs"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "expand_macro" },
+        "macro": { "type": "string", "minLength": 1 },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 },
+          "minProperties": 1
+        },
+        "outputs": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "idPrefix": { "type": "string" }
+      }
+    },
+    "set_params": {
+      "type": "object",
+      "required": ["op", "nodeId", "patch"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_params" },
+        "nodeId": { "type": "string", "minLength": 1 },
+        "patch": { "type": "object", "additionalProperties": true },
+        "remove": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "set_entity": {
+      "type": "object",
+      "required": ["op", "entityId", "patch"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_entity" },
+        "entityId": { "type": "string", "minLength": 1 },
+        "patch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": { "type": ["string", "null"] },
+            "role": { "type": "string" },
+            "visible": { "type": "boolean" },
+            "description": { "type": ["string", "null"] }
+          }
+        }
+      }
+    },
+    "delete": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["op", "targets"],
+          "additionalProperties": false,
+          "properties": {
+            "op": { "const": "delete" },
+            "targets": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "cascade": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["op", "target"],
+          "additionalProperties": false,
+          "properties": {
+            "op": { "const": "delete" },
+            "target": { "type": "string", "minLength": 1 },
+            "cascade": { "type": "boolean" }
+          }
+        }
+      ]
+    },
+    "add_assertion": {
+      "type": "object",
+      "required": ["op", "assertion"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "add_assertion" },
+        "assertion": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "remove_assertion": {
+      "type": "object",
+      "required": ["op", "assertionId"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "remove_assertion" },
+        "assertionId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "set_style": {
+      "type": "object",
+      "required": ["op", "targets", "style"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_style" },
+        "targets": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "style": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "set_interaction": {
+      "type": "object",
+      "required": ["op", "policy"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_interaction" },
+        "policy": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "set_control": {
+      "type": "object",
+      "required": ["op", "control"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_control" },
+        "control": { "$ref": "famtutor.math.document.v1.schema.json#/$defs/control" }
+      }
+    },
+    "set_clock": {
+      "type": "object",
+      "required": ["op", "clock"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_clock" },
+        "clock": { "$ref": "famtutor.math.document.v1.schema.json#/$defs/clock" }
+      }
+    },
+    "set_view": {
+      "type": "object",
+      "required": ["op", "viewId", "patch"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "set_view" },
+        "viewId": { "type": "string", "minLength": 1 },
+        "patch": { "type": "object", "additionalProperties": true }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/construct" },
+    { "$ref": "#/$defs/expand_macro" },
+    { "$ref": "#/$defs/set_params" },
+    { "$ref": "#/$defs/set_entity" },
+    { "$ref": "#/$defs/delete" },
+    { "$ref": "#/$defs/add_assertion" },
+    { "$ref": "#/$defs/remove_assertion" },
+    { "$ref": "#/$defs/set_style" },
+    { "$ref": "#/$defs/set_interaction" },
+    { "$ref": "#/$defs/set_control" },
+    { "$ref": "#/$defs/set_clock" },
+    { "$ref": "#/$defs/set_view" }
+  ]
+}

@@ -1,0 +1,442 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-40-solving-linear-inequalities",
+  "title": "解二元线性不等式",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/inequalities?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "region.function_inequality",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-solving-linear-inequalities",
+      "revision": 1,
+      "seed": 4001,
+      "metadata": {
+        "title": "解二元线性不等式",
+        "description": "把代数关系化为边界直线、解半平面和可拖动测试点。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-04"
+        ]
+      },
+      "entities": [
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "测试点 x"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "free",
+          "label": "测试点 y"
+        },
+        {
+          "id": "boundary",
+          "type": "function1",
+          "role": "derived",
+          "label": "y=0.5x+1"
+        },
+        {
+          "id": "solution",
+          "type": "region2",
+          "role": "derived",
+          "label": "y≥0.5x+1"
+        },
+        {
+          "id": "T",
+          "type": "point2",
+          "role": "derived",
+          "label": "T"
+        },
+        {
+          "id": "satisfies",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "feedback",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "x",
+          "command": "scalar.slider",
+          "params": {
+            "value": 0,
+            "min": -4,
+            "max": 4,
+            "step": 0.5,
+            "position": [
+              -5.3,
+              -5.15
+            ],
+            "length": 4.5
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "y",
+          "command": "scalar.slider",
+          "params": {
+            "value": 2,
+            "min": -3,
+            "max": 5,
+            "step": 0.5,
+            "position": [
+              0.5,
+              -5.15
+            ],
+            "length": 4.5
+          },
+          "outputs": [
+            "y0"
+          ]
+        },
+        {
+          "id": "boundary",
+          "command": "function.explicit",
+          "params": {
+            "expression": "0.5*x+1",
+            "domain": [
+              -6,
+              6
+            ]
+          },
+          "outputs": [
+            "boundary"
+          ]
+        },
+        {
+          "id": "region",
+          "command": "region.function_inequality",
+          "inputs": [
+            {
+              "ref": "boundary"
+            }
+          ],
+          "params": {
+            "relation": "above",
+            "domain": [
+              -6,
+              6
+            ],
+            "boundaryIncluded": true
+          },
+          "outputs": [
+            "solution"
+          ]
+        },
+        {
+          "id": "test",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "y0"
+          },
+          "outputs": [
+            "T"
+          ]
+        },
+        {
+          "id": "satisfies",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "y0>=0.5*x0+1"
+          },
+          "outputs": [
+            "satisfies"
+          ]
+        },
+        {
+          "id": "feedback",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "satisfies"
+            }
+          ],
+          "params": {
+            "trueText": "测试点满足不等式，位于阴影内或边界上",
+            "falseText": "测试点不满足不等式，位于阴影外",
+            "at": [
+              -5.4,
+              5.75
+            ]
+          },
+          "outputs": [
+            "feedback"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "2y≥x+2 ⇔ y≥0.5x+1",
+            "at": [
+              -5.4,
+              5.2
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "solution"
+          ],
+          "style": {
+            "token": "accent",
+            "fillOpacity": 0.18,
+            "strokeWidth": 2.5
+          }
+        },
+        {
+          "targets": [
+            "boundary"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "T"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "feedback"
+          ],
+          "style": {
+            "token": "success",
+            "fontSize": 12
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        },
+        {
+          "target": "y0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "test-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(T)"
+            },
+            {
+              "expr": "x0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "测试点横坐标与滑块一致。"
+        },
+        {
+          "id": "test-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(T)"
+            },
+            {
+              "expr": "y0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "测试点纵坐标与滑块一致。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-solving-linear-inequalities",
+          "title": "解二元线性不等式",
+          "stages": [
+            {
+              "id": "algebra",
+              "narration": "先把 2y≥x+2 化成斜截式 y≥0.5x+1，等价变形不改变解。",
+              "reveal": [
+                "boundary",
+                "note"
+              ]
+            },
+            {
+              "id": "boundary-line",
+              "narration": "等号 y=0.5x+1 是边界；因为含等号，边界属于解集。",
+              "reveal": [
+                "boundary",
+                "solution",
+                "note"
+              ]
+            },
+            {
+              "id": "test-point",
+              "narration": "将点坐标代入不等式；满足条件的点恰好落在阴影内或边界上。",
+              "reveal": [
+                "x0",
+                "y0",
+                "boundary",
+                "solution",
+                "T",
+                "feedback",
+                "note"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-solving-linear-inequalities-task",
+              "prompt": "切换阶段并用图像、代数与测试点核验结论。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "test-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "test-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.inequalities.9-12.02",
+          "ggb.math.skill.solving-linear-inequalities",
+          "https://www.geogebra.org/math/inequalities?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "x0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      },
+      {
+        "target": "y0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

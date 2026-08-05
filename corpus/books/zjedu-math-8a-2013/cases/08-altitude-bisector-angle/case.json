@@ -1,0 +1,204 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-08-altitude-bisector-angle",
+  "title": "高与角平分线组合求角",
+  "description": "对应教材例 2 / 图 1-7：在 △ABC 中，AD 是高，AE 是 ∠BAC 的角平分线，由 ∠BAC=80°、∠C=40° 分步推出 ∠DAE=10°。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.1 认识三角形",
+    "printedPages": [8],
+    "pdfPages": [11],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": ["altitude", "angle-bisector", "angle-calculation"],
+  "learningObjective": "利用三角形的高、角平分线、三角形内角和与角的和差关系，推导 ∠DAE=10°。",
+  "caseType": "guided-construction",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "point.projection",
+    "segment.through_points",
+    "angle.three_points",
+    "marker.right_angle",
+    "assertion.perpendicular",
+    "assertion.equal_angle",
+    "assertion.expression_equal",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "chapter-1-source-fidelity-v2",
+    "seed": 108,
+    "attempts": 2
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "altitude-bisector-08",
+      "revision": 1,
+      "seed": 108,
+      "metadata": {
+        "title": "图 1-7：高与角平分线组合求角",
+        "description": "AD 是高，AE 是 ∠BAC 的角平分线；已知 ∠BAC=80°、∠C=40°，求 ∠DAE。",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": ["printed-page-8", "pdf-page-11", "figure-1-7", "source-reviewed"]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [-0.8, 7, 10, -0.9],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FFFEE8",
+          "cameraPolicy": "stable_across_stages",
+          "title": "教材图 1-7 分步推导"
+        }
+      ],
+      "activities": [
+        {
+          "id": "derive-angle-dae",
+          "title": "由高与角平分线求 ∠DAE",
+          "stages": [
+            {
+              "id": "source",
+              "narration": "来源：印刷页 8，例 2，图 1-7。先确认点名、条件与所求角。",
+              "reveal": ["A", "B", "C", "triangle"],
+              "focus": ["triangle"]
+            },
+            {
+              "id": "triangle",
+              "narration": "已知 ∠BAC=80°，∠ACB=40°。",
+              "reveal": ["A", "B", "C", "triangle", "angleBAC", "angleACB"],
+              "focus": ["angleBAC", "angleACB"]
+            },
+            {
+              "id": "bisector",
+              "narration": "AE 平分 ∠BAC，所以 ∠BAE=∠EAC=40°。",
+              "reveal": ["A", "B", "C", "E", "triangle", "bisectorAE", "angleBAE", "angleEAC"],
+              "focus": ["bisectorAE", "angleBAE", "angleEAC"]
+            },
+            {
+              "id": "altitude",
+              "narration": "AD 是高，所以 AD⊥BC，∠ADC=90°。",
+              "reveal": ["A", "B", "C", "D", "E", "triangle", "bisectorAE", "altitudeAD", "rightAngleD"],
+              "focus": ["altitudeAD", "rightAngleD"]
+            },
+            {
+              "id": "derive",
+              "narration": "在 △ADC 中，∠DAC=180°-90°-40°=50°。",
+              "reveal": ["A", "B", "C", "D", "E", "triangle", "bisectorAE", "altitudeAD", "rightAngleD", "angleACB", "angleDAC"],
+              "focus": ["angleACB", "angleDAC"]
+            },
+            {
+              "id": "conclude",
+              "narration": "∠DAE=∠DAC-∠EAC=50°-40°=10°。",
+              "reveal": ["A", "B", "C", "D", "E", "triangle", "bisectorAE", "altitudeAD", "rightAngleD", "angleEAC", "angleDAE"],
+              "focus": ["angleDAE"]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "mixed",
+        "model": "gpt-5",
+        "sourceRefs": ["zjedu-math-8a-2013:printed-8", "zjedu-math-8a-2013:pdf-11", "zjedu-math-8a-2013:figure-1-7"]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-08-source-faithful-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "altitude-bisector-08",
+          "revision": 1
+        },
+        "operations": [
+          { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [3, 5.196152422706632] } },
+          { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [0, 0] } },
+          { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [9.192533317427738, 0] } },
+          { "op": "construct", "command": "line.through_points", "outputs": [{ "id": "lineBC" }], "inputs": [{ "ref": "B" }, { "ref": "C" }] },
+          { "op": "set_entity", "entityId": "lineBC", "patch": { "visible": false } },
+          { "op": "construct", "command": "point.projection", "outputs": [{ "id": "D", "label": "D" }], "inputs": [{ "ref": "A" }, { "ref": "lineBC" }] },
+          { "op": "construct", "command": "point.from_expressions", "outputs": [{ "id": "E", "label": "E" }], "params": { "x": "3.9162218679968364", "y": "0" } },
+          { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "triangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+          { "op": "construct", "command": "line.perpendicular_through", "outputs": [{ "id": "altitudeLine" }], "inputs": [{ "ref": "A" }, { "ref": "lineBC" }] },
+          { "op": "set_entity", "entityId": "altitudeLine", "patch": { "visible": false } },
+          { "op": "construct", "command": "segment.through_points", "outputs": [{ "id": "altitudeAD", "label": "AD" }], "inputs": [{ "ref": "A" }, { "ref": "D" }] },
+          { "op": "construct", "command": "segment.through_points", "outputs": [{ "id": "bisectorAE", "label": "AE" }], "inputs": [{ "ref": "A" }, { "ref": "E" }] },
+
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleBAC", "label": "80°" }], "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 0.82, "labelRadius": 1.5 } },
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleACB", "label": "40°" }], "inputs": [{ "ref": "A" }, { "ref": "C" }, { "ref": "B" }], "params": { "radius": 0.72, "labelRadius": 1.32 } },
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleBAE", "label": "40°" }], "inputs": [{ "ref": "B" }, { "ref": "A" }, { "ref": "E" }], "params": { "radius": 0.72, "labelRadius": 1.35 } },
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleEAC", "label": "40°" }], "inputs": [{ "ref": "E" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 0.72, "labelRadius": 1.35 } },
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleDAC", "label": "50°" }], "inputs": [{ "ref": "D" }, { "ref": "A" }, { "ref": "C" }], "params": { "radius": 1.0, "labelRadius": 1.75 } },
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleDAE", "label": "10°" }], "inputs": [{ "ref": "D" }, { "ref": "A" }, { "ref": "E" }], "params": { "radius": 0.48, "labelRadius": 1.02 } },
+
+          { "op": "construct", "command": "angle.three_points", "outputs": [{ "id": "angleADC" }], "inputs": [{ "ref": "A" }, { "ref": "D" }, { "ref": "C" }] },
+          { "op": "set_entity", "entityId": "angleADC", "patch": { "visible": false } },
+          { "op": "construct", "command": "marker.right_angle", "outputs": [{ "id": "rightAngleD" }], "inputs": [{ "ref": "angleADC" }], "params": { "size": 0.36 } },
+
+          { "op": "set_style", "targets": ["triangle"], "style": { "stroke": "#1B1B1B", "fill": "#FFFFFF", "strokeWidth": 2.2, "fillOpacity": 0.96, "labelVisible": false } },
+          { "op": "set_style", "targets": ["A"], "style": { "stroke": "#171717", "fill": "#F0202B", "pointSize": 5.4, "fontSize": 16, "labelPlacement": "top-right" } },
+          { "op": "set_style", "targets": ["B"], "style": { "stroke": "#171717", "fill": "#F0202B", "pointSize": 5.4, "fontSize": 16, "labelPlacement": "bottom-left" } },
+          { "op": "set_style", "targets": ["C"], "style": { "stroke": "#171717", "fill": "#F0202B", "pointSize": 5.4, "fontSize": 16, "labelPlacement": "bottom-right" } },
+          { "op": "set_style", "targets": ["D"], "style": { "stroke": "#171717", "fill": "#F0202B", "pointSize": 5.4, "fontSize": 16, "labelPlacement": "bottom-left" } },
+          { "op": "set_style", "targets": ["E"], "style": { "stroke": "#171717", "fill": "#F0202B", "pointSize": 5.4, "fontSize": 16, "labelPlacement": "bottom-right" } },
+          { "op": "set_style", "targets": ["bisectorAE"], "style": { "stroke": "#16816F", "fill": "#16816F", "strokeWidth": 2.1, "labelVisible": false } },
+          { "op": "set_style", "targets": ["altitudeAD"], "style": { "stroke": "#2C67A5", "fill": "#2C67A5", "strokeWidth": 2.1, "labelVisible": false } },
+          { "op": "set_style", "targets": ["rightAngleD"], "style": { "stroke": "#171717", "fill": "#FFFFFF", "fillOpacity": 0.96, "strokeWidth": 1.6 } },
+          { "op": "set_style", "targets": ["angleBAC", "angleACB", "angleBAE", "angleEAC", "angleDAC", "angleDAE"], "style": { "stroke": "#171717", "fill": "#FFFFFF", "fillOpacity": 0.96, "strokeWidth": 1.6, "fontSize": 15 } },
+
+          { "op": "add_assertion", "assertion": { "id": "given-angle-a-80", "predicate": "expression_equal", "arguments": [{ "expr": "angle(B,A,C)" }, { "value": 1.3962634015954636 }], "tolerance": 1e-10, "message": "∠BAC=80°。" } },
+          { "op": "add_assertion", "assertion": { "id": "given-angle-c-40", "predicate": "expression_equal", "arguments": [{ "expr": "angle(A,C,B)" }, { "value": 0.6981317007977318 }], "tolerance": 1e-10, "message": "∠ACB=40°。" } },
+          { "op": "add_assertion", "assertion": { "id": "altitude-perpendicular", "predicate": "perpendicular", "arguments": [{ "ref": "altitudeLine" }, { "ref": "lineBC" }], "requiredMethod": "construction", "tolerance": 1e-10, "message": "AD 所在直线垂直于 BC。" } },
+          { "op": "add_assertion", "assertion": { "id": "b-d-e-collinear", "predicate": "collinear", "arguments": [{ "ref": "B" }, { "ref": "D" }, { "ref": "E" }], "tolerance": 1e-10, "message": "B、D、E 共线。" } },
+          { "op": "add_assertion", "assertion": { "id": "d-e-c-collinear", "predicate": "collinear", "arguments": [{ "ref": "D" }, { "ref": "E" }, { "ref": "C" }], "tolerance": 1e-10, "message": "D、E、C 共线。" } },
+          { "op": "add_assertion", "assertion": { "id": "d-between-b-e", "predicate": "value_in_range", "arguments": [{ "expr": "xcoord(D)" }, { "expr": "xcoord(B)" }, { "expr": "xcoord(E)" }], "tolerance": 1e-10, "message": "D 位于 B、E 之间。" } },
+          { "op": "add_assertion", "assertion": { "id": "e-between-d-c", "predicate": "value_in_range", "arguments": [{ "expr": "xcoord(E)" }, { "expr": "xcoord(D)" }, { "expr": "xcoord(C)" }], "tolerance": 1e-10, "message": "E 位于 D、C 之间。" } },
+          { "op": "add_assertion", "assertion": { "id": "ae-bisects-angle-a", "predicate": "equal_angle", "arguments": [{ "ref": "angleBAE" }, { "ref": "angleEAC" }], "tolerance": 1e-10, "message": "AE 平分 ∠BAC。" } },
+          { "op": "add_assertion", "assertion": { "id": "derived-angle-dac-50", "predicate": "expression_equal", "arguments": [{ "expr": "angle(D,A,C)" }, { "value": 0.8726646259971648 }], "tolerance": 1e-10, "message": "∠DAC=50°。" } },
+          { "op": "add_assertion", "assertion": { "id": "result-angle-dae-10", "predicate": "expression_equal", "arguments": [{ "expr": "angle(D,A,E)" }, { "value": 0.17453292519943295 }], "tolerance": 1e-10, "message": "∠DAE=10°。" } }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+      "documentFingerprint": "947c260be9fb29f0aa8950f2a6164218687a34195a754c76b7de562d2d90b40a",
+    "assertions": [
+      { "kind": "entity-exists", "entityIds": ["A", "B", "C", "D", "E", "triangle", "altitudeAD", "bisectorAE", "rightAngleD", "angleBAC", "angleACB", "angleBAE", "angleEAC", "angleDAC", "angleDAE"] },
+      { "kind": "entity-types", "types": { "altitudeAD": "segment2", "bisectorAE": "segment2", "rightAngleD": "polygon2", "angleDAE": "angle" } },
+      { "kind": "runtime-assertions-pass" },
+      { "kind": "activity-stages", "minimum": 6 },
+      { "kind": "static-render" },
+      { "kind": "render-bundle" }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-discriminant-and-roots-of-a-quadratic-equation",
+  "title": "判别式与二次方程根的情况",
+  "titleEn": "Discriminant and Roots of a Quadratic Equation",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.discriminant-and-roots-of-a-quadratic-equation",
+    "occurrenceIds": [
+      "ggb.math.occurrence.quadratic-equations.9-12.02"
+    ],
+    "topicSlug": "quadratic-equations"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-discriminant-and-roots-of-a-quadratic-equation-1",
+      "type": "concept",
+      "visibleText": "判别式为 Δ=b²-4ac。",
+      "narrationSeed": "判别式为 Δ=b²-4ac。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.02"
+    },
+    {
+      "id": "atom-discriminant-and-roots-of-a-quadratic-equation-2",
+      "type": "rule",
+      "visibleText": "Δ>0 时有两个不同实根。",
+      "narrationSeed": "Δ>0 时有两个不同实根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.02"
+    },
+    {
+      "id": "atom-discriminant-and-roots-of-a-quadratic-equation-3",
+      "type": "procedure",
+      "visibleText": "Δ=0 时有一个二重实根。",
+      "narrationSeed": "Δ=0 时有一个二重实根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.02"
+    },
+    {
+      "id": "atom-discriminant-and-roots-of-a-quadratic-equation-4",
+      "type": "representation",
+      "visibleText": "Δ<0 时没有实根。",
+      "narrationSeed": "Δ<0 时没有实根。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.02"
+    },
+    {
+      "id": "atom-discriminant-and-roots-of-a-quadratic-equation-5",
+      "type": "misconception",
+      "visibleText": "实根数量对应图像与 x 轴的交点数量。",
+      "narrationSeed": "实根数量对应图像与 x 轴的交点数量。",
+      "sourceRef": "ggb.math.occurrence.quadratic-equations.9-12.02"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/39-discriminant-and-roots-of-a-quadratic-equation/case.json",
+    "caseId": "research-geogebra-39-discriminant-and-roots-of-a-quadratic-equation",
+    "documentId": "geogebra-math-discriminant-roots"
+  },
+  "stages": [
+    {
+      "id": "formula",
+      "order": 1
+    },
+    {
+      "id": "classify",
+      "order": 2
+    },
+    {
+      "id": "graph-roots",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-discriminant-and-roots-of-a-quadratic-equation-1",
+      "type": "short_answer",
+      "stem": "说明：判别式为 Δ=b²-4ac。",
+      "answer": "判别式为 Δ=b²-4ac。",
+      "feedback": {
+        "correct": "判别式为 Δ=b²-4ac。",
+        "incorrect": "判别式为 Δ=b²-4ac。"
+      },
+      "sourceAtomIds": [
+        "atom-discriminant-and-roots-of-a-quadratic-equation-1"
+      ]
+    },
+    {
+      "id": "quiz-discriminant-and-roots-of-a-quadratic-equation-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：Δ>0 时有两个不同实根。",
+      "answer": "Δ>0 时有两个不同实根。",
+      "feedback": {
+        "correct": "Δ>0 时有两个不同实根。",
+        "incorrect": "Δ>0 时有两个不同实根。"
+      },
+      "sourceAtomIds": [
+        "atom-discriminant-and-roots-of-a-quadratic-equation-2"
+      ]
+    },
+    {
+      "id": "quiz-discriminant-and-roots-of-a-quadratic-equation-3",
+      "type": "short_answer",
+      "stem": "说明：Δ=0 时有一个二重实根。",
+      "answer": "Δ=0 时有一个二重实根。",
+      "feedback": {
+        "correct": "Δ=0 时有一个二重实根。",
+        "incorrect": "Δ=0 时有一个二重实根。"
+      },
+      "sourceAtomIds": [
+        "atom-discriminant-and-roots-of-a-quadratic-equation-3"
+      ]
+    },
+    {
+      "id": "quiz-discriminant-and-roots-of-a-quadratic-equation-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：Δ<0 时没有实根。",
+      "answer": "Δ<0 时没有实根。",
+      "feedback": {
+        "correct": "Δ<0 时没有实根。",
+        "incorrect": "Δ<0 时没有实根。"
+      },
+      "sourceAtomIds": [
+        "atom-discriminant-and-roots-of-a-quadratic-equation-4"
+      ]
+    },
+    {
+      "id": "quiz-discriminant-and-roots-of-a-quadratic-equation-5",
+      "type": "short_answer",
+      "stem": "说明：实根数量对应图像与 x 轴的交点数量。",
+      "answer": "实根数量对应图像与 x 轴的交点数量。",
+      "feedback": {
+        "correct": "实根数量对应图像与 x 轴的交点数量。",
+        "incorrect": "实根数量对应图像与 x 轴的交点数量。"
+      },
+      "sourceAtomIds": [
+        "atom-discriminant-and-roots-of-a-quadratic-equation-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.quadratic-equations.9-12.02",
+        "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "boundary/classification checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 80-card page",
+        "four-case stage-switch review",
+        "piecewise endpoint visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

@@ -1,0 +1,904 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-3-1-41-reservoir-level-interval-test",
+  "title": "判断水库水位是否在正常工作范围",
+  "description": "按教材图 3-7、3-8 实现的来源可追溯不等式案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "3 一元一次不等式",
+    "section": "3.1 认识不等式",
+    "printedPages": [
+      92
+    ],
+    "pdfPages": [
+      95
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "compound-inequality",
+    "inequality-number-line",
+    "solution-checking"
+  ],
+  "learningObjective": "把 12～20 m（含端点）的工作范围写成 12≤x≤20，并通过动态取值解释哪些水位满足条件。",
+  "caseType": "exploration",
+  "difficulty": "introductory",
+  "requiredCapabilities": [
+    "interval.from_bounds",
+    "scalar.slider",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "assertion.value_in_range",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch3-source-faithful-v1",
+    "seed": 441,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch3-03-reservoir-level-interval-test",
+      "revision": 1,
+      "seed": 441,
+      "metadata": {
+        "title": "判断水库水位是否在正常工作范围",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "3.1",
+          "compound-inequality",
+          "inequality-number-line",
+          "solution-checking"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -2,
+            3.5,
+            24,
+            -3.5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": false,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-41",
+          "title": "判断水库水位是否在正常工作范围",
+          "stages": [
+            {
+              "id": "range",
+              "narration": "图 3-7：正常工作范围包含 12 m 和 20 m，因此写成 12≤x≤20，两端都用实心点。",
+              "reveal": [
+                "waterAxis",
+                "waterTick0",
+                "waterLabel0",
+                "waterTick4",
+                "waterLabel4",
+                "waterTick8",
+                "waterLabel8",
+                "waterTick12",
+                "waterLabel12",
+                "waterTick16",
+                "waterLabel16",
+                "waterTick20",
+                "waterLabel20",
+                "workingRange"
+              ]
+            },
+            {
+              "id": "check",
+              "narration": "图 3-8：调整水位 x，观察当前点是否落在橙色区间内，并核对实时判断。",
+              "reveal": [
+                "waterAxis",
+                "waterTick0",
+                "waterLabel0",
+                "waterTick4",
+                "waterLabel4",
+                "waterTick8",
+                "waterLabel8",
+                "waterTick12",
+                "waterLabel12",
+                "waterTick16",
+                "waterLabel16",
+                "waterTick20",
+                "waterLabel20",
+                "workingRange",
+                "x",
+                "currentLevel",
+                "canWork",
+                "waterFeedbackOk",
+                "waterFeedbackNo"
+              ],
+              "focus": [
+                "currentLevel",
+                "waterFeedbackOk",
+                "waterFeedbackNo"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-92:figure-3-7",
+          "zjedu-math-8a-2013:printed-92:figure-3-8"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-41-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch3-03-reservoir-level-interval-test",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterStart",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterThrough",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                22,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "waterAxis"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterStart"
+              },
+              {
+                "ref": "waterThrough"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick0Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick0High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick0"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick0Low"
+              },
+              {
+                "ref": "waterTick0High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel0"
+              }
+            ],
+            "params": {
+              "text": "0",
+              "at": [
+                -0.22,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick4Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick4High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick4"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick4Low"
+              },
+              {
+                "ref": "waterTick4High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel4"
+              }
+            ],
+            "params": {
+              "text": "4",
+              "at": [
+                3.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick8Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                8,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick8High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                8,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick8"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick8Low"
+              },
+              {
+                "ref": "waterTick8High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel8"
+              }
+            ],
+            "params": {
+              "text": "8",
+              "at": [
+                7.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick12Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                12,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick12High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                12,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick12"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick12Low"
+              },
+              {
+                "ref": "waterTick12High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel12"
+              }
+            ],
+            "params": {
+              "text": "12",
+              "at": [
+                11.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick16Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                16,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick16High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                16,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick16"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick16Low"
+              },
+              {
+                "ref": "waterTick16High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel16"
+              }
+            ],
+            "params": {
+              "text": "16",
+              "at": [
+                15.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick20Low",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                20,
+                -0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterTick20High",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                20,
+                0.12
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "waterTick20"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "waterTick20Low"
+              },
+              {
+                "ref": "waterTick20High"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "text.at",
+            "outputs": [
+              {
+                "id": "waterLabel20"
+              }
+            ],
+            "params": {
+              "text": "20",
+              "at": [
+                19.78,
+                -0.55
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "waterAxis",
+              "waterTick0",
+              "waterLabel0",
+              "waterTick4",
+              "waterLabel4",
+              "waterTick8",
+              "waterLabel8",
+              "waterTick12",
+              "waterLabel12",
+              "waterTick16",
+              "waterLabel16",
+              "waterTick20",
+              "waterLabel20"
+            ],
+            "style": {
+              "stroke": "#6F7F8C",
+              "fill": "#6F7F8C",
+              "strokeWidth": 1.5,
+              "fontSize": 13,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "construct",
+            "command": "interval.from_bounds",
+            "outputs": [
+              {
+                "id": "workingRange"
+              }
+            ],
+            "params": {
+              "lower": 12,
+              "upper": 20,
+              "lowerClosed": true,
+              "upperClosed": true,
+              "y": 0.2
+            }
+          },
+          {
+            "op": "construct",
+            "command": "scalar.slider",
+            "outputs": [
+              {
+                "id": "x",
+                "label": "x（m）"
+              }
+            ],
+            "params": {
+              "min": 6,
+              "max": 22,
+              "value": 15,
+              "position": [
+                3,
+                -2.3
+              ],
+              "length": 12,
+              "step": 1
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.from_expressions",
+            "outputs": [
+              {
+                "id": "currentLevel",
+                "label": "x"
+              }
+            ],
+            "params": {
+              "x": "x",
+              "y": 0.2
+            }
+          },
+          {
+            "op": "construct",
+            "command": "boolean.expression",
+            "outputs": [
+              {
+                "id": "canWork"
+              }
+            ],
+            "params": {
+              "expression": "x >= 12 && x <= 20"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "waterFeedbackAnchor",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                2.45
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.conditional",
+            "outputs": [
+              {
+                "id": "waterFeedbackOk"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "canWork"
+              },
+              {
+                "ref": "waterFeedbackAnchor"
+              }
+            ],
+            "params": {
+              "trueText": "正常工作：12 ≤ x ≤ 20",
+              "falseText": "​"
+            }
+          },
+          {
+            "op": "construct",
+            "command": "text.conditional",
+            "outputs": [
+              {
+                "id": "waterFeedbackNo"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "canWork"
+              },
+              {
+                "ref": "waterFeedbackAnchor"
+              }
+            ],
+            "params": {
+              "trueText": "​",
+              "falseText": "不能正常工作：x 不在 [12,20] 内"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "initial-level-in-range",
+              "predicate": "value_in_range",
+              "arguments": [
+                {
+                  "ref": "x"
+                },
+                {
+                  "value": 12
+                },
+                {
+                  "value": 20
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "初始水位 15 m 在正常工作范围内。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_interaction",
+            "policy": {
+              "target": "x",
+              "permissions": [
+                "set_value"
+              ]
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "workingRange"
+            ],
+            "style": {
+              "stroke": "#D06A3A",
+              "fill": "#D06A3A",
+              "strokeWidth": 3,
+              "pointSize": 5.2,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "currentLevel"
+            ],
+            "style": {
+              "stroke": "#155A73",
+              "fill": "#155A73",
+              "pointSize": 6,
+              "fontSize": 14,
+              "labelPlacement": "top"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "waterFeedbackOk"
+            ],
+            "style": {
+              "token": "success",
+              "fontSize": 15
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "waterFeedbackNo"
+            ],
+            "style": {
+              "token": "danger",
+              "fontSize": 15
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "waterStart",
+              "waterThrough",
+              "waterTick0Low",
+              "waterTick0High",
+              "waterTick4Low",
+              "waterTick4High",
+              "waterTick8Low",
+              "waterTick8High",
+              "waterTick12Low",
+              "waterTick12High",
+              "waterTick16Low",
+              "waterTick16High",
+              "waterTick20Low",
+              "waterTick20High",
+              "currentLevel",
+              "waterFeedbackAnchor"
+            ],
+            "style": {
+              "pointSize": 4.8,
+              "fontSize": 14,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "2dec7a44516cc9602f2e46f53e66afc4e19d15c5c7395f8fb1fe97328914258f",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "waterStart",
+          "waterThrough",
+          "waterAxis",
+          "waterTick0Low",
+          "waterTick0High",
+          "waterTick0",
+          "waterLabel0",
+          "waterTick4Low",
+          "waterTick4High",
+          "waterTick4"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 2
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "x",
+        "permission": "set_value"
+      }
+    ]
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

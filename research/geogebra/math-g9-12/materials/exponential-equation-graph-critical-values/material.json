@@ -1,0 +1,173 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-exponential-equation-graph-critical-values",
+  "title": "指数函数的式、图像和关键特征",
+  "titleEn": "Exponential Functions: Equation, Graph, and Critical Values",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.exponential-functions-equation-graph-and-critical-values",
+    "occurrenceIds": [
+      "ggb.math.occurrence.exponential-functions.9-12.03"
+    ],
+    "topicSlug": "exponential-functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-form",
+      "type": "concept",
+      "visibleText": "f(x)=b^x 中自变量位于指数位置。",
+      "narrationSeed": "f(x)=b^x 中自变量位于指数位置。",
+      "sourceRef": "ggb.math.occurrence.exponential-functions.9-12.03"
+    },
+    {
+      "id": "atom-growth",
+      "type": "rule",
+      "visibleText": "b>1 时函数指数增长。",
+      "narrationSeed": "b>1 时函数指数增长。",
+      "sourceRef": "ggb.math.occurrence.exponential-functions.9-12.03"
+    },
+    {
+      "id": "atom-decay",
+      "type": "rule",
+      "visibleText": "0<b<1 时函数指数衰减。",
+      "narrationSeed": "0<b<1 时函数指数衰减。",
+      "sourceRef": "ggb.math.occurrence.exponential-functions.9-12.03"
+    },
+    {
+      "id": "atom-critical-zero",
+      "type": "representation",
+      "visibleText": "图像始终经过 (0,1)。",
+      "narrationSeed": "图像始终经过 (0,1)。",
+      "sourceRef": "ggb.math.occurrence.exponential-functions.9-12.03"
+    },
+    {
+      "id": "atom-boundary",
+      "type": "misconception",
+      "visibleText": "b=1 时退化为常数函数。",
+      "narrationSeed": "b=1 时退化为常数函数。",
+      "sourceRef": "ggb.math.occurrence.exponential-functions.9-12.03"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/29-exponential-equation-graph-critical-values/case.json",
+    "caseId": "research-geogebra-29-exponential-equation-graph-critical-values",
+    "documentId": "geogebra-math-exponential-critical-values"
+  },
+  "stages": [
+    {
+      "id": "exponential-equation",
+      "order": 1
+    },
+    {
+      "id": "growth-decay",
+      "order": 2
+    },
+    {
+      "id": "critical-values",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-exponential-critical",
+      "type": "short_answer",
+      "stem": "f(x)=3·2^x 的 y 轴截距是多少？",
+      "answer": "3",
+      "feedback": {
+        "correct": "令 x=0，2^0=1。",
+        "incorrect": "令 x=0，2^0=1。"
+      },
+      "sourceAtomIds": [
+        "atom-form"
+      ]
+    },
+    {
+      "id": "quiz-growth",
+      "type": "short_answer",
+      "stem": "哪一个底数产生指数增长：0.5 还是 1.5？",
+      "answer": "1.5",
+      "feedback": {
+        "correct": "底数大于 1 时增长。",
+        "incorrect": "底数大于 1 时增长。"
+      },
+      "sourceAtomIds": [
+        "atom-growth"
+      ]
+    },
+    {
+      "id": "quiz-decay",
+      "type": "short_answer",
+      "stem": "0<b<1 时图像从左到右怎样？",
+      "answer": "下降",
+      "feedback": {
+        "correct": "函数值随 x 墠大而衰减。",
+        "incorrect": "函数值随 x 墠大而衰减。"
+      },
+      "sourceAtomIds": [
+        "atom-decay"
+      ]
+    },
+    {
+      "id": "quiz-zero",
+      "type": "true_false",
+      "stem": "b^0 等于多少？",
+      "answer": "1",
+      "feedback": {
+        "correct": "任意正底数的零次幂为 1。",
+        "incorrect": "任意正底数的零次幂为 1。"
+      },
+      "sourceAtomIds": [
+        "atom-critical-zero"
+      ]
+    },
+    {
+      "id": "quiz-boundary",
+      "type": "short_answer",
+      "stem": "判断：b=1 时仍表现指数增长。",
+      "answer": "错误",
+      "feedback": {
+        "correct": "此时 f(x)=1。",
+        "incorrect": "此时 f(x)=1。"
+      },
+      "sourceAtomIds": [
+        "atom-boundary"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.exponential-functions.9-12.03",
+        "https://www.geogebra.org/math/exponential-functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "parameter sweep test"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at 330px height",
+        "six-case stage-switch review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

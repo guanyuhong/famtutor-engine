@@ -1,0 +1,775 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-6-34-construct-triangle-asa",
+  "title": "已知两角及夹边作三角形",
+  "description": "按教材图 1-44、1-45实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.6 尺规作图",
+    "printedPages": [
+      38
+    ],
+    "pdfPages": [
+      41
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "ruler-compass-construction",
+    "asa"
+  ],
+  "learningObjective": "先作给定夹边，再在两端复制两个已知角，以两射线交点确定第三个顶点。",
+  "caseType": "guided-construction",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "ray.from_points",
+    "point.intersection_line_line",
+    "angle.three_points",
+    "assertion.equal_angle",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 234,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-34-construct-triangle-asa",
+      "revision": 1,
+      "seed": 234,
+      "metadata": {
+        "title": "已知两角及夹边作三角形",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.6",
+          "ruler-compass-construction",
+          "asa"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -5,
+            7.5,
+            7,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-34",
+          "title": "已知两角及夹边作三角形",
+          "stages": [
+            {
+              "id": "givens",
+              "narration": "已知两个角 α、β 和夹边 a。",
+              "reveal": [
+                "Oa",
+                "Ra",
+                "Sa",
+                "Ob",
+                "Lb",
+                "Sb",
+                "alphaArm1",
+                "alphaArm2",
+                "betaArm1",
+                "betaArm2",
+                "givenAlpha",
+                "givenBeta"
+              ]
+            },
+            {
+              "id": "base",
+              "narration": "第一步：作线段 AB=a。",
+              "reveal": [
+                "A",
+                "B",
+                "AB",
+                "Oa",
+                "Ra",
+                "Sa",
+                "Ob",
+                "Lb",
+                "Sb",
+                "alphaArm1",
+                "alphaArm2",
+                "betaArm1",
+                "betaArm2",
+                "givenAlpha",
+                "givenBeta"
+              ]
+            },
+            {
+              "id": "copy-angles",
+              "narration": "第二步：在 AB 同侧，分别以 A、B 为顶点复制 α、β，得到两条射线。",
+              "reveal": [
+                "A",
+                "B",
+                "AB",
+                "rayA",
+                "rayB",
+                "angleA",
+                "angleB"
+              ]
+            },
+            {
+              "id": "intersection",
+              "narration": "两射线交于 C，连接 AC、BC；△ABC 即为所求三角形。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "AB",
+                "AC",
+                "BC",
+                "angleA",
+                "angleB"
+              ],
+              "focus": [
+                "C"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-38:figure-1-44",
+          "zjedu-math-8a-2013:printed-38:figure-1-45"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-34-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-34-construct-triangle-asa",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "U",
+                "label": "U",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                2.57115,
+                3.064178
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "V",
+                "label": "V",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                4.631919,
+                3.75877
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB",
+                "label": "a"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "rayA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "U"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "rayB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "V"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_line_line",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "rayA"
+              },
+              {
+                "ref": "rayB"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleA",
+                "label": "α"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.55,
+              "labelRadius": 1
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleB",
+                "label": "β"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.55,
+              "labelRadius": 1
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Oa",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                -4,
+                5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Ra",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                -2,
+                5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Sa",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                -2.714425,
+                6.532089
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "alphaArm1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Oa"
+              },
+              {
+                "ref": "Ra"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "alphaArm2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Oa"
+              },
+              {
+                "ref": "Sa"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "givenAlpha",
+                "label": "α"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Ra"
+              },
+              {
+                "ref": "Oa"
+              },
+              {
+                "ref": "Sa"
+              }
+            ],
+            "params": {
+              "radius": 0.48,
+              "labelRadius": 0.9
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Ob",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Lb",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                4,
+                5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Sb",
+                "label": ""
+              }
+            ],
+            "params": {
+              "coords": [
+                5.31596,
+                6.879385
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "betaArm1"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Ob"
+              },
+              {
+                "ref": "Lb"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "betaArm2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Ob"
+              },
+              {
+                "ref": "Sb"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "givenBeta",
+                "label": "β"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "Lb"
+              },
+              {
+                "ref": "Ob"
+              },
+              {
+                "ref": "Sb"
+              }
+            ],
+            "params": {
+              "radius": 0.48,
+              "labelRadius": 0.9
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "copy-alpha",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "givenAlpha"
+                },
+                {
+                  "ref": "angleA"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "∠A=α。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "copy-beta",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "givenBeta"
+                },
+                {
+                  "ref": "angleB"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "∠B=β。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AC",
+              "BC",
+              "alphaArm1",
+              "alphaArm2",
+              "betaArm1",
+              "betaArm2"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "rayA",
+              "rayB"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "givenAlpha",
+              "givenBeta",
+              "angleA",
+              "angleB"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "Oa",
+              "Ra",
+              "Sa",
+              "Ob",
+              "Lb",
+              "Sb"
+            ],
+            "style": {
+              "pointSize": 0,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "B",
+              "U",
+              "V",
+              "C",
+              "Oa",
+              "Ra",
+              "Sa",
+              "Ob",
+              "Lb",
+              "Sb"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "285ca4594cc2e1c3685fb0c0ff3fe1b5d1c1ff37bbab2556311716736cd23af2",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "B",
+          "U",
+          "V",
+          "AB",
+          "rayA",
+          "rayB",
+          "C"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

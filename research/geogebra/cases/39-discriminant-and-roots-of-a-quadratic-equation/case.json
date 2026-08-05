@@ -1,0 +1,510 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-39-discriminant-and-roots-of-a-quadratic-equation",
+  "title": "判别式与二次方程根的情况",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "scalar.constant",
+    "function.value_at",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-discriminant-roots",
+      "revision": 1,
+      "seed": 3901,
+      "metadata": {
+        "title": "判别式与二次方程根的情况",
+        "description": "拖动常数项 c，让判别式跨越正、零、负，并比较图像与 x 轴的位置。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-03"
+        ]
+      },
+      "entities": [
+        {
+          "id": "c",
+          "type": "scalar",
+          "role": "free",
+          "label": "常数项 c"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=x²-2x+c"
+        },
+        {
+          "id": "one",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "vertexY",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "V",
+          "type": "point2",
+          "role": "derived",
+          "label": "V"
+        },
+        {
+          "id": "positive",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "zero",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "negative",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "positiveText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "zeroText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "negativeText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "formula",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "c",
+          "command": "scalar.slider",
+          "params": {
+            "value": 0,
+            "min": -2,
+            "max": 2,
+            "step": 0.25,
+            "position": [
+              -5.2,
+              -5.15
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "c"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "x^2-2*x+c",
+            "domain": [
+              -4,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "one",
+          "command": "scalar.constant",
+          "params": {
+            "value": 1
+          },
+          "outputs": [
+            "one"
+          ]
+        },
+        {
+          "id": "vy",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "one"
+            }
+          ],
+          "outputs": [
+            "vertexY"
+          ]
+        },
+        {
+          "id": "v",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "1",
+            "y": "vertexY"
+          },
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "id": "positive",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "4-4*c>0"
+          },
+          "outputs": [
+            "positive"
+          ]
+        },
+        {
+          "id": "zero",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "4-4*c==0"
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "negative",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "4-4*c<0"
+          },
+          "outputs": [
+            "negative"
+          ]
+        },
+        {
+          "id": "pt",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "positive"
+            }
+          ],
+          "params": {
+            "trueText": "Δ>0：两个不同实根 / 两个 x 轴交点",
+            "falseText": "​",
+            "at": [
+              -5.3,
+              6
+            ]
+          },
+          "outputs": [
+            "positiveText"
+          ]
+        },
+        {
+          "id": "zt",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "zero"
+            }
+          ],
+          "params": {
+            "trueText": "Δ=0：一个二重实根 / 与 x 轴相切",
+            "falseText": "​",
+            "at": [
+              -5.3,
+              6
+            ]
+          },
+          "outputs": [
+            "zeroText"
+          ]
+        },
+        {
+          "id": "nt",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "negative"
+            }
+          ],
+          "params": {
+            "trueText": "Δ<0：没有实根 / 与 x 轴不相交",
+            "falseText": "​",
+            "at": [
+              -5.3,
+              6
+            ]
+          },
+          "outputs": [
+            "negativeText"
+          ]
+        },
+        {
+          "id": "formula",
+          "command": "text.at",
+          "params": {
+            "text": "Δ=b²-4ac=4-4c",
+            "at": [
+              -5.3,
+              5.4
+            ]
+          },
+          "outputs": [
+            "formula"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "V"
+          ],
+          "style": {
+            "token": "accent",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "positiveText"
+          ],
+          "style": {
+            "token": "success",
+            "fontSize": 12
+          }
+        },
+        {
+          "targets": [
+            "zeroText"
+          ],
+          "style": {
+            "token": "accent",
+            "fontSize": 12
+          }
+        },
+        {
+          "targets": [
+            "negativeText"
+          ],
+          "style": {
+            "token": "danger",
+            "fontSize": 12
+          }
+        },
+        {
+          "targets": [
+            "formula"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "c",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "vertex-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(V)"
+            },
+            {
+              "expr": "1"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "对称轴保持 x=1。"
+        },
+        {
+          "id": "vertex-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(V)"
+            },
+            {
+              "expr": "c-1"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点纵坐标为 c-1。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-discriminant-roots",
+          "title": "判别式与二次方程根的情况",
+          "stages": [
+            {
+              "id": "formula",
+              "narration": "对于 ax²+bx+c=0，判别式 Δ=b²-4ac 决定实根的数量和性质。",
+              "reveal": [
+                "c",
+                "f",
+                "formula",
+                "V"
+              ]
+            },
+            {
+              "id": "classify",
+              "narration": "拖动 c，使 Δ 依次为正、零、负，观察分类反馈。",
+              "reveal": [
+                "c",
+                "f",
+                "formula",
+                "V",
+                "positiveText",
+                "zeroText",
+                "negativeText"
+              ]
+            },
+            {
+              "id": "graph-roots",
+              "narration": "实根对应函数图像与 x 轴的交点；相切给出二重根，不相交表示没有实根。",
+              "reveal": [
+                "c",
+                "f",
+                "formula",
+                "V",
+                "positiveText",
+                "zeroText",
+                "negativeText"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-discriminant-roots-task",
+              "prompt": "切换阶段并核验图像、代数关系和边界条件。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.quadratic-equations.9-12.02",
+          "ggb.math.skill.discriminant-and-roots-of-a-quadratic-equation",
+          "https://www.geogebra.org/math/quadratic-equations?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "c",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

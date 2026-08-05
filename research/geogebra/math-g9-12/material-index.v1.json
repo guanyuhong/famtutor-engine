@@ -1,0 +1,170 @@
+{
+  "schema": "famtutor.geogebra.math.material-index.v1",
+  "gradeBand": "9-12",
+  "wave": "01-04",
+  "generatedAt": "2026-08-05",
+  "materials": [
+    {
+      "order": 1,
+      "materialId": "ggb-math-g9-12-functions-and-function-notation",
+      "title": "函数与函数记号",
+      "uniqueSkillId": "ggb.math.skill.functions-and-function-notation",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.03",
+      "path": "materials/functions-and-function-notation/material.json",
+      "caseRef": "../../cases/28-functions-and-function-notation/case.json"
+    },
+    {
+      "order": 2,
+      "materialId": "ggb-math-g9-12-slope-and-intercept-changes",
+      "title": "斜率和截距变化",
+      "uniqueSkillId": "ggb.math.skill.effects-of-changes-in-slope-and-intercepts-of-lines",
+      "occurrenceId": "ggb.math.occurrence.linear-functions.9-12.01",
+      "path": "materials/slope-and-intercept-changes/material.json",
+      "caseRef": "../../cases/21-linear-function-properties/case.json"
+    },
+    {
+      "order": 3,
+      "materialId": "ggb-math-g9-12-nonlinear-parent-function-transformations",
+      "title": "非线性母函数变换",
+      "uniqueSkillId": "ggb.math.skill.transformations-on-nonlinear-parent-functions",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.07",
+      "path": "materials/nonlinear-parent-function-transformations/material.json",
+      "caseRef": "../../cases/22-quadratic-ax2-properties/case.json"
+    },
+    {
+      "order": 4,
+      "materialId": "ggb-math-g9-12-exponential-equation-graph-critical-values",
+      "title": "指数函数的式、图像和关键特征",
+      "uniqueSkillId": "ggb.math.skill.exponential-functions-equation-graph-and-critical-values",
+      "occurrenceId": "ggb.math.occurrence.exponential-functions.9-12.03",
+      "path": "materials/exponential-equation-graph-critical-values/material.json",
+      "caseRef": "../../cases/29-exponential-equation-graph-critical-values/case.json"
+    },
+    {
+      "order": 5,
+      "materialId": "ggb-math-g9-12-graphing-quadratic-functions",
+      "title": "二次函数作图",
+      "uniqueSkillId": "ggb.math.skill.graphing-quadratic-functions",
+      "occurrenceId": "ggb.math.occurrence.quadratic-functions.9-12.04",
+      "path": "materials/graphing-quadratic-functions/material.json",
+      "caseRef": "../../cases/30-graphing-quadratic-functions/case.json"
+    },
+    {
+      "order": 6,
+      "materialId": "ggb-math-g9-12-zeros-of-quadratic-functions",
+      "title": "二次函数的零点",
+      "uniqueSkillId": "ggb.math.skill.zeros-of-quadratic-functions",
+      "occurrenceId": "ggb.math.occurrence.quadratic-functions.9-12.07",
+      "path": "materials/zeros-of-quadratic-functions/material.json",
+      "caseRef": "../../cases/31-zeros-of-quadratic-functions/case.json"
+    },
+    {
+      "order": 7,
+      "materialId": "ggb-math-g9-12-representations-of-relations-and-functions",
+      "title": "关系与函数的多种表示",
+      "uniqueSkillId": "ggb.math.skill.representations-of-relations-and-functions",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.06",
+      "path": "materials/representations-of-relations-and-functions/material.json",
+      "caseRef": "../../cases/32-representations-of-relations-and-functions/case.json"
+    },
+    {
+      "order": 8,
+      "materialId": "ggb-math-g9-12-increasing-and-decreasing-functions",
+      "title": "函数的递增与递减",
+      "uniqueSkillId": "ggb.math.skill.increasing-and-decreasing-functions",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.04",
+      "path": "materials/increasing-and-decreasing-functions/material.json",
+      "caseRef": "../../cases/33-increasing-and-decreasing-functions/case.json"
+    },
+    {
+      "order": 9,
+      "materialId": "ggb-math-g9-12-graphing-absolute-value-functions-and-inequalities",
+      "title": "绝对值函数与不等式作图",
+      "uniqueSkillId": "ggb.math.skill.graphing-absolute-value-functions-and-inequalities",
+      "occurrenceId": "ggb.math.occurrence.inequalities.9-12.01",
+      "path": "materials/graphing-absolute-value-functions-and-inequalities/material.json",
+      "caseRef": "../../cases/34-graphing-absolute-value-functions-and-inequalities/case.json"
+    },
+    {
+      "order": 10,
+      "materialId": "ggb-math-g9-12-graphing-to-solve-quadratic-equations",
+      "title": "用图像解二次方程",
+      "uniqueSkillId": "ggb.math.skill.graphing-to-solve-quadratic-equations",
+      "occurrenceId": "ggb.math.occurrence.quadratic-equations.9-12.03",
+      "path": "materials/graphing-to-solve-quadratic-equations/material.json",
+      "caseRef": "../../cases/35-graphing-to-solve-quadratic-equations/case.json"
+    },
+    {
+      "order": 11,
+      "materialId": "ggb-math-g9-12-domain-and-range-of-special-functions",
+      "title": "特殊函数的定义域和值域",
+      "uniqueSkillId": "ggb.math.skill.domain-and-range-of-special-functions",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.02",
+      "path": "materials/domain-and-range-of-special-functions/material.json",
+      "caseRef": "../../cases/36-domain-and-range-of-special-functions/case.json"
+    },
+    {
+      "order": 12,
+      "materialId": "ggb-math-g9-12-composition-and-inverse-of-functions",
+      "title": "函数的复合与反函数",
+      "uniqueSkillId": "ggb.math.skill.composition-and-inverse-of-functions",
+      "occurrenceId": "ggb.math.occurrence.functions.9-12.01",
+      "path": "materials/composition-and-inverse-of-functions/material.json",
+      "caseRef": "../../cases/37-composition-and-inverse-of-functions/case.json"
+    },
+    {
+      "order": 13,
+      "materialId": "ggb-math-g9-12-solving-systems-of-linear-equations",
+      "title": "解二元一次方程组",
+      "uniqueSkillId": "ggb.math.skill.solving-systems-of-linear-equations",
+      "occurrenceId": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.02",
+      "path": "materials/solving-systems-of-linear-equations/material.json",
+      "caseRef": "../../cases/38-solving-systems-of-linear-equations/case.json"
+    },
+    {
+      "order": 14,
+      "materialId": "ggb-math-g9-12-discriminant-and-roots-of-a-quadratic-equation",
+      "title": "判别式与二次方程根的情况",
+      "uniqueSkillId": "ggb.math.skill.discriminant-and-roots-of-a-quadratic-equation",
+      "occurrenceId": "ggb.math.occurrence.quadratic-equations.9-12.02",
+      "path": "materials/discriminant-and-roots-of-a-quadratic-equation/material.json",
+      "caseRef": "../../cases/39-discriminant-and-roots-of-a-quadratic-equation/case.json"
+    },
+    {
+      "order": 15,
+      "materialId": "ggb-math-g9-12-solving-linear-inequalities",
+      "title": "解二元线性不等式",
+      "uniqueSkillId": "ggb.math.skill.solving-linear-inequalities",
+      "occurrenceId": "ggb.math.occurrence.inequalities.9-12.02",
+      "path": "materials/solving-linear-inequalities/material.json",
+      "caseRef": "../../cases/40-solving-linear-inequalities/case.json"
+    },
+    {
+      "order": 16,
+      "materialId": "ggb-math-g9-12-systems-of-linear-inequalities",
+      "title": "线性不等式组",
+      "uniqueSkillId": "ggb.math.skill.systems-of-linear-inequalities",
+      "occurrenceId": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03",
+      "path": "materials/systems-of-linear-inequalities/material.json",
+      "caseRef": "../../cases/41-systems-of-linear-inequalities/case.json"
+    },
+    {
+      "order": 17,
+      "materialId": "ggb-math-g9-12-solving-nonlinear-systems-of-equations-and-inequalities",
+      "title": "解非线性方程组与不等式组",
+      "uniqueSkillId": "ggb.math.skill.solving-nonlinear-systems-of-equations-and-inequalities",
+      "occurrenceId": "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.01",
+      "path": "materials/solving-nonlinear-systems-of-equations-and-inequalities/material.json",
+      "caseRef": "../../cases/42-solving-nonlinear-systems-of-equations-and-inequalities/case.json"
+    },
+    {
+      "order": 18,
+      "materialId": "ggb-math-g9-12-using-the-quadratic-formula-to-solve-quadratic-equations",
+      "title": "用求根公式解二次方程",
+      "uniqueSkillId": "ggb.math.skill.using-the-quadratic-formula-to-solve-quadratic-equations",
+      "occurrenceId": "ggb.math.occurrence.quadratic-equations.9-12.06",
+      "path": "materials/using-the-quadratic-formula-to-solve-quadratic-equations/material.json",
+      "caseRef": "../../cases/43-using-the-quadratic-formula-to-solve-quadratic-equations/case.json"
+    }
+  ]
+}

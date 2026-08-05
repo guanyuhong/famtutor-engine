@@ -1,31 +1,43 @@
 # Math Domain Roadmap
 
-本文档是 **FamTutor Engine** 数学包（`packages/math` / `@famtutor/math-runtime`）的领域路线图。引擎级多学科规划见仓库根 [`docs/ROADMAP.md`](../../../docs/ROADMAP.md)。
+本文档是 **FamTutor Engine** 数学包（`packages/math` / `@famtutor/math-runtime`）的领域路线图。引擎级设计与多学科规划见 [`docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md) 与 [`docs/ROADMAP.md`](../../../docs/ROADMAP.md)。
 
-## v0.1 — Agent-native 2D P0（本版本）
+## v0.1 — Agent-native 2D P0（已交付）
 
 - MathDocument v1；
-- 31 个核心命令；
+- **53** 个 L0 命令；
+- **8** 个 L1 宏（`expand_macro`，不进 L0 enum）；
 - safe expression；
 - DAG、numeric kernel、assertion、simulation；
 - JSXGraph + Direct SVG；
 - 9 Agent tools + MCP；
-- CLI、demo、完整 smoke tests。
+- CLI、demo、smoke tests。
 
-## v0.2 — 教学生产可用性
+## v0.2 — 引擎基础优先，再教学生产
 
-优先：
+**引擎级（见根文档）**：
+
+- ~~发布基线（PR1）~~
+- ~~`@famtutor/core` + math `DomainRuntime` / `applyMathChangeSet`（PR2）~~
+- ~~Live ChangeSet / `MountedRenderer` rebuild（PR3）~~
+- ~~Render Bundle `famtutor.render.bundle.v1`（PR4）~~
+
+在引擎基础完成后，再推进数学教学生产能力；暂不开物理/化学包。
+
+数学侧在引擎基础之后依次：
 
 - ~~arc、sector、ellipse、parabola、hyperbola~~（已下沉为 L0：`arc2`/`sector2`/`conic2`）
 - ~~transformation object~~（已下沉为 L0：`transform2` + `transform.apply`）
-- tangent、angle bisector、perpendicular bisector **macro（L1，不进 L0）** — 见 `src/catalog/macros.ts`
+- ~~tangent、angle bisector、perpendicular bisector macro（L1）~~ — 见 `src/catalog/macros.ts`
+- ~~Agent repair diagnostics / suggestedFixes~~（v0.1.1 已有初版）
+- ~~`mountMathRenderer` live rebuild + interaction ChangeSet~~（v0.2.0）
+- dirty-set / native object reconcile（后续）；
+- label layout / priority；
 - Direct SVG 与 JSXGraph 视觉 parity；
-- label layout/priority 接入旧 visual engine 能力；
 - Construction View；
 - Algebra Inspector；
 - server-side render worker；
-- document migration framework；
-- Agent repair diagnostics 和 suggested operations。
+- document migration framework。
 
 ### L0 vs L1 边界
 
@@ -56,4 +68,4 @@
 
 ## 非目标
 
-短期不做 GeoGebra 社区、完整 Spreadsheet、通用白板或 `.ggb` 100% 兼容。产品壁垒应放在 Agent 编译、数学验证、互动证据和课程生产，而不是复制所有桌面创作功能。
+短期不做 GeoGebra 社区、完整 Spreadsheet、通用白板或 `.ggb` 100% 兼容。产品壁垒应放在 Agent 编译、数学验证、互动证据、live 渲染和课程生产，而不是复制所有桌面创作功能。

@@ -1,0 +1,716 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-31-zeros-of-quadratic-functions",
+  "title": "二次函数的零点",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/quadratic-functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "function.explicit",
+    "function.value_at",
+    "scalar.slider",
+    "point.from_expressions",
+    "assertion.expression_equal",
+    "line.through_points",
+    "boolean.expression",
+    "text.conditional"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-quadratic-zeros",
+      "revision": 1,
+      "seed": 3101,
+      "metadata": {
+        "title": "二次函数的零点",
+        "description": "改变因式中的两个根，观察因式、零点、x 轴交点和重根边界同步变化。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "quadratic-function",
+          "zeros",
+          "factored-form",
+          "double-root"
+        ]
+      },
+      "entities": [
+        {
+          "id": "r1",
+          "type": "scalar",
+          "role": "free",
+          "label": "零点 r₁"
+        },
+        {
+          "id": "r2",
+          "type": "scalar",
+          "role": "free",
+          "label": "零点 r₂"
+        },
+        {
+          "id": "zero",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=(x−r₁)(x−r₂)"
+        },
+        {
+          "id": "atR1",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "atR2",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "atZero",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "Z1",
+          "type": "point2",
+          "role": "derived",
+          "label": "Z₁"
+        },
+        {
+          "id": "Z2",
+          "type": "point2",
+          "role": "derived",
+          "label": "Z₂"
+        },
+        {
+          "id": "Y",
+          "type": "point2",
+          "role": "derived",
+          "label": "Y"
+        },
+        {
+          "id": "V",
+          "type": "point2",
+          "role": "derived",
+          "label": "V"
+        },
+        {
+          "id": "axisLow",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "axisHigh",
+          "type": "point2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "axis",
+          "type": "line2",
+          "role": "auxiliary"
+        },
+        {
+          "id": "doubleRoot",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "distinctRoots",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "doubleText",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "distinctText",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "op-r1",
+          "command": "scalar.slider",
+          "params": {
+            "value": -2,
+            "min": -3,
+            "max": 3,
+            "step": 0.25,
+            "position": [
+              -5.2,
+              -5.25
+            ],
+            "length": 4.2
+          },
+          "outputs": [
+            "r1"
+          ]
+        },
+        {
+          "id": "op-r2",
+          "command": "scalar.slider",
+          "params": {
+            "value": 2,
+            "min": -3,
+            "max": 3,
+            "step": 0.25,
+            "position": [
+              -5.2,
+              -5.9
+            ],
+            "length": 4.2
+          },
+          "outputs": [
+            "r2"
+          ]
+        },
+        {
+          "id": "op-zero",
+          "command": "scalar.constant",
+          "params": {
+            "value": 0
+          },
+          "outputs": [
+            "zero"
+          ]
+        },
+        {
+          "id": "op-f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "(x-r1)*(x-r2)",
+            "domain": [
+              -4,
+              4
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "op-at-r1",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "r1"
+            }
+          ],
+          "outputs": [
+            "atR1"
+          ]
+        },
+        {
+          "id": "op-at-r2",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "r2"
+            }
+          ],
+          "outputs": [
+            "atR2"
+          ]
+        },
+        {
+          "id": "op-at-zero",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "zero"
+            }
+          ],
+          "outputs": [
+            "atZero"
+          ]
+        },
+        {
+          "id": "op-Z1",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "r1",
+            "y": "atR1"
+          },
+          "outputs": [
+            "Z1"
+          ]
+        },
+        {
+          "id": "op-Z2",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "r2",
+            "y": "atR2"
+          },
+          "outputs": [
+            "Z2"
+          ]
+        },
+        {
+          "id": "op-Y",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "0",
+            "y": "atZero"
+          },
+          "outputs": [
+            "Y"
+          ]
+        },
+        {
+          "id": "op-V",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "(r1+r2)/2",
+            "y": "-(r1-r2)^2/4"
+          },
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "id": "op-axis-low",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "(r1+r2)/2",
+            "y": "-4.5"
+          },
+          "outputs": [
+            "axisLow"
+          ]
+        },
+        {
+          "id": "op-axis-high",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "(r1+r2)/2",
+            "y": "6"
+          },
+          "outputs": [
+            "axisHigh"
+          ]
+        },
+        {
+          "id": "op-axis",
+          "command": "line.through_points",
+          "inputs": [
+            {
+              "ref": "axisLow"
+            },
+            {
+              "ref": "axisHigh"
+            }
+          ],
+          "outputs": [
+            "axis"
+          ]
+        },
+        {
+          "id": "op-double",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "r1==r2"
+          },
+          "outputs": [
+            "doubleRoot"
+          ]
+        },
+        {
+          "id": "op-distinct",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "r1!=r2"
+          },
+          "outputs": [
+            "distinctRoots"
+          ]
+        },
+        {
+          "id": "op-double-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "doubleRoot"
+            }
+          ],
+          "params": {
+            "trueText": "r₁=r₂：两个零点合并为重根",
+            "falseText": "​",
+            "at": [
+              -5.4,
+              5.45
+            ]
+          },
+          "outputs": [
+            "doubleText"
+          ]
+        },
+        {
+          "id": "op-distinct-text",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "distinctRoots"
+            }
+          ],
+          "params": {
+            "trueText": "r₁≠r₂：图像与 x 轴有两个交点",
+            "falseText": "​",
+            "at": [
+              -5.4,
+              5.45
+            ]
+          },
+          "outputs": [
+            "distinctText"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6,
+            6,
+            -6.35
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "r1",
+            "r2"
+          ],
+          "style": {
+            "fontSize": 12,
+            "labelOffset": [
+              4,
+              0
+            ]
+          }
+        },
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "stroke": "#155B73",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "Z1",
+            "Z2"
+          ],
+          "style": {
+            "stroke": "#E36E45",
+            "fill": "#E36E45",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "bottom"
+          }
+        },
+        {
+          "targets": [
+            "V"
+          ],
+          "style": {
+            "stroke": "#6C5CE7",
+            "fill": "#6C5CE7",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "Y"
+          ],
+          "style": {
+            "stroke": "#2B8A3E",
+            "fill": "#2B8A3E",
+            "pointSize": 4,
+            "fontSize": 10,
+            "labelVisible": true,
+            "labelPlacement": "left"
+          }
+        },
+        {
+          "targets": [
+            "axisLow",
+            "axisHigh"
+          ],
+          "style": {
+            "opacity": 0,
+            "pointSize": 1,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "axis"
+          ],
+          "style": {
+            "stroke": "#9DA9B5",
+            "strokeWidth": 1.3,
+            "dash": "dashed",
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "doubleText",
+            "distinctText"
+          ],
+          "style": {
+            "stroke": "#315F78",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "r1",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        },
+        {
+          "target": "r2",
+          "permissions": [
+            "select",
+            "drag"
+          ],
+          "dragMode": "free"
+        }
+      ],
+      "assertions": [
+        {
+          "id": "first-zero",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "atR1"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "f(r₁)=0。"
+        },
+        {
+          "id": "second-zero",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "atR2"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "f(r₂)=0。"
+        },
+        {
+          "id": "first-intercept",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(Z1)"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "Z₁ 在 x 轴上。"
+        },
+        {
+          "id": "second-intercept",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(Z2)"
+            },
+            {
+              "value": 0
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "Z₂ 在 x 轴上。"
+        },
+        {
+          "id": "y-intercept-product",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(Y)"
+            },
+            {
+              "expr": "r1*r2"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-9,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "f(0)=r₁r₂。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-quadratic-zeros",
+          "title": "二次函数的零点",
+          "stages": [
+            {
+              "id": "factored-form",
+              "narration": "因式分解式 f(x)=(x-r₁)(x-r₂) 把两个候选零点直接写在式子里。",
+              "focus": [
+                "f",
+                "r1",
+                "r2"
+              ]
+            },
+            {
+              "id": "zeros-intercepts",
+              "narration": "代入 r₁ 或 r₂ 时有一个因式为零，所以函数值为零；对应点就是 x 轴交点。",
+              "focus": [
+                "Z1",
+                "Z2"
+              ]
+            },
+            {
+              "id": "double-root",
+              "narration": "当 r₁=r₂ 时两个交点合并，抛物线与 x 轴相切；对称轴始终经过两根中点。",
+              "focus": [
+                "V",
+                "axis",
+                "doubleText",
+                "distinctText"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "move-the-zeros",
+              "prompt": "先取两个不同零点，再令 r₁=r₂，解释图像与 x 轴交点数量的变化。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "first-zero"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "second-zero"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "y-intercept-product"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.quadratic-functions.9-12.07",
+          "ggb.math.skill.zeros-of-quadratic-functions",
+          "https://www.geogebra.org/math/quadratic-functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "r1",
+        "permission": "drag"
+      },
+      {
+        "target": "r2",
+        "permission": "drag"
+      }
+    ]
+  }
+}

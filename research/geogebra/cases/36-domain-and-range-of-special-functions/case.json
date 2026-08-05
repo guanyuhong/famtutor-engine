@@ -1,0 +1,414 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-36-domain-and-range-of-special-functions",
+  "title": "特殊函数的定义域和值域",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/functions?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.piecewise",
+    "function.value_at",
+    "point.from_expressions",
+    "interval.from_bounds",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-domain-range-special-functions",
+      "revision": 1,
+      "seed": 3601,
+      "metadata": {
+        "title": "特殊函数的定义域和值域",
+        "description": "用同一 function1 表示常值、线性和阶梯分支，并核验开闭端点。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-03"
+        ]
+      },
+      "entities": [
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "输入 x"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "分段函数 f"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "derived"
+        },
+        {
+          "id": "P",
+          "type": "point2",
+          "role": "derived",
+          "label": "P"
+        },
+        {
+          "id": "domain",
+          "type": "interval1",
+          "role": "auxiliary",
+          "label": "定义域 [-4,4]"
+        },
+        {
+          "id": "formula",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "range",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "x",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -4,
+            "max": 4,
+            "step": 0.25,
+            "position": [
+              -5.4,
+              -5.2
+            ],
+            "length": 5
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.piecewise",
+          "params": {
+            "branches": [
+              {
+                "expression": "-1",
+                "domain": [
+                  -4,
+                  0
+                ],
+                "lowerClosed": true,
+                "upperClosed": false
+              },
+              {
+                "expression": "x+1",
+                "domain": [
+                  0,
+                  2
+                ],
+                "lowerClosed": true,
+                "upperClosed": false
+              },
+              {
+                "expression": "3",
+                "domain": [
+                  2,
+                  4
+                ],
+                "lowerClosed": true,
+                "upperClosed": true
+              }
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "y",
+          "command": "function.value_at",
+          "inputs": [
+            {
+              "ref": "f"
+            },
+            {
+              "ref": "x0"
+            }
+          ],
+          "outputs": [
+            "y0"
+          ]
+        },
+        {
+          "id": "p",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "y0"
+          },
+          "outputs": [
+            "P"
+          ]
+        },
+        {
+          "id": "domain",
+          "command": "interval.from_bounds",
+          "params": {
+            "lower": -4,
+            "upper": 4,
+            "lowerClosed": true,
+            "upperClosed": true,
+            "y": -4
+          },
+          "outputs": [
+            "domain"
+          ]
+        },
+        {
+          "id": "formula",
+          "command": "text.at",
+          "params": {
+            "text": "x<0: -1；0≤x<2: x+1；2≤x≤4: 3",
+            "at": [
+              -5.5,
+              5.8
+            ]
+          },
+          "outputs": [
+            "formula"
+          ]
+        },
+        {
+          "id": "range",
+          "command": "text.at",
+          "params": {
+            "text": "定义域 [-4,4]；值域 {-1}∪[1,3]",
+            "at": [
+              -5.5,
+              5.25
+            ]
+          },
+          "outputs": [
+            "range"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.4,
+            6,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "P"
+          ],
+          "style": {
+            "token": "accent",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "domain"
+          ],
+          "style": {
+            "token": "success"
+          }
+        },
+        {
+          "targets": [
+            "formula",
+            "range"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 11
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "point-input",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(P)"
+            },
+            {
+              "expr": "x0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "动态图上点的横坐标等于输入。"
+        },
+        {
+          "id": "point-output",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(P)"
+            },
+            {
+              "expr": "y0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "动态图上点的纵坐标等于分段函数值。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-domain-range-special-functions",
+          "title": "特殊函数的定义域和值域",
+          "stages": [
+            {
+              "id": "constant",
+              "narration": "先观察左侧常函数分支：不同输入可以得到同一个输出。",
+              "reveal": [
+                "x0",
+                "f",
+                "y0",
+                "P",
+                "formula"
+              ]
+            },
+            {
+              "id": "step",
+              "narration": "阶梯变化发生在分支端点；空心与实心端点决定边界值属于哪一段。",
+              "reveal": [
+                "x0",
+                "f",
+                "y0",
+                "P",
+                "formula"
+              ]
+            },
+            {
+              "id": "domain-range",
+              "narration": "定义域收集允许的输入；值域收集实际出现的输出。值域不一定是单个连续区间。",
+              "reveal": [
+                "x0",
+                "f",
+                "y0",
+                "P",
+                "domain",
+                "formula",
+                "range"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-domain-range-special-functions-task",
+              "prompt": "切换阶段并核验图像、代数关系和边界条件。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "point-input"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "point-output"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.functions.9-12.02",
+          "ggb.math.skill.domain-and-range-of-special-functions",
+          "https://www.geogebra.org/math/functions?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "x0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,542 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-2-12-counterexample",
+  "title": "用反例判断假命题",
+  "description": "按教材图 1-10实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.2 定义与命题",
+    "printedPages": [
+      13,
+      14
+    ],
+    "pdfPages": [
+      16,
+      17
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "true-false-statement",
+    "counterexample"
+  ],
+  "learningObjective": "识别满足命题条件但不满足结论的反例，理解反例为何能否定命题。",
+  "caseType": "demonstration",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "marker.parallel_chevron",
+    "marker.segment_tick",
+    "assertion.parallel",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 212,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-12-counterexample",
+      "revision": 1,
+      "seed": 212,
+      "metadata": {
+        "title": "用反例判断假命题",
+        "locale": "zh-CN",
+        "purpose": "demonstration",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.2",
+          "true-false-statement",
+          "counterexample"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            4,
+            7,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-12",
+          "title": "用反例判断假命题",
+          "stages": [
+            {
+              "id": "claim",
+              "narration": "待判断：一组对边平行、另一组对边相等的四边形是平行四边形。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "AB",
+                "AD",
+                "DC",
+                "BC"
+              ]
+            },
+            {
+              "id": "conditions",
+              "narration": "这个等腰梯形满足 AD∥BC 且 AB=DC，完整满足命题条件。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "AB",
+                "AD",
+                "DC",
+                "BC",
+                "topParallel1",
+                "topParallel2",
+                "bottomParallel1",
+                "bottomParallel2",
+                "tickAB",
+                "tickDC"
+              ]
+            },
+            {
+              "id": "counterexample",
+              "narration": "但 AD 与 BC 长度不同，另两边也不平行，它不是平行四边形；一个反例即可说明原命题是假命题。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "AB",
+                "AD",
+                "DC",
+                "BC",
+                "topParallel1",
+                "topParallel2",
+                "bottomParallel1",
+                "bottomParallel2",
+                "tickAB",
+                "tickDC"
+              ],
+              "focus": [
+                "AD",
+                "BC"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-13-14:figure-1-10"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-12-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-12-counterexample",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                1,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "D",
+                "label": "D"
+              }
+            ],
+            "params": {
+              "coords": [
+                5,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AD"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "D"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "DC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "D"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "BC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "M1",
+                "label": "M1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                3
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "M2",
+                "label": "M2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "topParallel1"
+              },
+              {
+                "id": "topParallel2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "M1"
+              },
+              {
+                "ref": "AD"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.parallel_chevron",
+            "outputs": [
+              {
+                "id": "bottomParallel1"
+              },
+              {
+                "id": "bottomParallel2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "M2"
+              },
+              {
+                "ref": "BC"
+              }
+            ],
+            "params": {
+              "size": 0.42
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickAB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "AB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickDC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "DC"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "one-pair-parallel",
+              "predicate": "parallel",
+              "arguments": [
+                {
+                  "ref": "AD"
+                },
+                {
+                  "ref": "BC"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AD 与 BC 平行。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "legs-equal",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AB"
+                },
+                {
+                  "ref": "DC"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AB 与 DC 相等。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AB",
+              "AD",
+              "DC",
+              "BC"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "topParallel1",
+              "topParallel2",
+              "bottomParallel1",
+              "bottomParallel2",
+              "tickAB",
+              "tickDC"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "D",
+              "B",
+              "C",
+              "M1",
+              "M2"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "33c93f478ccc12b18ced2191a88842db8cb29f3f8fa045487a82fc2afaad70ab",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "D",
+          "B",
+          "C",
+          "AB",
+          "AD",
+          "DC",
+          "BC"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

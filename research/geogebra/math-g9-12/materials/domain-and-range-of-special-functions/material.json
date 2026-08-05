@@ -1,0 +1,174 @@
+{
+  "schema": "famtutor.geogebra.math.material.v1",
+  "materialId": "ggb-math-g9-12-domain-and-range-of-special-functions",
+  "title": "特殊函数的定义域和值域",
+  "titleEn": "Domain and Range of Special Functions",
+  "gradeBand": "9-12",
+  "domain": "Algebra",
+  "pattern": "algebra_relationship",
+  "knowledgePoint": {
+    "uniqueSkillId": "ggb.math.skill.domain-and-range-of-special-functions",
+    "occurrenceIds": [
+      "ggb.math.occurrence.functions.9-12.02"
+    ],
+    "topicSlug": "functions"
+  },
+  "sourceSnapshot": "source-snapshot.json",
+  "teachingAtoms": [
+    {
+      "id": "atom-domain-and-range-of-special-functions-1",
+      "type": "concept",
+      "visibleText": "分段函数在不同输入区间使用不同规则。",
+      "narrationSeed": "分段函数在不同输入区间使用不同规则。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.02"
+    },
+    {
+      "id": "atom-domain-and-range-of-special-functions-2",
+      "type": "rule",
+      "visibleText": "开闭端点决定边界输入属于哪一段。",
+      "narrationSeed": "开闭端点决定边界输入属于哪一段。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.02"
+    },
+    {
+      "id": "atom-domain-and-range-of-special-functions-3",
+      "type": "procedure",
+      "visibleText": "定义域是允许输入的集合。",
+      "narrationSeed": "定义域是允许输入的集合。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.02"
+    },
+    {
+      "id": "atom-domain-and-range-of-special-functions-4",
+      "type": "representation",
+      "visibleText": "值域是函数实际输出的集合。",
+      "narrationSeed": "值域是函数实际输出的集合。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.02"
+    },
+    {
+      "id": "atom-domain-and-range-of-special-functions-5",
+      "type": "misconception",
+      "visibleText": "值域可能是不连续集合，不能强写成单一区间。",
+      "narrationSeed": "值域可能是不连续集合，不能强写成单一区间。",
+      "sourceRef": "ggb.math.occurrence.functions.9-12.02"
+    }
+  ],
+  "engineCase": {
+    "path": "../../../cases/36-domain-and-range-of-special-functions/case.json",
+    "caseId": "research-geogebra-36-domain-and-range-of-special-functions",
+    "documentId": "geogebra-math-domain-range-special-functions"
+  },
+  "stages": [
+    {
+      "id": "constant",
+      "order": 1
+    },
+    {
+      "id": "step",
+      "order": 2
+    },
+    {
+      "id": "domain-range",
+      "order": 3
+    }
+  ],
+  "quizSeeds": [
+    {
+      "id": "quiz-assessment-domain-and-range-of-special-functions-1",
+      "type": "short_answer",
+      "stem": "说明：分段函数在不同输入区间使用不同规则。",
+      "answer": "分段函数在不同输入区间使用不同规则。",
+      "feedback": {
+        "correct": "分段函数在不同输入区间使用不同规则。",
+        "incorrect": "分段函数在不同输入区间使用不同规则。"
+      },
+      "sourceAtomIds": [
+        "atom-domain-and-range-of-special-functions-1"
+      ]
+    },
+    {
+      "id": "quiz-domain-and-range-of-special-functions-2",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：开闭端点决定边界输入属于哪一段。",
+      "answer": "开闭端点决定边界输入属于哪一段。",
+      "feedback": {
+        "correct": "开闭端点决定边界输入属于哪一段。",
+        "incorrect": "开闭端点决定边界输入属于哪一段。"
+      },
+      "sourceAtomIds": [
+        "atom-domain-and-range-of-special-functions-2"
+      ]
+    },
+    {
+      "id": "quiz-domain-and-range-of-special-functions-3",
+      "type": "short_answer",
+      "stem": "说明：定义域是允许输入的集合。",
+      "answer": "定义域是允许输入的集合。",
+      "feedback": {
+        "correct": "定义域是允许输入的集合。",
+        "incorrect": "定义域是允许输入的集合。"
+      },
+      "sourceAtomIds": [
+        "atom-domain-and-range-of-special-functions-3"
+      ]
+    },
+    {
+      "id": "quiz-domain-and-range-of-special-functions-4",
+      "type": "short_answer",
+      "stem": "给出一个例子验证：值域是函数实际输出的集合。",
+      "answer": "值域是函数实际输出的集合。",
+      "feedback": {
+        "correct": "值域是函数实际输出的集合。",
+        "incorrect": "值域是函数实际输出的集合。"
+      },
+      "sourceAtomIds": [
+        "atom-domain-and-range-of-special-functions-4"
+      ]
+    },
+    {
+      "id": "quiz-domain-and-range-of-special-functions-5",
+      "type": "short_answer",
+      "stem": "说明：值域可能是不连续集合，不能强写成单一区间。",
+      "answer": "值域可能是不连续集合，不能强写成单一区间。",
+      "feedback": {
+        "correct": "值域可能是不连续集合，不能强写成单一区间。",
+        "incorrect": "值域可能是不连续集合，不能强写成单一区间。"
+      },
+      "sourceAtomIds": [
+        "atom-domain-and-range-of-special-functions-5"
+      ]
+    }
+  ],
+  "acceptance": {
+    "sourceFidelity": {
+      "status": "verified",
+      "evidence": [
+        "ggb.math.occurrence.functions.9-12.02",
+        "https://www.geogebra.org/math/functions?lang=en-GB"
+      ]
+    },
+    "mathCorrectness": {
+      "status": "automated",
+      "evidence": [
+        "runtime assertions",
+        "boundary/classification checks"
+      ]
+    },
+    "visualQuality": {
+      "status": "verified-browser-review",
+      "evidence": [
+        "Direct SVG",
+        "Mounted JSXGraph Gallery at live 80-card page",
+        "four-case stage-switch review",
+        "piecewise endpoint visual review"
+      ]
+    },
+    "runtimeStatus": {
+      "status": "automated",
+      "evidence": [
+        "validate",
+        "Direct SVG",
+        "MountedRenderer browser gate",
+        "Render Bundle"
+      ]
+    }
+  }
+}

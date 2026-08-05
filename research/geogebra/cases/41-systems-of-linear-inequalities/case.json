@@ -1,0 +1,511 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-41-systems-of-linear-inequalities",
+  "title": "线性不等式组",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "region.function_inequality",
+    "point.from_expressions",
+    "boolean.expression",
+    "text.conditional",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-systems-linear-inequalities",
+      "revision": 1,
+      "seed": 4101,
+      "metadata": {
+        "title": "线性不等式组",
+        "description": "叠加两个已有半平面，以公共阴影和联合布尔测试表达系统解。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-04"
+        ]
+      },
+      "entities": [
+        {
+          "id": "x0",
+          "type": "scalar",
+          "role": "free",
+          "label": "测试点 x"
+        },
+        {
+          "id": "y0",
+          "type": "scalar",
+          "role": "free",
+          "label": "测试点 y"
+        },
+        {
+          "id": "f1",
+          "type": "function1",
+          "role": "derived",
+          "label": "y=x-1"
+        },
+        {
+          "id": "f2",
+          "type": "function1",
+          "role": "derived",
+          "label": "y=-0.5x+3"
+        },
+        {
+          "id": "r1",
+          "type": "region2",
+          "role": "derived",
+          "label": "y≥x-1"
+        },
+        {
+          "id": "r2",
+          "type": "region2",
+          "role": "derived",
+          "label": "y≤-0.5x+3"
+        },
+        {
+          "id": "T",
+          "type": "point2",
+          "role": "derived",
+          "label": "T"
+        },
+        {
+          "id": "both",
+          "type": "boolean",
+          "role": "derived",
+          "visible": false
+        },
+        {
+          "id": "feedback",
+          "type": "text",
+          "role": "annotation"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "x",
+          "command": "scalar.slider",
+          "params": {
+            "value": 0,
+            "min": -4,
+            "max": 4,
+            "step": 0.5,
+            "position": [
+              -5.3,
+              -5.15
+            ],
+            "length": 4.5
+          },
+          "outputs": [
+            "x0"
+          ]
+        },
+        {
+          "id": "y",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -3,
+            "max": 5,
+            "step": 0.5,
+            "position": [
+              0.5,
+              -5.15
+            ],
+            "length": 4.5
+          },
+          "outputs": [
+            "y0"
+          ]
+        },
+        {
+          "id": "f1",
+          "command": "function.explicit",
+          "params": {
+            "expression": "x-1",
+            "domain": [
+              -6,
+              6
+            ]
+          },
+          "outputs": [
+            "f1"
+          ]
+        },
+        {
+          "id": "f2",
+          "command": "function.explicit",
+          "params": {
+            "expression": "-0.5*x+3",
+            "domain": [
+              -6,
+              6
+            ]
+          },
+          "outputs": [
+            "f2"
+          ]
+        },
+        {
+          "id": "r1",
+          "command": "region.function_inequality",
+          "inputs": [
+            {
+              "ref": "f1"
+            }
+          ],
+          "params": {
+            "relation": "above",
+            "domain": [
+              -6,
+              6
+            ],
+            "boundaryIncluded": true
+          },
+          "outputs": [
+            "r1"
+          ]
+        },
+        {
+          "id": "r2",
+          "command": "region.function_inequality",
+          "inputs": [
+            {
+              "ref": "f2"
+            }
+          ],
+          "params": {
+            "relation": "below",
+            "domain": [
+              -6,
+              6
+            ],
+            "boundaryIncluded": true
+          },
+          "outputs": [
+            "r2"
+          ]
+        },
+        {
+          "id": "test",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "x0",
+            "y": "y0"
+          },
+          "outputs": [
+            "T"
+          ]
+        },
+        {
+          "id": "both",
+          "command": "boolean.expression",
+          "params": {
+            "expression": "y0>=x0-1 && y0<=-0.5*x0+3"
+          },
+          "outputs": [
+            "both"
+          ]
+        },
+        {
+          "id": "feedback",
+          "command": "text.conditional",
+          "inputs": [
+            {
+              "ref": "both"
+            }
+          ],
+          "params": {
+            "trueText": "同时满足两个不等式：是系统的解",
+            "falseText": "至少有一个不等式不满足：不是系统的解",
+            "at": [
+              -5.4,
+              5.75
+            ]
+          },
+          "outputs": [
+            "feedback"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "解集 = 两个半平面的公共部分",
+            "at": [
+              -5.4,
+              5.2
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.8
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "r1"
+          ],
+          "style": {
+            "token": "primary",
+            "fillOpacity": 0.14,
+            "strokeWidth": 2.4
+          }
+        },
+        {
+          "targets": [
+            "r2"
+          ],
+          "style": {
+            "token": "accent",
+            "fillOpacity": 0.14,
+            "strokeWidth": 2.4
+          }
+        },
+        {
+          "targets": [
+            "f1"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.5,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "f2"
+          ],
+          "style": {
+            "token": "accent",
+            "strokeWidth": 2.5,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "T"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "right"
+          }
+        },
+        {
+          "targets": [
+            "feedback"
+          ],
+          "style": {
+            "token": "success",
+            "fontSize": 12
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "x0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        },
+        {
+          "target": "y0",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "test-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(T)"
+            },
+            {
+              "expr": "x0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "测试点横坐标与滑块一致。"
+        },
+        {
+          "id": "test-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(T)"
+            },
+            {
+              "expr": "y0"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "测试点纵坐标与滑块一致。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-systems-linear-inequalities",
+          "title": "线性不等式组",
+          "stages": [
+            {
+              "id": "first",
+              "narration": "先绘制 y≥x-1：边界上方是第一个解半平面。",
+              "reveal": [
+                "f1",
+                "r1"
+              ]
+            },
+            {
+              "id": "second",
+              "narration": "再绘制 y≤-0.5x+3：边界下方是第二个解半平面。",
+              "reveal": [
+                "f1",
+                "r1",
+                "f2",
+                "r2"
+              ]
+            },
+            {
+              "id": "intersection",
+              "narration": "系统要求同时满足两个条件；重叠区域就是公共解集，测试点用同一个合取条件核验。",
+              "reveal": [
+                "x0",
+                "y0",
+                "f1",
+                "r1",
+                "f2",
+                "r2",
+                "T",
+                "feedback",
+                "note"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-systems-linear-inequalities-task",
+              "prompt": "切换阶段并用图像、代数与测试点核验结论。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "test-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "test-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.system-of-equations-and-inequalities.9-12.03",
+          "ggb.math.skill.systems-of-linear-inequalities",
+          "https://www.geogebra.org/math/system-of-equations-and-inequalities?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "x0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      },
+      {
+        "target": "y0",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

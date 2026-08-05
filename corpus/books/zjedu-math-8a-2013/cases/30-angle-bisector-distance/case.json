@@ -1,0 +1,738 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-5-30-angle-bisector-distance",
+  "title": "角平分线上的点到两边距离相等",
+  "description": "按教材图 1-38实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "1 三角形的初步知识",
+    "section": "1.5 三角形全等的判定",
+    "printedPages": [
+      34
+    ],
+    "pdfPages": [
+      37
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "angle-bisector-distance",
+    "aas"
+  ],
+  "learningObjective": "从角平分线上的点分别向两边作垂线，用 AAS 证明两条距离相等。",
+  "caseType": "guided-construction",
+  "difficulty": "intermediate",
+  "requiredCapabilities": [
+    "point.projection",
+    "marker.right_angle",
+    "marker.segment_tick",
+    "assertion.equal_length",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch1-source-faithful-v2",
+    "seed": 230,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch1-30-angle-bisector-distance",
+      "revision": 1,
+      "seed": 230,
+      "metadata": {
+        "title": "角平分线上的点到两边距离相等",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "1.5",
+          "angle-bisector-distance",
+          "aas"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -1,
+            5.5,
+            7,
+            -1
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-30",
+          "title": "角平分线上的点到两边距离相等",
+          "stages": [
+            {
+              "id": "given",
+              "narration": "P 在 ∠XAY 的角平分线上，因此 ∠BAP=∠PAC。",
+              "reveal": [
+                "A",
+                "P",
+                "X",
+                "Y",
+                "AX",
+                "AY",
+                "AP",
+                "angleBAP",
+                "anglePAC"
+              ]
+            },
+            {
+              "id": "construct",
+              "narration": "从 P 分别向角的两边作垂线，垂足为 B、C；PB、PC 是点 P 到两边的距离。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "P",
+                "X",
+                "Y",
+                "AX",
+                "AY",
+                "AP",
+                "PB",
+                "PC",
+                "rightB",
+                "rightC"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "两个直角三角形按 AAS 全等，所以对应边 PB=PC。",
+              "reveal": [
+                "A",
+                "B",
+                "C",
+                "P",
+                "AX",
+                "AY",
+                "AP",
+                "PB",
+                "PC",
+                "rightB",
+                "rightC",
+                "tickPB",
+                "tickPC"
+              ],
+              "focus": [
+                "PB",
+                "PC"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-34:figure-1-38"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-30-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch1-30-angle-bisector-distance",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "X",
+                "label": "X"
+              }
+            ],
+            "params": {
+              "coords": [
+                6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "Y",
+                "label": "Y"
+              }
+            ],
+            "params": {
+              "coords": [
+                3,
+                5.196152
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "P",
+                "label": "P"
+              }
+            ],
+            "params": {
+              "coords": [
+                3.464102,
+                2
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "AX"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "X"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "ray.from_points",
+            "outputs": [
+              {
+                "id": "AY"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "Y"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AP"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "P"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "lineAX"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "X"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "lineAY"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "Y"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.projection",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "lineAX"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.projection",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "lineAY"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "angleBAP",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "P"
+              }
+            ],
+            "params": {
+              "radius": 0.5
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "anglePAC",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ],
+            "params": {
+              "radius": 0.68
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "anglePBA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "B"
+              },
+              {
+                "ref": "A"
+              }
+            ],
+            "params": {
+              "radius": 0.38
+            }
+          },
+          {
+            "op": "construct",
+            "command": "angle.three_points",
+            "outputs": [
+              {
+                "id": "anglePCA",
+                "label": ""
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "A"
+              }
+            ],
+            "params": {
+              "radius": 0.38
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.right_angle",
+            "outputs": [
+              {
+                "id": "rightB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "anglePBA"
+              }
+            ],
+            "params": {
+              "size": 0.28
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.right_angle",
+            "outputs": [
+              {
+                "id": "rightC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "anglePCA"
+              }
+            ],
+            "params": {
+              "size": 0.28
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PB"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PC"
+              }
+            ],
+            "params": {
+              "size": 0.32
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "bisected",
+              "predicate": "equal_angle",
+              "arguments": [
+                {
+                  "ref": "angleBAP"
+                },
+                {
+                  "ref": "anglePAC"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "AP 平分 ∠XAY。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "pb-perp",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "PB"
+                },
+                {
+                  "ref": "lineAX"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "PB⊥AX。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "pc-perp",
+              "predicate": "perpendicular",
+              "arguments": [
+                {
+                  "ref": "PC"
+                },
+                {
+                  "ref": "lineAY"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "PC⊥AY。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "distances",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "PB"
+                },
+                {
+                  "ref": "PC"
+                }
+              ],
+              "tolerance": 0.000001,
+              "message": "PB=PC。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AX",
+              "AY",
+              "AP"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "PB",
+              "PC"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.8,
+              "dash": "dashed",
+              "opacity": 0.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "angleBAP",
+              "anglePAC",
+              "rightB",
+              "rightC",
+              "tickPB",
+              "tickPC"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "lineAX",
+              "lineAY",
+              "anglePBA",
+              "anglePCA"
+            ],
+            "style": {
+              "opacity": 0,
+              "labelVisible": false
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A",
+              "X",
+              "Y",
+              "P",
+              "B",
+              "C"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "d9fcd6017ba0253334e92f31e126e904a75c1fe0e9810d18eca4e51c0b47797a",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "A",
+          "X",
+          "Y",
+          "P",
+          "AX",
+          "AY",
+          "AP",
+          "lineAX"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

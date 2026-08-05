@@ -1,0 +1,25 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-1-1-09-identify-triangle-lines",
+  "title": "辨认并作出中线、角平分线与高",
+  "description": "学生选择辅助线类型、在图上作线，并提交结果获得针对性证据与评分。",
+  "source": { "bookId": "zjedu-math-8a-2013", "pdfName": "义务教育教科书·数学八年级上册.pdf", "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2", "chapter": "1 三角形的初步知识", "section": "1.1 认识三角形", "printedPages": [8, 9], "pdfPages": [11, 12], "extractionMethod": "visual-review", "confidence": 1, "reviewStatus": "reviewed" },
+  "knowledgePoints": ["triangle-lines-assessment", "median", "angle-bisector", "altitude"],
+  "learningObjective": "能根据定义辨别并独立作出三类特殊线段。",
+  "caseType": "assessment",
+  "difficulty": "intermediate",
+  "requiredCapabilities": ["assessment.submit", "tool-restricted-construction", "evidence.capture", "feedback.scored"],
+  "generation": { "provider": "openai-codex", "model": "gpt-5", "promptVersion": "pr6-seed-v1", "seed": 109, "attempts": 2 },
+  "inputs": { "initialDocument": { "schema": "famtutor.math.document.v1", "documentId": "identify-lines-09", "revision": 1, "seed": 109, "metadata": { "title": "辨认三角形特殊线段", "locale": "zh-CN", "purpose": "assessment", "subject": "mathematics", "grade": "grade-8" }, "entities": [], "construction": [], "views": [{ "id": "main", "kind": "graphics2d", "visible": true, "renderer": "jsxgraph-svg", "boundingBox": [-5, 6, 5, -3], "axes": false, "grid": false, "keepAspectRatio": true }], "activities": [{ "id": "identify-lines", "title": "辨认与作图", "tasks": [{ "id": "draw-line", "prompt": "选择一种特殊线段并完成作图。", "allowedTools": ["point.midpoint", "segment.through_points", "line.perpendicular_through"], "evidence": [{ "kind": "assertion", "ref": "student-construction" }] }] }] } },
+  "trace": { "changeSets": [{ "schema": "famtutor.engine.change-set.v1", "changeSetId": "zj8a-09-partial", "base": { "domain": "math", "schema": "famtutor.math.document.v1", "documentId": "identify-lines-09", "revision": 1 }, "operations": [
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "A", "label": "A" }], "params": { "coords": [0, 5] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "B", "label": "B" }], "params": { "coords": [-4, 0] } },
+    { "op": "construct", "command": "point.free", "outputs": [{ "id": "C", "label": "C" }], "params": { "coords": [4, 0] } },
+    { "op": "construct", "command": "polygon.vertices", "outputs": [{ "id": "triangle", "label": "△ABC" }], "inputs": [{ "ref": "A" }, { "ref": "B" }, { "ref": "C" }] },
+    { "op": "set_interaction", "policy": { "target": "triangle", "permissions": ["select"] } }
+  ], "metadata": { "origin": "textbook-case-seed" } }] },
+  "expected": { "assertions": [], "interactions": [{ "target": "triangle", "permission": "select" }], "expectedFailure": { "stage": "assertion", "code": "CAPABILITY_ASSESSMENT_EVIDENCE_UNAVAILABLE", "message": "运行时可表达任务，但尚无提交、工具限制、评分和证据回传闭环。" } },
+  "artifacts": {},
+  "status": "expected-unsupported",
+  "diagnostics": [{ "code": "CAPABILITY_ASSESSMENT_EVIDENCE_UNAVAILABLE", "severity": "warning", "message": "MathActivity task 尚未连接 assessment submit/scoring 协议。", "path": "requiredCapabilities", "retryable": false }]
+}

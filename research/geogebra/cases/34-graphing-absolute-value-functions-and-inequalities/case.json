@@ -1,0 +1,399 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "research-geogebra-34-graphing-absolute-value-functions-and-inequalities",
+  "title": "绝对值函数与不等式作图",
+  "status": "accepted",
+  "caseType": "exploration",
+  "difficulty": "mechanism-reference",
+  "source": {
+    "printedPages": [],
+    "pdfPages": [],
+    "references": [
+      "https://www.geogebra.org/math/absolute-value?lang=en-GB"
+    ],
+    "note": "依据 GeoGebra Math 公开知识目标原创构建；不复制活动正文、插图、Applet 或脚本。"
+  },
+  "requiredCapabilities": [
+    "scalar.slider",
+    "function.explicit",
+    "region.function_inequality",
+    "point.from_expressions",
+    "text.at"
+  ],
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "geogebra-math-absolute-value-inequality",
+      "revision": 1,
+      "seed": 3401,
+      "metadata": {
+        "title": "绝对值函数与不等式作图",
+        "description": "平移 V 形母函数，并用函数边界定义二维解区域。",
+        "locale": "zh-CN",
+        "purpose": "exploration",
+        "subject": "mathematics",
+        "grade": "grade-9-12",
+        "tags": [
+          "geogebra-math-index",
+          "grade-9-12",
+          "wave-02"
+        ]
+      },
+      "entities": [
+        {
+          "id": "h",
+          "type": "scalar",
+          "role": "free",
+          "label": "水平平移 h"
+        },
+        {
+          "id": "k",
+          "type": "scalar",
+          "role": "free",
+          "label": "竖直平移 k"
+        },
+        {
+          "id": "f",
+          "type": "function1",
+          "role": "derived",
+          "label": "f(x)=|x-h|+k"
+        },
+        {
+          "id": "solution",
+          "type": "region2",
+          "role": "derived",
+          "label": "y≥f(x)"
+        },
+        {
+          "id": "V",
+          "type": "point2",
+          "role": "derived",
+          "label": "V(h,k)"
+        },
+        {
+          "id": "note",
+          "type": "text",
+          "role": "annotation"
+        }
+      ],
+      "construction": [
+        {
+          "id": "h",
+          "command": "scalar.slider",
+          "params": {
+            "value": 1,
+            "min": -2,
+            "max": 2,
+            "step": 0.25,
+            "position": [
+              -5.4,
+              -5.05
+            ],
+            "length": 4.4
+          },
+          "outputs": [
+            "h"
+          ]
+        },
+        {
+          "id": "k",
+          "command": "scalar.slider",
+          "params": {
+            "value": -1,
+            "min": -2,
+            "max": 2,
+            "step": 0.25,
+            "position": [
+              0.8,
+              -5.05
+            ],
+            "length": 4.4
+          },
+          "outputs": [
+            "k"
+          ]
+        },
+        {
+          "id": "f",
+          "command": "function.explicit",
+          "params": {
+            "expression": "abs(x-h)+k",
+            "domain": [
+              -5,
+              5
+            ]
+          },
+          "outputs": [
+            "f"
+          ]
+        },
+        {
+          "id": "region",
+          "command": "region.function_inequality",
+          "inputs": [
+            {
+              "ref": "f"
+            }
+          ],
+          "params": {
+            "relation": "above",
+            "domain": [
+              -5,
+              5
+            ],
+            "boundaryIncluded": true
+          },
+          "outputs": [
+            "solution"
+          ]
+        },
+        {
+          "id": "v",
+          "command": "point.from_expressions",
+          "params": {
+            "x": "h",
+            "y": "k"
+          },
+          "outputs": [
+            "V"
+          ]
+        },
+        {
+          "id": "note",
+          "command": "text.at",
+          "params": {
+            "text": "阴影表示 y ≥ |x-h|+k（边界计入）",
+            "at": [
+              -5.4,
+              6
+            ]
+          },
+          "outputs": [
+            "note"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            6.5,
+            6,
+            -5.7
+          ],
+          "axes": true,
+          "grid": true,
+          "keepAspectRatio": true,
+          "background": "#FBFCFE",
+          "cameraPolicy": "document"
+        }
+      ],
+      "styles": [
+        {
+          "targets": [
+            "solution"
+          ],
+          "style": {
+            "token": "accent",
+            "fillOpacity": 0.18,
+            "strokeWidth": 2.5
+          }
+        },
+        {
+          "targets": [
+            "f"
+          ],
+          "style": {
+            "token": "primary",
+            "strokeWidth": 2.8,
+            "labelVisible": false
+          }
+        },
+        {
+          "targets": [
+            "V"
+          ],
+          "style": {
+            "token": "danger",
+            "labelPlacement": "bottom-right"
+          }
+        },
+        {
+          "targets": [
+            "h",
+            "k"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 10,
+            "labelOffset": [
+              0,
+              -12
+            ]
+          }
+        },
+        {
+          "targets": [
+            "note"
+          ],
+          "style": {
+            "token": "primary",
+            "fontSize": 12
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "target": "h",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        },
+        {
+          "target": "k",
+          "permissions": [
+            "select",
+            "drag"
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "vertex-x",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "x(V)"
+            },
+            {
+              "expr": "h"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点横坐标由 h 决定。"
+        },
+        {
+          "id": "vertex-y",
+          "predicate": "expression_equal",
+          "arguments": [
+            {
+              "expr": "y(V)"
+            },
+            {
+              "expr": "k"
+            }
+          ],
+          "expected": true,
+          "tolerance": 1e-7,
+          "requiredMethod": "numeric",
+          "severity": "error",
+          "message": "顶点纵坐标由 k 决定。"
+        }
+      ],
+      "activities": [
+        {
+          "id": "geogebra-math-absolute-value-inequality",
+          "title": "绝对值函数与不等式作图",
+          "stages": [
+            {
+              "id": "parent",
+              "narration": "母函数 y=|x| 是 V 形，顶点在原点。",
+              "focus": [
+                "f"
+              ]
+            },
+            {
+              "id": "transform",
+              "narration": "h 控制水平平移，k 控制竖直平移，顶点始终是 (h,k)。",
+              "focus": [
+                "h",
+                "k",
+                "V"
+              ]
+            },
+            {
+              "id": "inequality",
+              "narration": "关系 y≥f(x) 选择边界上方；等号使边界为实线并包含在解集中。",
+              "focus": [
+                "solution",
+                "f"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "geogebra-math-absolute-value-inequality-task",
+              "prompt": "拖动参数、切换阶段，并用图像与代数互相核验。",
+              "allowedTools": [
+                "interaction.drag"
+              ],
+              "evidence": [
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-x"
+                },
+                {
+                  "kind": "assertion",
+                  "ref": "vertex-y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "ggb.math.occurrence.inequalities.9-12.01",
+          "ggb.math.occurrence.absolute-value.9-12.01",
+          "ggb.math.skill.graphing-absolute-value-functions-and-inequalities",
+          "https://www.geogebra.org/math/absolute-value?lang=en-GB"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": []
+  },
+  "expected": {
+    "assertions": [
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": [
+      {
+        "target": "h",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      },
+      {
+        "target": "k",
+        "permissions": [
+          "select",
+          "drag"
+        ]
+      }
+    ]
+  }
+}

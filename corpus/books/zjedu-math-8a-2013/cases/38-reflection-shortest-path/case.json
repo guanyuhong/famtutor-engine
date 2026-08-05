@@ -1,0 +1,690 @@
+{
+  "schema": "famtutor.case.v1",
+  "caseId": "zj8a-2-1-38-reflection-shortest-path",
+  "title": "用轴对称确定河边饮马的最短路线",
+  "description": "按教材图 2-8 实现的来源可追溯几何案例。",
+  "source": {
+    "bookId": "zjedu-math-8a-2013",
+    "pdfName": "义务教育教科书·数学八年级上册.pdf",
+    "pdfSha256": "d0888daf868964e0b04a7b22f09b24fa24b001becf7c3a617c5f799f1fa078f2",
+    "chapter": "2 特殊三角形",
+    "section": "2.1 图形的轴对称",
+    "printedPages": [
+      50
+    ],
+    "pdfPages": [
+      53
+    ],
+    "extractionMethod": "visual-review",
+    "confidence": 1,
+    "reviewStatus": "reviewed"
+  },
+  "knowledgePoints": [
+    "axial-symmetry",
+    "shortest-path",
+    "triangle-inequality"
+  ],
+  "learningObjective": "把折线路径 AP+PB 转化为直线 A′P+PB，并用两点之间线段最短确定最优河边点。",
+  "caseType": "guided-construction",
+  "difficulty": "advanced",
+  "requiredCapabilities": [
+    "transform.reflect",
+    "transform.apply",
+    "point.intersection_line_line",
+    "marker.segment_tick",
+    "assertion.collinear",
+    "assertion.equal_length",
+    "activity.stages"
+  ],
+  "generation": {
+    "provider": "openai-codex",
+    "model": "gpt-5",
+    "promptVersion": "ch2-source-faithful-v1",
+    "seed": 338,
+    "attempts": 1
+  },
+  "inputs": {
+    "initialDocument": {
+      "schema": "famtutor.math.document.v1",
+      "documentId": "ch2-03-reflection-shortest-path",
+      "revision": 1,
+      "seed": 338,
+      "metadata": {
+        "title": "用轴对称确定河边饮马的最短路线",
+        "locale": "zh-CN",
+        "purpose": "practice",
+        "subject": "mathematics",
+        "grade": "grade-8",
+        "tags": [
+          "2.1",
+          "axial-symmetry",
+          "shortest-path",
+          "triangle-inequality"
+        ]
+      },
+      "entities": [],
+      "construction": [],
+      "views": [
+        {
+          "id": "main",
+          "kind": "graphics2d",
+          "visible": true,
+          "renderer": "jsxgraph-svg",
+          "boundingBox": [
+            -6,
+            5,
+            7,
+            -5
+          ],
+          "axes": false,
+          "grid": false,
+          "keepAspectRatio": true,
+          "background": "#FAF8F2",
+          "cameraPolicy": "stable_across_stages"
+        }
+      ],
+      "activities": [
+        {
+          "id": "activity-38",
+          "title": "用轴对称确定河边饮马的最短路线",
+          "stages": [
+            {
+              "id": "problem",
+              "narration": "图 2-8：从 A 出发到河边 l 饮马，再回到 B。需要在河边选择一点，使折线总长最短。",
+              "reveal": [
+                "A",
+                "B",
+                "river"
+              ]
+            },
+            {
+              "id": "reflect",
+              "narration": "作 A 关于河岸 l 的对称点 A′。对河岸上任一点 P，总有 AP=A′P。",
+              "reveal": [
+                "A",
+                "A2",
+                "P",
+                "river",
+                "AA2",
+                "PA",
+                "PA2",
+                "tickPA",
+                "tickPA2"
+              ]
+            },
+            {
+              "id": "straighten",
+              "narration": "于是 AP+PB 可改写为 A′P+PB。两点之间线段最短，所以当 A′、P、B 共线时取得最小值。",
+              "reveal": [
+                "A",
+                "A2",
+                "B",
+                "river",
+                "A2BLine",
+                "A2BSegment"
+              ]
+            },
+            {
+              "id": "conclude",
+              "narration": "连接 A′B 与河岸交于 C。路线 A—C—B 的长度等于直线段 A′B，因此是最短路线。",
+              "reveal": [
+                "A",
+                "A2",
+                "B",
+                "C",
+                "river",
+                "AC",
+                "A2C",
+                "CB",
+                "A2BSegment"
+              ],
+              "focus": [
+                "AC",
+                "CB"
+              ]
+            }
+          ]
+        }
+      ],
+      "provenance": {
+        "generator": "agent",
+        "sourceRefs": [
+          "zjedu-math-8a-2013:printed-50:figure-2-8"
+        ]
+      }
+    }
+  },
+  "trace": {
+    "changeSets": [
+      {
+        "schema": "famtutor.engine.change-set.v1",
+        "changeSetId": "zj8a-38-build",
+        "base": {
+          "domain": "math",
+          "schema": "famtutor.math.document.v1",
+          "documentId": "ch2-03-reflection-shortest-path",
+          "revision": 1
+        },
+        "operations": [
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "L1",
+                "label": "L1",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                -6,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "L2",
+                "label": "L2",
+                "visible": false
+              }
+            ],
+            "params": {
+              "coords": [
+                7,
+                0
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "river",
+                "label": "l"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "L1"
+              },
+              {
+                "ref": "L2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "A",
+                "label": "A"
+              }
+            ],
+            "params": {
+              "coords": [
+                -4.2,
+                3.4
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "point.free",
+            "outputs": [
+              {
+                "id": "B",
+                "label": "B"
+              }
+            ],
+            "params": {
+              "coords": [
+                4.5,
+                2.5
+              ]
+            }
+          },
+          {
+            "op": "construct",
+            "command": "transform.reflect",
+            "outputs": [
+              {
+                "id": "reflectL",
+                "type": "transform2",
+                "visible": false
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "river"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "transform.apply",
+            "outputs": [
+              {
+                "id": "A2",
+                "type": "point2",
+                "label": "A′",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "reflectL"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "line.through_points",
+            "outputs": [
+              {
+                "id": "A2BLine"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.intersection_line_line",
+            "outputs": [
+              {
+                "id": "C",
+                "label": "C"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "river"
+              },
+              {
+                "ref": "A2BLine"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AC"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2C"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "C"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "CB"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "C"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "A2BSegment"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A2"
+              },
+              {
+                "ref": "B"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "point.projection",
+            "outputs": [
+              {
+                "id": "P",
+                "label": "P",
+                "visible": true
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "river"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "AA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "A"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "A"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "segment.through_points",
+            "outputs": [
+              {
+                "id": "PA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "P"
+              },
+              {
+                "ref": "A2"
+              }
+            ]
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPA"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PA"
+              }
+            ],
+            "params": {
+              "size": 0.3
+            }
+          },
+          {
+            "op": "construct",
+            "command": "marker.segment_tick",
+            "outputs": [
+              {
+                "id": "tickPA2"
+              }
+            ],
+            "inputs": [
+              {
+                "ref": "PA2"
+              }
+            ],
+            "params": {
+              "size": 0.3
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "reflection-distance",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "AC"
+                },
+                {
+                  "ref": "A2C"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "AC=A′C。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "straight-path",
+              "predicate": "collinear",
+              "arguments": [
+                {
+                  "ref": "A2"
+                },
+                {
+                  "ref": "C"
+                },
+                {
+                  "ref": "B"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "A′、C、B 共线。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "add_assertion",
+            "assertion": {
+              "id": "axis-midpoint",
+              "predicate": "equal_length",
+              "arguments": [
+                {
+                  "ref": "PA"
+                },
+                {
+                  "ref": "PA2"
+                }
+              ],
+              "tolerance": 1e-7,
+              "message": "P 是 AA′ 的中点。",
+              "requiredMethod": "numeric"
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AC",
+              "CB"
+            ],
+            "style": {
+              "stroke": "#15365F",
+              "strokeWidth": 2.3
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "river",
+              "AA2",
+              "A2BLine",
+              "A2C",
+              "A2BSegment"
+            ],
+            "style": {
+              "stroke": "#2E6DB2",
+              "strokeWidth": 1.7,
+              "dash": "dashed",
+              "opacity": 0.75
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "tickPA",
+              "tickPA2"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "fill": "#DCEFE7",
+              "strokeWidth": 1.7,
+              "fillOpacity": 0.14
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "river"
+            ],
+            "style": {
+              "lineLabelPosition": 0.88,
+              "lineLabelSide": "left",
+              "lineLabelDistance": 1.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "AC",
+              "CB"
+            ],
+            "style": {
+              "stroke": "#EF6C22",
+              "strokeWidth": 2.8
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "A2C",
+              "A2BSegment"
+            ],
+            "style": {
+              "stroke": "#0E8378",
+              "strokeWidth": 2.1,
+              "dash": "dashed",
+              "opacity": 0.85
+            }
+          },
+          {
+            "op": "set_style",
+            "targets": [
+              "L1",
+              "L2",
+              "A",
+              "B",
+              "A2",
+              "C",
+              "P"
+            ],
+            "style": {
+              "pointSize": 5,
+              "fontSize": 15,
+              "labelPlacement": "auto"
+            }
+          }
+        ],
+        "metadata": {
+          "origin": "textbook-case-source-faithful",
+          "sourceFidelity": "A",
+          "mathCorrectness": "verified",
+          "visualQuality": "pending-browser-review"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "documentFingerprint": "0d399b0d48f07942058c33084e3518bfa5490b58b21e96810b437cf37576cbc1",
+    "assertions": [
+      {
+        "kind": "entity-exists",
+        "entityIds": [
+          "L1",
+          "L2",
+          "river",
+          "A",
+          "B",
+          "reflectL",
+          "A2",
+          "A2BLine"
+        ]
+      },
+      {
+        "kind": "runtime-assertions-pass"
+      },
+      {
+        "kind": "activity-stages",
+        "minimum": 3
+      },
+      {
+        "kind": "static-render"
+      },
+      {
+        "kind": "render-bundle"
+      }
+    ],
+    "interactions": []
+  },
+  "artifacts": {},
+  "status": "accepted",
+  "diagnostics": []
+}

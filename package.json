@@ -7,9 +7,18 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -w @famtutor/math-runtime",
-    "test": "npm run test -w @famtutor/math-runtime",
-    "verify": "npm run verify -w @famtutor/math-runtime"
+    "build": "npm run build -w @famtutor/core && npm run build -w @famtutor/math-runtime",
+    "gallery": "npm run build && python3 -m http.server 4173 --bind 127.0.0.1",
+    "test": "npm run test -w @famtutor/core && npm run test -w @famtutor/math-runtime && npm run test:geogebra",
+    "test:corpus": "npm run build && node ./scripts/corpus-verify.mjs --write-report",
+    "test:geogebra": "node --test ./scripts/geogebra/*.test.mjs",
+    "geogebra:inspect": "node ./scripts/geogebra/cli.mjs inspect",
+    "geogebra:plan": "node ./scripts/geogebra/cli.mjs plan",
+    "geogebra:geometry-catalog": "node ./scripts/geogebra/cli.mjs geometry-catalog",
+    "verify": "npm run verify -w @famtutor/core && npm run verify -w @famtutor/math-runtime && npm run test:corpus"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3"
   },
   "engines": {
     "node": ">=20"

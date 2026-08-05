@@ -3,30 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FamTutor Agent-Native Math Runtime</title>
+  <title>FamTutor Math MountedRenderer Live Demo</title>
   <link rel="stylesheet" href="../vendor/jsxgraph/jsxgraph.css" />
   <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    { "imports": { "@famtutor/core": "/packages/core/dist/index.js" } }
+  </script>
 </head>
 <body>
   <header>
     <div>
-      <h1>FamTutor Agent-Native Math Runtime v0.1</h1>
-      <p>MathDocument → Construction DAG → JSXGraph / Direct SVG → Assertion & Evidence</p>
+      <h1>FamTutor Math Runtime v0.2 — Live MountedRenderer</h1>
+      <p>mountMathRenderer · ChangeSet rebuild · interaction commits · event log</p>
     </div>
     <select id="example">
       <option value="perpendicular-bisector.json">垂直平分线</option>
       <option value="function-slider.json">参数函数</option>
       <option value="circle-intersections.json">两圆交点</option>
       <option value="transformations.json">二维变换</option>
-      <option value="command-catalog-coverage.json">31 命令覆盖场景</option>
+      <option value="command-catalog-coverage.json">命令覆盖场景</option>
+      <option value="conditional-triangle-angle-sum.json">三角形内角和：条件证明</option>
+      <option value="jsxgraph-3d-foundation.json">JSXGraph 3D 基础能力</option>
     </select>
   </header>
   <main>
     <section class="panel"><div id="board"></div></section>
     <aside class="panel">
-      <div class="status"><span class="badge" id="validation">Loading</span><span class="badge" id="render">JSXGraph</span></div>
-      <h2>运行时检查</h2>
+      <div class="status">
+        <span class="badge" id="validation">Loading</span>
+        <span class="badge" id="revision">rev —</span>
+        <span class="badge" id="strategy">—</span>
+      </div>
+      <div id="document-controls" class="document-controls" hidden></div>
+      <div class="actions">
+        <button type="button" id="btn-agent">模拟 Agent ChangeSet</button>
+        <button type="button" id="btn-illegal">非法 ChangeSet</button>
+      </div>
+      <h2>状态</h2>
       <pre id="report"></pre>
+      <h2>Events</h2>
+      <pre id="events"></pre>
     </aside>
   </main>
   <script src="../vendor/jsxgraph/jsxgraphcore.js"></script>
