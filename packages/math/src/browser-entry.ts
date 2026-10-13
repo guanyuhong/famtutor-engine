@@ -39,3 +39,4 @@ export * from "./geogebra/import.js";
 export { GgbImportError } from "./geogebra/xml.js";
 
 export * from "./geogebra/conic-state.js";
+export * from "./geogebra/native-api.js";
