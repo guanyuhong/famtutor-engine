@@ -20,26 +20,26 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - name: Inspect path transport integration points
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          needles={
-            'packages/math/src/kernel/evaluate.ts':['case "point.on_path"'],
-            'packages/math/src/kernel/geometry.ts':['function lineFromPoints','function projectPointToPath'],
-            'packages/math/src/apply-changeset.ts':['point.on_path'],
-            'packages/math/src/render/mounted-renderer.ts':['point.on_path','point.set'],
-            'packages/math/src/render/jsxgraph.ts':['case "point.on_path"'],
-            'packages/math/src/catalog/commands.ts':['name: "point.on_path"']}
-          for file,terms in needles.items():
-            lines=Path(file).read_text().splitlines()
-            for i,line in enumerate(lines):
-              if any(t in line for t in terms):
-                print('\nSOURCE',file, i+1)
-                for j in range(max(0,i-4),min(len(lines),i+35)):print(f'{j+1}: {lines[j]}')
-          PY
       - run: npm ci && npm run build
       - name: Node regressions
-        run: npm test
+        run: |
+          mkdir -p artifacts
+          npm test > artifacts/node-tests.log 2>&1 || { cat artifacts/node-tests.log; exit 1; }
+          grep -E '^# (tests|pass|fail)' artifacts/node-tests.log
       - name: Strict original differential benchmark
-        run: node scripts/geogebra/compare-reference.mjs
+        run: |
+          node scripts/geogebra/compare-reference.mjs > artifacts/reference-comparison.json
+      - name: Development snapshot
+        if: always()
+        run: |
+          mkdir -p artifacts
+          git rev-parse HEAD > artifacts/commit.txt
+          git archive --format=tar HEAD packages scripts docs research corpus gallery examples package.json package-lock.json requirements-smoke.txt AGENTS.md LICENSE README.md .github | gzip -n > artifacts/source.tar.gz
+          tar -czf artifacts/dependencies.tar.gz node_modules
+          sha256sum artifacts/*.tar.gz > artifacts/SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-path-development
+          path: artifacts/
+          retention-days: 3
