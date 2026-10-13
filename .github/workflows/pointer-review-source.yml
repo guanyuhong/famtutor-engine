@@ -1,0 +1,24 @@
+name: Checked pointer review source transport
+on:
+  push:
+    branches: [codex/geogebra-pointer-v03]
+    paths: [.ci/pointer-review-source.py, .github/workflows/pointer-review-source.yml]
+permissions:
+  contents: write
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify locally tested source bytes, no refs or acceptance claims
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .ci/pointer-review-source.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checked-pointer-review-source
+          path: artifacts/pointer-review-source/
+          retention-days: 7
