@@ -32,3 +32,6 @@ export * from "./render/mounted-renderer.js";
 
 // Agent / MCP / RenderBundle stay Node-only — they import @famtutor/core value APIs
 // that cannot be inlined into the self-contained AMD smoke outFile.
+
+export * from "./geogebra/import.js";
+export { GgbImportError } from "./geogebra/xml.js";
