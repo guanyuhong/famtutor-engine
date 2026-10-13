@@ -15,15 +15,17 @@ OBSERVE = r'''labels => Object.fromEntries(labels.map(label => {
    r.x=ggb.getXcoord(label); r.y=ggb.getYcoord(label);
    if(type.endsWith('3d')) r.z=ggb.getZcoord(label);
  } else if(type==='line') {
-   const dom=new DOMParser().parseFromString(ggb.getXML(label),'application/xml');
-   const c=dom.querySelector('coords'); if(!c)throw Error('Missing line coefficients');
+   const dom=new DOMParser().parseFromString(ggb.getXML(),'application/xml');
+   const element=Array.from(dom.querySelectorAll('element')).find(e=>e.getAttribute('label')===label);
+   const c=element?.querySelector('coords'); if(!c)throw Error('Missing line coefficients');
    r.coefficients=['x','y','z'].map(k=>Number(c.getAttribute(k)));
  } else if(type==='conicpart') {
-   const dom=new DOMParser().parseFromString(ggb.getXML(label),'application/xml');
-   const c=dom.querySelector('conicPart'); if(!c)throw Error('Missing conic part type');
+   const dom=new DOMParser().parseFromString(ggb.getXML(),'application/xml');
+   const element=Array.from(dom.querySelectorAll('element')).find(e=>e.getAttribute('label')===label);
+   const c=element?.querySelector('conicPart'); if(!c)throw Error('Missing conic part type');
    const t=c.getAttribute('type'); if(!['0','1'].includes(t))throw Error('Unknown conic part type '+t);
    r.part=t==='0'?'arc':'sector'; r.value=ggb.getValue(label);
- } else if(['numeric','angle','segment','polygon','triangle','quadrilateral','boolean'].includes(type)) {
+ } else if(['numeric','angle','segment','polygon','triangle','quadrilateral','boolean','arc','sector'].includes(type)) {
    r.value=ggb.getValue(label);
  } else throw Error('Unmeasured reference type '+type);
  for(const [k,v] of Object.entries(r)) {
@@ -61,7 +63,8 @@ def main():
     try:
      page.evaluate('ggb.newConstruction()')
      if not page.evaluate('(c)=>ggb.evalCommand(c)',commands):raise RuntimeError('Reference rejected original program')
-     xml=page.evaluate('ggb.getXML()');entry.update(xml=xml,xmlSha256=hashlib.sha256(xml.encode()).hexdigest(),expected=page.evaluate(OBSERVE,labels),updated=[])
+     xml=page.evaluate('ggb.getXML()');entry.update(xml=xml,xmlSha256=hashlib.sha256(xml.encode()).hexdigest(),updated=[])
+     entry['expected']=page.evaluate(OBSERVE,labels)
      if actions is None:
       actions=[]
       if page.evaluate('ggb.exists("A") && ggb.isIndependent("A")'):actions.append({'setCoords':{'label':'A','coords':[-2,1]}})

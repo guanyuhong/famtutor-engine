@@ -1,0 +1,26 @@
+name: GeoGebra pinned interface inventory
+on:
+  push:
+    branches: [codex/geogebra-pr10-v04-20261013]
+    paths: [scripts/geogebra/build-compatibility-matrix.py, .github/workflows/geogebra-inventory.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/geogebra/build-compatibility-matrix.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-pinned-interface-inventory
+          path: artifacts/compatibility-inventory/
+          retention-days: 7
