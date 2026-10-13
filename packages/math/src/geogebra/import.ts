@@ -101,6 +101,7 @@ class Compiler {
   }
   expression(source:string, locals:string[]=[]):string {
     if(source.length>8192) ggbFail("EXPRESSION_LIMIT","Expression too long.");
+    source=source.replace(/(?<![\p{L}\p{N}_])((?:\d+\.?\d*|\.\d+))[eE]([+-]?\d+)(?![\p{L}\p{N}_])/gu,"($1*10^($2))");
     const tokens=source.replaceAll("−","-").replaceAll("×","*").replaceAll("·","*").replaceAll("÷","/").replaceAll("π","pi").replaceAll("°","*(pi/180)")
       .replaceAll("≤","<=").replaceAll("≥",">=").replaceAll("≠","!=").replaceAll("∧","&&").replaceAll("∨","||");
     const translated=tokens.replace(/[\p{L}_][\p{L}\p{N}_]*(?:\{\d+\})?['′]*/gu,(name,offset:number,whole:string)=>{
@@ -118,6 +119,7 @@ class Compiler {
       if(node.type==="identifier") return node.name;
       if(node.type==="unary") return `(${node.operator}${print(node.argument)})`;
       if(node.type==="binary") return `(${print(node.left)}${node.operator}${print(node.right)})`;
+      if(node.callee==="log"&&node.arguments.length===1) return `(ln(${print(node.arguments[0]!)})/ln(10))`;
       if(node.callee==="log"&&node.arguments.length===2) return `(ln(${print(node.arguments[1]!)})/ln(${print(node.arguments[0]!)}))`;
       return `${node.callee}(${node.arguments.map(print).join(",")})`;
     };

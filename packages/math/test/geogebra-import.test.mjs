@@ -37,3 +37,6 @@ for(const [name,payload] of [['DTD','<!DOCTYPE geogebra SYSTEM "file:///etc/pass
 test('source cycle is rejected',()=>assert.equal(importGeoGebraXml(xml(command('Midpoint',['B','B'],['A'])+command('Midpoint',['A','A'],['B']))).status,'rejected'));
 test('source size limit',()=>assert.equal(importGeoGebraXml(xml(Array.from({length:1501},(_,i)=>point('P'+i,i,0)).join(''))).status,'rejected'));
 for(const item of pack.cases)test(`real GeoGebra ${pack.runtimeVersion} XML: ${item.id}`,()=>{assert.equal(createHash('sha256').update(item.xml).digest('hex'),item.xmlSha256);const r=importGeoGebraXml(item.xml);assert.equal(r.status,'ready',JSON.stringify(r.diagnostics));assert.equal(validateMathDocument(r.document).status,'valid');assert.ok(renderDirectSvg(r.document).report.renderedEntities.length>0);});
+
+test('GeoGebra single-argument log is base ten, not natural logarithm',()=>{const r=run(expr('a','log(100)'));near(r.value('a'),2);});
+test('scientific notation is normalized before source label resolution',()=>{const r=run(expr('a','1e-3')+expr('b','2.5E2'));near(r.value('a'),0.001);near(r.value('b'),250);});
