@@ -91,7 +91,15 @@ export class GeoGebraNativeApi {
     }
    }
   };
-  return lower(parseExpression(source));
+  // GeoGebra command text treats lower-case e as Euler juxtaposition;
+  // the existing kernel also supports scientific literals, so lower only the
+  // public lexical layer. Identifier tokens are never rewritten.
+  const normalized=tokens.filter(t=>t.type!=='eof').map(t=>{
+   if(t.type!=='number')return t.value;
+   const m=/^(\d+(?:\.\d*)?|\.\d+)e([+-]?\d+)$/.exec(t.value);
+   return m?m[1]+'*e'+(/^[+-]/.test(m[2]!)?m[2]:'*'+m[2]):t.value;
+  }).join(' ');
+  return lower(parseExpression(normalized));
  }
  private scalar(source:string):string {
   const expression=this.expression(source),ast=parseExpression(expression);
@@ -175,6 +183,7 @@ export class GeoGebraNativeApi {
    const delta=subtractPoints(points[1],points[0]);
    return key==='x'?-delta.y:key==='y'?delta.x:cross(vector(points[0].x,points[0].y),vector(points[1].x,points[1].y));
   }
+  if(r.entity.type==='boolean'&&key!=='z')return 0; // Default checkbox screen position in this slice.
   throw Error('IllegalArgument');
  }
  getValue(label:string):number {const r=this.runtime(label);if(!r)return 0;if(!r.defined)return NaN;const v=r.value;if(typeof v==='number')return v;if(typeof v==='boolean')return Number(v);if(isSegment(v))return Math.hypot(v.to.x-v.from.x,v.to.y-v.from.y);return NaN;}
@@ -202,7 +211,17 @@ export class GeoGebraNativeApi {
   for(const id of g.order)if((g.nodeDependencies.get(id)??[]).some(n=>nodes.has(n)))nodes.add(id);
   for(const n of nodes)for(const id of g.outputsByNode.get(n)??[])ids.add(id);
   this.document.construction=this.document.construction.filter(n=>!nodes.has(n.id));this.document.entities=this.document.entities.filter(e=>!ids.has(e.id));this.document.interactions=this.document.interactions?.filter(i=>!ids.has(i.target));
-  for(const n of [...labels].reverse()){this.definitions.delete(n);this.event('remove',n);}this.document.revision++;this.render();
+  for(const n of [...labels].reverse()){this.definitions.delete(n);this.event('remove',n);}
+  // Hidden expression/literal inputs belong to live public constructions only.
+  // Mark backwards from every remaining public definition, then collect orphans.
+  const remaining=buildConstructionGraph(this.document),liveNodes=new Set<string>();
+  const pending=[...this.definitions.values()].map(d=>remaining.producerByEntity.get(d.id)!);
+  while(pending.length){const id=pending.pop()!;if(liveNodes.has(id))continue;liveNodes.add(id);pending.push(...(remaining.nodeDependencies.get(id)??[]));}
+  const liveEntities=new Set([...liveNodes].flatMap(id=>remaining.outputsByNode.get(id)??[]));
+  this.document.construction=this.document.construction.filter(n=>liveNodes.has(n.id));
+  this.document.entities=this.document.entities.filter(e=>liveEntities.has(e.id));
+  this.document.interactions=this.document.interactions?.filter(i=>liveEntities.has(i.target));
+  this.document.revision++;this.render();
  }
  newConstruction():void {this.writable();const rev=this.document.revision;this.document=blank();this.document.revision=rev+1;this.definitions.clear();this.render();}
 

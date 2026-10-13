@@ -18,6 +18,7 @@ export function invoke(api,method,args=[],diagnostics=[]) {
  }
 }
 export const programs=[
+ {id:'api-lexical-numbers',steps:[['evalCommand','n=1e3\nm=2e4\nq=1e-3\np=1e+3\ns=1E3\nA=(1E-3,-2E2)']]},
  {id:'api-point-dependencies',steps:[
   ['evalCommandGetLabels','A=(1,2)\nB=(4,6)\nM=Midpoint(A,B)\ns=Segment(A,B)\nl=Line(A,B)'],
   ['setCoords','A',-2,3],['setCoords','A',1,2],['getObjectName',2],['getAllObjectNames','point'],

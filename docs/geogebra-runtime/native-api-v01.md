@@ -1,16 +1,18 @@
-# Native Apps API first slice — Issue #14
+# Native Apps API first slice — Issue #14 / PR #15
 
-`createGeoGebraNativeApi()` is exported from the existing math package and browser entry. `evalCommand` compiles explicitly labelled command text directly through the existing safe numeric AST to original MathDocument nodes. Original DAG, evaluator, conic state and renderers execute it. It never calls `importGeoGebraXml`, never embeds GeoGebra as the native backend and never executes source JavaScript/GGBScript.
+`createGeoGebraNativeApi()` is exported from the existing math package and browser entry. Public `evalCommand` / `evalCommandGetLabels` compile explicitly labelled command text through the existing safe AST to original MathDocument construction nodes. The original DAG, evaluator, conic state and renderers execute it. No XML importer, GeoGebra execution backend, alternate mathematical kernel or source JavaScript interpreter is used for command execution.
 
-Recovered draft blob: 673638369533e5392c98d6524b7e2a5e97c604fd (19,818 bytes). Prior API test logs were not recovered. This iteration independently found and fixed scientific notation being rewritten as an identifier, and added bounded AST parsing. The original draft remains in the recovery checkpoint; PR #11 is predecessor history, not this stage's evidence.
+## Recovery and actual corrections
 
-## Scope
+Recovered unreferenced draft blob `673638369533e5392c98d6524b7e2a5e97c604fd` (19,818 bytes). Prior API test logs were not recovered. The source is now committed in PR #15 rather than existing only as a blob. The first native tests exposed regex-based identifier rewriting and missing AST bounds; the implementation now lowers tokens/AST nodes with finite resource limits.
 
-Finite explicitly labelled 2D points/vectors, numeric/boolean constants, bounded expressions, selected Midpoint/Vector/Line/Segment/Translate/Circle/Center/Radius overloads; typed public getters, finite input setters, basic add/update/remove/clear listeners, and a supported defined-state XML roundtrip. All declarations are partial capabilities, not complete signature or command-family compatibility.
+Fresh real-engine execution then exposed a mistaken assumption in the initial local scientific-notation test: GeoGebra command text reads `1e3` as Euler juxtaposition rather than 1000. The public lexical lowering now distinguishes that syntax from uppercase scientific literals without changing the original kernel parser. Existing reference cases are retained, and a separate lexical program probes both cases and signed forms.
 
-The native API source includes an auxiliary XML state adapter. Command execution never goes through that adapter. XML byte equality and full cross-engine XML interchange are not claimed; the common program checks own-engine semantic roundtrip and return type.
+The live trace also established that two-point lines/segments expose unnormalized homogeneous coefficients through coordinate queries, missing-name getValue returns zero, invalid object coordinate queries throw, and default checkbox x/y use screen coordinates. The API projection uses current kernel input values/vector primitives; no saved coordinates are substituted. newConstruction/setXML listener behavior follows the observed target runtime, not an inferred generic reset event.
 
-## Reproduce
+PR review additionally exposed anonymous helper leaks after deletion. Backward reachability from remaining public definitions now collects orphaned inputs while preserving live dependencies; a repeated create/delete regression verifies bounded growth. The reference applet selects the versioned codebase before injection and still checks the observed runtime version. A regression enforces this ordering.
+
+## Run
 
 ```
 npm ci && npm run build
@@ -22,14 +24,31 @@ node scripts/geogebra/native-api/compare.mjs artifacts/native-api/native.json ar
 python scripts/geogebra/native-api/browser.py
 ```
 
-`program.mjs` is identical source executed independently by both engines. The comparator checks tagged returns, names/counts, exact object types and defined flags, numeric values/coordinates, dependencies, and ordered events with the original 1e-7 relative tolerance. Missing/extra fields and changed program/source SHAs fail. Undefined, NaN, null, strings, numbers and booleans are distinct.
+A minimal independent native program:
 
-## Pins and merge gate
+```js
+import {createGeoGebraNativeApi} from '@famtutor/math-runtime';
+const api = createGeoGebraNativeApi();
+api.evalCommand('A=(1,2)\nB=(4,6)\nM=Midpoint(A,B)');
+api.setCoords('A',-2,3);
+console.log(api.getObjectType('M'), api.getXcoord('M'), api.getYcoord('M'));
+// point 1 4.5
+```
 
-Manual e318ba503db08005e4713e6955d6b9ba5769a36c; integration 298e983cad5e2f87cab7a330e303487d297960c1; upstream source 325faee17884c7ced41d360d0f08ae919a38a955. Required observed runtime 5.4.920.0, source/binary mapping UNVERIFIED. The main repository inventory retains unmatched/unverified overloads. Current acceptance status belongs to Issue #14 and final-SHA reports, not this prose.
+## Evidence contract
 
-Merge requires final-head native-api CI, original Node20/22 CI and reviewed compatibility CI. Local recovery was a same-repository archive plus checked runtime blobs, not a complete current git checkout. Final-SHA CI therefore supplies authoritative full-source testing. Local direct clone failed DNS resolution and the live reference loader could not load deployggb.js; neither was counted as passed.
+`program.mjs` is identical source executed independently by both engines. The comparator checks tagged returns, object names/counts, types/defined flags, numeric values/coordinates, dependencies and exact ordered events. `undefined`, NaN, null, strings, numbers, booleans and exceptions are distinct. Exception normalization removes only the unstable compiled Java class prefix; raw exceptions remain in each engine's diagnostics. Numeric tolerance remains 1e-7. Missing cases/steps, wrong calls, absent state/event evidence and changed source/program identities fail closed.
 
-## Explicit gaps
+The state test compares a supported own-engine semantic roundtrip and return type, not XML text equality or arbitrary cross-engine interchange. The native pointer suite performs actual mouse dragging and verifies public queries, canonical state, dependent values and remount/editing. Reference pointer event parity is separately NOT_RUN.
 
-Broad nested commands, CAS, 3D, implicit multiplication, arbitrary labels/redefinition, nonfinite setters, general point-on-path/region operations, all conic dispatch outputs, arbitrary XML/styles/scripts, listener string callbacks/reentrant mutation, undo/redo and unlisted Apps API methods. Native pointer test measures commit/writeback, not every intermediate reference event. Reference pointer parity, WebKit and physical devices are NOT_RUN. Undefined-state algebra is tested independently; complete mounted undefined-state synchronization and conic-axis-state serialization are not yet certified. No source scripts, author assets, paid APIs or deployment are used.
+## Fixed-source matrix
+
+The existing full inventory generator is retained. `native-api-overrides.v1.json` adds exact API/command-overload mappings; `native-api/coverage.py` overlays the native entrypoint evidence on those SAME canonical rows without relabeling importer evidence. Final CI retains `artifacts/native-api/inventory/matrix.json`, CSV and hashes. Unmatched rows remain visible. Mapping tests reject stale SHA, failed/missing checks, version drift and signature drift. Implementation remains PARTIAL even where sampled checks pass.
+
+Pins: manual `e318ba503db08005e4713e6955d6b9ba5769a36c`; integration `298e983cad5e2f87cab7a330e303487d297960c1`; upstream source `325faee17884c7ced41d360d0f08ae919a38a955`. Required runtime/codebase: `https://www.geogebra.org/apps/5.4.920.0/web3d/`. Source-to-binary mapping is still UNVERIFIED. Relevant upstream files are GgbAPI.java, ExpressionNodeEvaluator.java and the integration Apps API/Embedding documentation at these pins.
+
+## Acceptance and retained gaps
+
+Merge requires final-head native API parity CI, original Node20/22 CI and reviewed compatibility CI. Failure at `8eca721b` was incomplete capture caused by unmeasured coordinate exceptions; `9483c6be` captured every original program and exposed the lexical/default-checkbox mismatch. Neither is final approval. Actual final SHA and reports belong to Issue #14.
+
+Remaining gaps include broader nested commands, CAS/3D, implicit syntax outside the tested lexical forms, arbitrary labels/redefinition, nonfinite setters, constrained path/region edits, generalized conic dispatch, getValue expression strings, arbitrary XML/styles/scripts, listener string callbacks/reentrant mutations, undo/redo, intermediate reference pointer events, WebKit/devices, complete mounted undefined-state synchronization and conic-axis history serialization. A callable method or a sampled pass is not whole-signature compatibility. Local recovery is an archive plus checked runtime files, not a full latest checkout; exact-SHA CI is the authoritative full-source gate. No paid API, deployment, force push or author material redistribution is used.

@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[3]
 def capture(output):
  program=Path(__file__).with_name('program.mjs').read_bytes()
  git=subprocess.run(['git','rev-parse','HEAD'],cwd=ROOT,capture_output=True,text=True)
- report={'schema':'famtutor.native-api.trace.v1','engine':'geogebra','sourceSha':git.stdout.strip() if git.returncode==0 else None,'programSha256':hashlib.sha256(program).hexdigest(),'requiredRuntime':'5.4.920.0','binarySourceMapping':'UNVERIFIED','status':'BLOCKED','cases':[],'exceptionDiagnostics':[]}
+ report={'schema':'famtutor.native-api.trace.v1','engine':'geogebra','sourceSha':git.stdout.strip() if git.returncode==0 else None,'programSha256':hashlib.sha256(program).hexdigest(),'requiredRuntime':'5.4.920.0','codebase':'https://www.geogebra.org/apps/5.4.920.0/web3d/','binarySourceMapping':'UNVERIFIED','status':'BLOCKED','cases':[],'exceptionDiagnostics':[]}
  try:
   with sync_playwright() as p:
    options={'headless':True}
@@ -14,7 +14,7 @@ def capture(output):
    browser=p.chromium.launch(**options);page=browser.new_page();page.set_default_timeout(int(os.environ.get('GGB_TIMEOUT_MS','90000')))
    page.set_content('<!doctype html><meta charset="utf-8"><div id="ggb"></div>')
    page.add_script_tag(url='https://www.geogebra.org/apps/deployggb.js')
-   page.evaluate("""()=>{window.ready=false;const app=new GGBApplet({appName:'classic',width:900,height:650,language:'en',showToolBar:false,showAlgebraInput:false,appletOnLoad:api=>{window.ggb=api;window.ready=true;}},true);app.inject('ggb');}""")
+   page.evaluate("""()=>{window.ready=false;const app=new GGBApplet({appName:'classic',width:900,height:650,language:'en',showToolBar:false,showAlgebraInput:false,appletOnLoad:api=>{window.ggb=api;window.ready=true;}},true);app.setHTML5Codebase('https://www.geogebra.org/apps/5.4.920.0/web3d/');app.inject('ggb');}""")
    page.wait_for_function('window.ready');report['runtimeVersion']=page.evaluate('ggb.getVersion()')
    if report['runtimeVersion']!=report['requiredRuntime']:raise RuntimeError('Unexpected oracle version '+report['runtimeVersion'])
    page.add_script_tag(type='module',content=program.decode());page.wait_for_function('window.FT_API_PROGRAM')

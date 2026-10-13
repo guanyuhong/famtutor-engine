@@ -5,8 +5,8 @@ import {evaluateMathDocument,validateMathDocument} from '../dist/index.js';
 const api=()=>createGeoGebraNativeApi();
 const near=(a,b)=>assert.ok(Number.isFinite(a)&&Math.abs(a-b)<=1e-9*(1+Math.abs(b)),`${a} != ${b}`);
 
-test('native API compiles scientific literals through the safe numeric AST',()=>{
- const a=api();assert.equal(a.evalCommand('n=1e3\nA=(1e-3,-2E2)'),true);assert.equal(a.getValue('n'),1000);near(a.getXcoord('A'),.001);near(a.getYcoord('A'),-200);
+test('native API distinguishes uppercase scientific literals and lowercase Euler products',()=>{
+ const a=api();assert.equal(a.evalCommand('n=1e3\nA=(1E-3,-2E2)'),true);near(a.getValue('n'),3*Math.E);near(a.getXcoord('A'),.001);near(a.getYcoord('A'),-200);
 });
 test('native API public construction creates typed original MathDocument nodes',()=>{
  const a=api();assert.equal(a.evalCommandGetLabels('A=(1,2)\nB=(4,6)\nM=Midpoint(A,B)\ns=Segment(A,B)'), 'A,B,M,s');
@@ -75,4 +75,15 @@ test('real-reference regression: construction replacement retains update listene
 });
 test('coordinate queries reject scalar object types instead of silently returning zero',()=>{
  const a=api();a.evalCommand('n=2');for(const method of ['getXcoord','getYcoord','getZcoord'])assert.throws(()=>a[method]('n'),/IllegalArgument/);
+});
+
+test('deleting objects collects orphaned literal/expression helpers, but keeps live dependencies',()=>{
+ const a=api();a.evalCommand('O=(1,2)\nr=3\nkeep=Circle(O,r)');const count=a.getDocument().entities.length;
+ for(let i=0;i<120;i++){assert.equal(a.evalCommand('temp=Circle(O,2+r)'),true);a.deleteObject('temp');assert.equal(a.getDocument().entities.length,count);}
+ assert.equal(a.isDefined('keep'),true);a.setValue('r',4);assert.equal(a.isDefined('keep'),true);
+ a.deleteObject('keep');a.deleteObject('O');a.deleteObject('r');assert.equal(a.getDocument().entities.length,0);assert.equal(a.getDocument().construction.length,0);
+});
+
+test('default checkbox exposes screen x/y but rejects algebraic z',()=>{
+ const a=api();a.evalCommand('flag=true');assert.equal(a.getXcoord('flag'),0);assert.equal(a.getYcoord('flag'),0);assert.throws(()=>a.getZcoord('flag'),/IllegalArgument/);
 });

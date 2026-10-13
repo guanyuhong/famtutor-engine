@@ -50,5 +50,6 @@ with sync_playwright() as p:
  page.screenshot(path=str(OUT/'native-browser.png'));page.evaluate('api.destroy()')
  check('destroy-releases-existing-renderer',lambda:require(page.evaluate('Object.keys(JXG.boards).length')==0,'board leak'))
  browser.close()
-report={'schema':'famtutor.native-api.browser.v1','environment':'Chromium set_content','referencePointerParity':'NOT_RUN','passed':sum(c['status']=='PASSED' for c in checks),'failed':sum(c['status']=='FAILED' for c in checks),'checks':checks}
+identity=subprocess.run(['git','rev-parse','HEAD'],cwd=ROOT,capture_output=True,text=True)
+report={'sourceSha':identity.stdout.strip() if identity.returncode==0 else None,'schema':'famtutor.native-api.browser.v1','environment':'Chromium set_content','referencePointerParity':'NOT_RUN','passed':sum(c['status']=='PASSED' for c in checks),'failed':sum(c['status']=='FAILED' for c in checks),'checks':checks}
 (OUT/'browser.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2));raise SystemExit(bool(report['failed']))

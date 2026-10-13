@@ -33,6 +33,8 @@ jobs:
           git rev-parse HEAD > artifacts/native-api/commit.txt
           git rev-parse HEAD^{tree} > artifacts/native-api/tree.txt
           npm test 2>&1 | tee artifacts/native-api/node.log
+          node --test --test-reporter=tap packages/math/test/native-api.test.mjs scripts/geogebra/native-api-contract.test.mjs > artifacts/native-api/focused.tap
+          python scripts/geogebra/native-api/test_runtime_pin.py
       - name: Independently execute the identical public API program
         run: |
           node scripts/geogebra/native-api/run-native.mjs artifacts/native-api/native.json
@@ -40,6 +42,11 @@ jobs:
           node scripts/geogebra/native-api/compare.mjs artifacts/native-api/native.json artifacts/native-api/reference.json artifacts/native-api/comparison.json
       - name: Native pointer and state roundtrip acceptance
         run: python scripts/geogebra/native-api/browser.py > artifacts/native-api/browser.log
+      - name: Fixed-source matrix with exact native evidence
+        run: |
+          python scripts/geogebra/native-api/test_coverage.py
+          python scripts/geogebra/build-compatibility-matrix.py --output artifacts/native-api/inventory
+          python scripts/geogebra/native-api/coverage.py --matrix artifacts/native-api/inventory/matrix.json --evidence artifacts/native-api
       - name: Tested source remains unchanged
         run: git diff --exit-code && git diff --cached --exit-code
       - uses: actions/upload-artifact@v4

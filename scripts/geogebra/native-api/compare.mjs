@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {programs} from './program.mjs';
 export const TOLERANCE=1e-7;
 export function differences(expected,actual,at='$',out=[]) {
  if(typeof expected==='number') {
@@ -17,7 +18,14 @@ export function compare(native,reference) {
  if(!native.programSha256||native.programSha256!==reference.programSha256)throw Error('Different program sources');
  if(!native.sourceSha||native.sourceSha!==reference.sourceSha)throw Error('Different or unrecorded source SHA');
  if(reference.runtimeVersion!=='5.4.920.0')throw Error('Unpinned oracle runtime');
- if(!native.cases?.length||native.cases.length!==reference.cases?.length)throw Error('Missing cases');
+ if(!/^[0-9a-f]{40}$/.test(native.sourceSha)||!/^[0-9a-f]{64}$/.test(native.programSha256))throw Error('Malformed source identity');
+ for(const report of [native,reference]) {
+  if(report.cases?.length!==programs.length)throw Error('Missing cases');
+  for(const [i,program] of programs.entries()) {
+   const c=report.cases[i];if(c?.status!=='CAPTURED'||c.id!==program.id||c.steps?.length!==program.steps.length)throw Error('Incomplete case execution');
+   for(const [j,call] of program.steps.entries())if(differences(call,c.steps[j]?.call).length||!c.steps[j].state||!Array.isArray(c.steps[j].events))throw Error('Missing operation/state/event evidence');
+  }
+ }
  if(new Set(native.cases.map(c=>c.id)).size!==native.cases.length||new Set(reference.cases.map(c=>c.id)).size!==reference.cases.length)throw Error('Duplicate cases');
  const cases=reference.cases.map((r,i)=>{const n=native.cases[i],errors=differences(r,n);return {id:r.id,status:errors.length?'FAILED':'PASSED',steps:r.steps?.length??0,errors};});
  return {schema:'famtutor.native-api.comparison.v1',sourceSha:native.sourceSha,programSha256:native.programSha256,runtimeVersion:reference.runtimeVersion,tolerance:TOLERANCE,

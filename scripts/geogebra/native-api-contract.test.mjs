@@ -25,3 +25,11 @@ test('exception observation distinguishes a throw from void, NaN and zero',()=>{
  for(const value of [undefined,NaN,0])assert.ok(differences(invoke(a,'getXcoord',['n']),tag(value)).length);
  assert.deepEqual(invoke({f(){throw Error('Other error');}},'f'),{type:'throw',message:'Other error'});
 });
+
+test('identically missing cases or failing executions cannot pass the comparison gate',()=>{
+ const base={status:'CAPTURED',sourceSha:'a'.repeat(40),programSha256:'b'.repeat(64),runtimeVersion:'5.4.920.0',cases:programs.map(p=>runProgram(createGeoGebraNativeApi(),p))};
+ assert.equal(compare(base,structuredClone(base)).failed,0);
+ for(const mutation of [x=>x.cases.pop(),x=>x.cases[0].status='FAILED',x=>x.cases[0].steps.pop(),x=>delete x.cases[0].steps[0].state,x=>x.cases[0].steps[0].call=['getValue','wrong']]){
+  const bad=structuredClone(base);mutation(bad);assert.throws(()=>compare(bad,structuredClone(bad)));
+ }
+});
