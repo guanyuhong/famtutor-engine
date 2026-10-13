@@ -18,9 +18,16 @@ for spec in manifest:
   for start,end,text in reversed(spec['edits']):lines[start:end]=[text]
   raw=''.join(lines).encode()
  assert blob(raw)==spec['after'],(spec['path'],blob(raw))
+ expected=spec['after']
+ if spec['path']=='packages/math/src/kernel/evaluate.ts':
+  old='    observer?.(node, node.outputs.flatMap(id => { const output = runtimeEntities.get(id); return output ? [output] : []; }));'
+  new='    if (observer) observer(structuredClone(node), structuredClone(node.outputs.flatMap(id => { const output = runtimeEntities.get(id); return output ? [output] : []; })));'
+  text=raw.decode();assert text.count(old)==1;raw=text.replace(old,new).encode()
+  expected='56b724dcc3866ef0f7545301763ec09fb6dca99f'
+  assert blob(raw)==expected
  payload=json.dumps({'content':raw.decode(),'encoding':'utf-8'}).encode()
  result=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{REPO}/git/blobs','--input','-'],input=payload))
- assert result['sha']==spec['after']
+ assert result['sha']==expected
  reports.append({'path':spec['path'],'before':before,'after':result['sha']})
 out=pathlib.Path('artifacts/pointer-source');out.mkdir(parents=True,exist_ok=True)
 (out/'transport.json').write_text(json.dumps({'changes':reports,'refsWritten':False,'worktreeModified':False,'testAcceptance':False},indent=2)+'\n')
