@@ -401,8 +401,9 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       },
       onEvent: event => {
         this.safeHostCallback(() => this.mountOptions.onEvent?.(event));
-        if (event.type === "object.dragEnd" && event.target && Array.isArray(event.value)) {
-          const coords = event.value as [number, number];
+        const position = event.position ?? (Array.isArray(event.value) ? event.value : undefined);
+        if (event.type === "object.dragEnd" && event.target && position?.length === 2 && position.every(finiteNumber)) {
+          const coords = position as [number, number];
           void this.dispatch({ type: "point.set", target: event.target, payload: { coords } })
             .catch(error => {
               this.emit({
@@ -1040,8 +1041,8 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       if (!entity || entity.type !== "scalar") {
         return this.interactionDenied(`scalar.set target '${target}' must be a scalar.`, target);
       }
-      if (node?.command !== "scalar.slider") {
-        return this.interactionDenied(`scalar.set only allows scalar.slider (got '${node?.command}').`, node?.command);
+      if (node?.command !== "scalar.slider" && node?.command !== "scalar.constant") {
+        return this.interactionDenied(`scalar.set only allows editable scalar.slider or scalar.constant (got '${node?.command}').`, node?.command);
       }
       if (!interactionAllows(this.document, target, "set_value")) {
         return this.interactionDenied(`Entity '${target}' does not allow set_value.`, target);
