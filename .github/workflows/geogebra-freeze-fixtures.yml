@@ -1,0 +1,58 @@
+name: Freeze verified GeoGebra fixtures
+on:
+  push:
+    branches: [codex/geogebra-case-runtime-v02]
+    paths: [.github/workflows/geogebra-freeze-fixtures.yml]
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/geogebra-case-runtime-v02
+      - uses: actions/download-artifact@v4
+        with:
+          name: geogebra-reference-research-only
+          run-id: 38374361407
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/ggb-reference
+      - name: Verify and freeze only our eight programs, not author material
+        env:
+          CAPTURE_DIR: ${{ runner.temp }}/ggb-reference
+        run: |
+          python3 - <<'PY'
+          import os,json,pathlib,hashlib
+          source=pathlib.Path(os.environ['CAPTURE_DIR'])
+          report=json.loads((source/'capture.json').read_text())
+          assert report['status']=='CAPTURED'
+          assert report['runtimeVersion']=='5.4.920.0'
+          result={'schema':'famtutor.geogebra.reference-fixtures.v1','runtimeVersion':report['runtimeVersion'],'captureWorkflowRun':'38374361407','captureCommit':'c4463f0c5c03f7c83de8322627c7bbfaddd74ccb','cases':[]}
+          expected={'midpoint','bisector','angle-bisector','circle-intersection','polygon-rotation','ellipse','parabola','exponent-log'}
+          assert {c['id'] for c in report['cases']}==expected
+          for case in report['cases']:
+              assert case['status']=='CAPTURED'
+              raw=(source/(case['id']+'.xml')).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==case['xmlSha256']
+              result['cases'].append({**case,'xml':raw.decode('utf-8')})
+          target=pathlib.Path('packages/math/test/geogebra-fixtures')
+          target.mkdir(parents=True,exist_ok=True)
+          raw=json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False).encode('utf-8')
+          (target/'reference-capture.v1.json').write_bytes(raw)
+          digest=hashlib.sha256(raw).hexdigest()
+          loader='// Generated from verified Actions reference capture; never includes author assets.\nimport {readFileSync} from "node:fs";\nimport {createHash} from "node:crypto";\nconst raw=readFileSync(new URL("./reference-capture.v1.json",import.meta.url));\nif(createHash("sha256").update(raw).digest("hex")!=='+json.dumps(digest)+')throw new Error("Reference fixture corruption");\nexport default JSON.parse(raw.toString("utf8"));\n'
+          (target/'reference-capture.v1.mjs').write_text(loader)
+          PY
+      - name: Commit verified fixture bytes to development branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add packages/math/test/geogebra-fixtures/reference-capture.v1.json packages/math/test/geogebra-fixtures/reference-capture.v1.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(test): freeze byte-verified readable reference fixtures from real runtime'
+            git push origin HEAD:codex/geogebra-case-runtime-v02
+          fi
