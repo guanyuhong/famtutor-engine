@@ -32,11 +32,12 @@ jobs:
       - name: Development snapshot
         if: always()
         run: |
+          set -euo pipefail
           mkdir -p artifacts
           git rev-parse HEAD > artifacts/commit.txt
-          git archive --format=tar HEAD packages scripts docs research corpus gallery examples package.json package-lock.json requirements-smoke.txt AGENTS.md LICENSE README.md .github | gzip -n > artifacts/source.tar.gz
+          git archive --format=tar HEAD | gzip -n > artifacts/source.tar.gz
           tar -czf artifacts/dependencies.tar.gz node_modules
-          sha256sum artifacts/*.tar.gz > artifacts/SHA256SUMS
+          cd artifacts && sha256sum ./*.tar.gz > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
