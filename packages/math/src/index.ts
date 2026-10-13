@@ -55,3 +55,6 @@ export * from "./agent/runtime.js";
 export * from "./agent/repair.js";
 
 export * from "./mcp/protocol.js";
+
+export * from "./geogebra/import.js";
+export { GgbImportError } from "./geogebra/xml.js";
