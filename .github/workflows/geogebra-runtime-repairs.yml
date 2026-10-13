@@ -1,0 +1,82 @@
+name: Apply reviewed GeoGebra runtime repairs
+on:
+  push:
+    branches: [codex/geogebra-case-runtime-v02]
+    paths: [.github/workflows/geogebra-runtime-repairs.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/geogebra-case-runtime-v02
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Apply exact-source guarded repairs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          def patch(path, expected, replacements):
+              p=Path(path);raw=p.read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              if actual!=expected:
+                  raise RuntimeError('Source changed; reconcile instead of overwriting: '+path)
+              text=raw.decode()
+              for before,after in replacements:
+                  assert text.count(before)==1, (path,before)
+                  text=text.replace(before,after)
+              p.write_text(text)
+          patch('scripts/geogebra/build-gallery.mjs','1704326314522830347f2080c51f52a652f7eff6',[
+              ('unsubscribe?.();renderer?.destroy();renderer=null;','unsubscribe?.();await renderer?.destroy();renderer=null;')
+          ])
+          before='''          (x: number) => expressionValue(expression, { x }),
+          domain[0],
+          domain[1]'''
+          after='''          (x: number) => {
+            // Curve label anchoring may probe outside the declared plotting domain.
+            // Undefined numeric samples are gaps, never zeros or uncaught view errors.
+            if (!Number.isFinite(x) || x < domain[0] || x > domain[1]) return Number.NaN;
+            try { return expressionValue(expression, { x }); }
+            catch (error) {
+              if (error instanceof MathEngineError && [
+                "EXPRESSION_NON_FINITE", "EXPRESSION_DIVISION_BY_ZERO",
+                "EXPRESSION_DOMAIN_ERROR"
+              ].includes(error.code)) return Number.NaN;
+              throw error;
+            }
+          },
+          domain[0],
+          domain[1]'''
+          patch('packages/math/src/render/jsxgraph.ts','fc5e22451ec24894387073cbce6b0950916eea42',[(before,after)])
+          patch('packages/math/src/render/mounted-renderer.ts','f35de6fd56d9f97ff1d18f849139675e0d8fec37',[
+              ('        if (event.type === "object.dragEnd" && event.target && Array.isArray(event.value)) {\n          const coords = event.value as [number, number];','        const position = event.position ?? (Array.isArray(event.value) ? event.value : undefined);\n        if (event.type === "object.dragEnd" && event.target && position?.length === 2 && position.every(finiteNumber)) {\n          const coords = position as [number, number];'),
+              ('      if (node?.command !== "scalar.slider") {\n        return this.interactionDenied(`scalar.set only allows scalar.slider (got \'${node?.command}\').`, node?.command);\n      }','      if (node?.command !== "scalar.slider" && node?.command !== "scalar.constant") {\n        return this.interactionDenied(`scalar.set only allows editable scalar.slider or scalar.constant (got \'${node?.command}\').`, node?.command);\n      }')
+          ])
+          PY
+      - name: Original and new regression tests
+        run: npm ci && npm run build && npm test && node scripts/geogebra/build-gallery.mjs
+      - name: Browser acceptance
+        run: |
+          python3 -m pip install -r requirements-smoke.txt
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/geogebra/browser-acceptance.py
+      - name: Commit only reviewed source repairs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add packages/math/src/render/jsxgraph.ts packages/math/src/render/mounted-renderer.ts scripts/geogebra/build-gallery.mjs
+          git commit -m 'fix(math): persist pointer positions, safely sample curves and await renderer teardown'
+          git push origin HEAD:codex/geogebra-case-runtime-v02
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-renderer-browser-acceptance
+          path: artifacts/geogebra-results/
+          retention-days: 7
