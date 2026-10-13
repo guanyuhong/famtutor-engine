@@ -1,0 +1,51 @@
+name: GeoGebra native API parity
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-api-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci && npm run build
+      - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - name: Exact source and original regressions
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/native-api
+          git rev-parse HEAD > artifacts/native-api/commit.txt
+          git rev-parse HEAD^{tree} > artifacts/native-api/tree.txt
+          npm test 2>&1 | tee artifacts/native-api/node.log
+      - name: Independently execute the identical public API program
+        run: |
+          node scripts/geogebra/native-api/run-native.mjs artifacts/native-api/native.json
+          python scripts/geogebra/native-api/capture-reference.py --output artifacts/native-api/reference.json
+          node scripts/geogebra/native-api/compare.mjs artifacts/native-api/native.json artifacts/native-api/reference.json artifacts/native-api/comparison.json
+      - name: Native pointer and state roundtrip acceptance
+        run: python scripts/geogebra/native-api/browser.py > artifacts/native-api/browser.log
+      - name: Tested source remains unchanged
+        run: git diff --exit-code && git diff --cached --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-api-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/native-api/
+          retention-days: 14
+          if-no-files-found: error
