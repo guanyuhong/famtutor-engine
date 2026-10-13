@@ -26,7 +26,9 @@ function jsonData(value:unknown,depth=0,budget={nodes:0}):void {
   if(typeof value!=='object')throw Error('Snapshot must contain finite JSON data only');
   if(!Array.isArray(value)&&Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)
     throw Error('Snapshot must contain plain records');
-  for(const [key,item] of Object.entries(value)) {
+  for(const [key,descriptor] of Object.entries(Object.getOwnPropertyDescriptors(value))) {
+    if(descriptor.get||descriptor.set)throw Error('Snapshot accessors are not data');
+    const item=descriptor.value;
     if(['__proto__','prototype','constructor'].includes(key))throw Error('Unsafe snapshot key');
     jsonData(item,depth+1,budget);
   }

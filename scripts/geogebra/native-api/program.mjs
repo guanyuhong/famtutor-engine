@@ -18,6 +18,10 @@ export function invoke(api,method,args=[],diagnostics=[]) {
  }
 }
 export const programs=[
+ {id:'api-undefined-snapshot-continuation',nativeSnapshotAfter:1,steps:[
+  ['evalCommandGetLabels','O=(1,2)\nr=3\nc=Circle(O,r)\nH=Center(c)\nq=Radius(c)'],
+  ['setValue','r',-1],['setCoords','O',5,6],['setValue','r',4]
+ ]},
  {id:'api-lexical-numbers',steps:[['evalCommand','n=1e3\nm=2e4\nq=1e-3\np=1e+3\ns=1E3\nA=(1E-3,-2E2)']]},
  {id:'api-point-dependencies',steps:[
   ['evalCommandGetLabels','A=(1,2)\nB=(4,6)\nM=Midpoint(A,B)\ns=Segment(A,B)\nl=Line(A,B)'],
@@ -48,7 +52,7 @@ export function observe(api,diagnostics=[]) {
   x:invoke(api,'getXcoord',[name],diagnostics),y:invoke(api,'getYcoord',[name],diagnostics),z:invoke(api,'getZcoord',[name],diagnostics),value:invoke(api,'getValue',[name],diagnostics)
  }))};
 }
-export function runProgram(api,program,diagnostics=[]) {
+export function runProgram(api,program,diagnostics=[],afterCall=()=>{}) {
  api.newConstruction();
  let events=[],saved;const listeners={};
  for(const kind of ['Add','Update','Remove','Clear']){
@@ -65,6 +69,7 @@ export function runProgram(api,program,diagnostics=[]) {
     returned={type:'string',scope:'opaque-state-semantic-roundtrip'};
    }else if(call[0]==='$restore')returned=tag(api.setXML(saved));
    else returned=invoke(api,call[0],call.slice(1),diagnostics);
+   afterCall(steps.length);
    steps.push({call,returned,state:observe(api,diagnostics),events:[...events]});
   }
  }finally{for(const [kind,fn]of Object.entries(listeners))api['unregister'+kind+'Listener'](fn);}
