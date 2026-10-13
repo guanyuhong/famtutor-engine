@@ -1,3 +1,4 @@
+import { validateMathDocumentStructure } from "../protocol/validate.js";
 import { MathEngineError } from "../errors.js";
 import { evaluateBooleanExpression, evaluateNumericExpression } from "../expression/evaluator.js";
 import {
@@ -133,6 +134,9 @@ export interface JxgNamespace {
 }
 
 export interface JsxGraphRuntimeOptions {
+  /** Opt-in for authoritative documents containing mathematical undefined states.
+   * Objects are absent, never reconstructed from last-frame geometry. */
+  undefinedEntities?: "omit";
   viewId?: string;
   jsxgraph?: JxgNamespace;
   stageId?: string;
@@ -389,6 +393,10 @@ function mountJsxGraph2D(
   }
   if (!host?.ownerDocument?.createElement) throw new MathEngineError("DOM_HOST_REQUIRED", "mountJsxGraph requires a DOM HTMLElement host.");
 
+  if (options.undefinedEntities === "omit") {
+    const validation = validateMathDocumentStructure(document);
+    if (validation.status === "invalid") throw new MathEngineError("INVALID_MATH_DOCUMENT", JSON.stringify(validation.issues));
+  }
   const view = graphicsView(document, options.viewId);
   const container = host.ownerDocument.createElement("div");
   container.id = `famtutor-math-${++runtimeCounter.value}`;
@@ -422,6 +430,8 @@ function mountJsxGraph2D(
   const sliderAnimations = new Map<string, SliderAnimation>();
   const sliderAnimationTimers = new Map<string, number>();
   const skipped: Array<{ id: string; reason: string }> = [];
+  const omitted = new Set<string>();
+  const initialEvaluation = options.undefinedEntities === "omit" ? evaluateMathDocument(document) : undefined;
   const warnings: ValidationIssue[] = [];
   const createdIds: string[] = [];
   let stageId = options.stageId;
@@ -564,6 +574,12 @@ function mountJsxGraph2D(
     const attributes = jxgAttributes(document, output);
 
     switch (node.command) {
+      case "measurement.circle_radius": {
+        // Keep the original evaluator's distinction between conic axes and
+        // geometric definedness, including the opt-in retained-axis contract.
+        valueResolvers.set(output, () => currentHeadlessValues().get(output));
+        return;
+      }
       case "scalar.constant": {
         const value = numericParam(node, "value");
         valueResolvers.set(output, () => value);
@@ -1760,6 +1776,18 @@ function mountJsxGraph2D(
   for (const nodeId of graph.order) {
     const node = nodeById.get(nodeId)!;
     try {
+      const results = node.outputs.map(id => initialEvaluation?.entities.get(id));
+      // Deliberately narrow mathematical failure classes; programming/type/
+      // unsupported-renderer errors are NOT converted into successful omission.
+      const domainCodes = new Set(["INVALID_RADIUS", "DEGENERATE_LINE", "DEGENERATE_RAY", "DEGENERATE_TRANSFORM"]);
+      const domainUndefined = results.length > 0 && results.every(result => result && !result.defined && (
+        domainCodes.has(result.issue?.code ?? "") ||
+        result.issue?.code === "UNDEFINED_DEPENDENCY" && result.dependencies.some(id => omitted.has(id))
+      ));
+      if (domainUndefined) {
+        for (const id of node.outputs) { omitted.add(id); valueResolvers.set(id, () => undefined); }
+        continue;
+      }
       constructNode(node);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -1933,6 +1961,7 @@ function mountJsxGraph2D(
         height: Math.max(1, host.clientHeight || 0),
         renderedEntities: [...createdIds],
         skippedEntities: [...skipped],
+        ...(options.undefinedEntities === "omit" ? { undefinedEntities: [...omitted] } : {}),
         warnings: [...warnings],
         renderHash: stableHash(payload)
       };

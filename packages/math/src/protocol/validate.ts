@@ -529,6 +529,22 @@ function structuralValidation(value: unknown): ValidationIssue[] {
   return issues;
 }
 
+/** Check the persisted construction contract without equating mathematical
+ * undefinedness with malformed input. Full validateMathDocument is unchanged. */
+export function validateMathDocumentStructure(value: unknown): ValidationReport {
+  const issues = structuralValidation(value);
+  if (issues.some(issue => issue.severity === "error"))
+    return {status:"invalid", issues, assertionEvidence:[], undefinedEntities:[]};
+  try {
+    const graph = buildConstructionGraph(value as MathDocument);
+    return {status:"valid", issues, assertionEvidence:[], undefinedEntities:[],
+      graph:{nodeOrder:graph.order, edges:graph.edges}};
+  } catch (error) {
+    issues.push(asMathEngineError(error, "CONSTRUCTION_GRAPH_ERROR").toIssue("error"));
+    return {status:"invalid", issues, assertionEvidence:[], undefinedEntities:[]};
+  }
+}
+
 export function validateMathDocument(value: unknown): ValidationReport {
   const issues = structuralValidation(value);
   if (issues.some(current => current.severity === "error")) {

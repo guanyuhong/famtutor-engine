@@ -569,6 +569,8 @@ export interface ValidationReport {
 }
 
 export interface RenderReport {
+  /** Intentionally absent mathematical objects, not unsupported renderer entries. */
+  undefinedEntities?: string[];
   backend: "direct-svg" | "jsxgraph-svg" | "jsxgraph-canvas";
   viewId: string;
   width: number;
