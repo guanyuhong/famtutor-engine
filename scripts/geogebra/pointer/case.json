@@ -115,6 +115,6 @@
   "platformBoundary": "Raw DOM pointer/mouse/capture events and engine-specific client/runtime events retain order, timestamps, targets and payloads. Platform metadata are not asserted byte-identical across the canvas and SVG backends. Unsupported client events remain a separate gap; not a pass.",
   "sourceBinaryMapping": "UNVERIFIED",
   "pixelsPerUnit": 30,
-  "referenceEnableRightClick": false,
+  "referenceEnableRightClick": true,
   "calibration": "View-only calibration to equal integer-pixel world scale before construction, using actual view dimensions. Original fractional-pixel failure is retained separately; no coordinate result is corrected or rounded."
 }
