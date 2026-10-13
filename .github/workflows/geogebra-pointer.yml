@@ -1,0 +1,52 @@
+name: GeoGebra independent pointer parity
+on:
+  push:
+    branches: [codex/geogebra-pointer-v03]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pointer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  pointer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci && npm run build
+      - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - name: Exact source identity
+        run: |
+          mkdir -p artifacts/pointer
+          git rev-parse HEAD > artifacts/pointer/commit.txt
+          git rev-parse HEAD^{tree} > artifacts/pointer/tree.txt
+      - name: Native real pointer capture
+        run: python scripts/geogebra/pointer/capture.py --engine famtutor --output artifacts/pointer/native.json
+      - name: Independent pinned GeoGebra real pointer capture
+        if: ${{ !cancelled() }}
+        run: python scripts/geogebra/pointer/capture.py --engine geogebra --output artifacts/pointer/reference.json
+      - name: Strict every-boundary and ordered-callback comparison
+        if: ${{ !cancelled() }}
+        run: node scripts/geogebra/pointer/compare.mjs artifacts/pointer/native.json artifacts/pointer/reference.json artifacts/pointer/comparison.json
+      - name: Source unchanged
+        run: git diff --exit-code && git diff --cached --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pointer-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/pointer/
+          retention-days: 14
+          if-no-files-found: error

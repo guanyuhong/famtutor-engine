@@ -1,0 +1,10 @@
+# Issue 16 slice B: independent pointer evidence
+
+First capture checkpoint; no runtime modification or acceptance claim.
+Reference program creates A, B, Midpoint(A,B) and Segment(A,B) through public evalCommand in each independent engine. Browser mouse actions perform down, four moves, up, down, four return moves, up. Raw DOM pointer/mouse/capture events, ordered public add/update/remove/clear callbacks (with callback-time state), engine-specific runtime/client events, and every post-action API state are retained. Native samples also include the original canonical/evaluator/mounted/native-object surfaces.
+
+Sampling boundary is two animation frames after each single delivered Playwright mouse action and native flush. The original 1e-7 numeric comparator remains. Public callback order and all callback state fields are exact within this contract. Raw platform timestamp/target/pixel-frame differences are recorded, not equated between canvas and SVG. Unimplemented client event APIs are an explicit gap, not a success. Real pointer delivery is verified via trusted DOM events; no setCoords is used during the recorded sequence.
+
+Before repair, local native capture at restored main54d6f96d recorded fourteen states and six update callbacks. All eight movement boundaries retained old API/canonical coordinates while the native objects moved; there were 56 surface-coherence mismatches. Complete local raw trace is in checkpoint01. Local source was recovered from same-repository artifacts plus checked blobs after actual git clone DNS failure; it is not represented as a complete current checkout. Exact-source networked captures in this branch supply independent reference evidence.
+
+Pinned selected/observed runtime5.4.920.0. Official sources remain manuale318ba503db08005e4713e6955d6b9ba5769a36c, integration298e983cad5e2f87cab7a330e303487d297960c1, source325faee17884c7ced41d360d0f08ae919a38a955. Runtime-to-source mapping UNVERIFIED. No original-author material or source scripts are used.
