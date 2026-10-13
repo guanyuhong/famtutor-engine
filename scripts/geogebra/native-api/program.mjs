@@ -7,6 +7,16 @@ export function tag(value) {
   if(Array.isArray(value))return {type:'array',value:value.map(tag)};
   throw Error('Unmeasured public return type: '+typeof value);
 }
+// Preserve exceptions as outcomes, not missing observations. Only GeoGebra's
+// unstable Java-to-JS class prefix is removed; the semantic error is retained.
+// Raw exception text is separately retained in each engine's diagnostics.
+export function invoke(api,method,args=[],diagnostics=[]) {
+ try{return tag(api[method](...args));}
+ catch(error){
+  const raw=String(error?.message??error);diagnostics.push({method,args,raw});
+  return {type:'throw',message:raw.replace(/^Class\$[A-Za-z0-9_]+:\s*/, '')};
+ }
+}
 export const programs=[
  {id:'api-point-dependencies',steps:[
   ['evalCommandGetLabels','A=(1,2)\nB=(4,6)\nM=Midpoint(A,B)\ns=Segment(A,B)\nl=Line(A,B)'],
@@ -29,15 +39,15 @@ export const programs=[
   ['setCoords','A',-2,3],['$save'],['setCoords','A',6,7],['$restore'],['setCoords','A',2,4]
  ]}
 ];
-export function observe(api) {
+export function observe(api,diagnostics=[]) {
  const names=api.getAllObjectNames();
  if(!Array.isArray(names)||new Set(names).size!==names.length)throw Error('Invalid object names');
  return {names:tag(names),count:tag(api.getObjectNumber()),objects:names.map(name=>({
-  name,exists:tag(api.exists(name)),type:tag(api.getObjectType(name)),defined:tag(api.isDefined(name)),independent:tag(api.isIndependent(name)),
-  x:tag(api.getXcoord(name)),y:tag(api.getYcoord(name)),z:tag(api.getZcoord(name)),value:tag(api.getValue(name))
+  name,exists:invoke(api,'exists',[name],diagnostics),type:invoke(api,'getObjectType',[name],diagnostics),defined:invoke(api,'isDefined',[name],diagnostics),independent:invoke(api,'isIndependent',[name],diagnostics),
+  x:invoke(api,'getXcoord',[name],diagnostics),y:invoke(api,'getYcoord',[name],diagnostics),z:invoke(api,'getZcoord',[name],diagnostics),value:invoke(api,'getValue',[name],diagnostics)
  }))};
 }
-export function runProgram(api,program) {
+export function runProgram(api,program,diagnostics=[]) {
  api.newConstruction();
  let events=[],saved;const listeners={};
  for(const kind of ['Add','Update','Remove','Clear']){
@@ -53,8 +63,8 @@ export function runProgram(api,program) {
     // and the restored observable state are in this semantic roundtrip gate.
     returned={type:'string',scope:'opaque-state-semantic-roundtrip'};
    }else if(call[0]==='$restore')returned=tag(api.setXML(saved));
-   else returned=tag(api[call[0]](...call.slice(1)));
-   steps.push({call,returned,state:observe(api),events:[...events]});
+   else returned=invoke(api,call[0],call.slice(1),diagnostics);
+   steps.push({call,returned,state:observe(api,diagnostics),events:[...events]});
   }
  }finally{for(const [kind,fn]of Object.entries(listeners))api['unregister'+kind+'Listener'](fn);}
  return {id:program.id,status:'CAPTURED',steps};

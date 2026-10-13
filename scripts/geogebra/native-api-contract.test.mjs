@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {differences,compare,TOLERANCE} from './native-api/compare.mjs';
-import {tag,programs,runProgram} from './native-api/program.mjs';
+import {tag,programs,runProgram,invoke} from './native-api/program.mjs';
 import {createGeoGebraNativeApi} from '../../packages/math/dist/index.js';
 test('API comparator preserves undefined, NaN, number and string distinctions',()=>{
  for(const [a,b] of [[undefined,null],[NaN,undefined],[1,'1'],[false,0]])assert.ok(differences(tag(a),tag(b)).length);
@@ -16,4 +16,12 @@ test('API comparator rejects program, SHA, version and capture mismatches',()=>{
 });
 test('all shared API programs actually execute natively',()=>{
  for(const p of programs){const result=runProgram(createGeoGebraNativeApi(),p);assert.equal(result.status,'CAPTURED');assert.equal(result.steps.length,p.steps.length);}
+});
+
+test('exception observation distinguishes a throw from void, NaN and zero',()=>{
+ const diagnostics=[],a={getXcoord(){throw Error('Class$S83: IllegalArgument');}};
+ assert.deepEqual(invoke(a,'getXcoord',['n'],diagnostics),{type:'throw',message:'IllegalArgument'});
+ assert.equal(diagnostics[0].raw,'Class$S83: IllegalArgument');
+ for(const value of [undefined,NaN,0])assert.ok(differences(invoke(a,'getXcoord',['n']),tag(value)).length);
+ assert.deepEqual(invoke({f(){throw Error('Other error');}},'f'),{type:'throw',message:'Other error'});
 });

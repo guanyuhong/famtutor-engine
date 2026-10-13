@@ -31,7 +31,7 @@ test('native circles keep legitimate axis state without reviving undefined geome
  a.setCoords('O',3,4);a.setValue('r',3);assert.equal(a.getObjectType('c'),'circle');near(a.getXcoord('C'),3);near(a.getValue('R'),3);
 });
 test('native queries distinguish missing objects, NaN, booleans and void',()=>{
- const a=api();assert.equal(a.exists('missing'),false);assert.equal(a.isDefined('missing'),false);assert.equal(a.getObjectType('missing'),'');assert.ok(Number.isNaN(a.getValue('missing')));
+ const a=api();assert.equal(a.exists('missing'),false);assert.equal(a.isDefined('missing'),false);assert.equal(a.getObjectType('missing'),'');assert.equal(a.getValue('missing'),0);
  assert.equal(a.evalCommand('flag=true'),true);assert.equal(a.getValue('flag'),1);assert.equal(a.setValue('flag',2),undefined);assert.equal(a.getValue('flag'),0);
 });
 test('native update listeners see stable canonical dependent values',()=>{
@@ -61,4 +61,18 @@ test('native listener exceptions/reentrancy cannot corrupt the construction',()=
 });
 test('native blank and resource-limited inputs do not mutate state',()=>{
  const a=api();for(const s of ['', ' ', 'A='+'('.repeat(300)+'1'+')'.repeat(300),'A='+ '1+'.repeat(5000)+'1'])assert.equal(a.evalCommand(s),false);assert.equal(a.getObjectNumber(),0);
+});
+
+test('real-reference regression: line-like coordinate getters retain source coefficients',()=>{
+ const a=api();a.evalCommand('A=(1,2)\nB=(4,6)\ns=Segment(A,B)\nl=Line(A,B)');
+ for(const n of ['s','l'])assert.deepEqual([a.getXcoord(n),a.getYcoord(n),a.getZcoord(n)],[-4,3,-2]);
+ a.setCoords('A',-2,3);for(const n of ['s','l'])assert.deepEqual([a.getXcoord(n),a.getYcoord(n),a.getZcoord(n)],[-3,6,-24]);
+});
+test('real-reference regression: construction replacement retains update listeners without clear event',()=>{
+ const a=api(),events=[];a.registerUpdateListener(n=>events.push(n));a.registerClearListener(()=>events.push('clear'));
+ a.evalCommand('A=(1,2)');const state=a.getXML();a.newConstruction();a.evalCommand('P=(2,3)');a.setCoords('P',3,4);a.setXML(state);a.setCoords('A',2,3);
+ assert.deepEqual(events,['P','A']);
+});
+test('coordinate queries reject scalar object types instead of silently returning zero',()=>{
+ const a=api();a.evalCommand('n=2');for(const method of ['getXcoord','getYcoord','getZcoord'])assert.throws(()=>a[method]('n'),/IllegalArgument/);
 });

@@ -10,7 +10,7 @@ import {evaluateExpressionAst, SAFE_BUILTIN_NAMES} from '../expression/evaluator
 import {getCommandDefinition} from '../catalog/commands.js';
 import {buildConstructionGraph} from '../kernel/dag.js';
 import {evaluateMathDocument} from '../kernel/evaluate.js';
-import {isCircle, isPoint, isVector, isSegment} from '../kernel/geometry.js';
+import {isCircle, isPoint, isVector, isSegment, subtractPoints, cross, vector} from '../kernel/geometry.js';
 import {mountMathRenderer, type MathMountedRenderer, type MathMountedRendererOptions} from '../render/mounted-renderer.js';
 import {synchronizeGeoGebraConicState, setGeoGebraInput} from './conic-state.js';
 import {parseGgbXml, child, indexed} from './xml.js';
@@ -161,8 +161,23 @@ export class GeoGebraNativeApi {
  }
  getXcoord(label:string):number{return this.coordinate(label,'x');} getYcoord(label:string):number{return this.coordinate(label,'y');}
  getZcoord(label:string):number{return this.coordinate(label,'z');}
- private coordinate(label:string,key:'x'|'y'|'z'):number {const r=this.runtime(label);if(!r||!['point2','vector2'].includes(r.entity.type))return 0;if(!r.defined)return NaN;return key==='z'?0:(r.value as {x:number;y:number})[key];}
- getValue(label:string):number {const r=this.runtime(label);if(!r||!r.defined)return NaN;const v=r.value;if(typeof v==='number')return v;if(typeof v==='boolean')return Number(v);if(isSegment(v))return Math.hypot(v.to.x-v.from.x,v.to.y-v.from.y);return NaN;}
+ private coordinate(label:string,key:'x'|'y'|'z'):number {
+  const r=this.runtime(label);if(!r)return 0;
+  if(['point2','vector2'].includes(r.entity.type))return key==='z'?0:r.defined?(r.value as {x:number;y:number})[key]:NaN;
+  if(['line2','segment2'].includes(r.entity.type)) {
+   // Public coordinate queries expose the source producer's unnormalized
+   // homogeneous coefficients, not our kernel's canonical line normalization.
+   // Project current input geometry using existing vector primitives; no cache.
+   const node=this.node(r.id),inputs=node.inputs??[];
+   if(!['line.through_points','segment.through_points'].includes(node.command)||inputs.length!==2)throw Error('Unsupported coefficient projection');
+   const e=evaluateMathDocument(this.document),points=inputs.map(i=>'ref' in i?e.entities.get(i.ref)?.value:undefined);
+   if(!isPoint(points[0])||!isPoint(points[1]))return NaN;
+   const delta=subtractPoints(points[1],points[0]);
+   return key==='x'?-delta.y:key==='y'?delta.x:cross(vector(points[0].x,points[0].y),vector(points[1].x,points[1].y));
+  }
+  throw Error('IllegalArgument');
+ }
+ getValue(label:string):number {const r=this.runtime(label);if(!r)return 0;if(!r.defined)return NaN;const v=r.value;if(typeof v==='number')return v;if(typeof v==='boolean')return Number(v);if(isSegment(v))return Math.hypot(v.to.x-v.from.x,v.to.y-v.from.y);return NaN;}
  getAllObjectNames(type?:string):string[]{return [...this.definitions.keys()].filter(n=>type===undefined||this.getObjectType(n)===type);}
  getObjectNumber():number{return this.definitions.size;} getObjectName(index:number):string{return this.getAllObjectNames()[index]??'';}
  private affected(target:string):string[]{const g=buildConstructionGraph(this.document),start=g.producerByEntity.get(target)!;const found=new Set([start]);for(const id of g.order)if((g.nodeDependencies.get(id)??[]).some(n=>found.has(n)))found.add(id);return g.order.filter(n=>found.has(n)).flatMap(n=>g.outputsByNode.get(n)??[]).flatMap(id=>[...this.definitions].filter(([,d])=>d.id===id).map(([label])=>label));}
@@ -189,7 +204,7 @@ export class GeoGebraNativeApi {
   this.document.construction=this.document.construction.filter(n=>!nodes.has(n.id));this.document.entities=this.document.entities.filter(e=>!ids.has(e.id));this.document.interactions=this.document.interactions?.filter(i=>!ids.has(i.target));
   for(const n of [...labels].reverse()){this.definitions.delete(n);this.event('remove',n);}this.document.revision++;this.render();
  }
- newConstruction():void {this.writable();const rev=this.document.revision;this.document=blank();this.document.revision=rev+1;this.definitions.clear();this.callbacks.update.clear();this.event('clear');this.render();}
+ newConstruction():void {this.writable();const rev=this.document.revision;this.document=blank();this.document.revision=rev+1;this.definitions.clear();this.render();}
 
  /** Native extension: immutable canonical document, not a GeoGebra method. */
  getDocument():MathDocument{return clone(this.document);}
