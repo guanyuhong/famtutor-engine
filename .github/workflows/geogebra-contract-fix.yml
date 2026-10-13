@@ -1,0 +1,79 @@
+name: GeoGebra expression contract repair
+on:
+  push:
+    branches: [codex/geogebra-case-runtime-v02]
+    paths: [.github/workflows/geogebra-contract-fix.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    if: github.ref == 'refs/heads/codex/geogebra-case-runtime-v02'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Apply narrowly scoped source fixes
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('packages/math/src/geogebra/import.ts')
+          s=p.read_text()
+          old='    const tokens=source.replaceAll("−","-")'
+          new='    source=source.replace(/(?<![\\p{L}\\p{N}_])((?:\\d+\\.?\\d*|\\.\\d+))[eE]([+-]?\\d+)(?![\\p{L}\\p{N}_])/gu,"($1*10^($2))");\n'+old
+          assert s.count(old)==1, 'Unexpected source; refuse broad edit'
+          if 'source=source.replace(/(?<!' not in s: s=s.replace(old,new)
+          old='      if(node.callee==="log"&&node.arguments.length===2)'
+          new='      if(node.callee==="log"&&node.arguments.length===1) return `(ln(${print(node.arguments[0]!)})/ln(10))`;\n'+old
+          assert s.count(old)==1
+          if 'node.callee==="log"&&node.arguments.length===1' not in s: s=s.replace(old,new)
+          p.write_text(s)
+          p=Path('packages/math/test/geogebra-import.test.mjs')
+          s=p.read_text()
+          extra='''
+          test('GeoGebra single-argument log is base ten, not natural logarithm',()=>{const r=run(expr('a','log(100)'));near(r.value('a'),2);});
+          test('scientific notation is normalized before source label resolution',()=>{const r=run(expr('a','1e-3')+expr('b','2.5E2'));near(r.value('a'),0.001);near(r.value('b'),250);});
+          '''
+          if 'single-argument log is base ten' not in s: p.write_text(s+extra)
+      - name: Build and run original plus new tests
+        run: |
+          npm ci
+          npm run build
+          mkdir -p artifacts
+          set -o pipefail
+          npm test 2>&1 | tee artifacts/node-tests.log
+          node scripts/geogebra/build-gallery.mjs
+      - name: Commit tested source changes without force
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add packages/math/src/geogebra/import.ts packages/math/test/geogebra-import.test.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(math): respect GeoGebra log base and scientific notation in imported expressions'
+            git push origin HEAD:refs/heads/codex/geogebra-case-runtime-v02
+          fi
+      - name: Compare real reference without concealing mismatches
+        id: parity
+        continue-on-error: true
+        run: node scripts/geogebra/compare-reference.mjs > artifacts/comparison.json
+      - name: Package source, built engine and evidence
+        if: always()
+        run: |
+          mkdir -p artifacts
+          git rev-parse HEAD > artifacts/commit.txt
+          git archive --format=tar HEAD packages scripts docs research corpus gallery package.json package-lock.json requirements-smoke.txt AGENTS.md LICENSE README.md .github | gzip -n > artifacts/source.tar.gz
+          if test -d packages/math/dist; then tar -czf artifacts/built-packages.tar.gz packages/core/dist packages/math/dist; fi
+          if test -f examples/geogebra/index.html; then cp examples/geogebra/index.html artifacts/geogebra-workbench.html; fi
+          sha256sum artifacts/*.tar.gz > artifacts/SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: famtutor-geogebra-tested-development
+          path: artifacts/
+          retention-days: 7
+      - name: Fail complete parity gate when differences remain
+        if: steps.parity.outcome == 'failure'
+        run: exit 1
