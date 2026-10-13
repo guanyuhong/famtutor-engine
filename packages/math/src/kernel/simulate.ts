@@ -1,4 +1,5 @@
 import { MathEngineError, asMathEngineError } from "../errors.js";
+import { pathPointDragPatch } from "./path-state.js";
 import { evaluateExpressionAst } from "../expression/evaluator.js";
 import { parseExpression } from "../expression/parser.js";
 import type {
@@ -199,7 +200,7 @@ export function applySimulationFinalState(document: MathDocument, action: Simula
     const final = action.path[action.path.length - 1];
     if (!final) throw new MathEngineError("INVALID_DRAG_PATH", "Drag path is empty.");
     if (node.command === "point.free") node.params = { ...(node.params ?? {}), coords: final };
-    else if (node.command === "point.on_path") node.params = { ...(node.params ?? {}), initial: final };
+    else if (node.command === "point.on_path") node.params = { ...(node.params ?? {}), ...pathPointDragPatch(output, action.target, final) };
     else throw new MathEngineError("SIMULATION_TARGET_NOT_MUTABLE", `Point '${action.target}' cannot be persisted by changing its construction parameters.`);
   } else {
     if (node.command === "scalar.slider" || node.command === "scalar.constant") {

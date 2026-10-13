@@ -83,6 +83,7 @@ import { intervalFromBounds } from "../kernel/interval.js";
 import { functionInequalityRegion, functionRootInInterval, functionValueAt, isFunction1, piecewiseFunction } from "../kernel/function.js";
 import { mountJsxGraph3D } from "./jsxgraph3d.js";
 import { isEntityVisible } from "./visibility.js";
+import { bindIntrinsicGlider } from "./path-glider.js";
 
 export interface JxgObject {
   X?: () => number;
@@ -780,10 +781,14 @@ function mountJsxGraph2D(
         break;
       }
       case "point.on_path": {
-        const at = pairParam(node, "initial");
+        const parameterized = node.params?.pathParameter !== undefined;
+        const initialValue = parameterized ? evaluateMathDocument(document).entities.get(output)?.value : undefined;
+        const at = isPoint(initialValue) ? [initialValue.x, initialValue.y] : pairParam(node, "initial");
         const pathObject = objects.get(refs[0]!);
         if (!pathObject) throw new MathEngineError("UNDEFINED_INPUT", `Path '${refs[0]}' is not rendered.`);
         native = board.create("glider", [at[0], at[1], pathObject], attributes);
+        if (parameterized) bindIntrinsicGlider(native, numericParam(node, "pathParameter"), () => valueOf(refs[0]!),
+          () => expressionValue((node.params?.pathScale ?? 1) as string | number), JXG.COORDS_BY_USER ?? 0);
         objects.set(output, native);
         valueResolvers.set(output, () => safeRuntimePoint(native!));
         break;
@@ -954,7 +959,7 @@ function mountJsxGraph2D(
           : () => expressionValue(node.params?.radius as string | number);
         native = board.create("circle", [center, radius], jxgAttributes(document, output, true));
         objects.set(output, native);
-        valueResolvers.set(output, () => circle(pointOf(refs[0]!), radius()));
+        valueResolvers.set(output, () => circle(pointOf(refs[0]!), radius(), node.params?.allowPointCircle === true));
         break;
       }
       case "circle.through_points": {

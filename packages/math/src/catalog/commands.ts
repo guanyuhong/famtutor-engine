@@ -212,10 +212,11 @@ const definitions: CommandDefinition[] = [
   {
     name: "point.on_path",
     title: "Point on path",
-    description: "Create a point constrained to a line, segment, ray, circle, arc, or polygon boundary.",
+    description: "Create a point constrained to a path. Legacy initial coordinates are reprojected; optional pathParameter retains an intrinsic coordinate for line/segment/ray/circle motion. Optional positive pathScale (safe expression) scales the oriented line frame. Direct dragging recomputes the intrinsic coordinate. Internal parameters are not normalized GeoGebra PathParameter values.",
     inputTypes: [PATH_LIKE],
     outputTypes: ["point2"],
     requiredParams: ["initial"],
+    expressionParams: ["pathScale"],
     category: "point",
     renderer: "both"
   },
@@ -400,7 +401,7 @@ const definitions: CommandDefinition[] = [
   {
     name: "circle.center_radius",
     title: "Circle by center and radius",
-    description: "Create a circle from a center point and radius expression or scalar input.",
+    description: "Create a circle from a center point and radius expression or scalar input. Optional allowPointCircle accepts radius zero as a degenerate point circle; negative radii remain undefined.",
     inputTypes: ["point2"],
     variadicInputType: "scalar",
     minInputs: 1,

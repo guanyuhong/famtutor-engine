@@ -21,6 +21,7 @@ import type {
 } from "../types.js";
 import { finiteNumber } from "../util.js";
 import { buildConstructionGraph } from "./dag.js";
+import { pointAtPathParameter } from "./path-parameter.js";
 import {
   addPointVector,
   angleBisectorRay,
@@ -598,6 +599,9 @@ function executeNode(
     case "point.on_path": {
       const path = requirePathValue(inputs[0]!, "point.on_path");
       const coords = firstOutput ? overrides.points?.[firstOutput] : undefined;
+      if (!coords && params.pathParameter !== undefined) {
+        return [pointAtPathParameter(path, numberParam(node, "pathParameter"), expressionNumber(params.pathScale ?? 1, values))];
+      }
       const [x, y] = coords ?? pairParam(node, "initial");
       return [projectPointToPath(point(x, y), path)];
     }
@@ -696,7 +700,7 @@ function executeNode(
       const radius = inputs.length > 1
         ? requireScalarValue(inputs[1]!, "circle radius")
         : expressionNumber(params.radius, values);
-      return [circle(center, radius)];
+      return [circle(center, radius, params.allowPointCircle === true)];
     }
     case "circle.through_points": {
       const center = requirePointValue(inputs[0]!, "circle center");

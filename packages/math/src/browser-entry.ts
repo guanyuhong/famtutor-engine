@@ -17,6 +17,8 @@ export * from "./catalog/macro-expand.js";
 export * from "./expression/index.js";
 
 export * from "./kernel/geometry.js";
+export * from "./kernel/path-parameter.js";
+export * from "./kernel/path-state.js";
 export * from "./kernel/dag.js";
 export * from "./kernel/evaluate.js";
 export * from "./kernel/assertions.js";

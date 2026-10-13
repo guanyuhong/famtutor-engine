@@ -333,9 +333,9 @@ export function angleBisectorRay(
   return ray(vertex, addPointVector(vertex, normalized(direction)));
 }
 
-export function circle(center: Point2Value, radius: number): Circle2Value {
-  if (!Number.isFinite(radius) || radius <= DEFAULT_TOLERANCE) {
-    throw new MathEngineError("INVALID_RADIUS", "Circle radius must be finite and positive.", {
+export function circle(center: Point2Value, radius: number, allowPointCircle = false): Circle2Value {
+  if (!Number.isFinite(radius) || (allowPointCircle ? radius < 0 : radius <= DEFAULT_TOLERANCE)) {
+    throw new MathEngineError("INVALID_RADIUS", "Circle radius must be finite and positive, or zero with explicit allowPointCircle.", {
       actual: radius
     });
   }

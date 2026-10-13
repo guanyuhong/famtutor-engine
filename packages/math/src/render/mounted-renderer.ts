@@ -23,6 +23,7 @@ import {
 } from "../operations.js";
 import { advanceClock, initialClockState, resetClockState, type LogicalClockState } from "../kernel/clock.js";
 import { evaluateMathDocument } from "../kernel/evaluate.js";
+import { pathPointDragPatch } from "../kernel/path-state.js";
 import type { MathControlAction, MathDocument } from "../types.js";
 import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
@@ -1031,7 +1032,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         return this.interactionDenied(`Entity '${target}' does not allow drag.`, target);
       }
       patch = node.command === "point.on_path"
-        ? { initial: coords }
+        ? pathPointDragPatch(this.document, target, coords)
         : { coords };
     } else if (action.type === "scalar.set") {
       const value = action.payload.value;
