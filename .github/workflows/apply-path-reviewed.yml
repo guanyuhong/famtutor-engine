@@ -1,0 +1,95 @@
+# One-time checked-source patch runner; removed before the PR is ready.
+name: Apply reviewed path transport
+on:
+  push:
+    branches: [codex/geogebra-path-transport-v03]
+    paths: [.ci/apply-path-v03.py, .github/workflows/apply-path-reviewed.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  apply:
+    if: github.ref == 'refs/heads/codex/geogebra-path-transport-v03'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore immutable real-engine fixture
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          gh api repos/guanyuhong/famtutor-engine/actions/artifacts/11805052912/zip > /tmp/path-capture.zip
+          python3 - <<'PY'
+          import base64,gzip,hashlib,json,zipfile
+          from pathlib import Path
+          with zipfile.ZipFile('/tmp/path-capture.zip') as z:
+            names=[n for n in z.namelist() if n.endswith('path-reference.json')]
+            assert len(names)==1,names
+            raw=z.read(names[0])
+          sha='06e7bdf3da87669544434869e1c345467a0bc23821cd465d4d636d2604dfb6db'
+          assert hashlib.sha256(raw).hexdigest()==sha
+          data=json.loads(raw)
+          assert data['status']=='CAPTURED' and len(data['cases'])==9
+          encoded=base64.b64encode(gzip.compress(raw,compresslevel=9,mtime=0)).decode()
+          text='// Exact captured bytes from Actions run 38385783391. Original programs, not author assets.\n'
+          text+='import {gunzipSync} from "node:zlib";\nimport {createHash} from "node:crypto";\n'
+          text+='const raw=gunzipSync(Buffer.from('+json.dumps(encoded)+',"base64"));\n'
+          text+='if(createHash("sha256").update(raw).digest("hex")!=='+json.dumps(sha)+')throw Error("Path reference fixture corruption");\n'
+          text+='export default JSON.parse(raw.toString("utf8"));\n'
+          Path('packages/math/test/geogebra-fixtures/path-reference.v1.mjs').write_text(text)
+          PY
+      - name: Apply hash-guarded reviewed source changes
+        run: python .ci/apply-path-v03.py
+      - run: npm ci && npm run build
+      - name: Node and strict differential regressions
+        run: |
+          set -euo pipefail
+          npm test > artifacts/node-tests.log 2>&1 || { tail -150 artifacts/node-tests.log; exit 1; }
+          grep -E '^# (tests|pass|fail)' artifacts/node-tests.log
+          node scripts/geogebra/compare-reference.mjs > artifacts/reference-original.json
+          node --input-type=module -e 'import x from "./packages/math/test/geogebra-fixtures/path-reference.v1.mjs"; import {compareReference} from "./scripts/geogebra/compare-reference.mjs"; const r=await compareReference(x);console.log(JSON.stringify(r,null,2));if(r.failed)process.exit(1)' > artifacts/reference-path.json
+      - name: Browser test dependencies
+        run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - name: Native browser regressions
+        run: |
+          node scripts/geogebra/build-gallery.mjs
+          python scripts/geogebra/browser-acceptance.py > artifacts/browser.log
+          python scripts/geogebra/path-browser-acceptance.py > artifacts/path-browser.log
+      - name: Commit tested source on the feature branch only
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/geogebra-path-transport-v03
+          REMOTE_HEAD=$(git ls-remote origin refs/heads/codex/geogebra-path-transport-v03 | cut -f1)
+          test "$REMOTE_HEAD" = "$GITHUB_SHA"
+          git config user.name 'FamTutor compatibility bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add packages/math/src packages/math/test/geogebra-import.test.mjs packages/math/test/geogebra-fixtures/path-reference.v1.mjs scripts/geogebra/compare-reference.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(math): preserve intrinsic path state across parent edits and direct dragging'
+            git push origin HEAD:refs/heads/codex/geogebra-path-transport-v03
+          fi
+          git rev-parse HEAD > artifacts/tested-commit.txt
+      - name: Research selected original author materials
+        continue-on-error: true
+        run: python scripts/geogebra/probe-author-materials.py > artifacts/author-probe.log 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: path-transport-reviewed-results
+          path: |
+            artifacts/*.json
+            artifacts/*.log
+            artifacts/tested-commit.txt
+            artifacts/geogebra-results/*.json
+          retention-days: 7

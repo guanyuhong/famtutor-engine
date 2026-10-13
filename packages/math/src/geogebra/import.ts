@@ -4,6 +4,8 @@ import type { ExpressionNode } from "../expression/ast.js";
 import { parseExpression, collectExpressionIdentifiers } from "../expression/parser.js";
 import { evaluateNumericExpression, SAFE_BUILTIN_NAMES } from "../expression/evaluator.js";
 import { evaluateMathDocument } from "../kernel/evaluate.js";
+import { pathPointDragPatch } from "../kernel/path-state.js";
+import { independentLineCoefficients } from "./independent-line.js";
 import { buildConstructionGraph } from "../kernel/dag.js";
 import { child, indexed, parseGgbXml, ggbFail, GgbImportError, type GgbXmlNode } from "./xml.js";
 
@@ -24,7 +26,7 @@ export interface GeoGebraImportResult {
   source: { format: string; version: string; declaredObjects: number; importedObjects: number; scriptsExecuted: false };
 }
 interface Command { name: string; inputs: string[]; outputs: string[] }
-interface RecordItem { element?: GgbXmlNode; expression?: string; command?: Command }
+interface RecordItem { element?: GgbXmlNode; expression?: string; expressionType?: string; command?: Command }
 const linear = new Set<EntityType>(["line2", "segment2", "ray2"]);
 const scalar = new Set<EntityType>(["scalar", "angle"]);
 const names = new Set(SAFE_BUILTIN_NAMES);
@@ -58,6 +60,7 @@ class Compiler {
   readonly state = new Map<string,"busy"|"done"|"failed">();
   readonly types = new Map<string,EntityType>();
   readonly document: MathDocument;
+  private readonly lineScales = new Map<string,string>();
   private serial = 0;
   private expansions = 0;
   constructor(readonly root: GgbXmlNode, readonly options: GeoGebraImportOptions) {
@@ -73,7 +76,7 @@ class Compiler {
         const label=item.attributes.label; if(!label) ggbFail("NO_LABEL","An element/expression has no label.");
         const record=this.records.get(label)??{};
         if(item.name==="element") { if(record.element) ggbFail("DUPLICATE_ELEMENT",`Duplicate element ${label}`); record.element=item; }
-        else { if(record.expression!==undefined) ggbFail("DUPLICATE_EXPRESSION",`Duplicate expression ${label}`);record.expression=item.attributes.exp; }
+        else { if(record.expression!==undefined) ggbFail("DUPLICATE_EXPRESSION",`Duplicate expression ${label}`);record.expression=item.attributes.exp;record.expressionType=item.attributes.type; }
         this.records.set(label,record);
       } else if(item.name==="command") {
         const command={name:item.attributes.name??"",inputs:indexed(child(item,"input")),outputs:indexed(child(item,"output"))};
@@ -97,6 +100,13 @@ class Compiler {
       this.document.entities.push({id:output,type,role:"auxiliary",visible:false});
     }
     this.document.construction.push({id:`node${this.document.construction.length}`,command,inputs:inputs.map(ref=>({ref})),params,outputs:[id,...extraOutputs]});
+    if (type === "line2") {
+      if (command === "line.through_points") this.lineScales.set(id, `distance(${inputs[0]},${inputs[1]})`);
+      else if (command === "line.parallel_through" || command === "line.perpendicular_through") {
+        const scale = this.lineScales.get(inputs[1]!);
+        if (scale !== undefined) this.lineScales.set(id, scale);
+      }
+    }
     return id;
   }
   expression(source:string, locals:string[]=[]):string {
@@ -175,9 +185,26 @@ class Compiler {
     }
   }
   freeOrExpression(id:string,record:RecordItem):void {
-    const el=record.element; const type=el?.attributes.type;
+    const el=record.element; const type=el?.attributes.type ?? record.expressionType;
     const exp=record.expression;
-    if(type==="point" || (exp?.startsWith("(")&&splitGeoGebraArguments(exp.slice(1,-1)).length===2)) {
+    if(type==="vector") {
+      let x:string, y:string;
+      if(exp!==undefined) {
+        const tuple=exp.trim();
+        if(!tuple.startsWith("(")||!tuple.endsWith(")")) ggbFail("VECTOR_EXPRESSION_UNSUPPORTED",exp);
+        const parts=splitGeoGebraArguments(tuple.slice(1,-1));
+        if(parts.length!==2) ggbFail("VECTOR_DIMENSION","Expected two vector components.");
+        x=this.expression(parts[0]!);y=this.expression(parts[1]!);
+      } else {
+        const coords=child(el,"coords")?.attributes;if(!coords) ggbFail("VECTOR_COORDS","Missing vector coordinates.");
+        x=String(numeric(coords.x));y=String(numeric(coords.y));
+      }
+      // Reuse the public vector primitive and hidden expression endpoints: the vector
+      // stays vector2, follows dependencies, and renders as an arrow in both backends.
+      const origin=this.emit(this.helper(),"point2","point.free",[],{coords:[0,0]});
+      const endpoint=this.emit(this.helper(),"point2","point.from_expressions",[],{x,y});
+      this.emit(id,"vector2","vector.between_points",[origin,endpoint]);
+    } else if(type==="point" || (!type&&exp?.startsWith("(")&&exp.endsWith(")")&&splitGeoGebraArguments(exp.slice(1,-1)).length===2)) {
       if(exp!==undefined) {
         if(!exp.startsWith("(")||!exp.endsWith(")")) ggbFail("POINT_EXPRESSION_UNSUPPORTED",exp);
         const parts=splitGeoGebraArguments(exp.slice(1,-1));if(parts.length!==2) ggbFail("POINT_DIMENSION","Expected two coordinates.");
@@ -190,16 +217,20 @@ class Compiler {
         const z=coords.z===undefined?1:numeric(coords.z);if(z===0) ggbFail("POINT_AT_INFINITY","Point at infinity is unsupported.");
         this.emit(id,"point2","point.free",[],{coords:[numeric(coords.x)/z,numeric(coords.y)/z]});
       }
-    } else if(type==="line"&&exp===undefined) {
-      const coords=child(el,"coords")?.attributes;if(!coords) ggbFail("LINE_COORDS","A free line requires homogeneous coefficients.");
-      const a=numeric(coords.x),b=numeric(coords.y),c=numeric(coords.z);
+    } else if(type==="line") {
+      let a:number,b:number,c:number;
+      if(exp!==undefined) {
+        const sides=exp.split("=");
+        if(sides.length!==2||sides.some(side=>!side.trim())) ggbFail("LINE_EQUATION_UNSUPPORTED","Expected one affine equation.");
+        [a,b,c]=independentLineCoefficients(this.expression(sides[0]!,["x","y"]),this.expression(sides[1]!,["x","y"]));
+      } else {
+        const coords=child(el,"coords")?.attributes;if(!coords) ggbFail("LINE_COORDS","A free line requires homogeneous coefficients.");
+        a=numeric(coords.x);b=numeric(coords.y);c=numeric(coords.z);
+      }
       if(a===0&&b===0) ggbFail("DEGENERATE_LINE","Zero line normal.");
       const origin=this.emit(this.helper(),"point2","point.free",[],{coords:Math.abs(a)>Math.abs(b)?[-c/a,0]:[0,-c/b]});
       const end=this.emit(this.helper(),"point2","point.from_expressions",[],{x:`x(${origin})+(${b})`,y:`y(${origin})-(${a})`});
       this.emit(id,"line2","line.through_points",[origin,end]);
-    } else if(type==="vector"&&exp===undefined) {
-      const coords=child(el,"coords")?.attributes;if(!coords) ggbFail("VECTOR_COORDS","Missing vector coordinates.");
-      this.emit(id,"vector2","vector.components",[],{components:[numeric(coords.x),numeric(coords.y)]});
     } else if(type==="numeric"||type==="angle"||(!type&&exp!==undefined)) {
       const value=child(el,"value")?.attributes.val;
       const slider=child(el,"slider");const interval=child(el,"interval")?.attributes ?? (slider?.attributes.min !== undefined ? slider.attributes : undefined);
@@ -223,7 +254,7 @@ class Compiler {
   command(c:Command):void {
     const output=c.outputs.map(label=>this.labels[label]!);const id=output[0]!;
     const raw=c.inputs;
-    const aliases:Record<string,string>={orthogonalline:"perpendicularline",linebisector:"perpendicularbisector",angularbisector:"anglebisector",mirror:"reflect",circumcircle:"circle",centre:"center"};
+    const aliases:Record<string,string>={circulararc:"circlearc",circularsector:"circlesector",orthogonalline:"perpendicularline",linebisector:"perpendicularbisector",angularbisector:"anglebisector",mirror:"reflect",circumcircle:"circle",centre:"center"};
     const name=aliases[c.name.toLowerCase()]??c.name.toLowerCase();
     if(name==="curve") {
       if(raw.length!==5||output.length!==1) ggbFail("OVERLOAD_UNSUPPORTED","Curve expects x(t), y(t), t, start, end.");
@@ -242,8 +273,15 @@ class Compiler {
         const coords=child(this.records.get(c.outputs[0]!)?.element,"coords")?.attributes;
         if(!coords) ggbFail("PATH_POINT_STATE","A Point(path) command requires a saved finite position as initial constraint state.");
         const z=numeric(coords.z??"1");if(z===0) ggbFail("POINT_AT_INFINITY",c.outputs[0]!);
-        this.emit(id,"point2","point.on_path",args,{initial:[numeric(coords.x)/z,numeric(coords.y)/z]});
-        this.issue("PATH_PARAMETER_DIFFERENCE","Saved position is projected to the native path. GeoGebra path parameter/drag-history equivalence is not claimed.",c.outputs[0],"warning");return;
+        const initial:[number,number]=[numeric(coords.x)/z,numeric(coords.y)/z];
+        const scale=this.lineScales.get(args[0]!);
+        const intrinsic=["segment2","ray2","circle2"].includes(this.type(args[0]!)) || (this.type(args[0]!)==="line2" && scale!==undefined);
+        this.emit(id,"point2","point.on_path",args,{initial,...(intrinsic?{pathParameter:0,...(scale!==undefined?{pathScale:scale}:{})}:{})});
+        if (intrinsic) {
+          const node=this.document.construction.find(n=>n.outputs.includes(id))!;
+          node.params={...node.params,...pathPointDragPatch(this.document,id,initial)};
+        } else this.issue("PATH_PARAMETER_DIFFERENCE","This path producer has no verified intrinsic parameter mapping; legacy reprojection is retained.",c.outputs[0],"warning");
+        return;
       }
       case "midpoint":one();
         if(args.length===1&&this.type(args[0]!)==="circle2") this.emit(id,"point2","point.circle_center",args);
@@ -265,14 +303,27 @@ class Compiler {
         const end=this.emit(this.helper(),"point2","point.from_expressions",[],{
           x:`x(${b})+(x(${a})-x(${b}))/distance(${a},${b})+(x(${d})-x(${b}))/distance(${d},${b})`,
           y:`y(${b})+(y(${a})-y(${b}))/distance(${a},${b})+(y(${d})-y(${b}))/distance(${d},${b})`});
-        this.emit(id,"line2","line.through_points",[b!,end]);return;
+        this.emit(id,"line2","line.through_points",[b!,end]);this.lineScales.set(id,"1");return;
       }
       case "circle":one();
         if(args.length===3) {this.need(args,["point2","point2","point2"]);this.emit(id,"circle2","circle.through_three_points",args);}
         else if(args.length===2&&point(args[1]!)) {this.need(args,["point2","point2"]);this.emit(id,"circle2","circle.through_points",args);}
-        else {this.need(args,["point2",scalar]);this.emit(id,"circle2","circle.center_radius",[args[0]!],{radius:this.scalarRef(args[1]!)});}return;
-      case "circlearc":case "circumcirculararc":one();this.need(args,["point2","point2","point2"]);this.emit(id,"arc2",name==="circlearc"?"arc.center_points":"arc.three_points",args);return;
-      case "circlesector":one();this.need(args,["point2","point2","point2"]);this.emit(id,"sector2","sector.from_arc",[this.emit(this.helper(),"arc2","arc.center_points",args)]);return;
+        else {this.need(args,["point2",scalar]);this.emit(id,"circle2","circle.center_radius",[args[0]!],{radius:this.scalarRef(args[1]!),allowPointCircle:true});}return;
+      case "circlearc":case "circlesector": {
+        one();this.need(args,["point2","point2","point2"]);
+        const [center,start,direction]=args;
+        // GeoGebra AlgoConicPartCircle projects its third point onto the circle.
+        // Keep the stricter arc.center_points contract unchanged. This construction
+        // expresses the projected endpoint in the original dependency graph.
+        const angle=`atan2(y(${direction})-y(${center}),x(${direction})-x(${center}))`;
+        const radius=`distance(${center},${start})`;
+        const end=this.emit(this.helper(),"point2","point.from_expressions",[],{
+          x:`x(${center})+${radius}*cos(${angle})`,y:`y(${center})+${radius}*sin(${angle})`});
+        const arc=this.emit(name==="circlearc"?id:this.helper(),"arc2","arc.center_points",[center!,start!,end]);
+        if(name==="circlesector") this.emit(id,"sector2","sector.from_arc",[arc]);
+        return;
+      }
+      case "circumcirculararc":one();this.need(args,["point2","point2","point2"]);this.emit(id,"arc2","arc.three_points",args);return;
       case "polygon": {
         if(args.length<3||args.length>64||args.some(x=>!point(x))) ggbFail("OVERLOAD_UNSUPPORTED","Only Polygon(point, point, point, ...) is supported.");
         if(output.length!==1&&output.length!==args.length+1) ggbFail("OUTPUT_ARITY","Expected polygon plus optional edge outputs.");
@@ -316,7 +367,7 @@ class Compiler {
         one();if(args.length===2&&point(args[0]!)&&point(args[1]!)) this.emit(id,"scalar","measurement.distance",args);
         else {if(args.length===2&&linear.has(this.type(args[0]!))) args.reverse();this.need(args,["point2",linear]);const foot=this.emit(this.helper(),"point2","point.projection",args);this.emit(id,"scalar","measurement.distance",[args[0]!,foot]);}return;
       }
-      case "radius":one();this.need(args,["circle2"]);this.emit(id,"scalar","measurement.circle_radius",args);return;
+      case "radius":one();this.need(args,["circle2"]);this.emit(id,"scalar","measurement.circle_radius",args,{undefinedPolicy:"conic-axis-state"});return;
       case "slope":one();this.need(args,[linear]);this.emit(id,"scalar","measurement.slope",args);return;
       case "area":one();this.need(args,[new Set<EntityType>(["polygon2","circle2","sector2"])]);this.emit(id,"scalar","measurement.area",args);return;
       case "length":case "perimeter":one();if(args.length!==1) ggbFail("OVERLOAD_UNSUPPORTED",c.name);
@@ -332,6 +383,8 @@ class Compiler {
           if(args.length!==2) ggbFail("OVERLOAD_UNSUPPORTED",c.name);
           if(this.type(args[1]!)==="circle2") {
             if(type!=="point2"&&type!=="circle2") ggbFail("INVERSION_TYPE_UNSUPPORTED",type);
+            const declared=this.records.get(c.outputs[0]!)?.element?.attributes.type;
+            if(type==="circle2"&&declared&&declared!=="conic") ggbFail("INVERSION_OUTPUT_TYPE_UNSUPPORTED",`Inversion produced ${declared}, not a conic. No circle or saved coordinates are substituted.`);
             this.emit(id,type,type==="point2"?"point.invert_in_circle":"circle.invert_in_circle",args);return;
           }
           if(point(args[1]!)) transform=this.emit(this.helper(),"transform2","transform.dilate",[args[1]!],{factor:-1});

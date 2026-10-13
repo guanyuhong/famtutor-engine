@@ -1,0 +1,29 @@
+name: GeoGebra path reference capture
+on:
+  push:
+    branches: [codex/geogebra-path-transport-v03]
+    paths:
+      - scripts/geogebra/capture-path-reference.py
+      - .github/workflows/geogebra-path-reference.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright==1.58.0 && python -m playwright install --with-deps chromium
+      - run: python scripts/geogebra/capture-path-reference.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-path-reference
+          path: artifacts/path-reference.json
+          retention-days: 7

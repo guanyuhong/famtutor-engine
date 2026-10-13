@@ -21,6 +21,8 @@ import type {
 } from "../types.js";
 import { finiteNumber } from "../util.js";
 import { buildConstructionGraph } from "./dag.js";
+import { pointAtPathParameter } from "./path-parameter.js";
+import { retainedConicRadius } from "./conic-state.js";
 import {
   addPointVector,
   angleBisectorRay,
@@ -598,6 +600,9 @@ function executeNode(
     case "point.on_path": {
       const path = requirePathValue(inputs[0]!, "point.on_path");
       const coords = firstOutput ? overrides.points?.[firstOutput] : undefined;
+      if (!coords && params.pathParameter !== undefined) {
+        return [pointAtPathParameter(path, numberParam(node, "pathParameter"), expressionNumber(params.pathScale ?? 1, values))];
+      }
       const [x, y] = coords ?? pairParam(node, "initial");
       return [projectPointToPath(point(x, y), path)];
     }
@@ -696,7 +701,7 @@ function executeNode(
       const radius = inputs.length > 1
         ? requireScalarValue(inputs[1]!, "circle radius")
         : expressionNumber(params.radius, values);
-      return [circle(center, radius)];
+      return [circle(center, radius, params.allowPointCircle === true)];
     }
     case "circle.through_points": {
       const center = requirePointValue(inputs[0]!, "circle center");
@@ -970,6 +975,20 @@ export function evaluateMathDocument(document: MathDocument, overrides: Evaluati
   for (const nodeId of graph.order) {
     const node = graph.nodeById.get(nodeId)!;
     const undefinedDependency = (graph.entityDependenciesByNode.get(nodeId) ?? []).find(dependency => !values.has(dependency));
+    // Opt-in compatibility policy: Radius reads retained conic axes, not a
+    // cached geometric output. All other undefined dependencies remain strict.
+    const conicInput = node.inputs?.[0];
+    const retained = node.command === "measurement.circle_radius" && node.params?.undefinedPolicy === "conic-axis-state" && conicInput && "ref" in conicInput
+      ? retainedConicRadius(graph.nodeById.get(graph.producerByEntity.get(conicInput.ref)!)) : undefined;
+    if (undefinedDependency && retained !== undefined && node.outputs.length === 1) {
+      const outputId = node.outputs[0]!, entity = entityById.get(outputId);
+      if (entity?.type === "scalar") {
+        values.set(outputId, retained);
+        runtimeEntities.set(outputId, {id:outputId, entity, nodeId:node.id, command:node.command,
+          dependencies:graph.entityDependenciesByNode.get(nodeId)??[], defined:true, value:retained});
+        continue;
+      }
+    }
     if (undefinedDependency) {
       const issue: ValidationIssue = {
         code: "UNDEFINED_DEPENDENCY",

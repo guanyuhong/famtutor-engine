@@ -1,0 +1,46 @@
+name: GeoGebra path transport
+on:
+  push:
+    branches: [codex/geogebra-path-transport-v03]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: geogebra-path-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci && npm run build
+      - name: Node regressions
+        run: |
+          mkdir -p artifacts
+          npm test > artifacts/node-tests.log 2>&1 || { cat artifacts/node-tests.log; exit 1; }
+          grep -E '^# (tests|pass|fail)' artifacts/node-tests.log
+      - name: Strict original differential benchmark
+        run: |
+          node scripts/geogebra/compare-reference.mjs > artifacts/reference-comparison.json
+      - name: Development snapshot
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          git rev-parse HEAD > artifacts/commit.txt
+          git archive --format=tar HEAD | gzip -n > artifacts/source.tar.gz
+          tar -czf artifacts/dependencies.tar.gz node_modules
+          cd artifacts && sha256sum ./*.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-path-development
+          path: artifacts/
+          retention-days: 3
