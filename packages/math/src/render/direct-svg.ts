@@ -516,7 +516,15 @@ function renderEntity(
     const [a, b] = [transform.point(value.from), transform.point(value.to)];
     return `<line data-entity-id="${id}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" ${styleAttributes(style)}/>${renderLinearLabel(entity, a, b, style, options.theme)}`;
   }
-  if (isVector(value)) return "";
+  if (isVector(value)) {
+    const producer = document.construction.find(node => node.outputs.includes(entity.id));
+    const input = producer?.command === "vector.between_points" ? producer.inputs?.[0] : undefined;
+    const anchor = input && "ref" in input ? values.get(input.ref) : undefined;
+    const origin = isPoint(anchor) ? anchor : { x: 0, y: 0 };
+    const a = transform.point(origin);
+    const b = transform.point({ x: origin.x + value.x, y: origin.y + value.y });
+    return `<line data-entity-id="${id}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" ${styleAttributes(style)} marker-end="url(#fme-arrow)"/>${renderLinearLabel(entity, a, b, style, options.theme)}`;
+  }
   if (isCircle(value)) {
     const [cx, cy] = transform.point(value.center);
     return `<ellipse data-entity-id="${id}" cx="${cx}" cy="${cy}" rx="${value.radius * transform.scaleX}" ry="${value.radius * transform.scaleY}" ${styleAttributes(style, style.fill)} fill-opacity="${style.fillOpacity}"/>`;
@@ -645,7 +653,7 @@ function renderDirectSvg2D(document: MathDocument, options: DirectSvgOptions = {
     if (output) {
       shapeParts.push(output);
       renderedEntities.push(entity.id);
-    } else if (!["scalar", "boolean", "vector2", "transform2"].includes(entity.type)) {
+    } else if (!["scalar", "boolean", "transform2"].includes(entity.type)) {
       skippedEntities.push({ id: entity.id, reason: `Direct SVG has no visible primitive for ${entity.type}.` });
     }
   }

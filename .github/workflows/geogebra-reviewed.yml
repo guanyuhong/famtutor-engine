@@ -1,0 +1,71 @@
+name: GeoGebra reviewed compatibility
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: geogebra-reviewed-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  strict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - run: npm ci && npm run build
+      - name: Exact source identity
+        run: |
+          mkdir -p artifacts/reviewed
+          git rev-parse HEAD > artifacts/reviewed/commit.txt
+          git rev-parse HEAD^{tree} > artifacts/reviewed/tree.txt
+      - name: Full Node regressions including comparator guards
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee artifacts/reviewed/node.log
+      - name: Original complete verification including HTTP live browser
+        run: |
+          set -o pipefail
+          npm run verify 2>&1 | tee artifacts/reviewed/verify.log
+      - name: Immutable typed reference replay
+        run: |
+          node scripts/geogebra/compare-reference.mjs > artifacts/reviewed/reference.json
+          node --input-type=module -e 'import x from "./packages/math/test/geogebra-fixtures/path-reference.v1.mjs";import {compareReference} from "./scripts/geogebra/compare-reference.mjs";const r=await compareReference(x);console.log(JSON.stringify(r,null,2));if(r.failed)process.exit(1)' > artifacts/reviewed/path-reference.json
+      - name: Independent real GeoGebra capture and comparison at this SHA
+        run: |
+          python scripts/geogebra/capture-review.py --output artifacts/reviewed/fresh-reference
+          node scripts/geogebra/compare-reference.mjs artifacts/reviewed/fresh-reference/capture.json > artifacts/reviewed/fresh-comparison.json
+      - name: Original and new interaction suites
+        run: |
+          node scripts/geogebra/build-gallery.mjs
+          python scripts/geogebra/browser-acceptance.py > artifacts/reviewed/browser.log
+          python scripts/geogebra/path-browser-acceptance.py > artifacts/reviewed/path-browser.log
+          python scripts/geogebra/review-browser-acceptance.py > artifacts/reviewed/review-browser.log
+      - name: Pinned inventory extraction and parser regressions
+        run: |
+          python scripts/geogebra/test_matrix_extraction.py
+          python scripts/geogebra/build-compatibility-matrix.py --output artifacts/reviewed/inventory --evidence-directory artifacts/reviewed
+      - name: Tested tracked source must remain unchanged
+        run: git diff --exit-code && git diff --cached --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-reviewed-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            artifacts/reviewed/
+            artifacts/geogebra-results/*.json
+            artifacts/geogebra-results/review-browser.png
+            packages/math/artifacts/*summary.json
+          retention-days: 14

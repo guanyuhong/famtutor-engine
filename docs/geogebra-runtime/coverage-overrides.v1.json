@@ -1,0 +1,93 @@
+{
+  "schema": "famtutor.geogebra.coverage-overrides.v1",
+  "policy": "Exact overload and tested scope only; all unmatched rows remain UNMAPPED/NOT_RUN.",
+  "entries": [
+    {
+      "id": "command-overload:45db94b47faa05784644",
+      "signature": "CircularArc( <Midpoint>, <Point A>, <Point B> )",
+      "implementation": {
+        "status": "PARTIAL",
+        "locations": [
+          "packages/math/src/geogebra/import.ts"
+        ],
+        "scope": "2D, nondegenerate center/start/direction; radial changes, parent edits and remount"
+      },
+      "scope": "2D, nondegenerate center/start/direction; radial changes, parent edits and remount",
+      "testFiles": [
+        "packages/math/test/geogebra-pr10-regression.test.mjs",
+        "scripts/geogebra/comparison-contract.test.mjs"
+      ],
+      "realDifferential": [
+        "review-direction-arc-sector"
+      ],
+      "interaction": [
+        "review-direction-arc-sector-typed-reference-states-and-remount",
+        "review-direction-arc-sector-actual-pointer-writeback"
+      ],
+      "gaps": [
+        "Zero-radius and coincident direction behavior lack independent reference coverage.",
+        "3D overload behavior not implemented by this import path."
+      ]
+    },
+    {
+      "id": "command-overload:f162108d676127e2b552",
+      "signature": "CircularSector( <Midpoint>, <Point A>, <Point B> )",
+      "implementation": {
+        "status": "PARTIAL",
+        "locations": [
+          "packages/math/src/geogebra/import.ts"
+        ],
+        "scope": "2D, nondegenerate center/start/direction; radial changes, parent edits and remount"
+      },
+      "scope": "2D, nondegenerate center/start/direction; radial changes, parent edits and remount",
+      "testFiles": [
+        "packages/math/test/geogebra-pr10-regression.test.mjs",
+        "scripts/geogebra/comparison-contract.test.mjs"
+      ],
+      "realDifferential": [
+        "review-direction-arc-sector"
+      ],
+      "interaction": [
+        "review-direction-arc-sector-typed-reference-states-and-remount",
+        "review-direction-arc-sector-actual-pointer-writeback"
+      ],
+      "gaps": [
+        "Zero-radius and coincident direction behavior lack independent reference coverage.",
+        "3D overload behavior not implemented by this import path."
+      ]
+    },
+    {
+      "id": "command-overload:98f6d4d8b316e8b24251",
+      "signature": "Translate( <Object>, <Vector> )",
+      "implementation": {
+        "status": "PARTIAL",
+        "locations": [
+          "packages/math/src/geogebra/import.ts"
+        ],
+        "scope": "2D point translated by 2D vector, including scalar-dependent vector"
+      },
+      "scope": "2D point translated by 2D vector, including scalar-dependent vector",
+      "testFiles": [
+        "packages/math/test/geogebra-pr10-regression.test.mjs",
+        "scripts/geogebra/comparison-contract.test.mjs"
+      ],
+      "realDifferential": [
+        "review-vector-translate",
+        "review-dependent-vector"
+      ],
+      "interaction": [
+        "review-vector-translate-typed-reference-states-and-remount",
+        "review-dependent-vector-typed-reference-states-and-remount",
+        "review-vector-translate-actual-pointer-writeback"
+      ],
+      "gaps": [
+        "Other object/3D combinations need separate source and differential classification.",
+        "Vector editing semantics beyond rejecting false point dragging remain unverified."
+      ]
+    }
+  ],
+  "additionalInputSyntax": {
+    "typedVectorTuple": "Implemented 2D subset; tests and fresh review-vector cases; not a new official command.",
+    "independentAffineLine": "Implemented affine x/y syntax subset; dependent/nonlinear rejected without cached-coordinate fallback."
+  }
+}

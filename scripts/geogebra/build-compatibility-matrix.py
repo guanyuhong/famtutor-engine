@@ -2,7 +2,7 @@
 Downloads official documentation and selected declaration sources read-only.
 Unclassified overloads and implementation mappings are explicitly incomplete.
 """
-import argparse, csv, hashlib, io, json, pathlib, re, sys, tarfile, urllib.request
+import argparse, csv, hashlib, io, json, pathlib, re, subprocess, sys, tarfile, urllib.request
 PINS={'manual':('geogebra/manual','e318ba503db08005e4713e6955d6b9ba5769a36c'),
       'integration':('geogebra/integration','298e983cad5e2f87cab7a330e303487d297960c1'),
       'source':('geogebra/geogebra','325faee17884c7ced41d360d0f08ae919a38a955')}
@@ -44,23 +44,67 @@ def command_signatures(text):
   elif pending and (not line.strip() or number-start>8):pending=''
  return out
 
-API_SIGNATURE=re.compile(r'\b([A-Za-z_$][\w$]*(?:\[\])?(?:<[^\n|()]+>)?)\s+([A-Za-z_$][\w$]*)\s*\(([^()]*)\)')
+API_SIGNATURE=re.compile(r'(?:(?:[A-Za-z_$][\w$]*(?:\[\])?(?:<[^\n|()]+>)?)\s+)?([A-Za-z_$][\w$]*)\s*\(([^()]*)\)')
 
 def api_signatures(text):
- lines=text.splitlines();out=[];section=''
+ # API tables have three columns. Do not scan descriptions for apparent method calls.
+ lines=text.splitlines();out=[];section='';active=False;buffer=[];base=0
  for number,line in enumerate(lines,1):
-  if line.startswith('=='):section=line.lstrip('= ').strip()
-  if not line.startswith('|') or line.startswith('|==='):continue
-  cells=line.split('|');signature=cells[1].strip()
-  # Some official table cells concatenate two overloads. Keep both and retain raw Since cell.
-  for match in API_SIGNATURE.finditer(signature):
-   out.append((match.group(2),match.group(0),number,cells[2].strip() if len(cells)>2 else '',section))
+  if not active and line.startswith('=='):section=line.lstrip('= ').strip()
+  if line.strip()=='|===':
+   if not active:active=True;buffer=[];base=number+1;continue
+   active=False;body='\n'.join(buffer)
+   positions=list(re.finditer(r'(?<!\\)\|',body))
+   cells=[body[m.end():positions[i+1].start() if i+1<len(positions) else len(body)] for i,m in enumerate(positions)]
+   if not cells or 'Method Signature' not in cells[0]:continue
+   if len(cells)%3:raise ValueError('Malformed API table cell count at line '+str(base))
+   for i in range(3,len(cells),3):
+    raw=cells[i].strip();signature=re.sub(r'\s+',' ',raw);since=cells[i+1].strip()
+    matches=list(API_SIGNATURE.finditer(signature))
+    if not matches:raise ValueError('Unparsed API signature: '+repr(raw))
+    for match in matches:
+     line_no=base+body[:positions[i].start()].count('\n')
+     out.append((match.group(1),match.group(0),line_no,since,section))
+   continue
+  if active:buffer.append(line)
+ if active:raise ValueError('Unterminated API table')
  return out
 
+def apply_coverage(entries, coverage, evidence_dir=None):
+ # This hand-reviewed map selects exact signatures, never whole command names.
+ indexed={r['id']:r for r in entries}
+ evidence={}
+ if evidence_dir is not None:
+  folder=pathlib.Path(evidence_dir)
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  if (folder/'commit.txt').read_text().strip()!=head:raise ValueError('Evidence belongs to another source SHA')
+  for kind,filename in [('realDifferential','fresh-comparison.json'),('interaction','review-browser.log')]:
+   raw=(folder/filename).read_bytes();report=json.loads(raw)
+   if report.get('failed')!=0 or report.get('passed',0)<=0:raise ValueError('Required evidence did not pass: '+filename)
+   records=report.get('cases') if kind=='realDifferential' else report.get('checks')
+   if not isinstance(records,list) or not records:raise ValueError('Evidence has no observations')
+   evidence[kind]={'report':report,'records':records,'sourceSha':head,'sha256':hashlib.sha256(raw).hexdigest(),'path':filename}
+ for mapping in coverage.get('entries',[]):
+  row=indexed.get(mapping['id'])
+  if row is None or row['signature']!=mapping['signature']:raise ValueError('Coverage signature drift: '+mapping['id'])
+  row['implementation']=mapping['implementation']
+  row['gaps']=mapping['gaps']
+  row['nativeRegression']={'status':'NOT_RUN','testFiles':mapping['testFiles'],'evidence':[]}
+  for kind in ['realDifferential','interaction']:
+   required=mapping.get(kind,[])
+   if not required:continue
+   row[kind]['requiredChecks']=required
+   item=evidence.get(kind)
+   if item is None:continue
+   found={r.get('id',r.get('name')):r for r in item['records']}
+   if any(found.get(name,{}).get('status')!='PASSED' for name in required):raise ValueError('Missing required '+kind+' check for '+row['id'])
+   row[kind]={'status':'PASSED_SAMPLED_SCOPE','scope':mapping['scope'],'evidence':[{k:v for k,v in item.items() if k not in ['report','records']}],'checks':required}
+ return entries
+
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--output',default='artifacts/compatibility-inventory');args=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('--output',default='artifacts/compatibility-inventory');ap.add_argument('--evidence-directory');args=ap.parse_args()
  out=pathlib.Path(args.output);out.mkdir(parents=True,exist_ok=True)
- rows=[];files=[];gaps=[];command_pages=0;source_names=set()
+ rows=[];files=[];gaps=[];command_pages=0;category_pages=0;source_names=set()
  for kind in ['manual','integration']:
   repo,sha=PINS[kind];url=f'https://codeload.github.com/{repo}/tar.gz/{sha}';archive=download(url)
   files.append({'kind':'archive','url':url,'sha256':hashlib.sha256(archive).hexdigest()})
@@ -73,6 +117,8 @@ def main():
     if member.size>2*1024*1024:raise ValueError('Oversized source page')
     raw=tar.extractfile(member).read();text=raw.decode('utf-8');files.append(provenance(kind,path,raw))
     if kind=='manual':
+     if pathlib.PurePosixPath(path).stem.endswith('_Commands'):
+      category_pages+=1;continue
      command_pages+=1;signatures=command_signatures(text)
      if not signatures:gaps.append({'code':'COMMAND_PAGE_NO_PARSED_SIGNATURE','source':provenance(kind,path,raw)})
      for name,sig,line in signatures:rows.append(inventory_row('command-overload',name,sig,provenance(kind,path,raw,line)))
@@ -112,10 +158,14 @@ def main():
   if row['id'] in unique:unique[row['id']]['sources'].extend(row['sources'])
   else:unique[row['id']]=row
  rows=sorted(unique.values(),key=lambda r:(r['layer'],r['name'],r['signature']))
+ coverage_path=ROOT/'docs/geogebra-runtime/coverage-overrides.v1.json'
+ coverage=json.loads(coverage_path.read_text()) if coverage_path.exists() else {'entries':[]}
+ rows=apply_coverage(rows,coverage,args.evidence_directory)
  manifest={'schema':'famtutor.geogebra.compatibility-matrix.v1','pins':{k:{'repository':v[0],'commit':v[1]} for k,v in PINS.items()},
   'runtime':{'requiredVersion':'5.4.920.0','sourceBinaryMapping':'UNVERIFIED'},
   'inventoryStatus':'DOCUMENTED_SIGNATURES_EXTRACTED_SOURCE_OVERLOAD_CLASSIFICATION_INCOMPLETE',
-  'completeCompatibility':False,'counts':{'commandPages':command_pages,'sourceCommandIdentifiers':len(source_names),'rows':len(rows)},
+  'coverageMapping':{'path':str(coverage_path.relative_to(ROOT)),'sha256':hashlib.sha256(coverage_path.read_bytes()).hexdigest() if coverage_path.exists() else None},
+  'completeCompatibility':False,'counts':{'commandPages':command_pages,'categoryPages':category_pages,'sourceCommandIdentifiers':len(source_names),'rows':len(rows)},
   'gaps':gaps+[{'code':'SOURCE_DISPATCH_OVERLOAD_CLASSIFICATION_PENDING'},{'code':'API_EXPORT_PLATFORM_MAPPING_PENDING'},{'code':'SEMANTIC_OVERLOAD_AND_VARIADIC_EXPANSION_PENDING'}],
   'sourceFiles':files,'sourceCommandDeclarations':declarations,'commandProcessorCandidates':processors,'entries':rows}
  (out/'matrix.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
