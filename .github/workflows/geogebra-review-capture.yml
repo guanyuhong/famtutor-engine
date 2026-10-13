@@ -1,0 +1,28 @@
+name: GeoGebra review reference capture
+on:
+  push:
+    branches: [codex/geogebra-pr10-v04-20261013]
+    paths: [scripts/geogebra/capture-review.py, .github/workflows/geogebra-review-capture.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - name: Fresh real engine observations with required fields
+        run: python scripts/geogebra/capture-review.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: geogebra-review-reference
+          path: artifacts/review-capture/
+          retention-days: 7
