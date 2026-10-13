@@ -45,6 +45,7 @@ jobs:
           node --input-type=module -e 'import x from "./packages/math/test/geogebra-fixtures/path-reference.v1.mjs";import {compareReference} from "./scripts/geogebra/compare-reference.mjs";const r=await compareReference(x);console.log(JSON.stringify(r,null,2));if(r.failed)process.exit(1)' > artifacts/reviewed/path-reference.json
       - name: Independent real GeoGebra capture and comparison at this SHA
         run: |
+          python scripts/geogebra/test_capture_identity.py
           python scripts/geogebra/capture-review.py --output artifacts/reviewed/fresh-reference
           node scripts/geogebra/compare-reference.mjs artifacts/reviewed/fresh-reference/capture.json > artifacts/reviewed/fresh-comparison.json
       - name: Original and new interaction suites

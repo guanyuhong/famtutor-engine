@@ -1,7 +1,7 @@
 """Capture original programs in the real engine; never infer missing expectations.
 No author materials, scripts, native engine imports, or write credentials are used.
 """
-import argparse, hashlib, importlib.util, json, os, pathlib, sys, time
+import argparse, hashlib, importlib.util, json, os, pathlib, subprocess, sys, time
 from playwright.sync_api import sync_playwright
 
 spec = importlib.util.spec_from_file_location('original_capture', pathlib.Path(__file__).with_name('capture-reference.py'))
@@ -41,11 +41,21 @@ REVIEWS = [
  ('review-direction-arc-sector','O=(0,0)\nA=(2,0)\nB=(0,7)\na=CircularArc(O,A,B)\ns=CircularSector(O,A,B)',['O','A','B','a','s'],[{'setCoords':{'label':'B','coords':[0,11]}},{'setCoords':{'label':'B','coords':[-9,0]}},{'setCoords':{'label':'A','coords':[4,0]}},{'setCoords':{'label':'B','coords':[0,7]}},{'setCoords':{'label':'A','coords':[2,0]}}]),
 ]
 
+def capture_identity():
+ # A pull_request GITHUB_SHA may name a synthetic merge while checkout uses head.sha.
+ # Record the actual source object and preserve the workflow identity separately.
+ root=pathlib.Path(__file__).resolve().parents[2]
+ def git(*args):return subprocess.check_output(['git','-C',str(root),*args],text=True).strip()
+ source=git('rev-parse','HEAD');tree=git('rev-parse','HEAD^{tree}')
+ if len(source)!=40 or len(tree)!=40 or any(c not in '0123456789abcdef' for c in source+tree):raise ValueError('Invalid source identity')
+ subprocess.run(['git','-C',str(root),'diff','--quiet','HEAD','--','scripts/geogebra'],check=True)
+ return {'captureCommit':source,'captureTree':tree,'workflowEventSha':os.environ.get('GITHUB_SHA')}
+
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--output',default='artifacts/review-capture');parser.add_argument('--runtime-version',default='5.4.920.0');args=parser.parse_args()
  out=pathlib.Path(args.output);out.mkdir(parents=True,exist_ok=True)
  report={'schema':'famtutor.geogebra.reference-capture.v2','status':'BLOCKED','cases':[],
-         'captureCommit':os.environ.get('GITHUB_SHA'),'captureWorkflowRun':os.environ.get('GITHUB_RUN_ID'),
+         **capture_identity(),'captureWorkflowRun':os.environ.get('GITHUB_RUN_ID'),
          'runtimeVersionRequired':args.runtime_version,'binarySourceMapping':'UNVERIFIED',
          'fetchedAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'authorMaterials':'NOT_REQUESTED'}
  try:
