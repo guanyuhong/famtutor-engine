@@ -1,0 +1,14 @@
+{
+  "baselineCandidate": "5905294af8bfa1a32f314ab6dd4b2942f61a4044",
+  "candidateDisposition": "NOT_MERGED_DESPITE_GREEN_CI",
+  "reviews": [
+    {"id":4261656525,"reproduced":true,"observation":{"inheritedToJSONExecuted":true,"error":null},"fix":"Validate array prototypes before serialization; reject inherited source callbacks.","regression":"native snapshot rejects custom array prototypes before inherited toJSON can execute"},
+    {"id":4261656532,"reproduced":true,"observation":{"initialRevision":0,"freshMount":"INVALID_REVISION","freshSnapshot":"INVALID_REVISION"},"fix":"Initialize the empty native document with revision1, retaining structural validation.","regressions":["a fresh API can save and restore its empty construction before any command","state-empty-api-mount-before-command"]}
+  ],
+  "localBefore":{"focusedNative":{"passed":1,"failed":2},"stateBrowser":{"passed":8,"failed":1}},
+  "localAfter":{"allNewStateNative":{"passed":8,"failed":0},"stateBrowser":{"passed":9,"failed":0}},
+  "localProvenance":"Same-repository reconstructed source with exact candidate file blobs, not a full git checkout; final exact-SHA CI still required.",
+  "checkpoint":"famtutor-issue16-checkpoint-02.zip",
+  "checkpointSha256":"8f8070d0a6e8fce27bdc1dd0d321c867608c87e5e16673862652e17fc69bc1e0",
+  "referencePointerParity":"NOT_RUN"
+}

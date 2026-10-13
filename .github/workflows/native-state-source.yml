@@ -1,0 +1,45 @@
+name: Native state checked source transport
+on:
+  push:
+    branches: [codex/geogebra-native-state-v02]
+    paths: [.ci/native-state-source.json, .github/workflows/native-state-source.yml]
+permissions:
+  contents: write
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Hash-checked source bytes only (not test acceptance)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          repo='guanyuhong/famtutor-engine'
+          assert os.environ['GITHUB_REPOSITORY']==repo
+          assert os.environ['GITHUB_REF']=='refs/heads/codex/geogebra-native-state-v02'
+          def blob(b):return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          report=[]
+          for name,spec in json.loads(pathlib.Path('.ci/native-state-source.json').read_text()).items():
+            assert name.startswith('packages/math/src/') and '..' not in pathlib.PurePosixPath(name).parts
+            raw=pathlib.Path(name).read_bytes();assert blob(raw) in (spec['before'],spec['after']),(name,blob(raw))
+            if blob(raw)==spec['before']:
+              lines=raw.decode().splitlines(keepends=True)
+              for start,end,text in reversed(spec['edits']):lines[start:end]=[text]
+              raw=''.join(lines).encode()
+            assert blob(raw)==spec['after'],(name,blob(raw))
+            result=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/blobs','--input','-'],input=json.dumps({'content':raw.decode(),'encoding':'utf-8'}).encode()))
+            assert result['sha']==spec['after']
+            report.append({'path':name,'blob':result['sha']})
+          pathlib.Path('source-blobs.json').write_text(json.dumps({'sourceCommit':os.environ['GITHUB_SHA'],'files':report,'refsWritten':False,'tests':'NOT_RUN_SOURCE_TRANSPORT_ONLY'},indent=2))
+          print(pathlib.Path('source-blobs.json').read_text())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-state-source-blobs
+          path: source-blobs.json
+          retention-days: 7

@@ -1,0 +1,22 @@
+{
+  "issue": 16,
+  "baseline": "7c5df0214d79ba195bcbb24a983e4c9fcef842ae",
+  "baselineTree": "85383215e4d4159ebf94f2de781a34536d0d81bf",
+  "program": "O=(1,2)\nr=3\nc=Circle(O,r)\nH=Center(c)\nq=Radius(c)",
+  "environment": "Chromium set_content; restored same-repository source; exact native-api/renderer/kernel blobs checked; not a complete latest git checkout",
+  "sourceBlobs": {
+    "packages/math/src/geogebra/native-api.ts": "40273adbc783128af1d02fbe011a0174670e01ab",
+    "packages/math/src/render/jsxgraph.ts": "dc03f0459ea95f131cba72609421cbbabc9949fe",
+    "packages/math/src/render/mounted-renderer.ts": "8edfdbf70a84c137c622149a763c5912fd01a9e9"
+  },
+  "observations": [
+    {"phase":"valid","apiRevision":5,"mountedRevision":5,"apiDefined":true,"mountedDefined":true},
+    {"phase":"setValue(r,-1)","apiRevision":6,"mountedRevision":5,"apiDefined":false,"mountedDefined":true,"flushError":"REBUILD_FAILED: Circle radius must be finite and positive, or zero with explicit allowPointCircle."},
+    {"phase":"setValue(r,4)","apiRevision":7,"mountedRevision":5,"apiDefined":true,"mountedDefined":true,"flushError":"RENDER_INCOMPLETE: JSXGraph renderer does not support measurement.circle_radius."}
+  ],
+  "existingXmlRoundtrip": {"setRadius":-1,"retainedRadiusBefore":4,"retainedRadiusAfter":"NaN","status":"FAIL"},
+  "fixStatus":"NOT_IMPLEMENTED_AT_THIS_CHECKPOINT",
+  "newLiveReference":"NOT_RUN",
+  "referencePointerParity":"NOT_RUN",
+  "notes":"No old PR15 result is counted as this reproduction. Full raw snapshots, log and screenshot saved in issue16-evidence/before. Native canonical state persistence will be distinguished from full GeoGebra XML interchange."
+}

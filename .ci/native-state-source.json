@@ -1,0 +1,7 @@
+{
+  "packages/math/src/geogebra/native-api.ts": {
+    "before": "fc6d22032f50c343d5c6f97996b2e4b44c2c80fe",
+    "after": "9eb69c482541c437e1414a5dd280ab639909f856",
+    "edits": [[29,30,"const blank=():MathDocument=>({schema:'famtutor.math.document.v1',documentId:'geogebra-native-api',revision:1,seed:1,\n"]]
+  }
+}

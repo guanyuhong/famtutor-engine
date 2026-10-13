@@ -1,3 +1,5 @@
+import { validateNativeApiSnapshot, type NativeApiSnapshot } from "./native-snapshot.js";
+export type { NativeApiSnapshot } from "./native-snapshot.js";
 /** Native Apps API slice. Command text -> original MathDocument -> original kernel.
  * No GeoGebra backend, XML compiler, dynamic JS evaluation or coordinate cache.
  * Only the versioned, explicitly tested signatures are compatibility claims.
@@ -25,7 +27,7 @@ const split=(s:string):string[]=>{
  for(let i=0;i<s.length;i++){const c=s[i];if(c==='(')depth++;else if(c===')')depth--;else if(c===','&&depth===0){out.push(s.slice(start,i).trim());start=i+1;}if(depth<0)throw Error('Unbalanced arguments');}
  if(depth)throw Error('Unbalanced arguments');out.push(s.slice(start).trim());return out;
 };
-const blank=():MathDocument=>({schema:'famtutor.math.document.v1',documentId:'geogebra-native-api',revision:0,seed:1,
+const blank=():MathDocument=>({schema:'famtutor.math.document.v1',documentId:'geogebra-native-api',revision:1,seed:1,
  metadata:{title:'Native Apps API',locale:'en',purpose:'demonstration'},entities:[],construction:[],interactions:[],
  views:[{id:'main',kind:'graphics2d',visible:true,renderer:'direct-svg',boundingBox:[-10,10,10,-10]}]});
 
@@ -225,10 +227,26 @@ export class GeoGebraNativeApi {
  }
  newConstruction():void {this.writable();const rev=this.document.revision;this.document=blank();this.document.revision=rev+1;this.definitions.clear();this.render();}
 
+ /** Native extensions: preserve canonical construction and algebraic history.
+  * Call flush() after restoring into a mounted API. No callbacks/code are saved. */
+ getSnapshot():NativeApiSnapshot {
+  return validateNativeApiSnapshot({schema:"famtutor.geogebra-native.snapshot.v1",
+    document:this.document,definitions:[...this.definitions],serial:this.serial});
+ }
+ restoreSnapshot(value:unknown):void {
+  this.writable();
+  // Complete validation before changing document, bindings, queue or listeners.
+  const snapshot=validateNativeApiSnapshot(value);
+  snapshot.document.revision=Math.max(this.document.revision,snapshot.document.revision)+1;
+  this.document=snapshot.document;this.definitions=new Map(snapshot.definitions);this.serial=snapshot.serial;
+  this.render();
+ }
  /** Native extension: immutable canonical document, not a GeoGebra method. */
  getDocument():MathDocument{return clone(this.document);}
  private currentExpression(label:string,d:Definition):string|undefined {const n=this.node(d.id);if(n.command==='point.free')return '('+(n.params?.coords as number[]).join(',')+')';if(n.command==='vector.components')return '('+(n.params?.components as number[]).join(',')+')';if(['scalar.constant','boolean.constant'].includes(n.command))return String(n.params?.value);return d.expression;}
  getXML(label?:string):string {
+  if(label===undefined&&[...evaluateMathDocument(this.document).entities.values()].some(e=>!e.defined))
+    throw Error("Undefined-state XML export is not supported; use the native getSnapshot() extension.");
   const parts:string[]=[];
   for(const [name,d] of this.definitions){if(label!==undefined&&label!==name)continue;
    const r=this.runtime(name)!,kind=r.entity.type,type=kind==='circle2'?'conic':kind==='scalar'?'numeric':this.getObjectType(name);
@@ -261,7 +279,7 @@ export class GeoGebraNativeApi {
  /** Native extension: renderer lifecycle is asynchronous, public algebra API is synchronous. */
  async flush():Promise<void>{await this.renderTask;if(this.renderFailure){const error=this.renderFailure;this.renderFailure=undefined;throw error;}}
  async mount(host:HTMLElement,options:MathMountedRendererOptions={}):Promise<void>{
-  await this.destroy();this.renderer=await mountMathRenderer(host,this.document,options);
+  await this.destroy();this.renderer=await mountMathRenderer(host,this.document,{...options,undefinedEntities:"omit"});
   this.unsubscribe=this.renderer.subscribe(event=>{if(event.type==='interaction.committed'&&event.target){this.document=this.renderer!.getDocument();synchronizeGeoGebraConicState(this.document);for(const n of this.affected(event.target))this.event('update',n);}});
  }
  async destroy():Promise<void>{await this.flush();this.unsubscribe?.();this.unsubscribe=undefined;if(this.renderer)await this.renderer.destroy();this.renderer=undefined;}
