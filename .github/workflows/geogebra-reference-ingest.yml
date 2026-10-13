@@ -2,7 +2,7 @@ name: GeoGebra verified reference blob ingestion
 on:
   push:
     branches: [codex/geogebra-pr10-v04-20261013]
-    paths: [scripts/geogebra/ingest-reference-artifact.py, .github/workflows/geogebra-reference-ingest.yml]
+    paths: [scripts/geogebra/ingest-reference-artifact.py, scripts/geogebra/ingest-reviewed-source.py, .github/workflows/geogebra-reference-ingest.yml]
 permissions:
   contents: write
   actions: read
@@ -21,8 +21,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python scripts/geogebra/ingest-reference-artifact.py
+      - name: Transfer reviewed source blob without changing refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/geogebra/ingest-reviewed-source.py
       - uses: actions/upload-artifact@v4
         with:
           name: geogebra-reference-ingested-blob
-          path: artifacts/reference-ingest/ingested-blob.json
+          path: |
+            artifacts/reference-ingest/ingested-blob.json
+            artifacts/reviewed-source/ingested-blob.json
           retention-days: 7
