@@ -557,7 +557,8 @@ export function invertCircleInCircle(source: Circle2Value, inversion: Circle2Val
   const scale = inversion.radius ** 2 / denominator;
   return circle(
     addPointVector(inversion.center, scaleVector(centerDelta, scale)),
-    Math.abs(scale) * source.radius
+    Math.abs(scale) * source.radius,
+    source.radius === 0 && inversion.radius > 0 // Preserve an admitted point circle, not a singular inversion.
   );
 }
 
@@ -969,9 +970,9 @@ export function applyTransform(value: RuntimeValue, transform: Transform2Value):
   if (isCircle(value)) {
     const center = applyTransformToPoint(value.center, transform);
     if (transform.transformKind === "dilate" && transform.factor !== undefined) {
-      return circle(center, Math.abs(value.radius * transform.factor));
+      return circle(center, Math.abs(value.radius * transform.factor), value.radius === 0);
     }
-    return circle(center, value.radius);
+    return circle(center, value.radius, value.radius === 0);
   }
   if (isPolygon(value)) {
     return { kind: "polygon2", vertices: value.vertices.map(vertex => applyTransformToPoint(vertex, transform)) };

@@ -54,6 +54,7 @@ jobs:
           python scripts/geogebra/browser-acceptance.py > artifacts/reviewed/browser.log
           python scripts/geogebra/path-browser-acceptance.py > artifacts/reviewed/path-browser.log
           python scripts/geogebra/review-browser-acceptance.py > artifacts/reviewed/review-browser.log
+          python scripts/geogebra/point-circle-browser-acceptance.py > artifacts/reviewed/point-circle-browser.log
       - name: Pinned inventory extraction and parser regressions
         run: |
           python scripts/geogebra/test_matrix_extraction.py

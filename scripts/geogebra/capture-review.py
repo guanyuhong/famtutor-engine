@@ -41,6 +41,22 @@ REVIEWS = [
  ('review-direction-arc-sector','O=(0,0)\nA=(2,0)\nB=(0,7)\na=CircularArc(O,A,B)\ns=CircularSector(O,A,B)',['O','A','B','a','s'],[{'setCoords':{'label':'B','coords':[0,11]}},{'setCoords':{'label':'B','coords':[-9,0]}},{'setCoords':{'label':'A','coords':[4,0]}},{'setCoords':{'label':'B','coords':[0,7]}},{'setCoords':{'label':'A','coords':[2,0]}}]),
 ]
 
+# These probes validate mathematical values through dependent Center/Radius
+# objects. Raw conic Apps API subtype histories are recorded separately below;
+# the importer comparison is not a claim of an implemented Apps API facade.
+POINT_CIRCLE_PROGRAM = "O=(3,4)\nQ=(0,0)\nr=2\nk=2\nv=(2,-1)\nc=Circle(O,r)\ninv=Circle(Q,2)\nct=Translate(c,v)\ncd=Dilate(c,k,Q)\nci=Reflect(c,inv)\nT=Center(ct)\nD=Center(cd)\nI=Center(ci)\na=Radius(ct)\nb=Radius(cd)\nd=Radius(ci)"
+POINT_CIRCLE_LABELS = ['O','Q','r','k','T','D','I','a','b','d']
+REVIEWS.extend([
+ ('point-circle-collapse-recovery', POINT_CIRCLE_PROGRAM, POINT_CIRCLE_LABELS,
+  [{'setValue':{'label':'r','value':v}} for v in [0,-1,0,3,0,2]]),
+ ('point-circle-parent-inversion-recovery', POINT_CIRCLE_PROGRAM.replace('r=2','r=0'), POINT_CIRCLE_LABELS,
+  [{'setCoords':{'label':'O','coords':[6,8]}}, {'setValue':{'label':'k','value':-2}},
+   {'setCoords':{'label':'O','coords':[0,0]}}, {'setCoords':{'label':'O','coords':[3,4]}},
+   {'setValue':{'label':'k','value':0}}, {'setValue':{'label':'k','value':2}}, {'setValue':{'label':'r','value':2}}]),
+ ('circle-zero-dilation-recovery', POINT_CIRCLE_PROGRAM, POINT_CIRCLE_LABELS,
+  [{'setValue':{'label':'k','value':v}} for v in [0,-2,2]])
+])
+
 def capture_identity():
  # A pull_request GITHUB_SHA may name a synthetic merge while checkout uses head.sha.
  # Record the actual source object and preserve the workflow identity separately.
@@ -75,6 +91,9 @@ def main():
      if not page.evaluate('(c)=>ggb.evalCommand(c)',commands):raise RuntimeError('Reference rejected original program')
      xml=page.evaluate('ggb.getXML()');entry.update(xml=xml,xmlSha256=hashlib.sha256(xml.encode()).hexdigest(),updated=[])
      entry['expected']=page.evaluate(OBSERVE,labels)
+     if name.startswith('point-circle') or name.startswith('circle-zero'):
+      entry['rawConicApiTypes']=[page.evaluate("Object.fromEntries(['c','ct','cd','ci'].map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))")]
+      entry['conicApiTypeGate']='RECORDED_NOT_YET_NATIVE_API_VERIFIED'
      if actions is None:
       actions=[]
       if page.evaluate('ggb.exists("A") && ggb.isIndependent("A")'):actions.append({'setCoords':{'label':'A','coords':[-2,1]}})
@@ -82,11 +101,12 @@ def main():
      for action in actions:
       page.evaluate("""a=>{if(a.setCoords)ggb.setCoords(a.setCoords.label,...a.setCoords.coords);else ggb.setValue(a.setValue.label,a.setValue.value);}""",action)
       entry['updated'].append({**action,'expected':page.evaluate(OBSERVE,labels)})
+      if 'rawConicApiTypes' in entry:entry['rawConicApiTypes'].append(page.evaluate("Object.fromEntries(['c','ct','cd','ci'].map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))"))
      entry['status']='CAPTURED'
     except Exception as exc:entry['error']=str(exc)[:2400]
     report['cases'].append(entry)
    browser.close()
-  report['status']='CAPTURED' if len(report['cases'])==12 and all(c['status']=='CAPTURED' for c in report['cases']) else 'PARTIAL'
+  report['status']='CAPTURED' if len(report['cases'])==len(programs) and all(c['status']=='CAPTURED' for c in report['cases']) else 'PARTIAL'
  except Exception as exc:report['error']=str(exc)[:3000]
  raw=json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False).encode();(out/'capture.json').write_bytes(raw)
  (out/'SHA256SUMS').write_text(hashlib.sha256(raw).hexdigest()+'  capture.json\n')

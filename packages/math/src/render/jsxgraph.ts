@@ -793,6 +793,17 @@ function mountJsxGraph2D(
         valueResolvers.set(output, () => safeRuntimePoint(native!));
         break;
       }
+      case "point.circle_center": {
+        const current = () => {
+          const source = valueOf(refs[0]!);
+          if (!isCircle(source)) throw new MathEngineError("JSXGRAPH_DYNAMIC_TYPE", "point.circle_center requires a circle2 input.");
+          return source.center;
+        };
+        native = board.create("point", [() => current().x, () => current().y], jxgAttributes(document, output, true));
+        objects.set(output, native);
+        valueResolvers.set(output, current);
+        break;
+      }
       case "point.midpoint": {
         native = board.create("midpoint", [pointNative(objects, refs[0]!), pointNative(objects, refs[1]!)], jxgAttributes(document, output, true));
         objects.set(output, native);
