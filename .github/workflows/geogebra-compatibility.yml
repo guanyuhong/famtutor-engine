@@ -1,0 +1,51 @@
+name: GeoGebra compatibility
+
+on:
+  push:
+    branches: [codex/geogebra-case-runtime-v02]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: geogebra-compatibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Build original core and math
+        run: npm ci && npm run build
+      - name: Original Node regressions
+        run: npm test
+      - name: Compatibility tests when available
+        run: |
+          if test -f packages/math/tests/geogebra-import.test.mjs; then
+            node --test packages/math/tests/geogebra-import.test.mjs
+          fi
+      - name: Package reproducible development snapshot
+        if: always()
+        run: |
+          mkdir -p artifacts
+          git rev-parse HEAD > artifacts/commit.txt
+          git archive --format=tar HEAD packages scripts docs package.json package-lock.json requirements-smoke.txt AGENTS.md LICENSE README.md .github | gzip -n > artifacts/source.tar.gz
+          if test -d packages/math/dist; then
+            tar -czf artifacts/built-packages.tar.gz packages/core/dist packages/math/dist
+          fi
+          sha256sum artifacts/*.tar.gz > artifacts/SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: famtutor-geogebra-development-snapshot
+          path: artifacts/
+          retention-days: 7
