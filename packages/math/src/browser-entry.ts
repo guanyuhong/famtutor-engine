@@ -37,3 +37,5 @@ export * from "./render/mounted-renderer.js";
 
 export * from "./geogebra/import.js";
 export { GgbImportError } from "./geogebra/xml.js";
+
+export * from "./geogebra/conic-state.js";

@@ -47,10 +47,14 @@ REVIEWS = [
 POINT_CIRCLE_PROGRAM = "O=(3,4)\nQ=(0,0)\nr=2\nk=2\nv=(2,-1)\nc=Circle(O,r)\ninv=Circle(Q,2)\nct=Translate(c,v)\ncd=Dilate(c,k,Q)\nci=Reflect(c,inv)\nT=Center(ct)\nD=Center(cd)\nI=Center(ci)\na=Radius(ct)\nb=Radius(cd)\nd=Radius(ci)"
 POINT_CIRCLE_LABELS = ['O','Q','r','k','T','D','I','a','b','d']
 REVIEWS.extend([
+ ('point-circle-created-zero-translate-dilate',
+  "O=(3,4)\nQ=(0,0)\nr=0\nk=2\nv=(2,-1)\nc=Circle(O,r)\nct=Translate(c,v)\ncd=Dilate(c,k,Q)\nT=Center(ct)\nD=Center(cd)\na=Radius(ct)\nb=Radius(cd)",
+  ['O','Q','r','k','T','D','a','b'],
+  [{'setCoords':{'label':'O','coords':[6,8]}},{'setValue':{'label':'k','value':0}},{'setValue':{'label':'k','value':-2}},{'setValue':{'label':'r','value':2}},{'setValue':{'label':'r','value':0}}]),
  ('point-circle-collapse-recovery', POINT_CIRCLE_PROGRAM, POINT_CIRCLE_LABELS,
   [{'setValue':{'label':'r','value':v}} for v in [0,-1,0,3,0,2]]),
- ('point-circle-parent-inversion-recovery', POINT_CIRCLE_PROGRAM.replace('r=2','r=0'), POINT_CIRCLE_LABELS,
-  [{'setCoords':{'label':'O','coords':[6,8]}}, {'setValue':{'label':'k','value':-2}},
+ ('point-circle-parent-inversion-recovery', POINT_CIRCLE_PROGRAM, POINT_CIRCLE_LABELS,
+  [{'setValue':{'label':'r','value':0}}, {'setCoords':{'label':'O','coords':[6,8]}}, {'setValue':{'label':'k','value':-2}},
    {'setCoords':{'label':'O','coords':[0,0]}}, {'setCoords':{'label':'O','coords':[3,4]}},
    {'setValue':{'label':'k','value':0}}, {'setValue':{'label':'k','value':2}}, {'setValue':{'label':'r','value':2}}]),
  ('circle-zero-dilation-recovery', POINT_CIRCLE_PROGRAM, POINT_CIRCLE_LABELS,
@@ -92,7 +96,7 @@ def main():
      xml=page.evaluate('ggb.getXML()');entry.update(xml=xml,xmlSha256=hashlib.sha256(xml.encode()).hexdigest(),updated=[])
      entry['expected']=page.evaluate(OBSERVE,labels)
      if name.startswith('point-circle') or name.startswith('circle-zero'):
-      entry['rawConicApiTypes']=[page.evaluate("Object.fromEntries(['c','ct','cd','ci'].map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))")]
+      entry['rawConicApiTypes']=[page.evaluate("Object.fromEntries(['c','ct','cd','ci'].filter(n=>ggb.exists(n)).map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))")]
       entry['conicApiTypeGate']='RECORDED_NOT_YET_NATIVE_API_VERIFIED'
      if actions is None:
       actions=[]
@@ -101,10 +105,19 @@ def main():
      for action in actions:
       page.evaluate("""a=>{if(a.setCoords)ggb.setCoords(a.setCoords.label,...a.setCoords.coords);else ggb.setValue(a.setValue.label,a.setValue.value);}""",action)
       entry['updated'].append({**action,'expected':page.evaluate(OBSERVE,labels)})
-      if 'rawConicApiTypes' in entry:entry['rawConicApiTypes'].append(page.evaluate("Object.fromEntries(['c','ct','cd','ci'].map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))"))
+      if 'rawConicApiTypes' in entry:entry['rawConicApiTypes'].append(page.evaluate("Object.fromEntries(['c','ct','cd','ci'].filter(n=>ggb.exists(n)).map(n=>[n,{type:ggb.getObjectType(n),defined:ggb.isDefined(n)}]))"))
      entry['status']='CAPTURED'
     except Exception as exc:entry['error']=str(exc)[:2400]
     report['cases'].append(entry)
+   # Independent initial-point inversion dispatch: retain this known gap and
+   # require strict import rejection. It is NOT counted as command compatibility.
+   page.evaluate('ggb.newConstruction()')
+   gap_program="O=(3,4)\nQ=(0,0)\nc=Circle(O,0)\ninv=Circle(Q,2)\nci=Reflect(c,inv)"
+   if not page.evaluate('(c)=>ggb.evalCommand(c)',gap_program):raise RuntimeError('Gap probe construction rejected')
+   gap_xml=page.evaluate('ggb.getXML()')
+   dispatch=page.evaluate("""()=>{const d=new DOMParser().parseFromString(ggb.getXML(),'application/xml');const e=Array.from(d.querySelectorAll('element')).find(x=>x.getAttribute('label')==='ci');return {xmlType:e?.getAttribute('type'),apiType:ggb.getObjectType('ci'),defined:ggb.isDefined('ci'),centerCommand:ggb.evalCommand('J=Center(ci)'),centerExists:ggb.exists('J')};}""")
+   if dispatch['xmlType']!='implicitpoly' or dispatch['centerExists']:raise RuntimeError('Initial point-conic inversion dispatch changed: '+str(dispatch))
+   report['unsupportedOutputProbes']=[{'id':'initial-point-conic-inversion-implicit','commands':gap_program,'xml':gap_xml,'xmlSha256':hashlib.sha256(gap_xml.encode()).hexdigest(),'dispatch':dispatch,'requiredDiagnostic':'INVERSION_OUTPUT_TYPE_UNSUPPORTED','compatibilityStatus':'UNIMPLEMENTED','acceptance':'STRICT_REJECTION_REQUIRED_NOT_COMPATIBILITY_PASS'}]
    browser.close()
   report['status']='CAPTURED' if len(report['cases'])==len(programs) and all(c['status']=='CAPTURED' for c in report['cases']) else 'PARTIAL'
  except Exception as exc:report['error']=str(exc)[:3000]

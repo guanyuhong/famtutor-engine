@@ -970,6 +970,7 @@ export function applyTransform(value: RuntimeValue, transform: Transform2Value):
   if (isCircle(value)) {
     const center = applyTransformToPoint(value.center, transform);
     if (transform.transformKind === "dilate" && transform.factor !== undefined) {
+      if (transform.factor === 0) throw new MathEngineError("DEGENERATE_TRANSFORM", "Zero conic dilation has no finite transformed conic.");
       return circle(center, Math.abs(value.radius * transform.factor), value.radius === 0);
     }
     return circle(center, value.radius, value.radius === 0);

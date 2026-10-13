@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { compareObservation, checkStaticSvg, RELATIVE_TOLERANCE } from './comparison-contract.mjs';
-import { importGeoGebraXml, evaluateMathDocument, renderDirectSvg, validateMathDocument, pathPointDragPatch } from '../../packages/math/dist/index.js';
+import { importGeoGebraXml, evaluateMathDocument, renderDirectSvg, validateMathDocument, setGeoGebraInput, synchronizeGeoGebraConicState } from '../../packages/math/dist/index.js';
 
 export async function compareReference(data) {
   if(!Array.isArray(data?.cases)||!data.cases.length)throw new Error('Reference cases must be nonempty');
@@ -30,6 +30,7 @@ export async function compareReference(data) {
         }
         errors.push(...checkStaticSvg(renderDirectSvg(document),document,evaluated).map(error=>({phase,step:'render',...error})));
       };
+      synchronizeGeoGebraConicState(document);
       check(item.expected,'initial');
       for(const [index,update] of item.updated.entries()) {
         if(!update||Boolean(update.setCoords)===Boolean(update.setValue)){errors.push({step:'update',index,code:'INVALID_UPDATE'});continue;}
@@ -37,16 +38,20 @@ export async function compareReference(data) {
         if(update.setCoords&&(!Array.isArray(action.coords)||action.coords.length!==2||!action.coords.every(Number.isFinite))||update.setValue&&!Number.isFinite(action.value)){errors.push({step:'update',index,code:'INVALID_UPDATE_VALUE'});continue;}
         const node=document.construction.find(n=>n.outputs.includes(id));
         if(!node||!(update.setCoords?['point.free','point.on_path']:['scalar.constant','scalar.slider']).includes(node.command)){errors.push({step:'update',id,error:'not an editable source primitive'});continue;}
-        if(update.setCoords) {
-          if(node.command==='point.on_path')Object.assign(node.params,pathPointDragPatch(document,id,action.coords));
-          else node.params.coords=action.coords;
-        } else node.params.value=action.value;
-        document.revision++;check(update.expected,`update-${index+1}`);
+        setGeoGebraInput(document,id,update.setCoords?{coords:action.coords}:{value:action.value});
+        check(update.expected,`update-${index+1}`);
       }
 
     }
     const status=errors.length?'FAILED':'PASSED';report[errors.length?'failed':'passed']++;
     report.cases.push({id:item.id,status,states,observations,errors,importWarnings:imported.diagnostics.filter(d=>d.severity==='warning')});
+  }
+  report.unsupportedOutputProbes=[];
+  for(const probe of data.unsupportedOutputProbes??[]) {
+    if(createHash('sha256').update(probe.xml).digest('hex')!==probe.xmlSha256)throw new Error(`Gap probe fingerprint mismatch: ${probe.id}`);
+    const imported=importGeoGebraXml(probe.xml),rejected=imported.status==='rejected'&&imported.diagnostics.some(d=>d.code===probe.requiredDiagnostic);
+    report.unsupportedOutputProbes.push({id:probe.id,compatibilityStatus:'UNIMPLEMENTED',strictRejection:rejected?'PASSED':'FAILED',diagnostics:imported.diagnostics});
+    if(!rejected)report.failed++;
   }
   report.status=report.failed?'FAILED':'PASSED';return report;
 }

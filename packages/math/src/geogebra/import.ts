@@ -367,7 +367,7 @@ class Compiler {
         one();if(args.length===2&&point(args[0]!)&&point(args[1]!)) this.emit(id,"scalar","measurement.distance",args);
         else {if(args.length===2&&linear.has(this.type(args[0]!))) args.reverse();this.need(args,["point2",linear]);const foot=this.emit(this.helper(),"point2","point.projection",args);this.emit(id,"scalar","measurement.distance",[args[0]!,foot]);}return;
       }
-      case "radius":one();this.need(args,["circle2"]);this.emit(id,"scalar","measurement.circle_radius",args);return;
+      case "radius":one();this.need(args,["circle2"]);this.emit(id,"scalar","measurement.circle_radius",args,{undefinedPolicy:"conic-axis-state"});return;
       case "slope":one();this.need(args,[linear]);this.emit(id,"scalar","measurement.slope",args);return;
       case "area":one();this.need(args,[new Set<EntityType>(["polygon2","circle2","sector2"])]);this.emit(id,"scalar","measurement.area",args);return;
       case "length":case "perimeter":one();if(args.length!==1) ggbFail("OVERLOAD_UNSUPPORTED",c.name);
@@ -383,6 +383,8 @@ class Compiler {
           if(args.length!==2) ggbFail("OVERLOAD_UNSUPPORTED",c.name);
           if(this.type(args[1]!)==="circle2") {
             if(type!=="point2"&&type!=="circle2") ggbFail("INVERSION_TYPE_UNSUPPORTED",type);
+            const declared=this.records.get(c.outputs[0]!)?.element?.attributes.type;
+            if(type==="circle2"&&declared&&declared!=="conic") ggbFail("INVERSION_OUTPUT_TYPE_UNSUPPORTED",`Inversion produced ${declared}, not a conic. No circle or saved coordinates are substituted.`);
             this.emit(id,type,type==="point2"?"point.invert_in_circle":"circle.invert_in_circle",args);return;
           }
           if(point(args[1]!)) transform=this.emit(this.helper(),"transform2","transform.dilate",[args[1]!],{factor:-1});

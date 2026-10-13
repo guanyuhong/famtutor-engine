@@ -14,7 +14,6 @@ for (const [name,transform,expected] of [
  ['translation',translateTransform(vector(2,-1)),[5,3,0]],
  ['positive dilation',dilateTransform(point(0,0),2),[6,8,0]],
  ['negative dilation',dilateTransform(point(0,0),-2),[-6,-8,0]],
- ['zero dilation of an admitted point circle',dilateTransform(point(1,1),0),[1,1,0]],
  ['rotation',rotateTransform(point(0,0),Math.PI/2),[-4,3,0]],
  ['reflection',reflectTransform(lineFromPoints(point(0,0),point(1,0))),[3,-4,0]]
 ]) test(`P1: admitted point circle survives ${name}`,()=>checkCircle(applyTransform(circle(point(3,4),0,true),transform),...expected));
@@ -55,3 +54,5 @@ test('P1: collapsed circles follow moved parents and recover after JSON round tr
  set(d,'O',{coords:[3,4]});set(d,'r',{value:2});e=evaluateMathDocument(d);checkCircle(e.entities.get('ct').value,5,3,2);checkCircle(e.entities.get('cd').value,-6,-8,4);
  assert.equal(e.entities.get('ci').defined,true);assert.equal(e.entities.get('Oci').defined,true);
 });
+
+test('Zero circle dilation stays undefined for both positive-radius and point conics',()=>{for(const radius of [0,2])assert.throws(()=>applyTransform(circle(point(3,4),radius,true),dilateTransform(point(1,1),0)),e=>e.code==='DEGENERATE_TRANSFORM');});
