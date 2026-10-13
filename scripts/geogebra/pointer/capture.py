@@ -4,6 +4,7 @@ Always saves partial/error evidence. GeoGebra is a separate oracle browser only.
 import argparse,hashlib,json,os,subprocess,traceback,math
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+from timing_probe import timing_contract, observe_after_hold
 ROOT=Path(__file__).resolve().parents[3]
 HERE=Path(__file__).resolve().parent
 LOADER="const defs=new Map(),mods=new Map();window.define=(name,deps,factory)=>defs.set(name,{deps,factory});window.define.amd={};window.ftRequire=function load(name){if(mods.has(name))return mods.get(name);const d=defs.get(name);if(!d)throw Error('Missing module '+name);const e={};mods.set(name,e);const r=d.factory(...d.deps.map(x=>x==='require'?load:x==='exports'?e:load(x)));if(r!==undefined)mods.set(name,r);return mods.get(name);};"
@@ -19,11 +20,15 @@ def encoded(data):
  return data
 def write(path,data):
  path.parent.mkdir(parents=True,exist_ok=True);raw=json.dumps(encoded(data),ensure_ascii=False,indent=2,allow_nan=False).encode();path.write_bytes(raw);path.with_suffix('.sha256').write_text(sha(raw)+'  '+path.name+'\n')
-def run(engine,out,native_warning=False):
+def run(engine,out,native_warning=False,diagnostic_hold_ms=0):
+ timing=timing_contract(diagnostic_hold_ms)
  raw=(HERE/'case.json').read_bytes();spec=json.loads(raw);observer=(HERE/'recorder.js').read_bytes()
  report={'schema':'famtutor.pointer.trace.v1','engine':engine,**identity(),'caseSha256':sha(raw),'recorderSha256':sha(observer),'spec':spec,'status':'BLOCKED','samples':[],'pageErrors':[],'rawDOM':[],'publicEvents':[],'engineEvents':[]}
  if native_warning and engine!='famtutor':raise ValueError('Warning assertions belong to the native validation probe only')
  report['nativeWarningOnly']=native_warning
+ report['timingProbe']=timing
+ report['captureSha256']=sha(Path(__file__).read_bytes())
+ report['lateObservations']=[]
  if engine=='famtutor':subprocess.run(['node','node_modules/typescript/bin/tsc','-p','packages/math/tsconfig.browser-smoke.json'],cwd=ROOT,check=True)
  try:
   with sync_playwright() as pw:
@@ -67,6 +72,10 @@ def run(engine,out,native_warning=False):
       row['native']=page.evaluate("""()=>{const d=api.getDocument(),md=api.renderer.getDocument(),e=rt.evaluateMathDocument(d),me=rt.evaluateMathDocument(md),h=api.renderer.active;return {document:d,mountedDocument:md,report:h.report(),objects:Object.fromEntries(['A','B','M','s'].map(n=>{const id=d.entities.find(x=>x.label===n).id,p=h.getNative(id);return [n,{evaluated:e.entities.get(id),mounted:me.entities.get(id),rendererValue:h.getValue(id),native:p?{type:p.elType,x:typeof p.X==='function'?p.X():null,y:typeof p.Y==='function'?p.Y():null}:null}]}))};}""")
      report['samples'].append(row)
      report.update(page.evaluate('pointerRecord.trace'));write(out,report)
+     late=observe_after_hold(page,step,diagnostic_hold_ms)
+     if late is not None:
+      report['lateObservations'].append(late)
+      report.update(page.evaluate('pointerRecord.trace'));write(out,report)
     settle();sample('initial')
     for action in spec['actions']:
      page.evaluate('(s)=>window.pointerStep=s',action['id']);xy=None
@@ -88,4 +97,4 @@ def run(engine,out,native_warning=False):
  # Recursively encode nonfinite values, including runtime internal diagnostics.
  write(out,report);print(json.dumps({k:report.get(k) for k in ['engine','status','sourceSha','runtimeVersion','error']}));return report['status']=='CAPTURED'
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--native-warning',action='store_true');a=p.parse_args();raise SystemExit(0 if run(a.engine,a.output,a.native_warning) else 1)
+ p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--native-warning',action='store_true');p.add_argument('--diagnostic-hold-ms',type=int,default=0);a=p.parse_args();raise SystemExit(0 if run(a.engine,a.output,a.native_warning,a.diagnostic_hold_ms) else 1)

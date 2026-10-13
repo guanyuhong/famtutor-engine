@@ -1,0 +1,51 @@
+name: Pointer repeatability diagnosis
+on:
+  push:
+    branches: [codex/geogebra-pointer-v03]
+    paths: ['scripts/geogebra/pointer/**', '.github/workflows/pointer-repeatability.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pointer-repeatability-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci && npm run build
+      - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
+      - name: Identity and diagnostic negative controls
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/pointer-repeatability
+          git rev-parse HEAD > artifacts/pointer-repeatability/commit.txt
+          git rev-parse HEAD^{tree} > artifacts/pointer-repeatability/tree.txt
+          python scripts/geogebra/pointer/test_timing_probe.py 2>&1 | tee artifacts/pointer-repeatability/unit.log
+          node --test packages/math/test/pointer-contract.test.mjs > artifacts/pointer-repeatability/comparator.tap
+      - name: All independent replicates, never retry-until-green
+        run: |
+          set -euo pipefail
+          python scripts/geogebra/pointer/repeatability.py --repeats 3 --hold-ms 150 --output artifacts/pointer-repeatability/runs 2>&1 | tee artifacts/pointer-repeatability/run.log
+      - name: Tracked source remains unchanged
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code && git diff --cached --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pointer-repeatability-${{ github.sha }}
+          path: artifacts/pointer-repeatability/
+          retention-days: 14
+          if-no-files-found: error

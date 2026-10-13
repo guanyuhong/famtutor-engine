@@ -31,6 +31,9 @@ export function nativeCoherence(trace) {
 function validateTrace(trace,engine,errors) {
  const fail=(code,detail={})=>errors.push({code,engine,...detail});
  if(trace?.engine!==engine||trace?.status!=='CAPTURED')fail('CAPTURE_INCOMPLETE');
+ // Passive timing experiments change cadence and are not original-protocol evidence.
+ if(trace?.timingProbe && (trace.timingProbe.postSampleHoldMs!==0 || trace.timingProbe.originalProtocolEligible!==true))fail('DIAGNOSTIC_TIMING_NOT_ACCEPTED');
+ if(trace?.lateObservations?.length)fail('EXTRA_OBSERVATION_PROFILE_NOT_ACCEPTED');
  if(!/^[0-9a-f]{40}$/.test(trace?.sourceSha??'')||!/^[0-9a-f]{40}$/.test(trace?.sourceTree??'')||trace.trackedDirty!==false)fail('SOURCE_IDENTITY_INVALID');
  if(trace.caseSha256!==CASE_HASH||trace.recorderSha256!==RECORDER_HASH)fail('TEST_SOURCE_DRIFT');
  differences(trace.spec,EXPECTED_CASE,engine+'.spec',errors);
