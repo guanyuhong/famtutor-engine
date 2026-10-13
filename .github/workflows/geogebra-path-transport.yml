@@ -1,0 +1,45 @@
+name: GeoGebra path transport
+on:
+  push:
+    branches: [codex/geogebra-path-transport-v03]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: geogebra-path-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Inspect path transport integration points
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          needles={
+            'packages/math/src/kernel/evaluate.ts':['case "point.on_path"'],
+            'packages/math/src/kernel/geometry.ts':['function lineFromPoints','function projectPointToPath'],
+            'packages/math/src/apply-changeset.ts':['point.on_path'],
+            'packages/math/src/render/mounted-renderer.ts':['point.on_path','point.set'],
+            'packages/math/src/render/jsxgraph.ts':['case "point.on_path"'],
+            'packages/math/src/catalog/commands.ts':['name: "point.on_path"']}
+          for file,terms in needles.items():
+            lines=Path(file).read_text().splitlines()
+            for i,line in enumerate(lines):
+              if any(t in line for t in terms):
+                print('\nSOURCE',file, i+1)
+                for j in range(max(0,i-4),min(len(lines),i+35)):print(f'{j+1}: {lines[j]}')
+          PY
+      - run: npm ci && npm run build
+      - name: Node regressions
+        run: npm test
+      - name: Strict original differential benchmark
+        run: node scripts/geogebra/compare-reference.mjs
