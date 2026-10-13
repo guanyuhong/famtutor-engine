@@ -1548,7 +1548,19 @@ function mountJsxGraph2D(
         const expression = stringParam(node, "expression");
         const domain = domainParam(node);
         native = board.create("functiongraph", [
-          (x: number) => expressionValue(expression, { x }),
+          (x: number) => {
+            // Curve label anchoring may probe outside the declared plotting domain.
+            // Undefined numeric samples are gaps, never zeros or uncaught view errors.
+            if (!Number.isFinite(x) || x < domain[0] || x > domain[1]) return Number.NaN;
+            try { return expressionValue(expression, { x }); }
+            catch (error) {
+              if (error instanceof MathEngineError && [
+                "EXPRESSION_NON_FINITE", "EXPRESSION_DIVISION_BY_ZERO",
+                "EXPRESSION_DOMAIN_ERROR"
+              ].includes(error.code)) return Number.NaN;
+              throw error;
+            }
+          },
           domain[0],
           domain[1]
         ], jxgAttributes(document, output, true));

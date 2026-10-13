@@ -58,7 +58,6 @@ class Parser {
 
   private parseBinary(minPrecedence: number): ExpressionNode {
     let left = this.parseUnary();
-
     while (true) {
       const token = this.peek();
       if (token.type !== "operator") break;
@@ -76,7 +75,6 @@ class Parser {
         end: right.end
       };
     }
-
     return left;
   }
 
@@ -84,7 +82,8 @@ class Parser {
     const token = this.peek();
     if (token.type === "operator" && (token.value === "+" || token.value === "-" || token.value === "!")) {
       this.consume();
-      const argument = this.parseUnary();
+      // Exponentiation binds more tightly than unary +/-; negative exponents remain valid.
+      const argument = token.value === "!" ? this.parseUnary() : this.parseBinary(PRECEDENCE["^"]!);
       return {
         type: "unary",
         operator: token.value as UnaryNode["operator"],

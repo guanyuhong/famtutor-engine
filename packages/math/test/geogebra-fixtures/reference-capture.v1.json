@@ -1,0 +1,561 @@
+{
+  "schema": "famtutor.geogebra.reference-fixtures.v1",
+  "runtimeVersion": "5.4.920.0",
+  "captureWorkflowRun": "38374361407",
+  "captureCommit": "c4463f0c5c03f7c83de8322627c7bbfaddd74ccb",
+  "cases": [
+    {
+      "id": "midpoint",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "A=(0,0)\nB=(4,2)\nM=Midpoint(A,B)\ns=Segment(A,B)",
+      "status": "CAPTURED",
+      "xmlSha256": "7d76bbd24875246cb0f55ece3c77381fc38f0d268892e0ec71b28a192c9e8688",
+      "expected": {
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 0
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 4,
+          "y": 2
+        },
+        "M": {
+          "type": "point",
+          "defined": true,
+          "x": 2,
+          "y": 1
+        },
+        "s": {
+          "type": "segment",
+          "defined": true,
+          "value": 4.47213595499958
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 4,
+              "y": 2
+            },
+            "M": {
+              "type": "point",
+              "defined": true,
+              "x": 1,
+              "y": 1.5
+            },
+            "s": {
+              "type": "segment",
+              "defined": true,
+              "value": 6.0827625302982185
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"d9e730b6-e0fc-4e70-b6ad-aac541d4e0b7\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"A\" exp=\"(0, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(4, 2)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"4\" y=\"2\" z=\"1\"/>\n</element>\n<command name=\"Midpoint\">\n\t<input a0=\"A\" a1=\"B\"/>\n\t<output a0=\"M\"/>\n</command>\n<element type=\"point\" label=\"M\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"2\" y=\"1\" z=\"1\"/>\n</element>\n<command name=\"Segment\">\n\t<input a0=\"A\" a1=\"B\"/>\n\t<output a0=\"s\"/>\n</command>\n<element type=\"segment\" label=\"s\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"-2\" y=\"4\" z=\"0\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "bisector",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "A=(-3,0)\nB=(3,0)\nl=PerpendicularBisector(A,B)\nP=Point(l)\nd=Distance(P,A)\ne=Distance(P,B)",
+      "status": "CAPTURED",
+      "xmlSha256": "4eb04c340ade2f6563c310f4de38537f45fc45436a6ca3b7abfa86a3b7cbbd42",
+      "expected": {
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": -3,
+          "y": 0
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 3,
+          "y": 0
+        },
+        "P": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 0
+        },
+        "d": {
+          "type": "numeric",
+          "defined": true,
+          "value": 3
+        },
+        "e": {
+          "type": "numeric",
+          "defined": true,
+          "value": 3
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 3,
+              "y": 0
+            },
+            "P": {
+              "type": "point",
+              "defined": true,
+              "x": 0.5,
+              "y": 0.5
+            },
+            "d": {
+              "type": "numeric",
+              "defined": true,
+              "value": 2.5495097567963922
+            },
+            "e": {
+              "type": "numeric",
+              "defined": true,
+              "value": 2.5495097567963922
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"e151388c-b8cc-4320-b6b9-22b34a8c18a0\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"A\" exp=\"(-3, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-3\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(3, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"3\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"LineBisector\">\n\t<input a0=\"A\" a1=\"B\"/>\n\t<output a0=\"l\"/>\n</command>\n<element type=\"line\" label=\"l\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"-6\" y=\"0\" z=\"0\"/>\n</element>\n<command name=\"Point\">\n\t<input a0=\"l\"/>\n\t<output a0=\"P\"/>\n</command>\n<element type=\"point\" label=\"P\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"125\" g=\"125\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"Distance\">\n\t<input a0=\"P\" a1=\"A\"/>\n\t<output a0=\"d\"/>\n</command>\n<element type=\"numeric\" label=\"d\">\n\t<value val=\"3\"/>\n</element>\n<command name=\"Distance\">\n\t<input a0=\"P\" a1=\"B\"/>\n\t<output a0=\"e\"/>\n</command>\n<element type=\"numeric\" label=\"e\">\n\t<value val=\"3\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "angle-bisector",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "A=(4,0)\nB=(0,0)\nC=(0,4)\nl=AngleBisector(A,B,C)\nP=Point(l)",
+      "status": "CAPTURED",
+      "xmlSha256": "f86e57daa4bb61bc709bf3622d80c9bade432dd1a6dd9440f4f42905a2c75818",
+      "expected": {
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": 4,
+          "y": 0
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 0
+        },
+        "C": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 4
+        },
+        "P": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 0,
+              "y": 0
+            },
+            "C": {
+              "type": "point",
+              "defined": true,
+              "x": 0,
+              "y": 4
+            },
+            "P": {
+              "type": "point",
+              "defined": true,
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"ac67168f-6f20-4b01-b079-afb127cfc071\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"A\" exp=\"(4, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"4\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(0, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"C\" exp=\"(0, 4)\" type=\"point\"/>\n<element type=\"point\" label=\"C\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"4\" z=\"1\"/>\n</element>\n<command name=\"AngularBisector\">\n\t<input a0=\"A\" a1=\"B\" a2=\"C\"/>\n\t<output a0=\"l\"/>\n</command>\n<element type=\"line\" label=\"l\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"-0.7071067811865475\" y=\"0.7071067811865475\" z=\"0\"/>\n</element>\n<command name=\"Point\">\n\t<input a0=\"l\"/>\n\t<output a0=\"P\"/>\n</command>\n<element type=\"point\" label=\"P\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"125\" g=\"125\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "circle-intersection",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "O=(0,0)\nA=(-5,0)\nB=(5,0)\nl=Line(A,B)\nc=Circle(O,3)\nX=Intersect(l,c,1)\nY=Intersect(l,c,2)",
+      "status": "CAPTURED",
+      "xmlSha256": "3f8c0d1e7625be63887745f72f12da1acc7c81783619607b4deb2dfa6db74ecd",
+      "expected": {
+        "X": {
+          "type": "point",
+          "defined": true,
+          "x": -3,
+          "y": 0
+        },
+        "Y": {
+          "type": "point",
+          "defined": true,
+          "x": 3,
+          "y": 0
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "X": {
+              "type": "point",
+              "defined": true,
+              "x": -2.7861739379323627,
+              "y": 1.112310562561766
+            },
+            "Y": {
+              "type": "point",
+              "defined": true,
+              "x": 2.9861739379323624,
+              "y": 0.28768943743823394
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"59702a09-70f3-4ca6-91f1-38606f73cfb7\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"O\" exp=\"(0, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"O\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"A\" exp=\"(-5, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-5\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(5, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"5\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"Line\">\n\t<input a0=\"A\" a1=\"B\"/>\n\t<output a0=\"l\"/>\n</command>\n<element type=\"line\" label=\"l\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"0\" y=\"10\" z=\"0\"/>\n</element>\n<command name=\"Circle\">\n\t<input a0=\"O\" a1=\"3\"/>\n\t<output a0=\"c\"/>\n</command>\n<element type=\"conic\" label=\"c\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"specific\"/>\n\t<eigenvectors x0=\"1\" y0=\"0\" z0=\"1\" x1=\"0\" y1=\"1\" z1=\"1\"/>\n\t<matrix A0=\"1\" A1=\"1\" A2=\"-9\" A3=\"0\" A4=\"0\" A5=\"0\"/>\n</element>\n<command name=\"Intersect\">\n\t<input a0=\"c\" a1=\"l\" a2=\"1\"/>\n\t<output a0=\"X\"/>\n</command>\n<element type=\"point\" label=\"X\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-3\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"Intersect\">\n\t<input a0=\"c\" a1=\"l\" a2=\"2\"/>\n\t<output a0=\"Y\"/>\n</command>\n<element type=\"point\" label=\"Y\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"3\" y=\"0\" z=\"1\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "polygon-rotation",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "A=(0,0)\nB=(4,0)\nC=(1,3)\np=Polygon(A,B,C)\nq=Rotate(p,60°,A)\nd=Area(q)",
+      "status": "CAPTURED",
+      "xmlSha256": "8fe68a071fc949cca8552fb250bea00588390a8435bbb50921129538d79e3f59",
+      "expected": {
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 0
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 4,
+          "y": 0
+        },
+        "C": {
+          "type": "point",
+          "defined": true,
+          "x": 1,
+          "y": 3
+        },
+        "p": {
+          "type": "triangle",
+          "defined": true
+        },
+        "q": {
+          "type": "triangle",
+          "defined": true
+        },
+        "d": {
+          "type": "numeric",
+          "defined": true,
+          "value": 6.000000000000001
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 4,
+              "y": 0
+            },
+            "C": {
+              "type": "point",
+              "defined": true,
+              "x": 1,
+              "y": 3
+            },
+            "p": {
+              "type": "triangle",
+              "defined": true
+            },
+            "q": {
+              "type": "triangle",
+              "defined": true
+            },
+            "d": {
+              "type": "numeric",
+              "defined": true,
+              "value": 7.5
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"64ae086b-7a53-48f6-aecc-cf4aa4db6551\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"A\" exp=\"(0, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(4, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"4\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"C\" exp=\"(1, 3)\" type=\"point\"/>\n<element type=\"point\" label=\"C\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"1\" y=\"3\" z=\"1\"/>\n</element>\n<command name=\"Polygon\">\n\t<input a0=\"A\" a1=\"B\" a2=\"C\"/>\n\t<output a0=\"p\" a1=\"c\" a2=\"a\" a3=\"b\"/>\n</command>\n<element type=\"polygon\" label=\"p\">\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<show object=\"true\" label=\"false\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0.10000000149011612\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n</element>\n<element type=\"segment\" label=\"c\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"0\" y=\"4\" z=\"0\"/>\n</element>\n<element type=\"segment\" label=\"a\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"-3\" y=\"-3\" z=\"12\"/>\n</element>\n<element type=\"segment\" label=\"b\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"3\" y=\"-1\" z=\"0\"/>\n</element>\n<command name=\"Rotate\">\n\t<input a0=\"A\" a1=\"60°\" a2=\"A\"/>\n\t<output a0=\"A&apos;\"/>\n</command>\n<element type=\"point\" label=\"A&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"Rotate\">\n\t<input a0=\"B\" a1=\"60°\" a2=\"A\"/>\n\t<output a0=\"B&apos;\"/>\n</command>\n<element type=\"point\" label=\"B&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"2.0000000000000004\" y=\"3.4641016151377544\" z=\"1\"/>\n</element>\n<command name=\"Rotate\">\n\t<input a0=\"C\" a1=\"60°\" a2=\"A\"/>\n\t<output a0=\"C&apos;\"/>\n</command>\n<element type=\"point\" label=\"C&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-2.098076211353316\" y=\"2.3660254037844393\" z=\"1\"/>\n</element>\n<command name=\"Polygon\">\n\t<input a0=\"A&apos;\" a1=\"B&apos;\" a2=\"C&apos;\"/>\n\t<output a0=\"q\" a1=\"c&apos;\" a2=\"a&apos;\" a3=\"b&apos;\"/>\n</command>\n<element type=\"polygon\" label=\"q\">\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<show object=\"true\" label=\"false\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0.10000000149011612\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n</element>\n<element type=\"segment\" label=\"c&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"-3.4641016151377544\" y=\"2.0000000000000004\" z=\"0\"/>\n</element>\n<element type=\"segment\" label=\"a&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"1.0980762113533151\" y=\"-4.098076211353316\" z=\"12.000000000000002\"/>\n</element>\n<element type=\"segment\" label=\"b&apos;\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"153\" g=\"51\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<auxiliary val=\"false\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<outlyingIntersections val=\"false\"/>\n\t<keepTypeOnTransform val=\"true\"/>\n\t<startStyle val=\"default\"/>\n\t<endStyle val=\"default\"/>\n\t<coords x=\"2.3660254037844393\" y=\"2.098076211353316\" z=\"0\"/>\n</element>\n<command name=\"Area\">\n\t<input a0=\"q\"/>\n\t<output a0=\"d\"/>\n</command>\n<element type=\"numeric\" label=\"d\">\n\t<value val=\"6.000000000000001\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "ellipse",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "A=(-2,0)\nB=(2,0)\nC=(0,3)\ne=Ellipse(A,B,C)\nD=(-6,0)\nE=(6,0)\nl=Line(D,E)\nX=Intersect(l,e,1)",
+      "status": "CAPTURED",
+      "xmlSha256": "1c89549ec3ad20450355052bf1f5363f70569ae958d7b3507e1b0941f1364136",
+      "expected": {
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": -2,
+          "y": 0
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 2,
+          "y": 0
+        },
+        "C": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 3
+        },
+        "X": {
+          "type": "point",
+          "defined": true,
+          "x": -3.605551275463988,
+          "y": 0
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 2,
+              "y": 0
+            },
+            "C": {
+              "type": "point",
+              "defined": true,
+              "x": 0,
+              "y": 3
+            },
+            "X": {
+              "type": "point",
+              "defined": true,
+              "x": -3.0115642053899254,
+              "y": 0
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"90d5b426-924f-4ea7-80f2-894ba0af5424\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"A\" exp=\"(-2, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-2\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(2, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"2\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"C\" exp=\"(0, 3)\" type=\"point\"/>\n<element type=\"point\" label=\"C\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"3\" z=\"1\"/>\n</element>\n<command name=\"Ellipse\">\n\t<input a0=\"A\" a1=\"B\" a2=\"C\"/>\n\t<output a0=\"e\"/>\n</command>\n<element type=\"conic\" label=\"e\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<eigenvectors x0=\"1\" y0=\"0\" z0=\"1\" x1=\"0\" y1=\"1\" z1=\"1\"/>\n\t<matrix A0=\"144\" A1=\"207.99999999999997\" A2=\"-1871.999999999999\" A3=\"0\" A4=\"0\" A5=\"0\"/>\n</element>\n<expression label=\"D\" exp=\"(-6, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"D\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-6\" y=\"0\" z=\"1\"/>\n</element>\n<expression label=\"E\" exp=\"(6, 0)\" type=\"point\"/>\n<element type=\"point\" label=\"E\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"6\" y=\"0\" z=\"1\"/>\n</element>\n<command name=\"Line\">\n\t<input a0=\"D\" a1=\"E\"/>\n\t<output a0=\"l\"/>\n</command>\n<element type=\"line\" label=\"l\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"0\" y=\"12\" z=\"0\"/>\n</element>\n<command name=\"Intersect\">\n\t<input a0=\"e\" a1=\"l\" a2=\"1\"/>\n\t<output a0=\"X\"/>\n</command>\n<element type=\"point\" label=\"X\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-3.605551275463988\" y=\"0\" z=\"1\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "parabola",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "F=(0,2)\nA=(-5,-2)\nB=(5,-2)\nl=Line(A,B)\np=Parabola(F,l)\nC=(-5,1)\nD=(5,1)\ng=Line(C,D)\nX=Intersect(g,p,1)\nY=Intersect(g,p,2)",
+      "status": "CAPTURED",
+      "xmlSha256": "00b8a6a7f22fd398316f6285e51f1e286155e06c6c87450f602b5c23d98d5623",
+      "expected": {
+        "F": {
+          "type": "point",
+          "defined": true,
+          "x": 0,
+          "y": 2
+        },
+        "A": {
+          "type": "point",
+          "defined": true,
+          "x": -5,
+          "y": -2
+        },
+        "B": {
+          "type": "point",
+          "defined": true,
+          "x": 5,
+          "y": -2
+        },
+        "X": {
+          "type": "point",
+          "defined": true,
+          "x": -2.82842712474619,
+          "y": 1
+        },
+        "Y": {
+          "type": "point",
+          "defined": true,
+          "x": 2.82842712474619,
+          "y": 1
+        }
+      },
+      "updated": [
+        {
+          "setCoords": {
+            "label": "A",
+            "coords": [
+              -2,
+              1
+            ]
+          },
+          "expected": {
+            "F": {
+              "type": "point",
+              "defined": true,
+              "x": 0,
+              "y": 2
+            },
+            "A": {
+              "type": "point",
+              "defined": true,
+              "x": -2,
+              "y": 1
+            },
+            "B": {
+              "type": "point",
+              "defined": true,
+              "x": 5,
+              "y": -2
+            },
+            "X": {
+              "type": "point",
+              "defined": false
+            },
+            "Y": {
+              "type": "point",
+              "defined": false
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"aefa3ff8-43c0-4dd8-ba11-957713a072cd\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"F\" exp=\"(0, 2)\" type=\"point\"/>\n<element type=\"point\" label=\"F\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"0\" y=\"2\" z=\"1\"/>\n</element>\n<expression label=\"A\" exp=\"(-5, -2)\" type=\"point\"/>\n<element type=\"point\" label=\"A\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-5\" y=\"-2\" z=\"1\"/>\n</element>\n<expression label=\"B\" exp=\"(5, -2)\" type=\"point\"/>\n<element type=\"point\" label=\"B\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"5\" y=\"-2\" z=\"1\"/>\n</element>\n<command name=\"Line\">\n\t<input a0=\"A\" a1=\"B\"/>\n\t<output a0=\"l\"/>\n</command>\n<element type=\"line\" label=\"l\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"0\" y=\"10\" z=\"20\"/>\n</element>\n<command name=\"Parabola\">\n\t<input a0=\"F\" a1=\"l\"/>\n\t<output a0=\"p\"/>\n</command>\n<element type=\"conic\" label=\"p\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<eigenvectors x0=\"0\" y0=\"1\" z0=\"1\" x1=\"-1\" y1=\"0\" z1=\"1\"/>\n\t<matrix A0=\"100\" A1=\"0\" A2=\"0\" A3=\"0\" A4=\"0\" A5=\"-400\"/>\n</element>\n<expression label=\"C\" exp=\"(-5, 1)\" type=\"point\"/>\n<element type=\"point\" label=\"C\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-5\" y=\"1\" z=\"1\"/>\n</element>\n<expression label=\"D\" exp=\"(5, 1)\" type=\"point\"/>\n<element type=\"point\" label=\"D\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"77\" g=\"77\" b=\"255\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<animation step=\"0.1\" type=\"1\" playing=\"false\"/>\n\t<pointSize val=\"5\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"5\" y=\"1\" z=\"1\"/>\n</element>\n<command name=\"Line\">\n\t<input a0=\"C\" a1=\"D\"/>\n\t<output a0=\"g\"/>\n</command>\n<element type=\"line\" label=\"g\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"0\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n\t<eqnStyle style=\"implicit\"/>\n\t<coords x=\"0\" y=\"10\" z=\"-10\"/>\n</element>\n<command name=\"Intersect\">\n\t<input a0=\"p\" a1=\"g\" a2=\"1\"/>\n\t<output a0=\"X\"/>\n</command>\n<element type=\"point\" label=\"X\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"-2.82842712474619\" y=\"1\" z=\"1\"/>\n</element>\n<command name=\"Intersect\">\n\t<input a0=\"p\" a1=\"g\" a2=\"2\"/>\n\t<output a0=\"Y\"/>\n</command>\n<element type=\"point\" label=\"Y\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"2.82842712474619\" y=\"1\" z=\"1\"/>\n</element>\n</construction>\n</geogebra>\n"
+    },
+    {
+      "id": "exponent-log",
+      "origin": "original-program-executed-by-geogebra",
+      "commands": "a=2\nb=log(a,8)\nf(x)=a^x\nP=(3,b)",
+      "status": "CAPTURED",
+      "xmlSha256": "1aed6d4681714e2e6fafda685e8a79f100cf665226d9fc8a8f507a29bf1d3df1",
+      "expected": {
+        "a": {
+          "type": "numeric",
+          "defined": true,
+          "value": 2
+        },
+        "b": {
+          "type": "numeric",
+          "defined": true,
+          "value": 3
+        },
+        "P": {
+          "type": "point",
+          "defined": true,
+          "x": 3,
+          "y": 3
+        }
+      },
+      "updated": [
+        {
+          "setValue": {
+            "label": "a",
+            "value": 4
+          },
+          "expected": {
+            "a": {
+              "type": "numeric",
+              "defined": true,
+              "value": 4
+            },
+            "b": {
+              "type": "numeric",
+              "defined": true,
+              "value": 1.5
+            },
+            "P": {
+              "type": "point",
+              "defined": true,
+              "x": 3,
+              "y": 1.5
+            }
+          }
+        }
+      ],
+      "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<geogebra format=\"5.0\" version=\"5.4.920.0\" app=\"classic\" platform=\"w\" id=\"638e61f4-5c27-49d1-8860-a463dd041cfd\" xsi:noNamespaceSchemaLocation=\"https://www.geogebra.org/apps/xsd/ggb.xsd\" xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<gui>\n\t<window width=\"900\" height=\"650\"/>\n\t<perspectives>\n<perspective id=\"tmp\">\n\t<panes>\n\t<pane location=\"\" divider=\"0.4\" orientation=\"1\"/>\n</panes>\n\t<views>\n\t<view id=\"4097\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1,1,1,1\" size=\"400\" window=\"100,100,700,550\"/>\n\t<view id=\"512\" toolbar=\"0 | 1 501 5 19 , 67 | 2 15 45 18 , 7 37 | 514 3 9 , 13 44 , 47 | 16 51 | 551 550 11 ,  20 22 21 23 , 55 56 57 , 12 | 69 | 510 511 , 512 513 | 533 531 , 534 532 , 522 523 , 537 536 , 535 , 538 | 521 520 | 36 , 38 49 560 | 571 30 29 570 31 33 | 17 | 540 40 41 42 , 27 28 35 , 6 , 502\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1,1\" size=\"500\" window=\"100,100,600,400\"/>\n\t<view id=\"4\" toolbar=\"0 || 2020 , 2021 , 2022 || 2001 , 2003 , 2002 , 2004 , 2005 || 2040 , 2041 , 2042 , 2044 , 2043\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,1\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"8\" toolbar=\"1001 | 1002 | 1003  || 1005 | 1004 || 1006 | 1007 | 1010 || 1008 | 1009 || 6\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1,3\" size=\"300\" window=\"100,100,600,400\"/>\n\t<view id=\"1\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"530\" window=\"100,100,600,400\"/>\n\t<view id=\"2\" visible=\"true\" inframe=\"false\" stylebar=\"false\" location=\"3\" size=\"360\" tab=\"ALGEBRA\" window=\"100,100,600,400\"/>\n\t<view id=\"16\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"32\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"300\" window=\"50,50,500,500\"/>\n\t<view id=\"64\" toolbar=\"0\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"128\" visible=\"false\" inframe=\"false\" stylebar=\"false\" location=\"1\" size=\"480\" window=\"50,50,500,500\"/>\n\t<view id=\"70\" toolbar=\"0 || 2020 || 2021 || 2022\" visible=\"false\" inframe=\"false\" stylebar=\"true\" location=\"1\" size=\"900\" window=\"50,50,500,500\"/>\n</views>\n\t<toolbar show=\"false\" items=\"0 73 62 | 1 501 67 , 5 19 , 72 75 76 | 2 15 45 , 18 65 , 7 37 | 4 3 8 9 , 13 44 , 58 , 47 | 16 51 64 , 70 | 10 34 53 11 , 24  20 22 , 21 23 | 55 56 57 , 12 | 36 46 , 38 49  50 , 71  14  68 | 30 29 54 32 31 33 | 25 17 26 60 52 61 | 40 41 42 , 27 28 35 , 6\" position=\"1\" help=\"false\"/>\n\t<input show=\"false\" cmd=\"true\" top=\"algebra\"/>\n\t<dockBar show=\"false\" east=\"false\"/>\n</perspective>\n</perspectives>\n\t<labelingStyle val=\"0\"/>\n\t<font size=\"16\"/>\n</gui>\n<euclidianView>\n\t<viewNumber viewNo=\"1\"/>\n\t<size width=\"530\" height=\"648\"/>\n\t<coordSystem xZero=\"265\" yZero=\"324\" scale=\"50\" yscale=\"50\"/>\n\t<evSettings axes=\"true\" grid=\"true\" gridIsBold=\"false\" pointCapturing=\"3\" rightAngleStyle=\"1\" checkboxSize=\"26\" gridType=\"3\"/>\n\t<bgColor r=\"255\" g=\"255\" b=\"255\"/>\n\t<axesColor r=\"28\" g=\"28\" b=\"31\"/>\n\t<gridColor r=\"180\" g=\"179\" b=\"186\"/>\n\t<lineStyle axes=\"1\" grid=\"0\"/>\n\t<axis id=\"0\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n\t<axis id=\"1\" show=\"true\" label=\"\" unitLabel=\"\" tickStyle=\"1\" showNumbers=\"true\"/>\n</euclidianView>\n<algebraView>\n\t<mode val=\"3\"/>\n</algebraView>\n<kernel>\n\t<continuous val=\"false\"/>\n\t<usePathAndRegionParameters val=\"true\"/>\n\t<decimals val=\"2\"/>\n\t<angleUnit val=\"degree\"/>\n\t<algebraStyle val=\"3\" spreadsheet=\"0\"/>\n\t<coordStyle val=\"0\"/>\n</kernel>\n<tableview min=\"0\" max=\"0\" step=\"0\"/>\n<scripting blocked=\"false\" disabled=\"false\"/>\n<construction title=\"\" author=\"\" date=\"\">\n<expression label=\"a\" exp=\"2\"/>\n<element type=\"numeric\" label=\"a\">\n\t<value val=\"2\"/>\n\t<show object=\"false\" label=\"true\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"1\"/>\n\t<animation type=\"0\" playing=\"false\"/>\n</element>\n<expression label=\"b\" exp=\"log(a, 8)\"/>\n<element type=\"numeric\" label=\"b\">\n\t<value val=\"3\"/>\n</element>\n<expression label=\"f\" exp=\"f(x) = a^(x)\"/>\n<element type=\"function\" label=\"f\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"0\" g=\"100\" b=\"0\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<fixed val=\"true\"/>\n\t<lineStyle thickness=\"5\" type=\"0\" typeHidden=\"1\" opacity=\"178\"/>\n</element>\n<expression label=\"P\" exp=\"(3, b)\" type=\"point\"/>\n<element type=\"point\" label=\"P\">\n\t<show object=\"true\" label=\"true\"/>\n\t<objColor r=\"110\" g=\"109\" b=\"115\" alpha=\"0\"/>\n\t<layer val=\"0\"/>\n\t<labelMode val=\"0\"/>\n\t<pointSize val=\"4\"/>\n\t<pointStyle val=\"0\"/>\n\t<coords x=\"3\" y=\"3\" z=\"1\"/>\n</element>\n</construction>\n</geogebra>\n"
+    }
+  ]
+}
