@@ -27,7 +27,7 @@ const split=(s:string):string[]=>{
  for(let i=0;i<s.length;i++){const c=s[i];if(c==='(')depth++;else if(c===')')depth--;else if(c===','&&depth===0){out.push(s.slice(start,i).trim());start=i+1;}if(depth<0)throw Error('Unbalanced arguments');}
  if(depth)throw Error('Unbalanced arguments');out.push(s.slice(start).trim());return out;
 };
-const blank=():MathDocument=>({schema:'famtutor.math.document.v1',documentId:'geogebra-native-api',revision:0,seed:1,
+const blank=():MathDocument=>({schema:'famtutor.math.document.v1',documentId:'geogebra-native-api',revision:1,seed:1,
  metadata:{title:'Native Apps API',locale:'en',purpose:'demonstration'},entities:[],construction:[],interactions:[],
  views:[{id:'main',kind:'graphics2d',visible:true,renderer:'direct-svg',boundingBox:[-10,10,10,-10]}]});
 

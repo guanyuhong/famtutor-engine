@@ -40,6 +40,10 @@ with sync_playwright() as pw:
    require(rows['c']['native']['r']==radius,'native circle radius differs')
    require([rows['H']['native']['x'],rows['H']['native']['y']]==center,'native center differs')
   require(page.evaluate('Object.keys(JXG.boards).length')==1,'staging board leak')
+ def mount_empty():
+  result=page.evaluate("""async()=>{const empty=rt.createGeoGebraNativeApi();try{await empty.mount(document.getElementById('stage'),{jsxgraph:JXG});const before=empty.getDocument();if(before.revision<1||before.entities.length)throw Error('Invalid initial document');if(!empty.evalCommand('A=(1,2)'))throw Error('Command after mount failed');await empty.flush();const d=empty.getDocument(),id=d.entities.find(e=>e.label==='A').id,p=empty.renderer.active.getNative(id);return {x:empty.getXcoord('A'),nativeX:p.X(),same:JSON.stringify(d)===JSON.stringify(empty.renderer.getDocument())};}finally{await empty.destroy();}}""")
+  require(result=={'x':1,'nativeX':1,'same':True},str(result));require(page.evaluate('Object.keys(JXG.boards).length')==0,'empty lifecycle board leak')
+ check('state-empty-api-mount-before-command',mount_empty)
  def initial():
   page.evaluate("async()=>{if(!api.evalCommand('O=(1,2)\\nr=3\\nc=Circle(O,r)\\nH=Center(c)\\nq=Radius(c)'))throw Error('command failed');await api.mount(document.getElementById('stage'),{jsxgraph:JXG});}");observe('valid',True,3,[1,2])
  check('state-valid-public-evaluator-mounted-coherence',initial)
