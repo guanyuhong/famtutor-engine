@@ -2,29 +2,119 @@
   "schema": "famtutor.pointer.case.v1",
   "id": "free-point-midpoint-segment-roundtrip",
   "program": "A=(1,2)\nB=(6,5)\nM=Midpoint(A,B)\ns=Segment(A,B)",
-  "labels": ["A", "B", "M", "s"],
-  "pointLabels": ["A", "B", "M"],
+  "labels": [
+    "A",
+    "B",
+    "M",
+    "s"
+  ],
+  "pointLabels": [
+    "A",
+    "B",
+    "M"
+  ],
   "target": "A",
   "requiredRuntime": "5.4.920.0",
   "codebase": "https://www.geogebra.org/apps/5.4.920.0/web3d/",
-  "viewport": {"width": 1000, "height": 750},
+  "viewport": {
+    "width": 1000,
+    "height": 750
+  },
   "actions": [
-    {"id":"approach", "type":"move", "world":[1,2]},
-    {"id":"down-out", "type":"down"},
-    {"id":"out-1", "type":"move", "world":[2,2]},
-    {"id":"out-2", "type":"move", "world":[3,3]},
-    {"id":"out-3", "type":"move", "world":[4,3]},
-    {"id":"out-4", "type":"move", "world":[4,4]},
-    {"id":"up-out", "type":"up"},
-    {"id":"down-back", "type":"down"},
-    {"id":"back-1", "type":"move", "world":[4,3]},
-    {"id":"back-2", "type":"move", "world":[3,3]},
-    {"id":"back-3", "type":"move", "world":[2,2]},
-    {"id":"back-4", "type":"move", "world":[1,2]},
-    {"id":"up-back", "type":"up"}
+    {
+      "id": "approach",
+      "type": "move",
+      "world": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "down-out",
+      "type": "down"
+    },
+    {
+      "id": "out-1",
+      "type": "move",
+      "world": [
+        2,
+        2
+      ]
+    },
+    {
+      "id": "out-2",
+      "type": "move",
+      "world": [
+        3,
+        3
+      ]
+    },
+    {
+      "id": "out-3",
+      "type": "move",
+      "world": [
+        4,
+        3
+      ]
+    },
+    {
+      "id": "out-4",
+      "type": "move",
+      "world": [
+        4,
+        4
+      ]
+    },
+    {
+      "id": "up-out",
+      "type": "up"
+    },
+    {
+      "id": "down-back",
+      "type": "down"
+    },
+    {
+      "id": "back-1",
+      "type": "move",
+      "world": [
+        4,
+        3
+      ]
+    },
+    {
+      "id": "back-2",
+      "type": "move",
+      "world": [
+        3,
+        3
+      ]
+    },
+    {
+      "id": "back-3",
+      "type": "move",
+      "world": [
+        2,
+        2
+      ]
+    },
+    {
+      "id": "back-4",
+      "type": "move",
+      "world": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "up-back",
+      "type": "up"
+    }
   ],
   "sampling": "Initial and after every explicit Playwright mouse action; two animation frames then await native flush if present. Every mouse.move uses steps=1. Callback-time states are also retained.",
   "comparison": "Every declared post-action public state and complete ordered add/update/remove/clear callback trace including callback-time states. No event deduplication, filtering, sorting or batching.",
   "platformBoundary": "Raw DOM pointer/mouse/capture events and engine-specific client/runtime events retain order, timestamps, targets and payloads. Platform metadata are not asserted byte-identical across the canvas and SVG backends. Unsupported client events remain a separate gap; not a pass.",
-  "sourceBinaryMapping": "UNVERIFIED"
+  "sourceBinaryMapping": "UNVERIFIED",
+  "pixelsPerUnit": 30,
+  "referenceEnableRightClick": false,
+  "calibration": "View-only calibration to equal integer-pixel world scale before construction, using actual view dimensions. Original fractional-pixel failure is retained separately; no coordinate result is corrected or rounded."
 }

@@ -965,12 +965,19 @@ function executeNode(
   }
 }
 
-export function evaluateMathDocument(document: MathDocument, overrides: EvaluationOverrides = {}): EvaluationResult {
+/** Optional trusted-host observation at actual node completion. It does not
+ * supply values or affect computation. Default evaluation is unchanged. */
+export type EvaluationObserver = (node: ConstructionNode, outputs: readonly RuntimeEntity[]) => void;
+
+export function evaluateMathDocument(document: MathDocument, overrides: EvaluationOverrides = {}, observer?: EvaluationObserver): EvaluationResult {
   const graph = buildConstructionGraph(document);
   const entityById = new Map(document.entities.map(entity => [entity.id, entity]));
   const values = new Map<string, RuntimeValue>();
   const runtimeEntities = new Map<string, RuntimeEntity>();
   const issues: ValidationIssue[] = [];
+  const notify = (node: ConstructionNode): void => {
+    if (observer) observer(structuredClone(node), structuredClone(node.outputs.flatMap(id => { const output = runtimeEntities.get(id); return output ? [output] : []; })));
+  };
 
   for (const nodeId of graph.order) {
     const node = graph.nodeById.get(nodeId)!;
@@ -986,6 +993,7 @@ export function evaluateMathDocument(document: MathDocument, overrides: Evaluati
         values.set(outputId, retained);
         runtimeEntities.set(outputId, {id:outputId, entity, nodeId:node.id, command:node.command,
           dependencies:graph.entityDependenciesByNode.get(nodeId)??[], defined:true, value:retained});
+        notify(node);
         continue;
       }
     }
@@ -1012,6 +1020,7 @@ export function evaluateMathDocument(document: MathDocument, overrides: Evaluati
           issue
         });
       }
+      notify(node);
       continue;
     }
 
@@ -1070,6 +1079,7 @@ export function evaluateMathDocument(document: MathDocument, overrides: Evaluati
         });
       }
     }
+    notify(node);
   }
 
   for (const entity of document.entities) {

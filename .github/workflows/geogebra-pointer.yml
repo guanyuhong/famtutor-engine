@@ -2,6 +2,7 @@ name: GeoGebra independent pointer parity
 on:
   push:
     branches: [codex/geogebra-pointer-v03]
+    paths: ['packages/math/**', 'scripts/geogebra/pointer/**', '.github/workflows/geogebra-pointer.yml']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -28,11 +29,14 @@ jobs:
           python-version: '3.12'
       - run: npm ci && npm run build
       - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
-      - name: Exact source identity
+      - name: Exact source identity and original native regressions
         run: |
+          set -euo pipefail
           mkdir -p artifacts/pointer
           git rev-parse HEAD > artifacts/pointer/commit.txt
           git rev-parse HEAD^{tree} > artifacts/pointer/tree.txt
+          npm test 2>&1 | tee artifacts/pointer/node.log
+          node --test packages/math/test/pointer-evaluation.test.mjs packages/math/test/pointer-contract.test.mjs > artifacts/pointer/focused.tap
       - name: Native real pointer capture
         run: python scripts/geogebra/pointer/capture.py --engine famtutor --output artifacts/pointer/native.json
       - name: Independent pinned GeoGebra real pointer capture

@@ -4,7 +4,7 @@ export type { NativeApiSnapshot } from "./native-snapshot.js";
  * No GeoGebra backend, XML compiler, dynamic JS evaluation or coordinate cache.
  * Only the versioned, explicitly tested signatures are compatibility claims.
  */
-import type {ConstructionNode, EntityType, JsonValue, MathDocument} from '../types.js';
+import type {ConstructionNode, EntityType, JsonValue, MathDocument, RuntimeEntity} from '../types.js';
 import {parseExpression, collectExpressionIdentifiers} from '../expression/parser.js';
 import {tokenizeExpression} from '../expression/tokenizer.js';
 import type {ExpressionNode} from '../expression/ast.js';
@@ -37,6 +37,7 @@ export class GeoGebraNativeApi {
  private serial=0;
  private callbacks:Record<EventKind,Set<Listener>>={add:new Set(),update:new Set(),remove:new Set(),clear:new Set()};
  private notifying=false;
+ private notificationState: ReadonlyMap<string,RuntimeEntity>|undefined;
  private renderer:MathMountedRenderer|undefined;
  private renderTask:Promise<void>=Promise.resolve();
  private renderFailure:unknown;
@@ -158,7 +159,7 @@ export class GeoGebraNativeApi {
   catch(e){this.diagnostics.push({code:'UNSUPPORTED_OR_INVALID_COMMAND',message:String(e)});this.render();return null;}
  }
  exists(label:string):boolean{return this.definitions.has(label);}
- private runtime(label:string){const d=this.definitions.get(label);return d?evaluateMathDocument(this.document).entities.get(d.id):undefined;}
+ private runtime(label:string){const d=this.definitions.get(label);return d?(this.notificationState??evaluateMathDocument(this.document).entities).get(d.id):undefined;}
  isDefined(label:string):boolean{return this.runtime(label)?.defined===true;}
  isIndependent(label:string):boolean {
   const d=this.definitions.get(label);if(!d)return false;const graph=buildConstructionGraph(this.document),n=graph.producerByEntity.get(d.id)!;
@@ -279,8 +280,29 @@ export class GeoGebraNativeApi {
  /** Native extension: renderer lifecycle is asynchronous, public algebra API is synchronous. */
  async flush():Promise<void>{await this.renderTask;if(this.renderFailure){const error=this.renderFailure;this.renderFailure=undefined;throw error;}}
  async mount(host:HTMLElement,options:MathMountedRendererOptions={}):Promise<void>{
-  await this.destroy();this.renderer=await mountMathRenderer(host,this.document,{...options,undefinedEntities:"omit"});
-  this.unsubscribe=this.renderer.subscribe(event=>{if(event.type==='interaction.committed'&&event.target){this.document=this.renderer!.getDocument();synchronizeGeoGebraConicState(this.document);for(const n of this.affected(event.target))this.event('update',n);}});
+  await this.destroy();this.renderer=await mountMathRenderer(host,this.document,{...options,undefinedEntities:"omit",continuousPointer:true,deferPointerActivation:true});
+  this.unsubscribe=this.renderer.subscribe(event=>{
+   if(event.type==='interaction.updated'&&event.target){
+    const state=new Map(evaluateMathDocument(this.document).entities);
+    this.document=this.renderer!.getDocument();
+    const affected=new Set(this.affected(event.target));
+    const names=new Map([...this.definitions].map(([name,d])=>[d.id,name]));
+    try {
+     // Each notification follows actual completion in the original evaluator.
+     // Pending nodes expose their prior committed result only DURING this
+     // synchronous callback window. These observations are never math inputs,
+     // never persisted, and cannot reconstruct an undefined geometric output.
+     evaluateMathDocument(this.document,{},(_node,outputs)=>{
+      for(const output of outputs)state.set(output.id,output);
+      this.notificationState=state;
+      for(const output of outputs){const name=names.get(output.id);if(name&&affected.has(name))this.event('update',name);}
+     });
+    } finally {this.notificationState=undefined;}
+   }else if(event.type==='interaction.committed'&&event.target){
+    this.document=this.renderer!.getDocument();synchronizeGeoGebraConicState(this.document);
+    if(event.payload?.continuousPointer!==true)for(const n of this.affected(event.target))this.event('update',n);
+   }
+  });
  }
  async destroy():Promise<void>{await this.flush();this.unsubscribe?.();this.unsubscribe=undefined;if(this.renderer)await this.renderer.destroy();this.renderer=undefined;}
 }

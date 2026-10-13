@@ -33,10 +33,10 @@ def run(engine,out):
    try:
     if engine=='geogebra':
      page.add_script_tag(url='https://www.geogebra.org/apps/deployggb.js')
-     page.evaluate("""spec=>{window.ready=false;const app=new GGBApplet({appName:'classic',width:900,height:600,language:'en',perspective:'G',showToolBar:false,showAlgebraInput:false,showMenuBar:false,showResetIcon:false,enableLabelDrags:false,enableShiftDragZoom:false,showZoomButtons:false,showFullscreenButton:false,appletOnLoad:a=>{window.api=a;window.ready=true;}},true);app.setHTML5Codebase(spec.codebase);app.inject('stage');}""",spec)
+     page.evaluate("""spec=>{window.ready=false;const app=new GGBApplet({appName:'classic',width:900,height:600,language:'en',perspective:'G',showToolBar:false,showAlgebraInput:false,showMenuBar:false,showResetIcon:false,enableRightClick:spec.referenceEnableRightClick,enableLabelDrags:false,enableShiftDragZoom:false,showZoomButtons:false,showFullscreenButton:false,appletOnLoad:a=>{window.api=a;window.ready=true;}},true);app.setHTML5Codebase(spec.codebase);app.inject('stage');}""",spec)
      page.wait_for_function('window.ready');report['runtimeVersion']=page.evaluate('api.getVersion()');report['selectedCodebase']=spec['codebase']
      if report['runtimeVersion']!=spec['requiredRuntime']:raise RuntimeError('Reference version mismatch '+report['runtimeVersion'])
-     page.evaluate("()=>{api.setCoordSystem(-15,15,-10,10);api.setPointCapture(1,0);api.setGridVisible(false);api.setMode(0);}")
+     page.evaluate("""spec=>{const p=JSON.parse(api.getViewProperties(1)),k=spec.pixelsPerUnit;if(!(p.width>0&&p.height>0&&k>0))throw Error('Invalid view dimensions');api.setCoordSystem(-p.width/(2*k),p.width/(2*k),-p.height/(2*k),p.height/(2*k));api.setPointCapture(1,0);api.setGridVisible(false);api.setMode(0);}""",spec)
     else:
      for text in [(ROOT/'packages/math/vendor/jsxgraph/jsxgraphcore.js').read_text(),LOADER,(ROOT/'packages/math/artifacts/runtime.browser.amd.js').read_text()]:page.add_script_tag(content=text)
      page.evaluate("()=>{window.rt=ftRequire('browser-entry');window.api=rt.createGeoGebraNativeApi();}")
@@ -49,10 +49,12 @@ def run(engine,out):
     if engine=='geogebra':
      view=page.evaluate("()=>{const p=JSON.parse(api.getViewProperties(1)),r=document.getElementById('stage').getBoundingClientRect();return {...p,frameLeft:r.left,frameTop:r.top};}")
      report['view']=view
+     if abs(view['invXscale']-1/spec['pixelsPerUnit'])>1e-12 or abs(view['invYscale']-1/spec['pixelsPerUnit'])>1e-12:raise RuntimeError('Reference view calibration failed')
      def screen(xy):return [view['frameLeft']+view['left']+(xy[0]-view['xMin'])/view['invXscale'],view['frameTop']+view['top']+view['height']-(xy[1]-view['yMin'])/view['invYscale']]
     else:
      view=page.evaluate("()=>{const b=Object.values(JXG.boards)[0],r=b.containerObj.getBoundingClientRect();return {left:r.left,top:r.top,origin:b.origin.scrCoords,unitX:b.unitX,unitY:b.unitY,bounds:b.getBoundingBox()};}")
      report['view']=view
+     if abs(view['unitX']-spec['pixelsPerUnit'])>1e-9 or abs(view['unitY']-spec['pixelsPerUnit'])>1e-9:raise RuntimeError('Native view calibration failed')
      def screen(xy):return [view['left']+view['origin'][1]+xy[0]*view['unitX'],view['top']+view['origin'][2]-xy[1]*view['unitY']]
     def settle():page.evaluate("async()=>{await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));if(typeof api.flush==='function')await api.flush();}")
     def sample(step,action=None,xy=None):
@@ -65,7 +67,10 @@ def run(engine,out):
     settle();sample('initial')
     for action in spec['actions']:
      page.evaluate('(s)=>window.pointerStep=s',action['id']);xy=None
-     if action['type']=='move':xy=screen(action['world']);page.mouse.move(*xy,steps=1)
+     if action['type']=='move':
+      xy=screen(action['world'])
+      if any(abs(v-round(v))>1e-7 for v in xy):raise RuntimeError('Non-integer pointer target under calibrated view')
+      page.mouse.move(*xy,steps=1)
      elif action['type']=='down':page.mouse.down()
      elif action['type']=='up':page.mouse.up()
      else:raise ValueError('Unknown pointer action')
