@@ -19,9 +19,11 @@ def encoded(data):
  return data
 def write(path,data):
  path.parent.mkdir(parents=True,exist_ok=True);raw=json.dumps(encoded(data),ensure_ascii=False,indent=2,allow_nan=False).encode();path.write_bytes(raw);path.with_suffix('.sha256').write_text(sha(raw)+'  '+path.name+'\n')
-def run(engine,out):
+def run(engine,out,native_warning=False):
  raw=(HERE/'case.json').read_bytes();spec=json.loads(raw);observer=(HERE/'recorder.js').read_bytes()
  report={'schema':'famtutor.pointer.trace.v1','engine':engine,**identity(),'caseSha256':sha(raw),'recorderSha256':sha(observer),'spec':spec,'status':'BLOCKED','samples':[],'pageErrors':[],'rawDOM':[],'publicEvents':[],'engineEvents':[]}
+ if native_warning and engine!='famtutor':raise ValueError('Warning assertions belong to the native validation probe only')
+ report['nativeWarningOnly']=native_warning
  if engine=='famtutor':subprocess.run(['node','node_modules/typescript/bin/tsc','-p','packages/math/tsconfig.browser-smoke.json'],cwd=ROOT,check=True)
  try:
   with sync_playwright() as pw:
@@ -42,6 +44,7 @@ def run(engine,out):
      page.evaluate("()=>{window.rt=ftRequire('browser-entry');window.api=rt.createGeoGebraNativeApi();}")
     report['constructionReturn']=page.evaluate('(s)=>api.evalCommand(s)',spec['program'])
     if report['constructionReturn'] is not True:raise RuntimeError('Construction rejected')
+    if native_warning:page.evaluate("()=>{const snapshot=api.getSnapshot();snapshot.document.assertions=[{id:'pointer-warning',predicate:'expression_equal',arguments:[{expr:'1'},{expr:'2'}],severity:'warning'}];api.restoreSnapshot(snapshot);}")
     if engine=='famtutor':page.evaluate("async()=>{await api.mount(document.getElementById('stage'),{jsxgraph:JXG,onEvent:e=>window.pointerRecord?.engineEvent(e)});}")
     page.add_script_tag(content=observer.decode());page.evaluate('(s)=>installPointerRecorder(api,s.spec,s.engine)',{'spec':spec,'engine':engine})
     if engine=='famtutor':page.evaluate("api.renderer.subscribe(e=>pointerRecord.engineEvent(e))")
@@ -85,4 +88,4 @@ def run(engine,out):
  # Recursively encode nonfinite values, including runtime internal diagnostics.
  write(out,report);print(json.dumps({k:report.get(k) for k in ['engine','status','sourceSha','runtimeVersion','error']}));return report['status']=='CAPTURED'
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();raise SystemExit(0 if run(a.engine,a.output) else 1)
+ p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--native-warning',action='store_true');a=p.parse_args();raise SystemExit(0 if run(a.engine,a.output,a.native_warning) else 1)

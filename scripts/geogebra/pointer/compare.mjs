@@ -86,7 +86,7 @@ function validateState(state,step,fail){
  for(const name of EXPECTED_CASE.labels){
   const o=state.objects[name],point=EXPECTED_CASE.pointLabels.includes(name);
   if(!o||typeof o.exists!=='boolean'||typeof o.defined!=='boolean'||typeof o.independent!=='boolean'||o.type!==(point?'point':'segment')||!o.exists) {fail('OBJECT_OBSERVATION_INVALID',{step,name});continue;}
-  for(const field of ['value',...(point?['x','y','z']:[])]){
+  for(const field of ['value',...(EXPECTED_CASE.coordinateLabels.includes(name)?['x','y','z']:[])]){
    const r=o[field];if(!r||typeof r.type!=='string'||(r.type!=='undefined'&&r.type!=='exception'&&!Object.hasOwn(r,'value')))fail('TAGGED_FIELD_MISSING',{step,name,field});
    else if(r.type==='number'&&!(Number.isFinite(r.value)||(r.value&&['NaN','Infinity','-Infinity'].includes(r.value.$number))))fail('INVALID_NUMBER_TAG',{step,name,field});
   }
@@ -109,7 +109,7 @@ export function compare(native,reference){
  return {schema:'famtutor.pointer.comparison.v1',status:errors.length?'FAILED':'PASSED',sourceSha:native.sourceSha,sourceTree:native.sourceTree,caseSha256:native.caseSha256,recorderSha256:native.recorderSha256,runtimeVersion:reference.runtimeVersion,tolerance:TOLERANCE,checkedSamples:ns.length,publicEventCounts:{native:native.publicEvents?.length,reference:reference.publicEvents?.length},rawDOMCounts:{native:native.rawDOM?.length,reference:reference.rawDOM?.length},nativeCoherenceErrors:coherence.length,errors,
  scope:'Every delivered down/move/up boundary and full ordered public add/update/remove/clear callback trace including callback-time observations; calibrated integer-pixel mouse case; no final-only claim',
  platformMetadata:'Raw DOM/capture/mouse timestamps, canvas/SVG target identities, pixel transforms, and extra engine-specific runtime/client channels retained separately, not asserted identical',
- gaps:['Client event API compatibility is NOT_IMPLEMENTED; reference client channel is retained unfiltered.','Fractional-pixel quantization, touch, pen, high input rate/coalescing, constrained paths, mid-drag undefined/recovery and cross-format persistence are NOT_RUN in the accepted slice.']};
+ gaps:['Client event API compatibility is NOT_IMPLEMENTED; reference client channel is retained unfiltered.','Right-click-disabled mode remains FAILED in earlier captures; fractional-pixel quantization, touch, pen, high input rate/coalescing, constrained paths, mid-drag undefined/recovery and cross-format persistence are NOT_RUN in the accepted default-mode slice.']};
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){
  const [a,b,o]=process.argv.slice(2);const result=compare(JSON.parse(fs.readFileSync(a)),JSON.parse(fs.readFileSync(b)));fs.writeFileSync(o,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({...result,errors:result.errors.slice(0,6)}));if(result.errors.length)process.exitCode=1;

@@ -6,7 +6,7 @@ window.installPointerRecorder = (api, spec, engine) => {
   function outcome(fn){try{const value=fn();return value===undefined?{type:'undefined'}:{type:typeof value,value:number(value)};}catch(e){return {type:'exception',message:String(e)};}}
   function state(){return {names:api.getAllObjectNames(),objects:Object.fromEntries(spec.labels.map(n=>[n,{
     exists:api.exists(n),type:api.getObjectType(n),defined:api.isDefined(n),independent:api.isIndependent(n),
-    ...(spec.pointLabels.includes(n)?{x:outcome(()=>api.getXcoord(n)),y:outcome(()=>api.getYcoord(n)),z:outcome(()=>api.getZcoord(n))}:{}),
+    ...(spec.coordinateLabels.includes(n)?{x:outcome(()=>api.getXcoord(n)),y:outcome(()=>api.getYcoord(n)),z:outcome(()=>api.getZcoord(n))}:{}),
     value:outcome(()=>api.getValue(n))
   }]))};}
   function stamp(){return {seq:++seq,step:window.pointerStep,time:performance.now()};}

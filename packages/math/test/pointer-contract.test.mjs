@@ -14,7 +14,7 @@ const tag=value=>({type:typeof value,value:Number.isNaN(value)?{$number:'NaN'}:v
 function fixture(){
  const api=createGeoGebraNativeApi();api.evalCommand(spec.program);let seq=0;
  const t={unitTestOnly:true,schema:'famtutor.pointer.trace.v1',engine:'famtutor',sourceSha:'a'.repeat(40),sourceTree:'b'.repeat(40),trackedDirty:false,status:'CAPTURED',spec,caseSha256:hash(bytes),recorderSha256:hash(fs.readFileSync(new URL('recorder.js',here))),constructionReturn:true,samples:[],rawDOM:[],publicEvents:[],engineEvents:[],pageErrors:[],callbackErrors:[]};
- const state=()=>({names:api.getAllObjectNames(),objects:Object.fromEntries(spec.labels.map(n=>[n,{exists:api.exists(n),type:api.getObjectType(n),defined:api.isDefined(n),independent:api.isIndependent(n),...(spec.pointLabels.includes(n)?{x:tag(api.getXcoord(n)),y:tag(api.getYcoord(n)),z:tag(api.getZcoord(n))}:{}),value:tag(api.getValue(n))}]))});
+ const state=()=>({names:api.getAllObjectNames(),objects:Object.fromEntries(spec.labels.map(n=>[n,{exists:api.exists(n),type:api.getObjectType(n),defined:api.isDefined(n),independent:api.isIndependent(n),...(spec.coordinateLabels.includes(n)?{x:tag(api.getXcoord(n)),y:tag(api.getYcoord(n)),z:tag(api.getZcoord(n))}:{}),value:tag(api.getValue(n))}]))});
  const sample=step=>{const d=api.getDocument(),e=evaluateMathDocument(d);t.samples.push({step,state:state(),publicEventCount:t.publicEvents.length,domEventCount:t.rawDOM.length,native:{document:d,mountedDocument:copy(d),objects:Object.fromEntries(spec.labels.map(n=>{const id=d.entities.find(e=>e.label===n).id,r=e.entities.get(id);return [n,{evaluated:r,mounted:r,rendererValue:r.value,native:{x:r.value.x,y:r.value.y}}]}))}});};
  let pressed=false;sample('initial');
  for(const action of spec.actions){

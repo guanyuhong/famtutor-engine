@@ -45,6 +45,10 @@ jobs:
       - name: Strict every-boundary and ordered-callback comparison
         if: ${{ !cancelled() }}
         run: node scripts/geogebra/pointer/compare.mjs artifacts/pointer/native.json artifacts/pointer/reference.json artifacts/pointer/comparison.json
+      - name: Native warning-only validation still permits real dragging
+        run: |
+          python scripts/geogebra/pointer/capture.py --engine famtutor --native-warning --output artifacts/pointer/warning.json
+          node scripts/geogebra/pointer/compare.mjs artifacts/pointer/warning.json artifacts/pointer/reference.json artifacts/pointer/warning-comparison.json
       - name: Source unchanged
         run: git diff --exit-code && git diff --cached --exit-code
       - uses: actions/upload-artifact@v4

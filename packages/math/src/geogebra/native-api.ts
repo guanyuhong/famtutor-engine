@@ -38,6 +38,8 @@ export class GeoGebraNativeApi {
  private callbacks:Record<EventKind,Set<Listener>>={add:new Set(),update:new Set(),remove:new Set(),clear:new Set()};
  private notifying=false;
  private notificationState: ReadonlyMap<string,RuntimeEntity>|undefined;
+ private notificationPriorState: ReadonlyMap<string,RuntimeEntity>|undefined;
+ private notificationCompleted: Set<string>|undefined;
  private renderer:MathMountedRenderer|undefined;
  private renderTask:Promise<void>=Promise.resolve();
  private renderFailure:unknown;
@@ -181,7 +183,10 @@ export class GeoGebraNativeApi {
    // Project current input geometry using existing vector primitives; no cache.
    const node=this.node(r.id),inputs=node.inputs??[];
    if(!['line.through_points','segment.through_points'].includes(node.command)||inputs.length!==2)throw Error('Unsupported coefficient projection');
-   const e=evaluateMathDocument(this.document),points=inputs.map(i=>'ref' in i?e.entities.get(i.ref)?.value:undefined);
+   const sourceState=this.notificationState
+    ? (this.notificationCompleted?.has(r.id)?this.notificationState:this.notificationPriorState!)
+    : evaluateMathDocument(this.document).entities;
+   const points=inputs.map(i=>'ref' in i?sourceState.get(i.ref)?.value:undefined);
    if(!isPoint(points[0])||!isPoint(points[1]))return NaN;
    const delta=subtractPoints(points[1],points[0]);
    return key==='x'?-delta.y:key==='y'?delta.x:cross(vector(points[0].x,points[0].y),vector(points[1].x,points[1].y));
@@ -283,7 +288,10 @@ export class GeoGebraNativeApi {
   await this.destroy();this.renderer=await mountMathRenderer(host,this.document,{...options,undefinedEntities:"omit",continuousPointer:true,deferPointerActivation:true});
   this.unsubscribe=this.renderer.subscribe(event=>{
    if(event.type==='interaction.updated'&&event.target){
-    const state=new Map(evaluateMathDocument(this.document).entities);
+    const prior=evaluateMathDocument(this.document).entities;
+    const state=new Map(prior);
+    this.notificationPriorState=prior;
+    this.notificationCompleted=new Set();
     this.document=this.renderer!.getDocument();
     const affected=new Set(this.affected(event.target));
     const names=new Map([...this.definitions].map(([name,d])=>[d.id,name]));
@@ -293,11 +301,11 @@ export class GeoGebraNativeApi {
      // synchronous callback window. These observations are never math inputs,
      // never persisted, and cannot reconstruct an undefined geometric output.
      evaluateMathDocument(this.document,{},(_node,outputs)=>{
-      for(const output of outputs)state.set(output.id,output);
+      for(const output of outputs){state.set(output.id,output);this.notificationCompleted!.add(output.id);}
       this.notificationState=state;
       for(const output of outputs){const name=names.get(output.id);if(name&&affected.has(name))this.event('update',name);}
      });
-    } finally {this.notificationState=undefined;}
+    } finally {this.notificationState=undefined;this.notificationPriorState=undefined;this.notificationCompleted=undefined;}
    }else if(event.type==='interaction.committed'&&event.target){
     this.document=this.renderer!.getDocument();synchronizeGeoGebraConicState(this.document);
     if(event.payload?.continuousPointer!==true)for(const n of this.affected(event.target))this.event('update',n);

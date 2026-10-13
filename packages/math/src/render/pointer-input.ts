@@ -22,7 +22,7 @@ export function acceptPointerInput(document: MathDocument, target: string, coord
   changed.params = { ...changed.params, coords: [coords[0]!, coords[1]!] };
   candidate.revision++;
   const validation = validateMathDocument(candidate);
-  if (validation.status !== "valid") throw new MathEngineError("POINTER_STATE_NOT_ACCEPTED", JSON.stringify(validation.issues));
+  if (validation.status === "invalid" || validation.undefinedEntities.length > 0 || validation.issues.some(issue => issue.severity === "error")) throw new MathEngineError("POINTER_STATE_NOT_ACCEPTED", JSON.stringify(validation.issues));
   // Retain document/node identity used by existing renderer resolvers. Only an
   // independently checked source input and revision change, never derived values.
   node.params = changed.params;
