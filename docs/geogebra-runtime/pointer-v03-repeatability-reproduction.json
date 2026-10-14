@@ -1,0 +1,58 @@
+{
+  "schema": "famtutor.pointer.repeatability-reproduction.v1",
+  "scope": "Two existing independent captures audited; not a new capture or new engine repair",
+  "pairs": [
+    {
+      "run": 38446172813,
+      "artifact": 11837494644,
+      "sourceSha": "edb43f7b12dce772b27a6ac92d62bfa36bbafce2",
+      "sourceTree": "1a1abb76f2c85a24c8b44b796dff02f9a807f1da",
+      "status": "FAILED",
+      "samples": 14,
+      "counts": {
+        "native": 18,
+        "reference": 15
+      },
+      "firstDifference": {
+        "path": "steps.back-2.state.objects.A.x.value",
+        "code": "NUMBER",
+        "native": 3,
+        "reference": 4
+      },
+      "nativeCoherenceErrors": 0,
+      "sha256": {
+        "native": "30a4aad6ebb9216a32a9ed946da81824d83e7fdcc9cf055e7791f9904059c6c7",
+        "reference": "faabf85fc77ccf52731bd3a5be3831f612913ea20d862c1c26073637872cc944",
+        "comparison": "a57b47546dca715172a99f51e39d5d498dcd69f3c3e86df38e0c95c064f23596"
+      }
+    },
+    {
+      "run": 38446154694,
+      "artifact": 11838362291,
+      "sourceSha": "edb43f7b12dce772b27a6ac92d62bfa36bbafce2",
+      "sourceTree": "1a1abb76f2c85a24c8b44b796dff02f9a807f1da",
+      "status": "FAILED",
+      "samples": 14,
+      "counts": {
+        "native": 18,
+        "reference": 15
+      },
+      "firstDifference": {
+        "path": "steps.out-2.state.objects.A.x.value",
+        "code": "NUMBER",
+        "native": 3,
+        "reference": 1
+      },
+      "nativeCoherenceErrors": 0,
+      "sha256": {
+        "native": "2809c0bcae81a5a3b5d08e83f5a410bed864621cc25ea7039209bfa67c77c067",
+        "reference": "9f58d47f29c2e47a4a00f8ac1268f01ef2a510ef9b00d389de05f05f4cb64fc5",
+        "comparison": "60917979d998ef91a5ac49b69d554b2eb511b5ff15c707b9d90c502e6340c540"
+      }
+    }
+  ],
+  "rootCause": "UNCONFIRMED",
+  "hypothesis": "Observed changing missing-update boundary near short input intervals. Do not infer a fixed throttle or change mathematical/event results from this correlation.",
+  "mergeAcceptance": "BLOCKED",
+  "nextExperiment": "3 independent pairs with original unmodified timing protocol, plus 3 pairs with an explicit diagnostic-only 150ms passive observation after each unchanged early sample. Every attempt retained. No reference coordinate is supplied to native."
+}

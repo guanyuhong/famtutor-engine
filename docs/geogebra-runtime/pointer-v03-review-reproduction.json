@@ -1,0 +1,11 @@
+{
+  "kind": "local_review_reproduction",
+  "candidate": "a5441e56648627d7df2713a80cbd47ddf27a826a",
+  "reviews": [4262192009, 4262192017],
+  "before": {"passed": 7, "failed": 2, "log": "review-before.tap"},
+  "after": {"passed": 28, "failed": 0, "log": "review-focused.tap"},
+  "warningPointer": {"status": "CAPTURED", "publicCallbacks": 18, "coherenceErrors": 0},
+  "sourceIdentity": "LOCAL_RECONSTRUCTION_NOT_FINAL_SHA",
+  "expandedLiveReferenceAtLocalCheckpoint": "NOT_RUN_YET",
+  "acceptancePolicy": "This reproduction record is not final acceptance. The current candidate must have its own exact-SHA live/CI artifacts and Issue evidence."
+}

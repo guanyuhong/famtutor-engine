@@ -1,0 +1,24 @@
+name: Checked pointer source transport
+on:
+  push:
+    branches: [codex/geogebra-pointer-v03]
+    paths: [.ci/pointer-source.json, .ci/pointer-source.py, .github/workflows/pointer-source.yml]
+permissions:
+  contents: write
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Hash-verified source bytes only, no refs or test acceptance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .ci/pointer-source.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checked-pointer-source
+          path: artifacts/pointer-source/
+          retention-days: 7

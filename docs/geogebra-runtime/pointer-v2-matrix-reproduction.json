@@ -1,0 +1,12 @@
+{
+  "schema": "famtutor.pointer.matrix-reproduction.v2",
+  "observedArtifactHead": "51c7a25fa40c3ebd69830ae3f9f5024d3f1241b5",
+  "observed": "The current v2 proof passed but nativeApiMapping.referencePointerParity still inherited NOT_RUN from the base API overlay.",
+  "beforeRegression": {"passed":8,"failed":1},
+  "afterRegression": {"passed":9,"failed":0},
+  "repair": "Set the overall mapping summary to PASSED_BOUNDED_PROTOCOL_V2 with an explicit scope only after valid current v2 evidence. Preserve old nativeApiStateSlice.referencePointerParity=NOT_RUN; never promote previous phase-specific evidence.",
+  "additionalCsvFinding": "Eight existing stateLifecycle JSON interaction proofs were PASSED_SAMPLED_SCOPE but their CSV column read a nonexistent status field and displayed NOT_RUN. The CSV now reads the existing interaction field; the actual eight-row mismatch is preserved in checkpoint logs.",
+  "completeMatrixRegressionsAfter": {"passed":10,"failed":0},
+  "runtimeAndInputProtocolChanged": false,
+  "finalShaAcceptance": "REQUIRES_FRESH_CURRENT_COMMIT_CI"
+}

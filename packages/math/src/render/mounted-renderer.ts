@@ -24,6 +24,8 @@ import {
 import { advanceClock, initialClockState, resetClockState, type LogicalClockState } from "../kernel/clock.js";
 import { evaluateMathDocument } from "../kernel/evaluate.js";
 import { pathPointDragPatch } from "../kernel/path-state.js";
+import { acceptPointerInput } from "./pointer-input.js";
+import { GEOGEBRA_DRAGGING_DELAY_MS, pointerActivationReady } from "./pointer-activation.js";
 import type { MathControlAction, MathDocument } from "../types.js";
 import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
@@ -57,6 +59,10 @@ export type MathInteractionActionInput = MathInteractionAction | LegacyMathInter
 
 export interface MathMountedRendererOptions extends JsxGraphRuntimeOptions {
   domainRuntime?: MathDomainRuntime;
+  /** Opt-in synchronous free-point input updates. Preserve the default end-only host policy. */
+  continuousPointer?: boolean;
+  /** Apply the fixed-reference press-to-drag delay. Never skip a move by ordinal. */
+  deferPointerActivation?: boolean;
 }
 
 export interface MathMountedRenderer extends MountedRenderer<MathDocument, MathOperation, MathInteractionActionInput> {
@@ -171,6 +177,10 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   private readonly clockStates = new Map<string, LogicalClockState>();
   private readonly clockTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private clockMutation = false;
+  private readonly continuousPointer: boolean;
+  private readonly deferPointerActivation: boolean;
+  private pointerSession?: { target: string; pressedAtMs: number; activated: boolean; changed: boolean };
+  private pendingTasks = 0;
 
   constructor(host: HTMLElement, document: MathDocument, options: MathMountedRendererOptions = {}) {
     this.host = host;
@@ -178,7 +188,12 @@ class MathMountedRendererImpl implements MathMountedRenderer {
     this.domainRuntime = options.domainRuntime ?? new MathDomainRuntime();
     this.viewId = options.viewId;
     this.stageId = options.stageId;
-    const { domainRuntime: _ignored, ...rest } = options;
+    if (options.continuousPointer && options.domainRuntime) {
+      throw new MathEngineError("CUSTOM_POINTER_DOMAIN_UNSUPPORTED", "Continuous pointer updates require the default mathematical domain; custom-domain input policy is not bypassed.");
+    }
+    this.continuousPointer = options.continuousPointer === true;
+    this.deferPointerActivation = options.deferPointerActivation === true;
+    const { domainRuntime: _ignored, continuousPointer: _continuous, deferPointerActivation: _defer, ...rest } = options;
     this.mountOptions = rest;
     this.synchronizeClocks();
   }
@@ -372,7 +387,9 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   }
 
   private enqueue<T>(task: () => Promise<T>): Promise<T> {
-    const run = this.queue.then(task, task);
+    this.pendingTasks++;
+    const guarded = async (): Promise<T> => { try { return await task(); } finally { this.pendingTasks--; } };
+    const run = this.queue.then(guarded, guarded);
     this.queue = run.then(() => undefined, () => undefined);
     return run;
   }
@@ -403,6 +420,17 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       onEvent: event => {
         this.safeHostCallback(() => this.mountOptions.onEvent?.(event));
         const position = event.position ?? (Array.isArray(event.value) ? event.value : undefined);
+        if (this.continuousPointer && event.target) {
+          const node = this.document.construction.find(n => n.outputs.includes(event.target!));
+          if (node?.command === "point.free") {
+            if (event.type === "object.selected") {
+              this.pointerSession = {target:event.target, pressedAtMs:Date.now(), activated:!this.deferPointerActivation, changed:false};
+            } else if ((event.type === "object.drag" || event.type === "object.dragEnd") && position?.length === 2) {
+              this.handlePointerInput(event.target, position as [number,number], event.type === "object.dragEnd");
+              return;
+            }
+          }
+        }
         if (event.type === "object.dragEnd" && event.target && position?.length === 2 && position.every(finiteNumber)) {
           const coords = position as [number, number];
           void this.dispatch({ type: "point.set", target: event.target, payload: { coords } })
@@ -431,6 +459,55 @@ class MathMountedRendererImpl implements MathMountedRenderer {
         }
       }
     };
+  }
+
+  private handlePointerInput(target: string, coords: [number,number], ended: boolean): void {
+    if (this.destroyRequested || this.destroyed) return;
+    const session = this.pointerSession;
+    const node = this.document.construction.find(n => n.outputs.includes(target));
+    const current = node?.params?.coords;
+    const restoreVisual = (): void => {
+      if (Array.isArray(current) && current.length === 2 && current.every(finiteNumber)) this.active?.setPoint(target, current as [number,number]);
+    };
+    if (!session || session.target !== target || this.pendingTasks) {
+      restoreVisual();
+      this.emit({type:"interaction.failed",target,payload:{reason:"pointer_session_not_available"}});
+      return;
+    }
+    // The reference rejects moves by elapsed time after press, not move count.
+    // Releasing before any accepted move must not replay a suppressed coordinate.
+    if (!session.activated && ended) {
+      restoreVisual();
+      this.pointerSession = undefined;
+      this.emit({type:"interaction.committed",target,payload:{revision:this.document.revision,actionType:"point.set",continuousPointer:true,stateChanged:false,gestureChanged:false}});
+      return;
+    }
+    if (!session.activated) {
+      const nowMs = Date.now();
+      if (!pointerActivationReady(session.pressedAtMs, nowMs, GEOGEBRA_DRAGGING_DELAY_MS)) {
+        restoreVisual();
+        this.emit({type:"interaction.started",target,payload:{phase:"activation-delay",elapsedMs:nowMs-session.pressedAtMs,delayMs:GEOGEBRA_DRAGGING_DELAY_MS}});
+        return;
+      }
+      session.activated = true;
+      // Process this same eligible move. No deferred coordinate or synthetic event.
+    }
+    try {
+      const changed = acceptPointerInput(this.document,target,coords);
+      session.changed ||= changed;
+      if (changed) {
+        this.activeContainer?.querySelector("[data-revision]")?.setAttribute("data-revision", String(this.document.revision));
+        this.emit({type:"interaction.updated",target,payload:{revision:this.document.revision,actionType:"point.set",continuousPointer:true}});
+      }
+      if (ended) {
+        this.pointerSession = undefined;
+        this.emit({type:"interaction.committed",target,payload:{revision:this.document.revision,actionType:"point.set",continuousPointer:true,stateChanged:changed,gestureChanged:session.changed}});
+      }
+    } catch (error) {
+      restoreVisual();
+      if (ended) this.pointerSession = undefined;
+      this.emit({type:"interaction.failed",target,payload:{reason:"pointer_input_rejected",message:error instanceof Error?error.message:String(error)}});
+    }
   }
 
   private createContainer(kind: "active" | "staging"): HTMLElement {

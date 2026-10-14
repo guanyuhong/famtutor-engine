@@ -1,0 +1,11 @@
+{
+  "schema": "famtutor.pointer.reproduction.v2",
+  "baseline": "55c0014fc9b3a8faeef56acc3f4d8a59e096f09a",
+  "beforePointerInputBlob": "6f01bcb68306e358e6f733ba20327af8d8394536",
+  "afterPointerInputBlob": "3e2f058de4028fe52b6dda701bc95ba810e2fc52",
+  "checkpoint06Activation": "NOT_APPLIED; existing remote19d5d990 timing retained",
+  "before": {"nativeRegressions": "2PASS_1FAIL", "actualMouse": "CAPTURED; out move rejected with POINTER_STATE_NOT_ACCEPTED for an unrelated negative-radius conic", "reference": "NOT_RUN"},
+  "afterLocal": {"newNativeRegressions": "6PASS_0FAIL", "selectedRegressions": "38PASS_0FAIL", "mouse": "out A=(3,3), return A=(1,2), six ordered update callbacks, no pointer_input_rejected", "reference": "BLOCKED_LOCAL_SCRIPT_DNS", "finalShaCI": "NOT_RUN"},
+  "preservation": "Before/after raw traces and logs are in checkpoints07/08. Existing errors, malformed structure and affected undefined topology still reject atomically; legitimate unrelated classification/axes remain and no geometry is cached.",
+  "completeCompatibility": false
+}

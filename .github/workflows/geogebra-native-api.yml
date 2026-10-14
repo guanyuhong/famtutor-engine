@@ -11,7 +11,7 @@ concurrency:
 jobs:
   native-api:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,14 +47,44 @@ jobs:
         env:
           STATE_EVIDENCE_DIR: artifacts/native-api/state
         run: python scripts/geogebra/native-api/state-browser.py > artifacts/native-api/state-browser.log
-      - name: Fixed-source matrix with exact native evidence
+      - name: Versioned symmetric pointer protocol and focused guards
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/native-api/pointer-v2
+          cp artifacts/native-api/commit.txt artifacts/native-api/tree.txt artifacts/native-api/pointer-v2/
+          node --test packages/math/test/pointer-evaluation.test.mjs packages/math/test/pointer-contract.test.mjs packages/math/test/pointer-activation.test.mjs packages/math/test/pointer-unrelated-undefined.test.mjs > artifacts/native-api/pointer-v2/focused.tap
+          python scripts/geogebra/pointer-v2/test_protocol.py > artifacts/native-api/pointer-v2/protocol-tests.log 2>&1
+          python scripts/geogebra/pointer-v2/test_coverage.py > artifacts/native-api/pointer-v2/coverage-tests.log 2>&1
+      - name: Independent native pointer capture, without internal audit during input
+        run: python scripts/geogebra/pointer-v2/capture.py --engine famtutor --output artifacts/native-api/pointer-v2/native.json
+      - name: Independent pinned GeoGebra pointer capture
+        if: ${{ !cancelled() }}
+        run: python scripts/geogebra/pointer-v2/capture.py --engine geogebra --output artifacts/native-api/pointer-v2/reference.json
+      - name: Strict actual timing and complete public callback comparison
+        if: ${{ !cancelled() }}
+        run: python scripts/geogebra/pointer-v2/compare.py artifacts/native-api/pointer-v2/native.json artifacts/native-api/pointer-v2/reference.json artifacts/native-api/pointer-v2/comparison.json
+      - name: Separate native document/evaluator/renderer audit
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/geogebra/pointer-v2/capture.py --engine famtutor --replicates 1 --audit-native --output artifacts/native-api/pointer-v2/audit.json
+          python scripts/geogebra/pointer-v2/audit.py artifacts/native-api/pointer-v2/audit.json artifacts/native-api/pointer-v2/audit-comparison.json
+      - name: Retained warning-only host policy real-pointer regression
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/geogebra/pointer-v2/capture.py --engine famtutor --replicates 1 --audit-native --native-warning --output artifacts/native-api/pointer-v2/warning-audit.json
+          python scripts/geogebra/pointer-v2/audit.py artifacts/native-api/pointer-v2/warning-audit.json artifacts/native-api/pointer-v2/warning-audit-comparison.json
+      - name: Fixed-source matrix with exact native and versioned pointer evidence
+        if: ${{ !cancelled() }}
         run: |
           python scripts/geogebra/native-api/test_coverage.py
           python scripts/geogebra/native-api/test_state_coverage.py
+          python scripts/geogebra/pointer/test_coverage.py
           python scripts/geogebra/build-compatibility-matrix.py --output artifacts/native-api/inventory
           python scripts/geogebra/native-api/coverage.py --matrix artifacts/native-api/inventory/matrix.json --evidence artifacts/native-api
           python scripts/geogebra/native-api/state-coverage.py --matrix artifacts/native-api/inventory/matrix.json --evidence artifacts/native-api
+          python scripts/geogebra/pointer-v2/coverage.py --matrix artifacts/native-api/inventory/matrix.json --evidence artifacts/native-api/pointer-v2
       - name: Tested source remains unchanged
+        if: ${{ !cancelled() }}
         run: git diff --exit-code && git diff --cached --exit-code
       - uses: actions/upload-artifact@v4
         if: always()
