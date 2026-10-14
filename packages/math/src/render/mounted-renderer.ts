@@ -25,6 +25,7 @@ import { advanceClock, initialClockState, resetClockState, type LogicalClockStat
 import { evaluateMathDocument } from "../kernel/evaluate.js";
 import { pathPointDragPatch } from "../kernel/path-state.js";
 import { acceptPointerInput } from "./pointer-input.js";
+import { GEOGEBRA_DRAGGING_DELAY_MS, pointerActivationReady } from "./pointer-activation.js";
 import type { MathControlAction, MathDocument } from "../types.js";
 import { canonicalizeJson, deepClone, finiteNumber, nowIso, sha256Utf8, toJsonValue } from "../util.js";
 import { mountJsxGraph, type JsxGraphRuntimeHandle, type JsxGraphRuntimeOptions } from "./jsxgraph.js";
@@ -60,7 +61,7 @@ export interface MathMountedRendererOptions extends JsxGraphRuntimeOptions {
   domainRuntime?: MathDomainRuntime;
   /** Opt-in synchronous free-point input updates. Preserve the default end-only host policy. */
   continuousPointer?: boolean;
-  /** Establish drag mode on the first movement without moving geometry. */
+  /** Apply the fixed-reference press-to-drag delay. Never skip a move by ordinal. */
   deferPointerActivation?: boolean;
 }
 
@@ -178,7 +179,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
   private clockMutation = false;
   private readonly continuousPointer: boolean;
   private readonly deferPointerActivation: boolean;
-  private pointerSession?: { target: string; activated: boolean; changed: boolean };
+  private pointerSession?: { target: string; pressedAtMs: number; activated: boolean; changed: boolean };
   private pendingTasks = 0;
 
   constructor(host: HTMLElement, document: MathDocument, options: MathMountedRendererOptions = {}) {
@@ -423,7 +424,7 @@ class MathMountedRendererImpl implements MathMountedRenderer {
           const node = this.document.construction.find(n => n.outputs.includes(event.target!));
           if (node?.command === "point.free") {
             if (event.type === "object.selected") {
-              this.pointerSession = {target:event.target, activated:!this.deferPointerActivation, changed:false};
+              this.pointerSession = {target:event.target, pressedAtMs:Date.now(), activated:!this.deferPointerActivation, changed:false};
             } else if ((event.type === "object.drag" || event.type === "object.dragEnd") && position?.length === 2) {
               this.handlePointerInput(event.target, position as [number,number], event.type === "object.dragEnd");
               return;
@@ -473,12 +474,23 @@ class MathMountedRendererImpl implements MathMountedRenderer {
       this.emit({type:"interaction.failed",target,payload:{reason:"pointer_session_not_available"}});
       return;
     }
-    // Establishing drag mode is an explicit input state, not event-log filtering.
-    if (!session.activated && !ended) {
-      session.activated = true;
+    // The reference rejects moves by elapsed time after press, not move count.
+    // Releasing before any accepted move must not replay a suppressed coordinate.
+    if (!session.activated && ended) {
       restoreVisual();
-      this.emit({type:"interaction.started",target,payload:{phase:"activation"}});
+      this.pointerSession = undefined;
+      this.emit({type:"interaction.committed",target,payload:{revision:this.document.revision,actionType:"point.set",continuousPointer:true,stateChanged:false,gestureChanged:false}});
       return;
+    }
+    if (!session.activated) {
+      const nowMs = Date.now();
+      if (!pointerActivationReady(session.pressedAtMs, nowMs, GEOGEBRA_DRAGGING_DELAY_MS)) {
+        restoreVisual();
+        this.emit({type:"interaction.started",target,payload:{phase:"activation-delay",elapsedMs:nowMs-session.pressedAtMs,delayMs:GEOGEBRA_DRAGGING_DELAY_MS}});
+        return;
+      }
+      session.activated = true;
+      // Process this same eligible move. No deferred coordinate or synthetic event.
     }
     try {
       const changed = acceptPointerInput(this.document,target,coords);
