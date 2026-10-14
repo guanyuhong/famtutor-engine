@@ -17,6 +17,7 @@ def inspect(report):
   samples={x['step']:x for x in (row.get('trace') or {}).get('samples',[])}
   for a in row.get('audits',[]):
    root=row['id']+'.'+a['step'];state=a['state'];public=samples[a['step']]['state']['objects']
+   if report.get('nativeWarningOnly') is True and not any(x.get('id')=='pointer-v2-warning' and x.get('severity')=='warning' for x in state['document'].get('assertions',[])):errors.append({'code':'WARNING_ASSERTION_MISSING','path':root})
    c.diff(state['document'],state['mountedDocument'],root+'.canonical',errors)
    if set(state['entities'])!=set(public):errors.append({'code':'AUDIT_ENTITY_SET','path':root})
    for label,value in state['entities'].items():
@@ -31,6 +32,6 @@ def inspect(report):
       for k in ['x','y']:
        c.diff({'type':'number','value':v[k]},p[k],root+'.'+label+'.api.'+k,errors)
        c.diff(v[k],(value.get('native') or {}).get(k),root+'.'+label+'.shape.'+k,errors)
- return {'schema':'famtutor.pointer.audit.v2','sourceSha':report.get('sourceSha'),'sourceTree':report.get('sourceTree'),'status':'FAILED' if errors else 'PASSED_NATIVE_AUDIT_ONLY','cases':len(report.get('cases',[])),'errors':errors,'scope':'Instrumented native canonical/evaluator/renderer replay, separate from symmetric primary reference parity.'}
+ return {'schema':'famtutor.pointer.audit.v2','sourceSha':report.get('sourceSha'),'sourceTree':report.get('sourceTree'),'status':'FAILED' if errors else 'PASSED_NATIVE_AUDIT_ONLY','cases':len(report.get('cases',[])),'nativeWarningOnly':report.get('nativeWarningOnly',False),'errors':errors,'scope':'Instrumented native canonical/evaluator/renderer replay, separate from symmetric primary reference parity.'}
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('capture',type=Path);p.add_argument('output',type=Path);a=p.parse_args();r=inspect(json.loads(a.capture.read_text()));a.output.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['status','cases']}));raise SystemExit(bool(r['errors']))

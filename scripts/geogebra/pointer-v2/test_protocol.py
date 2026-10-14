@@ -43,6 +43,15 @@ class Contract(unittest.TestCase):
  def test_audit_cannot_certify_reference_parity(self):
   r=c.compare({'scope':'NATIVE_INSTRUMENTED_AUDIT'},{})
   self.assertNotEqual(r['status'],'PASSED_BOUNDED_PROTOCOL_V2');self.assertTrue(r['protocolErrors'])
+ def test_internal_audit_cannot_hide_in_primary_label(self):
+  f=fixture();f['audits']=[{'step':'press'}]
+  result=c.compare({'engine':'famtutor','scope':'SYMMETRIC_PUBLIC_CAPTURE','cases':[f]}, {})
+  self.assertIn('ASYMMETRIC_INTERNAL_AUDIT_IN_PRIMARY',{e['code'] for e in result['protocolErrors']})
+ def test_controller_elapsed_timing_must_be_measured(self):
+  f=fixture();f['audits']=[];f['controllerCalls']=[{'step':'press','inputStartNs':1,'inputAckNs':0,'sampleAckNs':2}]
+  result=c.compare({'engine':'famtutor','scope':'SYMMETRIC_PUBLIC_CAPTURE','cases':[f]}, {})
+  self.assertIn('CONTROLLER_CLOCK',{e['code'] for e in result['protocolErrors']})
+
 class AuditContract(unittest.TestCase):
  def test_empty_audit_is_not_evidence(self):
   s=importlib.util.spec_from_file_location('audit',HERE/'audit.py');a=importlib.util.module_from_spec(s);s.loader.exec_module(a)

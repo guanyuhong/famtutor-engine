@@ -111,6 +111,13 @@ def compare(native,reference):
   expected=[(r,c['id']) for r in range(spec['replicates']) for c in spec['cases']]
   if [(c.get('replicate'),c.get('id')) for c in t.get('cases',[])]!=expected:protocol_errors.append({'code':'REPLICATES_OR_CASES_MISSING','engine':engine})
   for row in t.get('cases',[]):
+   if row.get('audits')!=[]:protocol_errors.append({'code':'ASYMMETRIC_INTERNAL_AUDIT_IN_PRIMARY','engine':engine,'case':row.get('id')})
+   scenario=next((x for x in spec['cases'] if x['id']==row.get('id')),None)
+   calls=row.get('controllerCalls',[])
+   if scenario and [x.get('step') for x in calls]!=[x['id'] for x in scenario['actions']]:protocol_errors.append({'code':'CONTROLLER_CALLS_MISSING','engine':engine,'case':row.get('id')})
+   for call in calls:
+    times=[call.get(k) for k in ['inputStartNs','inputAckNs','sampleAckNs']]
+    if any(type(x) is not int for x in times) or not times[0]<=times[1]<=times[2]:protocol_errors.append({'code':'CONTROLLER_CLOCK','engine':engine,'case':row.get('id'),'step':call.get('step')})
    protocol_errors.extend({'engine':engine,**e} for e in validate_case(row,spec) if e['code']!='INPUT_INTENT_STATE')
    errors.extend({'engine':engine,**e} for e in validate_case(row,spec) if e['code']=='INPUT_INTENT_STATE')
    if engine=='geogebra' and (row.get('runtimeVersion')!=spec['referenceRuntime'] or row.get('selectedCodebase')!=spec['codebase']):protocol_errors.append({'code':'RUNTIME_PIN','case':row['id']})

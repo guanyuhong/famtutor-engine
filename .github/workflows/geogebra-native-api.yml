@@ -68,6 +68,11 @@ jobs:
         run: |
           python scripts/geogebra/pointer-v2/capture.py --engine famtutor --replicates 1 --audit-native --output artifacts/native-api/pointer-v2/audit.json
           python scripts/geogebra/pointer-v2/audit.py artifacts/native-api/pointer-v2/audit.json artifacts/native-api/pointer-v2/audit-comparison.json
+      - name: Retained warning-only host policy real-pointer regression
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/geogebra/pointer-v2/capture.py --engine famtutor --replicates 1 --audit-native --native-warning --output artifacts/native-api/pointer-v2/warning-audit.json
+          python scripts/geogebra/pointer-v2/audit.py artifacts/native-api/pointer-v2/warning-audit.json artifacts/native-api/pointer-v2/warning-audit-comparison.json
       - name: Fixed-source matrix with exact native and versioned pointer evidence
         if: ${{ !cancelled() }}
         run: |

@@ -18,9 +18,11 @@ def encode(x):
 def save(path,data):
  path.parent.mkdir(parents=True,exist_ok=True);raw=json.dumps(encode(data),indent=2,allow_nan=False).encode();path.write_bytes(raw);path.with_suffix('.sha256').write_text(digest(raw)+'  '+path.name+'\n')
 AUDIT="""()=>{const d=api.getDocument(),md=api.renderer.getDocument(),ev=rt.evaluateMathDocument(d),me=rt.evaluateMathDocument(md),h=api.renderer.active;return {document:d,mountedDocument:md,report:h.report(),entities:Object.fromEntries(d.entities.filter(e=>e.label).map(e=>{const n=h.getNative(e.id);return [e.label,{evaluated:ev.entities.get(e.id),mounted:me.entities.get(e.id),renderer:h.getValue(e.id),native:n?{type:n.elType,x:typeof n.X==='function'?n.X():null,y:typeof n.Y==='function'?n.Y():null}:null}]}))};}"""
-def run(engine,out,case_id=None,replicates=None,audit=False):
+def run(engine,out,case_id=None,replicates=None,audit=False,native_warning=False):
  raw=(HERE/'protocol.json').read_bytes();spec=json.loads(raw);observer=(HERE/'observer.js').read_bytes();sha=git('rev-parse','HEAD');tree=git('rev-parse','HEAD^{tree}')
  report={'schema':'famtutor.pointer.capture.v2','engine':engine,'protocol':spec,'protocolSha256':digest(raw),'observerSha256':digest(observer),'runnerSha256':digest(Path(__file__).read_bytes()),'sourceSha':sha,'sourceTree':tree,'trackedDirty':bool(git('diff','--name-only','HEAD')) if sha else None,'scope':'NATIVE_INSTRUMENTED_AUDIT' if audit else 'SYMMETRIC_PUBLIC_CAPTURE','cases':[],'status':'BLOCKED'}
+ if native_warning and not(audit and engine=='famtutor'):raise ValueError('Native warning regression requires a separate instrumented audit')
+ if audit:report['nativeWarningOnly']=native_warning
  if audit and engine!='famtutor':raise ValueError('Native audit must be a separate native replay')
  if engine=='famtutor':subprocess.run(['node','node_modules/typescript/bin/tsc','-p','packages/math/tsconfig.browser-smoke.json'],cwd=ROOT,check=True)
  try:
@@ -48,6 +50,7 @@ def run(engine,out,case_id=None,replicates=None,audit=False):
       row['program']=program;row['constructionReturn']=page.evaluate('(s)=>api.evalCommand(s)',program)
       if row['constructionReturn'] is not True:raise ValueError('Native construction program rejected')
       if case.get('unrelatedUndefined'):page.evaluate("api.setValue('r',-1)")
+      if native_warning:page.evaluate("()=>{const s=api.getSnapshot();s.document.assertions=[{id:'pointer-v2-warning',predicate:'expression_equal',arguments:[{expr:'1'},{expr:'2'}],severity:'warning'}];api.restoreSnapshot(s);}")
       if engine=='famtutor':page.evaluate("async()=>await api.mount(document.getElementById('stage'),{jsxgraph:JXG})")
       page.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
       if engine=='geogebra':
@@ -91,5 +94,5 @@ def run(engine,out,case_id=None,replicates=None,audit=False):
  except Exception as e:report['error']=str(e);report['stack']=traceback.format_exc()
  save(out,report);print(json.dumps({'engine':engine,'status':report['status'],'cases':len(report['cases']),'captured':sum(x['status']=='CAPTURED' for x in report['cases'])}));return report
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--case');p.add_argument('--replicates',type=int);p.add_argument('--audit-native',action='store_true');a=p.parse_args();a.output.parent.mkdir(parents=True,exist_ok=True)
- result=run(a.engine,a.output,a.case,a.replicates,a.audit_native);raise SystemExit(0 if result['status']=='CAPTURED' else 1)
+ p=argparse.ArgumentParser();p.add_argument('--engine',choices=['famtutor','geogebra'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--case');p.add_argument('--replicates',type=int);p.add_argument('--audit-native',action='store_true');p.add_argument('--native-warning',action='store_true');a=p.parse_args();a.output.parent.mkdir(parents=True,exist_ok=True)
+ result=run(a.engine,a.output,a.case,a.replicates,a.audit_native,a.native_warning);raise SystemExit(0 if result['status']=='CAPTURED' else 1)
