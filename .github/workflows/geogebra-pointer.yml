@@ -1,8 +1,5 @@
 name: GeoGebra independent pointer parity
 on:
-  push:
-    branches: [codex/geogebra-pointer-v03]
-    paths: ['packages/math/**', 'scripts/geogebra/pointer/**', '.github/workflows/geogebra-pointer.yml']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -14,7 +11,7 @@ concurrency:
 jobs:
   pointer:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,32 +26,36 @@ jobs:
           python-version: '3.12'
       - run: npm ci && npm run build
       - run: pip install -r requirements-smoke.txt && python -m playwright install --with-deps chromium
-      - name: Exact source identity and original native regressions
+      - name: Exact source and unchanged original regressions
         run: |
           set -euo pipefail
-          mkdir -p artifacts/pointer
-          git rev-parse HEAD > artifacts/pointer/commit.txt
-          git rev-parse HEAD^{tree} > artifacts/pointer/tree.txt
-          npm test 2>&1 | tee artifacts/pointer/node.log
-          node --test packages/math/test/pointer-evaluation.test.mjs packages/math/test/pointer-contract.test.mjs > artifacts/pointer/focused.tap
-      - name: Native real pointer capture
-        run: python scripts/geogebra/pointer/capture.py --engine famtutor --output artifacts/pointer/native.json
-      - name: Independent pinned GeoGebra real pointer capture
+          mkdir -p artifacts/pointer-v2
+          git rev-parse HEAD > artifacts/pointer-v2/commit.txt
+          git rev-parse 'HEAD^{tree}' > artifacts/pointer-v2/tree.txt
+          npm test 2>&1 | tee artifacts/pointer-v2/node.log
+          node --test packages/math/test/pointer-evaluation.test.mjs packages/math/test/pointer-contract.test.mjs packages/math/test/pointer-activation.test.mjs packages/math/test/pointer-unrelated-undefined.test.mjs > artifacts/pointer-v2/focused.tap
+          python scripts/geogebra/pointer-v2/test_protocol.py > artifacts/pointer-v2/protocol-tests.log 2>&1
+          python scripts/geogebra/pointer-v2/test_coverage.py > artifacts/pointer-v2/coverage-tests.log 2>&1
+      - name: Protocol v2 native independent capture (three repetitions, no retries)
+        run: python scripts/geogebra/pointer-v2/capture.py --engine famtutor --output artifacts/pointer-v2/native.json
+      - name: Protocol v2 fixed GeoGebra independent capture (three repetitions, no retries)
         if: ${{ !cancelled() }}
-        run: python scripts/geogebra/pointer/capture.py --engine geogebra --output artifacts/pointer/reference.json
-      - name: Strict every-boundary and ordered-callback comparison
+        run: python scripts/geogebra/pointer-v2/capture.py --engine geogebra --output artifacts/pointer-v2/reference.json
+      - name: Actual delivery windows and all ordered public observations
         if: ${{ !cancelled() }}
-        run: node scripts/geogebra/pointer/compare.mjs artifacts/pointer/native.json artifacts/pointer/reference.json artifacts/pointer/comparison.json
-      - name: Native warning-only validation still permits real dragging
+        run: python scripts/geogebra/pointer-v2/compare.py artifacts/pointer-v2/native.json artifacts/pointer-v2/reference.json artifacts/pointer-v2/comparison.json
+      - name: Separate instrumented native internal-surface replay (not reference parity)
+        if: ${{ !cancelled() }}
         run: |
-          python scripts/geogebra/pointer/capture.py --engine famtutor --native-warning --output artifacts/pointer/warning.json
-          node scripts/geogebra/pointer/compare.mjs artifacts/pointer/warning.json artifacts/pointer/reference.json artifacts/pointer/warning-comparison.json
+          python scripts/geogebra/pointer-v2/capture.py --engine famtutor --replicates 1 --audit-native --output artifacts/pointer-v2/audit.json
+          python scripts/geogebra/pointer-v2/audit.py artifacts/pointer-v2/audit.json artifacts/pointer-v2/audit-comparison.json
       - name: Source unchanged
+        if: ${{ !cancelled() }}
         run: git diff --exit-code && git diff --cached --exit-code
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pointer-${{ github.event.pull_request.head.sha || github.sha }}
-          path: artifacts/pointer/
+          name: pointer-v2-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/pointer-v2/
           retention-days: 14
           if-no-files-found: error
