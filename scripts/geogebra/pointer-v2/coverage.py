@@ -25,6 +25,8 @@ def apply(matrix,comparison,audit,sha,tree,hashes):
   if row is None or row['signature']!=signature or row.get('nativeApi',{}).get('implementation',{}).get('status')!='PARTIAL':raise ValueError('Canonical row drift')
   row['nativeApi']['pointerProtocolV2']=copy.deepcopy(proof)
  result['nativeApiPointerProtocolV2']={**proof,'rows':list(ROWS),'completeCompatibility':False}
+ result['nativeApiMapping']['referencePointerParity']='PASSED_BOUNDED_PROTOCOL_V2'
+ result['nativeApiMapping']['referencePointerScope']=proof['scope']
  return result
 
 def main():
