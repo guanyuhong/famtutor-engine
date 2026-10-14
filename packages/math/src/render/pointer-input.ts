@@ -2,7 +2,9 @@
  * captured board. Math comes exclusively from the existing validator/evaluator.
  * Pending/undefined topology transitions are intentionally not accepted here. */
 import type { MathDocument } from "../types.js";
-import { validateMathDocument } from "../protocol/validate.js";
+import { evaluateMathDocument } from "../kernel/evaluate.js";
+import { buildConstructionGraph } from "../kernel/dag.js";
+import { validateMathDocumentStructure, validateMathDocument } from "../protocol/validate.js";
 import { MathEngineError } from "../errors.js";
 import { deepClone } from "../util.js";
 
@@ -21,8 +23,38 @@ export function acceptPointerInput(document: MathDocument, target: string, coord
   const changed = candidate.construction.find(n => n.id === node.id)!;
   changed.params = { ...changed.params, coords: [coords[0]!, coords[1]!] };
   candidate.revision++;
+  const structure = validateMathDocumentStructure(candidate);
+  if (structure.status === "invalid") throw new MathEngineError("POINTER_STATE_NOT_ACCEPTED", JSON.stringify(structure.issues));
+  const graph = buildConstructionGraph(candidate);
+  const affected = new Set([node.id]);
+  for (const id of graph.order) if ((graph.nodeDependencies.get(id) ?? []).some(parent => affected.has(parent))) affected.add(id);
+  const before = evaluateMathDocument(document), after = evaluateMathDocument(candidate);
+  const allowedUndefined = new Set<string>(), allowedIssues = new Set<string>();
+  const domainCodes = new Set(["INVALID_RADIUS", "DEGENERATE_LINE", "DEGENERATE_RAY", "DEGENERATE_TRANSFORM"]);
+  // An unchanged, unrelated domain-undefined branch cannot veto this edit.
+  // Type/programming/structure errors, global assertions, and any undefined
+  // object in the affected closure still reject atomically. No geometry is
+  // reconstructed from prior values; only existing diagnostics are compared.
+  for (const id of graph.order) {
+    if (affected.has(id)) continue;
+    const outputs = graph.outputsByNode.get(id) ?? [];
+    const admitted = outputs.length > 0 && outputs.every(output => {
+      const prior = before.entities.get(output), current = after.entities.get(output);
+      return prior && current && !prior.defined && !current.defined
+        && JSON.stringify(prior.issue) === JSON.stringify(current.issue)
+        && (domainCodes.has(current.issue?.code ?? "") || current.issue?.code === "UNDEFINED_DEPENDENCY"
+          && current.dependencies.some(parent => allowedUndefined.has(parent)));
+    });
+    if (admitted) for (const output of outputs) {
+      allowedUndefined.add(output);
+      allowedIssues.add(JSON.stringify(after.entities.get(output)!.issue));
+    }
+  }
   const validation = validateMathDocument(candidate);
-  if (validation.status === "invalid" || validation.undefinedEntities.length > 0 || validation.issues.some(issue => issue.severity === "error")) throw new MathEngineError("POINTER_STATE_NOT_ACCEPTED", JSON.stringify(validation.issues));
+  if (validation.undefinedEntities.some(id => !allowedUndefined.has(id))
+    || validation.issues.some(issue => issue.severity === "error" && !allowedIssues.has(JSON.stringify(issue)))) {
+    throw new MathEngineError("POINTER_STATE_NOT_ACCEPTED", JSON.stringify(validation.issues));
+  }
   // Retain document/node identity used by existing renderer resolvers. Only an
   // independently checked source input and revision change, never derived values.
   node.params = changed.params;
