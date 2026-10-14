@@ -18,6 +18,10 @@ class Coverage(unittest.TestCase):
   r=c.apply(m,p,a,SHA,TREE,{})
   self.assertEqual(r['nativeApiMapping']['referencePointerParity'],'PASSED_BOUNDED_PROTOCOL_V2')
   self.assertEqual(r['nativeApiStateSlice']['referencePointerParity'],'NOT_RUN')
+ def test_csv_preserves_prior_state_interaction_evidence(self):
+  row={'id':'known','layer':'apps-api','signature':'known','sources':[{'url':'source'}],'nativeApi':{'stateLifecycle':{'interaction':'PASSED_SAMPLED_SCOPE'}}}
+  self.assertEqual(c.csv_row(row)[7],'PASSED_SAMPLED_SCOPE')
+  self.assertEqual(c.csv_row(row)[8],'NOT_RUN')
  def test_failed_input_protocol_cannot_mark_pass(self):
   m,p,a=self.fixture();p['status']='INPUT_PROTOCOL_FAILED'
   with self.assertRaises(ValueError):c.apply(m,p,a,SHA,TREE,{})

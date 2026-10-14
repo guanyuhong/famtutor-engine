@@ -29,6 +29,10 @@ def apply(matrix,comparison,audit,sha,tree,hashes):
  result['nativeApiMapping']['referencePointerScope']=proof['scope']
  return result
 
+def csv_row(row):
+ n=row.get('nativeApi',{})
+ return [row['id'],row['layer'],row['signature'],n.get('implementation',{}).get('status','UNMAPPED'),*[n.get(k,{}).get('status','NOT_RUN') for k in ['nativeRegression','realDifferential','interaction']],n.get('stateLifecycle',{}).get('interaction','NOT_RUN'),n.get('pointerProtocolV2',{}).get('status','NOT_RUN'),row['sources'][0]['url']]
+
 def main():
  p=argparse.ArgumentParser();p.add_argument('--matrix',type=Path,required=True);p.add_argument('--evidence',type=Path,required=True);a=p.parse_args();e=a.evidence
  sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();tree=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],cwd=ROOT,text=True).strip()
@@ -45,7 +49,7 @@ def main():
  with a.matrix.with_suffix('.csv').open('w',newline='') as f:
   w=csv.writer(f);w.writerow(['id','layer','signature','nativeImplementation','nativeRegression','realDifferential','interaction','stateLifecycle','pointerV2','source'])
   for row in out['entries']:
-   n=row.get('nativeApi',{});w.writerow([row['id'],row['layer'],row['signature'],n.get('implementation',{}).get('status','UNMAPPED'),*[n.get(k,{}).get('status','NOT_RUN') for k in ['nativeRegression','realDifferential','interaction']],n.get('stateLifecycle',{}).get('status','NOT_RUN'),n.get('pointerProtocolV2',{}).get('status','NOT_RUN'),row['sources'][0]['url']])
+   w.writerow(csv_row(row))
  (a.matrix.parent/'SHA256SUMS').write_text(''.join(hashlib.sha256(f.read_bytes()).hexdigest()+'  '+f.name+'\n' for f in sorted(a.matrix.parent.iterdir()) if f.is_file() and f.name!='SHA256SUMS'))
  print(json.dumps(out['nativeApiPointerProtocolV2'],indent=2))
 if __name__=='__main__':main()
