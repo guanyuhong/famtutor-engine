@@ -2,7 +2,7 @@ name: Pointer repeatability diagnosis
 on:
   push:
     branches: [codex/geogebra-pointer-v03]
-    paths: ['scripts/geogebra/pointer/**', '.github/workflows/pointer-repeatability.yml']
+    paths: ['packages/math/**', 'scripts/geogebra/pointer/**', '.github/workflows/pointer-repeatability.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
           git rev-parse HEAD > artifacts/pointer-repeatability/commit.txt
           git rev-parse HEAD^{tree} > artifacts/pointer-repeatability/tree.txt
           python scripts/geogebra/pointer/test_timing_probe.py 2>&1 | tee artifacts/pointer-repeatability/unit.log
-          node --test packages/math/test/pointer-contract.test.mjs > artifacts/pointer-repeatability/comparator.tap
+          node --test packages/math/test/pointer-contract.test.mjs packages/math/test/pointer-activation.test.mjs > artifacts/pointer-repeatability/comparator.tap
       - name: All independent replicates, never retry-until-green
         run: |
           set -euo pipefail
